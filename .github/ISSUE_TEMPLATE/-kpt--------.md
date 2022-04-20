@@ -2,7 +2,7 @@
 name: " KPT 회고 이슈카드"
 about: " KPT 회고 이슈카드"
 title: ''
-labels: ''
+labels: retrospect
 assignees: ''
 
 ---
