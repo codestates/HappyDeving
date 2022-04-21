@@ -22,9 +22,12 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "build-css": "tailwindcss build src/styles.css -o public/styles.css",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+
+  
   "eslintConfig": {
     "extends": [
       "react-app",
