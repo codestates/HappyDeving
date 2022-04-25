@@ -187,15 +187,11 @@ authorization code
             "updatedAt": "2019-02-24T16:17:47.000Z"
             "loginMethod": 2
         },
-         
-    }
-    
-    res.cookie(
-        {
+        cookie: {
             accessToken:asdfasdfasdfas,
             refreshToken:asdfasdfasdfas,
-        }
-    )
+        }       
+    }
 }
 ```
 {% endswagger-response %}
