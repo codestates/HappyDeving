@@ -13,6 +13,10 @@ signin 성공 시 기입한 id, pw 일치하는 user 정보 찾아서 돌려주�
 
 {% endswagger-parameter %}
 
+{% swagger-parameter in="body" name="code*" %}
+authorization code
+{% endswagger-parameter %}
+
 {% swagger-response status="200: OK" description="" %}
 ```javascript
 {
@@ -24,10 +28,7 @@ signin 성공 시 기입한 id, pw 일치하는 user 정보 찾아서 돌려주�
             "createdAt": "2019-02-24T16:17:47.000Z",
             "updatedAt": "2019-02-24T16:17:47.000Z"
         },
-        cookie: {
-            accessToken:asdfasdfasdfas,
-            refreshToken:asdfasdfasdfas,
-        }       
+         
     }
 }
 ```
@@ -186,11 +187,15 @@ authorization code
             "updatedAt": "2019-02-24T16:17:47.000Z"
             "loginMethod": 2
         },
-        cookie: {
+         
+    }
+    
+    res.cookie(
+        {
             accessToken:asdfasdfasdfas,
             refreshToken:asdfasdfasdfas,
-        }       
-    }
+        }
+    )
 }
 ```
 {% endswagger-response %}
