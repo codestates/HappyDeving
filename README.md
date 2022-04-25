@@ -1,16 +1,21 @@
-# 프로젝트 소개
-## 😈 Logo
-![happylogo3](https://user-images.githubusercontent.com/87491901/164157863-13772940-0652-4407-ba95-04406613b21e.png)
+# Happy Deving
 
-## ✏️ About
-당신의 지역에서 일어나고 있는 모든 스터디, Happy Deving이 찾아드립니다.  
-원하는 지역에서 같은 목표를 가진 스터디원들을 만나 더 멋진 개발자로 성장하세요!
+## Welcome to MyAPI
 
-## ✨ Feature
-- 위치 기반 검색을 통해 원하는 스터디 모임을 한 눈에 파악할 수 있습니다.
-- 지도의 스터디 모임을 클릭하면 미리보기를 통해 정보를 볼 수 있습니다.
-- 원하는 지역에 스터디 모집글을 올려 멤버를 모을 수 있습니다.
-- 오프라인과 온라인 중에 선택해서 스터디 모집글을 올릴 수 있습니다.
-- 내가 찜한 스터디 모집글을 마이페이지에서 한 눈에 볼 수 있습니다.
+Welcome to MyAPI! Here you'll find all the documentation you need to get up and running with the MyAPI API.
 
-## 💫 Final Web View
+## Want to jump right in?
+
+Feeling like an eager beaver? Jump in to the quick start docs and get making your first request:
+
+{% content-ref url="quick-start.md" %}
+[quick-start.md](quick-start.md)
+{% endcontent-ref %}
+
+## Want to deep dive?
+
+Dive a little deeper and start exploring our API reference to get an idea of everything that's possible with the API:
+
+{% content-ref url="reference/api-reference/" %}
+[api-reference](reference/api-reference/)
+{% endcontent-ref %}
