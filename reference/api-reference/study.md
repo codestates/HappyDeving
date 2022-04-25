@@ -83,7 +83,7 @@ data: {
 ```javascript
 {
     data: {
-            studies : [
+            study :
                     {
                     "id": 1,
                     "username": "somi",
@@ -103,13 +103,12 @@ data: {
                             ],
                     "createdAt": "2019-02-24T16:17:47.000Z",
                     "updatedAt": "2019-02-24T16:17:47.000Z"
-                    }
-            ]
+                    },
             comments:[ 
                     {
                     "id": 1,
                     "content": "참여하고싶어요",
-                    "username": "somi"
+                    "username": "nikki"
                     "createdAt": "2019-02-24T16:17:47.000Z",
                     "updatedAt": "2019-02-24T16:17:47.000Z"
                     "parentId": null

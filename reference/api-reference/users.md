@@ -24,12 +24,15 @@ authorization code
         userInfo:{
             "id": 1,
             "username": "nikki"
-            "email": "nikki@gmail.com",
             "createdAt": "2019-02-24T16:17:47.000Z",
             "updatedAt": "2019-02-24T16:17:47.000Z"
+            "loginMethod": 1
         },
-         
-    }
+        res.cookie: {
+          accessToken:asdfasdfasdfas,
+          refreshToken:asdfasdfasdfas,
+        }
+     
 }
 ```
 {% endswagger-response %}
@@ -144,11 +147,11 @@ authorization code
             "updatedAt": "2019-02-24T16:17:47.000Z"
             "loginMethod": 1
         },
-        cookie: {
-            accessToken:asdfasdfasdfas,
-            refreshToken:asdfasdfasdfas,
-        }       
-    }
+        res.cookie: {
+          accessToken:asdfasdfasdfas,
+          refreshToken:asdfasdfasdfas,
+        }
+     
 }
 ```
 {% endswagger-response %}
@@ -185,13 +188,56 @@ authorization code
             "username": "nikki"
             "createdAt": "2019-02-24T16:17:47.000Z",
             "updatedAt": "2019-02-24T16:17:47.000Z"
-            "loginMethod": 2
+            "loginMethod": 1
         },
-        cookie: {
-            accessToken:asdfasdfasdfas,
-            refreshToken:asdfasdfasdfas,
-        }       
-    }
+        res.cookie: {
+          accessToken:asdfasdfasdfas,
+          refreshToken:asdfasdfasdfas,
+        }
+     
+}
+```
+{% endswagger-response %}
+
+{% swagger-response status="404: Not Found" description="" %}
+```javascript
+{
+    // Response
+}
+```
+{% endswagger-response %}
+
+{% swagger-response status="500: Internal Server Error" description="" %}
+```javascript
+```
+{% endswagger-response %}
+{% endswagger %}
+
+{% swagger method="post" path="/users/login/kakao" baseUrl="https://happydeving.com" summary="kakao social login" %}
+{% swagger-description %}
+
+{% endswagger-description %}
+
+{% swagger-parameter in="body" name="code*" %}
+authorization code
+{% endswagger-parameter %}
+
+{% swagger-response status="200: OK" description="" %}
+```javascript
+{
+    data:{
+        userInfo:{
+            "id": 1,
+            "username": "nikki"
+            "createdAt": "2019-02-24T16:17:47.000Z",
+            "updatedAt": "2019-02-24T16:17:47.000Z"
+            "loginMethod": 1
+        },
+        res.cookie: {
+          accessToken:asdfasdfasdfas,
+          refreshToken:asdfasdfasdfas,
+        }
+     
 }
 ```
 {% endswagger-response %}
