@@ -97,12 +97,15 @@ function SignupModal() {
     username: "",
     email: "",
     password: "",
-    password_check: "",
+    confirmPassword: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
   const handleInputValue = (key) => (e) => {
     setSignupInfo({ ...signupInfo, [key]: e.target.value });
   };
+
+  const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
+  const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/; // 8~24자, 소문자, 대문자, 숫자, 특수문자 1개 이상
 
   const signup = async () => {
     await signupApi(signupInfo).then((response) => {
@@ -116,14 +119,33 @@ function SignupModal() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-    const { username, email, password } = signupInfo;
+    const { username, email, password, confirmPassword } = signupInfo;
+    const validatedEmail = EMAIL_REGEX.test(email);
+    const validatedPassword = PASSWORD_REGEX.test(password);
+
     if (Object.values(signupInfo).includes("")) {
-      setErrorMessage("모든 항목을 입력해 주세요.");
+      setErrorMessage("모든 항목을 입력해 주세요");
+      return;
+    }
+    if (!validatedEmail || !validatedPassword) {
+      setErrorMessage("유효한 이메일과 비밀번호를 입력해 주세요");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setErrorMessage("비밀번호가 일치하지 않습니다");
       return;
     }
     try {
       await signup(username, email, password).then(
-        () => dispatch(openSignupModal(false)),
+        () => {
+          dispatch(openSignupModal(false));
+          setSignupInfo({
+            username: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+          });
+        },
         (error) => {
           console.log(error);
         }
@@ -150,6 +172,14 @@ function SignupModal() {
                   <h1 className="text-grey-600 underline">Sign In</h1>
                 </Title>
                 <InputWrap>
+                  <Text>닉네임</Text>
+                  <input
+                    type="username"
+                    placeholder="닉네임"
+                    onChange={handleInputValue("username")}
+                  />
+                </InputWrap>
+                <InputWrap>
                   <Text>이메일</Text>
                   <input type="email" placeholder="이메일" onChange={handleInputValue("email")} />
                 </InputWrap>
@@ -166,7 +196,7 @@ function SignupModal() {
                   <input
                     type="password"
                     placeholder="비밀번호 확인"
-                    onChange={handleInputValue("password_check")}
+                    onChange={handleInputValue("confirmPassword")}
                   />
                 </InputWrap>
 
