@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import React from "react";
-import "../../static/fonts/font.css";
+import { useDispatch } from "react-redux";
+import { openSigninModal } from "../../features/modal/modalSlice";
+// import "../../static/fonts/font.css";
 
 const StyledHeader = styled.header`
   display: flex;
@@ -40,6 +42,7 @@ const Circle = styled.div`
 `;
 
 const Header = () => {
+  const dispatch = useDispatch();
   return (
     <>
       <StyledHeader>
@@ -48,8 +51,12 @@ const Header = () => {
           src="https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png"
         />
         <div>
-          <span className="write">새 글 쓰기</span>
-          <span className="login">로그인</span>
+          <span onClick={() => console.log("새글쓰기")} className="write">
+            새 글 쓰기
+          </span>
+          <span onClick={() => dispatch(openSigninModal(true))} className="login">
+            로그인
+          </span>
         </div>
       </StyledHeader>
       <Circle />
