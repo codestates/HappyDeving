@@ -8,7 +8,6 @@ const StyledHeader = styled.header`
   align-items: center;
   grid-column: 3/13;
   position: relative;
-  font-family: "hanna";
 
   > .logo {
     width: 200px;
@@ -18,7 +17,7 @@ const StyledHeader = styled.header`
     color: #5e17eb;
     text-align: center;
     font-size: 25px;
-    font-family: "hanna";
+    font-family: "Bold";
 
     .write {
       margin-right: 20px;
