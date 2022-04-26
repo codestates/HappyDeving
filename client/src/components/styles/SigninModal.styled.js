@@ -1,8 +1,10 @@
-import React, { useState } from "react";
-import { signinApi } from "../../api/users";
-import { useDispatch } from "react-redux";
-import { openSigninModal, openSignupModal } from "../../features/modal/modalSlice";
-// import { Container } from "../styles/Container.styled";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { signin, reset } from "../../features/auth/authSlice";
+import { openSignupModal, openSigninModal } from "../../features/modal/modalSlice";
+import LoadingIndicator from "../LoadingIndicator";
 import styled from "styled-components";
 
 // const Footer = styled(Content)`
@@ -96,48 +98,47 @@ const Resister = styled.p`
 `;
 
 function SigninModal() {
-  const dispatch = useDispatch();
-  const [loginInfo, setLoginInfo] = useState({
+  const [userData, setUserData] = useState({
     email: "",
     password: "",
   });
+  const { email, password } = userData;
+
   const [errorMessage, setErrorMessage] = useState("");
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isSuccess || user) {
+      navigate("/");
+    }
+    dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
   const handleInputValue = (key) => (e) => {
-    setLoginInfo({ ...loginInfo, [key]: e.target.value });
-  };
-
-  const signin = async () => {
-    await signinApi(loginInfo).then((response) => {
-      if (response.cookie.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response));
-      }
-
-      return response.data;
-    });
+    setUserData({ ...userData, [key]: e.target.value });
   };
 
   const handleSignin = async (e) => {
     e.preventDefault();
-    const { email, password } = loginInfo;
-    if (Object.values(loginInfo).includes("")) {
+    if (Object.values(userData).includes("")) {
       setErrorMessage("모든 항목을 입력해 주세요.");
       return;
     }
-    try {
-      await signin(email, password).then(
-        () => {
-          localStorage.setItem("signedIn", "true");
-          dispatch(openSigninModal(false));
-          window.location.reload();
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
+    const userData = {
+      email,
+      password,
+    };
+    dispatch(signin(userData));
+    dispatch(openSigninModal(false));
   };
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <>

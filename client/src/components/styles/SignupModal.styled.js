@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import { signupApi } from "../../api/users";
-import { useDispatch } from "react-redux";
-import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
+import { signup, reset } from "../../features/auth/authSlice";
 import { openSignupModal } from "../../features/modal/modalSlice";
+import LoadingIndicator from "../LoadingIndicator";
+import styled from "styled-components";
 
 // const Footer = styled(Content)`
 //   grid-column: 3 / 13;
@@ -92,38 +95,41 @@ const AlertBox = styled.div`
 `;
 
 function SignupModal() {
-  const dispatch = useDispatch();
-  const [signupInfo, setSignupInfo] = useState({
+  const [userData, setUserData] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
+  const { username, email, password, confirmPassword } = userData;
+
   const [errorMessage, setErrorMessage] = useState("");
-  const handleInputValue = (key) => (e) => {
-    setSignupInfo({ ...signupInfo, [key]: e.target.value });
-  };
 
   const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
   const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/; // 8~24자, 소문자, 대문자, 숫자, 특수문자 1개 이상
 
-  const signup = async () => {
-    await signupApi(signupInfo).then((response) => {
-      if (response.cookie.accessToken) {
-        localStorage.setItem("user", JSON.stringify(response));
-      }
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-      return response.data;
-    });
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (isSuccess || user) {
+      navigate("/");
+    }
+    dispatch(reset()); // 상태 모두 리셋
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  const handleInputValue = (key) => (e) => {
+    setUserData({ ...userData, [key]: e.target.value });
   };
 
-  const handleSignup = async (e) => {
+  const handleSignup = (e) => {
     e.preventDefault();
-    const { username, email, password, confirmPassword } = signupInfo;
     const validatedEmail = EMAIL_REGEX.test(email);
     const validatedPassword = PASSWORD_REGEX.test(password);
 
-    if (Object.values(signupInfo).includes("")) {
+    if (Object.values(userData).includes("")) {
       setErrorMessage("모든 항목을 입력해 주세요");
       return;
     }
@@ -135,25 +141,19 @@ function SignupModal() {
       setErrorMessage("비밀번호가 일치하지 않습니다");
       return;
     }
-    try {
-      await signup(username, email, password).then(
-        () => {
-          dispatch(openSignupModal(false));
-          setSignupInfo({
-            username: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
-          });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    } catch (err) {
-      console.log(err);
-    }
+    const userData = {
+      username,
+      email,
+      password,
+    };
+
+    dispatch(signup(userData));
+    dispatch(openSignupModal(false));
   };
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <>
