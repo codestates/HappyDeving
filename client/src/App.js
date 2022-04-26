@@ -9,12 +9,14 @@ function App() {
   useEffect(() => {
     axios.get(`${REACT_APP_API_URL}`).then((res) => {
       setInfo(res.data);
+      console.log(res.data);
     });
   }, []);
 
   return (
     <div className="App">
       <header className="App-header">
+        <p>{info}</p>
         <p>{info.id}</p>
         <p>{info.firstName}</p>
         <p>{info.lastName}</p>
