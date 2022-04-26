@@ -39,6 +39,7 @@ data: {
                             },
                     "kakaoLink": "https://kakao.com", 
                     "closed": false, 
+                    "location_id": 1,
                     "language": [
                             {
                             "id": 1,
@@ -93,7 +94,8 @@ data: {
                             "description": "airbnb 클론 코딩 하신 분"
                             },
                     "kakaoLink": "https://kakao.com", 
-                    "closed": false, 
+                    "closed": false,
+                    "location_id": 1,
                     "language": [
                             {
                             "id": 1,
@@ -145,6 +147,10 @@ access token
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="username" required="true" %}
+
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="title" required="true" %}
 
 {% endswagger-parameter %}
 
@@ -247,6 +253,7 @@ name, roadAddress, latitude, longitude
                             },
                     "kakaoLink": "https://kakao.com", 
                     "closed": false, 
+                    "location_id": 1,
                     "language": [
                             {
                             "id": 1,

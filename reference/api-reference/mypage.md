@@ -36,6 +36,7 @@ accessToken
                             },
                     "kakaoLink": "https://kakao.com", 
                     "closed": false, 
+                    "location_id": 1,
                     "language": [
                             {
                             "id": 1,
