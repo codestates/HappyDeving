@@ -9,8 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ Study, Language }) {
       // define association here
-      this.belongsTo(Study, { foreignKey: "study_id", as: "study" });
-      this.belongsTo(Language, { foreignKey: "language_id", as: "language" });
     }
 
     toJSON() {

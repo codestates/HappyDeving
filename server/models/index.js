@@ -33,4 +33,39 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+// Associations setting
+const {User, Language, Location, Study_comment, Study_language, Study, User_likes_study} = sequelize.models;
+
+
+
+User.hasMany(Study, { foreignKey: "user_id", as: "study" });
+Study.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
+User.hasMany(Study_comment, { foreignKey: "user_id", as: "study_comment" });
+Study_comment.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
+User.hasMany(User_likes_study, { foreignKey: "user_id", as: "user_likes_study" });
+User_likes_study.belongsTo(User, { foreignKey: "user_id", as: "user" });
+
+Study.hasMany(User_likes_study, { foreignKey: "study_id", as: "user_likes_study" });
+User_likes_study.belongsTo(Study, { foreignKey: "study_id", as: "study" });
+
+Study.hasMany(Study_language, { foreignKey: "study_id", as: "study_language" });
+Study_language.belongsTo(Study, { foreignKey: "study_id", as: "study" });
+
+Language.hasMany(Study, { foreignKey: "location_id", as: "study" });
+Study.belongsTo(Location, { foreignKey: "location_id", as: "location" });
+
+Language.hasMany(Study_language, { foreignKey: "language_id", as: "study_language" });
+Study_language.belongsTo(Language, { foreignKey: "language_id", as: "language" });
+
+Study.hasMany(Study_comment, { foreignKey: "study_id", as: "study_comment" });
+Study_comment.belongsTo(Study, { foreignKey: "study_id", as: "study" });
+
+
+
+
+
+
+
 module.exports = db;

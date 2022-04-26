@@ -10,6 +10,8 @@ module.exports = {
       },
       study_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "study", key: "id" },
       },
       language_id: {
         type: Sequelize.INTEGER,
