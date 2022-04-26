@@ -92,7 +92,7 @@ const AlertBox = styled.div`
   justify-content: center;
 `;
 const Resister = styled.p`
-  font-size: 18px;
+  font-style: italic;
 `;
 
 function SigninModal() {
@@ -109,7 +109,7 @@ function SigninModal() {
   const signin = async () => {
     await signinApi(loginInfo).then((response) => {
       if (response.cookie.accessToken) {
-        sessionStorage.setItem("user", JSON.stringify(response));
+        localStorage.setItem("user", JSON.stringify(response));
       }
 
       return response.data;
@@ -126,7 +126,7 @@ function SigninModal() {
     try {
       await signin(email, password).then(
         () => {
-          sessionStorage.setItem("signedIn", "true");
+          localStorage.setItem("signedIn", "true");
           dispatch(openSigninModal(false));
           window.location.reload();
         },

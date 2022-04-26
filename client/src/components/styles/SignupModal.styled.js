@@ -110,7 +110,7 @@ function SignupModal() {
   const signup = async () => {
     await signupApi(signupInfo).then((response) => {
       if (response.cookie.accessToken) {
-        sessionStorage.setItem("user", JSON.stringify(response));
+        localStorage.setItem("user", JSON.stringify(response));
       }
 
       return response.data;

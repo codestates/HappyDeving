@@ -21,3 +21,20 @@
 // };
 
 // export default Map;
+
+import React from "react";
+import styled from "styled-components";
+import Content from "../styles/Content.styled";
+
+const StyledMap = styled(Content)`
+  grid-column: 3 / 13;
+  height: 400px;
+  text-align: center;
+  /* x, y, blur-radius, spread */
+`;
+
+const Map = () => {
+  return <StyledMap>Map Page</StyledMap>;
+};
+
+export default Map;

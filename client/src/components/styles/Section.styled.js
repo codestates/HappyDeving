@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Content from "../styles/Content.styled";
 
 const StyledSection = styled(Content)`
-  grid-column: 3 / 13;
+  grid-column: 2 / 14;
   height: 400px;
   /* x, y, blur-radius, spread */
 `;
