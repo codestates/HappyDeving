@@ -9,6 +9,8 @@ const Container = styled.div`
   padding: 0 2px;
   margin: 0 auto;
   background-color: #d8e4f4;
+  position: relative;
+  z-index: 0;
 `;
 
 export default Container;
