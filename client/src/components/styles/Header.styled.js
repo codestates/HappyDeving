@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import React from "react";
-import "../../static/fonts/font.css";
+import { useDispatch } from "react-redux";
+import { openSigninModal } from "../../features/modal/modalSlice";
+import { Link, useNavigate } from "react-router-dom";
+
+// import "../../static/fonts/font.css";
 
 const StyledHeader = styled.header`
   display: flex;
@@ -39,16 +43,27 @@ const Circle = styled.div`
 `;
 
 const Header = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const goToHome = () => {
+    navigate("/");
+  };
   return (
     <>
       <StyledHeader>
         <img
+          onClick={goToHome}
           className="logo"
           src="https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png"
         />
         <div>
-          <span className="write">새 글 쓰기</span>
-          <span className="login">로그인</span>
+          <Link to="/write">
+            <span className="write">새 글 쓰기</span>
+          </Link>
+          <span onClick={() => dispatch(openSigninModal(true))} className="login">
+            로그인
+          </span>
         </div>
       </StyledHeader>
       <Circle />

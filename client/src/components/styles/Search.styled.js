@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import Content from "../styles/Content.styled";
 import React, { useState } from "react";

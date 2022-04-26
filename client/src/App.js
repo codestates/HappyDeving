@@ -1,12 +1,21 @@
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
+import { useSelector } from "react-redux";
 import Container from "../src/components/styles/Container.styled";
 import Header from "../src/components/styles/Header.styled";
 import Search from "../src/components/styles/Search.styled";
-// import Section from "../src/components/styles/Section.styled";
-import Map from "../src/components/styles/Map.styled";
 import Footer from "../src/components/styles/Footer.styled";
-import "./static/fonts/font.css";
+import SigninModal from "./components/styles/SigninModal.styled";
+import SignupModal from "./components/styles/SignupModal.styled";
+import Landing from "./pages/Landing";
+import Write from "./pages/Write";
+import Map from "././components/styles/Map.styled";
+import Study from "./pages/Study";
+import MyStudy from "./pages/MyStudy";
+import Profile from "./pages/Profile";
+import LikedStudy from "./pages/LikedStudy";
+// import "./static/fonts/font.css";
 
 const theme = {
   colors: {
@@ -21,19 +30,49 @@ const theme = {
     borderRadius: "30px",
     boxShadow: "10px 5px 15px 0.1px rgba(0, 0, 0, 0.1)",
   },
+  font: {},
 };
 
 function App() {
+  const { signinModal, signupModal } = useSelector((store) => store.modal);
   return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        <Header />
-        <Search />
-        {/* <Section /> */}
-        <Map />
-        <Footer />
-      </Container>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <Container>
+          <Header />
+          {signinModal ? <SigninModal /> : null}
+          {signupModal ? <SignupModal /> : null}
+          <Routes>
+            <Route
+              path="/"
+              exact
+              element={
+                <>
+                  <Search />
+                  <Landing />
+                </>
+              }
+            />
+            <Route path="/write" element={<Write />} />
+            <Route
+              path="/map"
+              exact
+              element={
+                <>
+                  <Search />
+                  <Map />
+                </>
+              }
+            />{" "}
+            <Route path="/study/:id" element={<Study />} />
+            <Route path="/profile/" element={<Profile />} />
+            <Route path="/mystudy" element={<MyStudy />} />
+            <Route path="/likedStudy" element={<LikedStudy />} />
+          </Routes>
+          <Footer />
+        </Container>
+      </ThemeProvider>
+    </Router>
   );
 }
 
