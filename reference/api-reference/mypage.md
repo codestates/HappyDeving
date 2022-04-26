@@ -21,6 +21,7 @@ accessToken
             "id": 1,
             "username": "nikki"
             "email": "nikki@gmail.com",
+            "verified": true,
             "createdAt": "2019-02-24T16:17:47.000Z",
             "updatedAt": "2019-02-24T16:17:47.000Z"
         },   
@@ -107,6 +108,7 @@ accessToken
             "id": 1,
             "username": "nikki"
             "email": "nikki@gmail.com",
+            "verified": true,
             "createdAt": "2019-02-24T16:17:47.000Z",
             "updatedAt": "2019-02-24T16:17:47.000Z"
         }
