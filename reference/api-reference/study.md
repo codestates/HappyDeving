@@ -39,7 +39,7 @@ data: {
                             },
                     "kakaoLink": "https://kakao.com", 
                     "closed": false, 
-                    "location_id": 1,
+                    "location":  { lat: 33.450705, lng: 126.570677 },
                     "language": [
                             {
                             "id": 1,
@@ -95,7 +95,7 @@ data: {
                             },
                     "kakaoLink": "https://kakao.com", 
                     "closed": false,
-                    "location_id": 1,
+                   "location":  { lat: 33.450705, lng: 126.570677 },
                     "language": [
                             {
                             "id": 1,
