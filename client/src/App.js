@@ -1,31 +1,4 @@
-<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./App.css";
-import { REACT_APP_API_URL } from "./config";
-
-function App() {
-  const [info, setInfo] = useState("");
-
-  useEffect(() => {
-    axios.get(`${REACT_APP_API_URL}`).then((res) => {
-      setInfo(res.data);
-      console.log(res.data);
-    });
-  }, []);
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>{info}</p>
-        <p>{info.id}</p>
-        <p>{info.firstName}</p>
-        <p>{info.lastName}</p>
-        <p>{info.email}</p>
-      </header>
-    </div>
-=======
-import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { useSelector } from "react-redux";
@@ -42,6 +15,9 @@ import Study from "./pages/Study";
 import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
 import LikedStudy from "./pages/LikedStudy";
+import axios from "axios";
+import { REACT_APP_API_URL } from "./config";
+
 // import "./static/fonts/font.css";
 
 const theme = {
@@ -62,6 +38,15 @@ const theme = {
 
 function App() {
   const { signinModal, signupModal } = useSelector((store) => store.modal);
+  const [info, setInfo] = useState("");
+
+  useEffect(() => {
+    axios.get(`${REACT_APP_API_URL}/users/5`).then((res) => {
+      setInfo(res);
+      console.log("userInfo:: ", res);
+    });
+  }, []);
+
   return (
     <Router>
       <ThemeProvider theme={theme}>
@@ -100,7 +85,6 @@ function App() {
         </Container>
       </ThemeProvider>
     </Router>
->>>>>>> 8ca395665e01ed42db538143144c366fbb1fa26d
   );
 }
 

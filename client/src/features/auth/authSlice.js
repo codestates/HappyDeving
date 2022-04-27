@@ -11,23 +11,23 @@ const initialState = {
   message: "",
 };
 
-export const signup = createAsyncThunk("auth/signup", async (userData, thunkAPI) => {
+export const signup = createAsyncThunk("auth/signup", async (signupData, thunkAPI) => {
   try {
-    return await signupApi(userData).then((res) => {
-      return res.data;
+    return await signupApi(signupData).then((res) => {
+      return res.dataValues;
     });
   } catch (error) {
     return thunkAPI.rejectWithValue(error.message);
   }
 });
 
-export const signin = createAsyncThunk("auth/signin", async (userData, thunkAPI) => {
+export const signin = createAsyncThunk("auth/signin", async (signinData, thunkAPI) => {
   try {
-    return await signinApi(userData).then((res) => {
-      if (res.data) {
-        sessionStorage.setItem("user", JSON.stringify(res.data.cookie.accessToken));
+    return await signinApi(signinData).then((res) => {
+      if (res.dataValues) {
+        localStorage.setItem("user", JSON.stringify(res.dataValues));
       }
-      return res.data;
+      return res.dataValues;
     });
   } catch (error) {
     return thunkAPI.rejectWithValue(error.message);
