@@ -1,15 +1,48 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Content from "../styles/Content.styled";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { langImg } from "../../static/images/langImg";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getStudiesMapApi } from "../../api/study";
+import {
+  languageModal,
+  locationModal,
+  dateModal,
+  reset,
+} from "../../features/searchModals/searchModalSlice";
+import CalenderDate from "../Calendar";
+
+// const moment = require("moment");
+// const dispatch = useDispatch();
+// return (
+//   <StyledSection>
+{
+  /* 전역 변수에 저장 방식 정하기! 위에 방식이 더 정학히 비교할 수는 있지만? 약간 오류생김
+      {moment(calenderDateValue).format("M월 D일")} => Wed Apr 13 2022 00:00:00 GMT+0900 (한국 표준시) 
+    {calenderDateValue}  => 4월 13일*/
+}
+{
+  /* <div>{moment(calenderDateValue).format("M월 D일")}</div> */
+}
+{
+  /* <div onClick={() => dispatch(openCalenderModal(!calenderModal))}>search</div> */
+}
+{
+  /* </StyledSection>
+  );
+} */
+}
+
+const { kakao } = window;
 
 const StyledSearch = styled(Content)`
   grid-column: 3/ 13;
   border-radius: 50px;
   height: 80px;
-  font-family: "hanna";
+  font-family: "Bold";
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   margin-bottom: 0px;
@@ -58,7 +91,7 @@ const Language = styled(Content)`
   height: 80px;
 `;
 
-const Icon = styled.span`
+const SearchIcon = styled.span`
   height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -76,68 +109,54 @@ const Icon = styled.span`
   }
 `;
 
-// const Icon = styled.span`
-//   grid-column: 11/12;
-//   height: 8vw;
-//   border-radius: 50%;
-//   padding: 3vw;
-//   box-sizing: border-box;
-//   background-color: ${(props) => props.theme.colors.purple};
-// `;
-
-// const [modal, setModal] = useState(1 / 2);
-
-// const clickHandler = (id) => {
-//   switch (id) {
-//     case "location":
-//       setModal({
-//         ...modal,
-//         location: true,
-//       });
-//       break;
-//     case "date":
-//       setModal({
-//         ...modal,
-//         date: true,
-//       });
-//       break;
-
-//     case "language":
-//       setModal({
-//         ...modal,
-//         date: true,
-//       });
-//       break;
-//   }
-// };
-
-// const Modal = styled(Content)`
-//   display: ${(props) => (props.modal ? "block" : "none")};
-//   grid-column: ${(props) => props.modal};
-//   z-index: 1;
-//   position: relative;
-//   &:after {
-//     content: "";
-//     display: block;
-//     padding-bottom: 100%;
-//   }
-// `;
-
 const LocationModal = styled(Content)`
+  position: relative;
+  box-sizing: content-box;
   grid-column: 2/8;
-  display: ${(props) => (props.modal === "location" ? "block" : "none")};
+  /* height: 100%; */
+  /* display: flex; */
+  /* align-items: center; */
+  /* padding-top: 3%; */
+  font-family: "Medium";
+  padding: 5% 5% 3% 5%;
+  min-height: 7vw;
+  max-height: 12vw;
+  overflow: scroll;
+  > div {
+    border-bottom: 1px solid beige;
+    text-align: center;
+    padding: 7%;
+    border-radius: 30px;
 
-  &:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
+    &:hover {
+      color: ${(props) => props.theme.colors.purple};
+      cursor: pointer;
+    }
+  }
+  > input {
+    height: 5vw;
+    width: 90%;
+    border-radius: 30px;
+    background-color: lightgray;
+    box-shadow: ${(props) => props.theme.contents.boxShadow};
+    position: absolute;
+    z-index: 30;
+    opacity: 80%;
+    text-align: center;
+
+    &:focus {
+      outline: none;
+    }
   }
 `;
 
 const DateModal = styled(Content)`
   grid-column: 5/11;
-  display: ${(props) => (props.modal === "date" ? "block" : "none")};
-
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  /* align-items: center; */
+  margin: 5% auto;
   &:after {
     content: "";
     display: block;
@@ -147,76 +166,163 @@ const DateModal = styled(Content)`
 
 const LanguageModal = styled(Content)`
   grid-column: 8/14;
-  display: ${(props) => (props.modal === "language" ? "block" : "none")};
-  position: relative;
-  display: flex;
-  justify-content: space-around;
 
-  &:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
-  }
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 90%;
+    height: 90%;
+    margin: 5% auto;
+    border: none;
 
-  > img {
-    position: absolute;
-    display: block;
-    width: 30%;
-    margin: 5%;
+    > img {
+      display: block;
+      width: 25%;
+      height: 25%;
+      margin: 4%;
+    }
   }
 `;
 
-const langIcons = () => {
-  let keyArr = Object.keys(langImg);
-  return keyArr.map((key, idx) => <img src={langImg[key]} key={idx} />);
-};
-
 const Search = () => {
-  const [modal, setModal] = useState(null);
   //display : none으로 위에서 막아버림
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [locationList, setLocationList] = useState([]);
 
-  const clickHandler = (id) => {
-    setModal(id);
-    // switch (id) {
-    //   case "location":
-    //     setModal("2/8");
-    //     //이상하게 styled-component는 props 이용 조건부 렌더링 시 string으로 해야 먹힌다
-    //     break;
-    //   case "date":
-    //     setModal("5/11");
-    //     break;
+  var ps = new kakao.maps.services.Places();
 
-    //   case "language":
-    //     setModal("8/14");
-    //     break;
-    //   case "search":
-    //     setModal(null);
-    //     break;
-    // }
+  // 키워드 검색을 요청하는 함수입니다
+  function searchPlaces(value) {
+    var keyword = value;
+    if (!keyword.replace(/^\s+|\s+$/g, "")) {
+      alert("키워드를 입력해주세요!");
+      return false;
+    }
+    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+    return ps.keywordSearch(keyword, placesSearchCB);
+  }
+
+  // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+  function placesSearchCB(data, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      // 정상적으로 검색이 완료됐으면
+      // 검색 목록과 마커를 표출합니다
+      // 페이지 번호를 표출합니다
+      setLocationList(data);
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      alert("검색 결과가 존재하지 않습니다.");
+      return;
+    } else if (status === kakao.maps.services.Status.ERROR) {
+      alert("검색 결과 중 오류가 발생했습니다.");
+      return;
+    }
+  }
+
+  const { location, date, language } = useSelector((store) => store.search);
+  const [data, setData] = useState({
+    location: "",
+    date: "",
+    language: "",
+  });
+  const { calenderDateValue } = useSelector((store) => store.calender);
+  console.log(calenderDateValue);
+
+  const langIcons = () => {
+    let keyArr = Object.keys(langImg);
+    return keyArr.map((key, idx) => (
+      <img
+        src={langImg[key]}
+        key={idx}
+        onClick={() => {
+          setData({ ...data, language: key });
+          dispatch(reset());
+        }}
+      />
+    ));
   };
 
+  //console.log(searchPlaces("송파구"));
+
+  const handleInputValue = (e) => {
+    if (e.key === "Enter") {
+      searchPlaces(e.target.value);
+    } // true
+  };
+
+  const locationListHandler = (locationList) => {
+    const list = locationList.map(
+      (location) =>
+        location["address_name"].split(" ")[1] + " " + location["address_name"].split(" ")[2]
+    );
+    const filteredList = Array.from(new Set(list));
+    return filteredList.map((list, idx) => (
+      <div
+        key={idx}
+        onClick={() => {
+          setData({ ...data, location: list });
+          dispatch(dateModal());
+        }}
+      >
+        {list}
+      </div>
+    ));
+  };
+
+  console.log(locationListHandler(locationList));
+  console.log(locationList);
   return (
     <>
       <StyledSearch>
-        <Location id="location" onClick={(e) => clickHandler(e.target.id)}>
+        <Location
+          id="location"
+          onClick={() => {
+            dispatch(locationModal());
+          }}
+        >
           <span className="title">location</span>
-          <span className="desc"> location</span>
+          <span className="desc">{data.location ? data.location : "위치를 검색해주세요"}</span>
         </Location>
-        <Date id="date" onClick={(e) => clickHandler(e.target.id)}>
+        <Date id="date" onClick={() => dispatch(dateModal())}>
           <span className="title">Start Date</span>
-          <span className="desc"> Start Date</span>
+          <span className="desc">{calenderDateValue}</span>
         </Date>
-        <Language id="language" onClick={(e) => clickHandler(e.target.id)}>
+        <Language id="language" onClick={() => dispatch(languageModal())}>
           <span className="title">Language</span>
-          <span className="desc"> Language</span>
+          <span className="desc">{data.language ? data.language : "언어를 선택해주세요"} </span>
         </Language>
-        <Icon id="search" onClick={(e) => clickHandler(e.target.id)}>
+        <SearchIcon
+          id="search"
+          onClick={() => {
+            getStudiesMapApi(data).then((res) => console.log(res));
+            //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
+            navigate("/map");
+            setData({ location: "", date: "", language: "" });
+            dispatch(reset());
+          }}
+        >
           <FontAwesomeIcon icon={faSearch} size="1x" color="white" />
-        </Icon>
+        </SearchIcon>
       </StyledSearch>
-      <LocationModal modal={modal} />
-      <DateModal modal={modal} />
-      <LanguageModal modal={modal}>{langIcons()}</LanguageModal>
+      {location ? (
+        <LocationModal>
+          <input onKeyDown={(e) => handleInputValue(e)} placeholder="ex. 송파구 오륜동"></input>
+          <div></div>
+          {locationListHandler(locationList)}
+          {/* ['address_name', 'category_group_code', 'category_group_name', 'category_name', 'distance', 'id', 'phone', 'place_name', 'place_url', 'road_address_name', 'x', 'y'] */}
+
+          {/* <div>
+            {options.map((x,i) => x.indexof(handleComboBox) > -1 ? <div onClick={() => onClick(i)}>{x}</div>:null)}
+          </div> */}
+        </LocationModal>
+      ) : null}
+      {date ? <DateModal /> : null}
+      {language ? (
+        <LanguageModal>
+          <div>{langIcons()}</div>
+        </LanguageModal>
+      ) : null}
     </>
   );
 };

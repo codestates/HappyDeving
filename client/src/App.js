@@ -17,24 +17,27 @@ import Profile from "./pages/Profile";
 import LikedStudy from "./pages/LikedStudy";
 import "./static/fonts/font.css";
 
-const theme = {
-  colors: {
-    purple: "#5E17EB",
-    lavender: "#C593FE",
-    bg: "#d8e4f4",
-  },
-  logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-  contents: {
-    marginBottom: "15px",
-    bg: "rgb(252, 252, 239)",
-    borderRadius: "30px",
-    boxShadow: "10px 5px 15px 0.1px rgba(0, 0, 0, 0.1)",
-  },
-  font: {},
-};
-
 function App() {
+  const [info, setInfo] = useState("");
   const { signinModal, signupModal } = useSelector((store) => store.modal);
+
+
+  const theme = {
+    colors: {
+      purple: "#5E17EB",
+      lavender: "#C593FE",
+      bg: "#d8e4f4",
+    },
+    logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
+    contents: {
+      marginBottom: "15px",
+      bg: "rgb(252, 252, 239)",
+      borderRadius: "30px",
+      boxShadow: "10px 5px 15px 0.1px rgba(0, 0, 0, 0.1)",
+    },
+    font: {},
+  };
+
 
   return (
     <Router>
