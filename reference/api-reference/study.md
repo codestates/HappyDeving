@@ -174,6 +174,14 @@ name, roadAddress, latitude, longitude
 0.normal 1.github 2.google
 {% endswagger-parameter %}
 
+{% swagger-parameter in="body" name="startDate" required="true" %}
+
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="language_id" required="true" type="Int" %}
+
+{% endswagger-parameter %}
+
 {% swagger-response status="201: Created" description="" %}
 ```javascript
 ```

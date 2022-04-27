@@ -17,8 +17,7 @@ import Profile from "./pages/Profile";
 import LikedStudy from "./pages/LikedStudy";
 import axios from "axios";
 import { REACT_APP_API_URL } from "./config";
-
-// import "./static/fonts/font.css";
+import "./static/fonts/font.css";
 
 const theme = {
   colors: {
