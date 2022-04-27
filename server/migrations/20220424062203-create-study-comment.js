@@ -16,7 +16,7 @@ module.exports = {
       study_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "study", key: "id" },
+        references: { model: "study", key: "id", onDelete: "cascade" },
       },
       content: {
         type: Sequelize.TEXT,
@@ -24,6 +24,7 @@ module.exports = {
       },
       parentId: {
         type: Sequelize.INTEGER,
+        defaultValue: null,
       },
       createdAt: {
         allowNull: false,

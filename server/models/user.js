@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       verified: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       password: {
         type: DataTypes.STRING,

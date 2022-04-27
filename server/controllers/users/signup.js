@@ -1,5 +1,6 @@
 const { User } = require("../../models");
 const bcrypt = require("bcrypt");
+const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
 
 // const { hashPassword } = require("../tokenFunctions/security");
 
@@ -27,9 +28,11 @@ module.exports = {
         password: hashedPassword,
       });
 
-      console.log(newUser);
+      const newAccessToken = generateAccessToken({ username, email });
+      const newrefreshToken = generaterefreshToken({ username, email });
+      sendTocookie(res, newrefreshToken);
 
-      return res.send(newUser);
+      return res.send({ data: { newUser }, newAccessToken });
     } catch (err) {
       console.error(err);
       return res.status(500).json();

@@ -10,7 +10,12 @@ const { sequelize } = require("./models/index");
 
 app.use(express.json({ strict: false }));
 app.use(cookieParser());
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    credentials: true,
+  })
+);
 
 // Routing
 app.use("/users", router.userRouter);

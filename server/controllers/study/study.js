@@ -1,19 +1,30 @@
-const { User, Study, Study_comment, Language, Study_language } = require("../../models");
+const { User, Study, Study_comment, Language, Study_language, Location } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 const { Op } = require("sequelize");
 
 module.exports = {
+  // ! 완료
   get: async (req, res) => {
     try {
-      const { id } = req.params;
-
       const study = await Study.findOne({
-        where: { id },
-        include: ["study_comment"],
+        where: { id: req.params.id },
+        include: [
+          { model: Language, as: "language", attributes: ["id", "name"] },
+          {
+            model: Study_comment,
+            as: "study_comment",
+            attributes: ["id", "content", "createdAt", "updatedAt", "parentId"],
+          },
+        ],
       });
 
+      // study 없으면
+      if (!study) {
+        return res.status(404).json("not found");
+      }
+
       const {
-        id: userId,
+        id,
         content,
         title,
         kakaoLink,
@@ -22,39 +33,33 @@ module.exports = {
         location_id,
         createdAt,
         updatedAt,
+        language,
+        user_id,
       } = study;
 
+      console.log(study);
+
       const findUsername = await User.findOne({
-        where: { id: userId },
+        where: { id: user_id },
         attributes: ["username"],
       });
 
-      const { username } = findUsername;
-      const language_id = await Study_language.findAll({
-        where: { study_id: id },
+      const findLocation = await Location.findOne({
+        where: { id: location_id },
+        attributes: ["latitude", "longitude"],
       });
 
-      const index = [];
-      language_id.forEach((el) => index.push(el.language_id));
+      study_comment.forEach((el) => (el.dataValues.username = findUsername.username));
 
-      const languages = await Language.findAll({
-        where: { id: { [Op.in]: index } },
-      });
-
-      const language = [];
-      languages.forEach((el) => language.push(el.dataValues));
-
-      study_comment.forEach((el) => (el.dataValues.username = username));
-
-      res.send({
+      res.status(200).json({
         data: {
           study: {
             id,
-            username,
+            username: findUsername.username,
             content: { title, description: content },
             kakaoLink,
             closed,
-            location_id,
+            location: findLocation,
             language,
             createdAt,
             updatedAt,
@@ -67,9 +72,11 @@ module.exports = {
       return res.status(500).json();
     }
   },
+  // ! 완료
   post: async (req, res) => {
     try {
-      const { content, kakaoLink, startDate, closed, location, title, loginMethod } = req.body;
+      const { content, kakaoLink, startDate, closed, location, title, language_id, loginMethod } =
+        req.body;
 
       const data = checkAccessToken(req);
       const { id } = req.params;
@@ -81,7 +88,17 @@ module.exports = {
         return res.status(401).json("wrong req params");
       }
 
-      console.log(loginMethod);
+      const findOrCreateLocation = await Location.findOrCreate({
+        where: { latitude: location[0], longitude: location[1] },
+      });
+
+      // TODO: 경도 위도 필요시
+      // const latitudeAndLongitude = [];
+      // findOrCreateLocation.map((el) => {
+      //   if (el.latitude && el.longitude) {
+      //     latitudeAndLongitude.push(el.latitude, el.longitude);
+      //   }
+      // });
 
       const post = await Study.create({
         user_id: id,
@@ -89,9 +106,18 @@ module.exports = {
         title,
         kakaoLink,
         startDate,
+        location_id: findOrCreateLocation[0].id,
         closed,
         location,
       });
+
+      console.log(language_id);
+      for (let i = 0; i < language_id.length; i++) {
+        await Study_language.create({
+          study_id: post.id,
+          language_id: language_id[i],
+        });
+      }
 
       res.json(post);
     } catch (err) {
@@ -107,9 +133,18 @@ module.exports = {
       return res.status(500).json();
     }
   },
+  // ! 완료
   delete: async (req, res) => {
     try {
       const { id } = req.params;
+      await Study_comment.destroy({
+        where: { study_id: id },
+      });
+
+      await Study_language.destroy({
+        where: { study_id: id },
+      });
+
       const study = await Study.destroy({ where: { id } });
 
       res.status(200).json(study);
