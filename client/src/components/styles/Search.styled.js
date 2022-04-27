@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import Content from "../styles/Content.styled";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +11,28 @@ import {
   dateModal,
   reset,
 } from "../../features/searchModals/searchModalSlice";
+import CalenderDate from "../Calendar";
+
+// const moment = require("moment");
+// const dispatch = useDispatch();
+// return (
+//   <StyledSection>
+{
+  /* 전역 변수에 저장 방식 정하기! 위에 방식이 더 정학히 비교할 수는 있지만? 약간 오류생김
+      {moment(calenderDateValue).format("M월 D일")} => Wed Apr 13 2022 00:00:00 GMT+0900 (한국 표준시) 
+    {calenderDateValue}  => 4월 13일*/
+}
+{
+  /* <div>{moment(calenderDateValue).format("M월 D일")}</div> */
+}
+{
+  /* <div onClick={() => dispatch(openCalenderModal(!calenderModal))}>search</div> */
+}
+{
+  /* </StyledSection>
+  );
+} */
+}
 
 const StyledSearch = styled(Content)`
   grid-column: 3/ 13;
@@ -95,7 +117,11 @@ const LocationModal = styled(Content)`
 
 const DateModal = styled(Content)`
   grid-column: 5/11;
-
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  /* align-items: center; */
+  margin: 5% auto;
   &:after {
     content: "";
     display: block;
@@ -132,6 +158,8 @@ const Search = () => {
   //display : none으로 위에서 막아버림
   const dispatch = useDispatch();
   const { location, date, language } = useSelector((store) => store.search);
+  const { calenderDateValue } = useSelector((store) => store.calender);
+  console.log(calenderDateValue);
 
   return (
     <>
@@ -147,7 +175,8 @@ const Search = () => {
         </Location>
         <Date id="date" onClick={() => dispatch(dateModal())}>
           <span className="title">Start Date</span>
-          <span className="desc"> Start Date</span>
+          {/* <span className="desc"> Start Date</span> */}
+          <span className="desc">{calenderDateValue}</span>
         </Date>
         <Language id="language" onClick={() => dispatch(languageModal())}>
           <span className="title">Language</span>
@@ -155,12 +184,15 @@ const Search = () => {
         </Language>
 
         <Icon id="search" onClick={() => dispatch(reset())}>
-
           <FontAwesomeIcon icon={faSearch} size="1x" color="white" />
         </Icon>
       </StyledSearch>
       {location ? <LocationModal /> : null}
-      {date ? <DateModal /> : null}
+      {date ? (
+        <DateModal>
+          <CalenderDate />
+        </DateModal>
+      ) : null}
       {language ? <LanguageModal>{langIcons()}</LanguageModal> : null}
     </>
   );
