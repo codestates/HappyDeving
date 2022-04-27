@@ -219,6 +219,10 @@ access token
 
 {% endswagger-parameter %}
 
+{% swagger-parameter in="body" name="title" %}
+
+{% endswagger-parameter %}
+
 {% swagger-parameter in="body" name="kakaoLink" required="false" %}
 
 {% endswagger-parameter %}
