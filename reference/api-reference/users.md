@@ -269,6 +269,12 @@ authorization code
 ```
 {% endswagger-response %}
 
+{% swagger-response status="400: Bad Request" description="" %}
+```javascript
+{ message: "Invalid link" }
+```
+{% endswagger-response %}
+
 {% swagger-response status="500: Internal Server Error" description="" %}
 ```javascript
 ```
