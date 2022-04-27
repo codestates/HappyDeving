@@ -6,7 +6,6 @@ import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 
 const { kakao } = window;
-console.log(langImg);
 
 const studies = dummydata.data.studies;
 const markerdata = studies.map((el) => {
