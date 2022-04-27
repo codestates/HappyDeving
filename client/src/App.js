@@ -15,7 +15,7 @@ import Study from "./pages/Study";
 import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
 import LikedStudy from "./pages/LikedStudy";
-// import "./static/fonts/font.css";
+import "./static/fonts/font.css";
 
 const theme = {
   colors: {

@@ -4,9 +4,8 @@ import { useDispatch } from "react-redux";
 import { openSigninModal } from "../../features/modal/modalSlice";
 import { Link, useNavigate } from "react-router-dom";
 
-// import "../../static/fonts/font.css";
-
 const StyledHeader = styled.header`
+  font-family: "Bold";
   display: flex;
   justify-content: space-between;
   align-items: center;

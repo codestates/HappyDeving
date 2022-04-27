@@ -5,12 +5,8 @@ import "./index.css";
 import { store } from "./store";
 import { Provider } from "react-redux";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter } from "react-router-dom";
 
 import "./index.css";
-
-
-
 const rootNode = document.getElementById("root");
 
 ReactDOM.createRoot(rootNode).render(
