@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addLikedStudyApi, UnLikedStudyApi  } from "../../api/study";
+import { addLikedStudyApi, UnLikedStudyApi } from "../../api/study";
 const initialState = {
   // writeCards:[], 내가 작성한 글을 따로 뺼지
   // like 아이콘이 Pull 인 상태인 카드만 갖고오기 likedStudyCards 배열에 담기
@@ -26,14 +26,12 @@ export const addLikedCard = createAsyncThunk(
   }
 );
 
-export const unLikedCard= createAsyncThunk(
+export const unLikedCard = createAsyncThunk(
   "studyCards/unLikedCard",
   async (CardsData, thunkAPI) => {
     try {
-      
-      return await UnLikedStudyApi (CardsData).then((res) => {
+      return await UnLikedStudyApi(CardsData).then((res) => {
         return res.dataValues;
-      
       });
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -64,13 +62,11 @@ export const likedStudyCardsSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.likedStudyCards.push(action.payload);
-        
       })
       .addCase(addLikedCard.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-      
       })
       .addCase(unLikedCard.pending, (state) => {
         state.isLoading = true;
@@ -80,17 +76,15 @@ export const likedStudyCardsSlice = createSlice({
         state.isSuccess = true;
         state.likedStudyCards = state.likedStudyCards.filter(
           (card) => card.id !== action.payload.id
+        );
       })
       .addCase(unLikedCard.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-
       });
   },
 });
-
-
 
 export const { reset } = likedStudyCardsSlice.actions;
 export default likedStudyCardsSlice.reducer;
