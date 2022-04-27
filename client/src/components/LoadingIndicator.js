@@ -7,10 +7,10 @@ const StyledLoadingIndicator = styled(Content)`
   height: 400px;
   /* x, y, blur-radius, spread */
   position: fixed;
-  top: 0;
+  /* top: 0;
   right: 0;
   bottom: 0;
-  left: 0;
+  left: 0; */
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 5000;
   display: flex;

@@ -1,6 +1,6 @@
+import React, { useState } from "react";
 import styled from "styled-components";
 import Content from "../styles/Content.styled";
-import React from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { langImg } from "../../static/images/langImg";
@@ -153,7 +153,9 @@ const Search = () => {
           <span className="title">Language</span>
           <span className="desc"> Language</span>
         </Language>
+
         <Icon id="search" onClick={() => dispatch(reset())}>
+
           <FontAwesomeIcon icon={faSearch} size="1x" color="white" />
         </Icon>
       </StyledSearch>
