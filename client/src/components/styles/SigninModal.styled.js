@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-
 import { signin, reset } from "../../features/auth/authSlice";
 import { openSignupModal, openSigninModal } from "../../features/modal/modalSlice";
 import LoadingIndicator from "../LoadingIndicator";
