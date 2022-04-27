@@ -112,9 +112,9 @@ function SigninModal() {
   const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isSuccess || user) {
-      navigate("/");
-    }
+    // if (isSuccess || user) {
+    //   navigate("/"); 모달창이니까 안 해도 될 것 같다.
+    // }
     dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
@@ -128,11 +128,11 @@ function SigninModal() {
       setErrorMessage("모든 항목을 입력해 주세요.");
       return;
     }
-    const userData = {
+    const signinData = {
       email,
       password,
     };
-    dispatch(signin(userData));
+    dispatch(signin(signinData));
     dispatch(openSigninModal(false));
   };
 
