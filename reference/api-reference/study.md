@@ -28,11 +28,8 @@ data: {
             studies : [
                     {
                     "id": 1, 
-                    "content": 
-                            {
-                            "title": "스터디 구함",
-                            "description": "airbnb 클론 코딩 하신 분"
-                            },
+                    "content": "airbnb 클론 코딩 하신 분"
+                    "title": "스터디 구함",
                     "kakaoLink": "https://kakao.com", 
                     "closed": false, 
                     "location":  { lat: 33.450705, lng: 126.570677 },
@@ -204,7 +201,7 @@ name, roadAddress, latitude, longitude
 
 {% endswagger-description %}
 
-{% swagger-parameter in="path" name="id (userId)" type="Int" required="true" %}
+{% swagger-parameter in="path" name="id (studyId)" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
@@ -241,7 +238,7 @@ access token
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="location" type="Array" required="false" %}
-name, roadAddress, latitude, longitude
+name(장소이름), latitude, longitude, guType, dongType
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="startDate" type="Date" %}
@@ -268,7 +265,10 @@ name, roadAddress, latitude, longitude
                     "title": "스터디 구함",
                     "kakaoLink": "https://kakao.com", 
                     "closed": false, 
-                    "location_id": 1,
+                    "location": { 
+                            lat: 33.450705, 
+                            lng: 126.570677 
+                            },
                     "language": [
                             {
                             "id": 1,
