@@ -29,14 +29,15 @@ accessToken
                     {
                     "id": 1, 
                     "username": "nikki"
-                    "content": 
-                            {
-                            "title": "스터디 구함",
-                            "description": "airbnb 클론 코딩 하신 분"
-                            },
+                    "content": "airbnb 클론 코딩 하신 분" 
+                    "title": "스터디 구함",
                     "kakaoLink": "https://kakao.com", 
                     "closed": false, 
-                    "location":  { lat: 33.450705, lng: 126.570677 },
+                    "location":  
+                                { 
+                                "lat": "33.450705", 
+                                "lng": "126.570677" 
+                                },
                     "language": [
                             {
                             "id": 1,
