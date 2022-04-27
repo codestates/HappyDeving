@@ -83,6 +83,7 @@ Nodemailer 사용
         "id": 1,
         "username": "nikki"
         "email": "nikki@gmail.com",
+        "verified": false,
         "createdAt": "2019-02-24T16:17:47.000Z",
         "updatedAt": "2019-02-24T16:17:47.000Z"
     }
@@ -256,7 +257,7 @@ authorization code
 {% endswagger-response %}
 {% endswagger %}
 
-{% swagger method="delete" path="/users/withdrawal" baseUrl="https://happydeving.com" summary="google social login" %}
+{% swagger method="delete" path="/users/withdrawal" baseUrl="https://happydeving.com" summary="" %}
 {% swagger-description %}
 
 {% endswagger-description %}
