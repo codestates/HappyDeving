@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import { signup, reset } from "../../features/auth/authSlice";
-import { openSignupModal } from "../../features/modal/modalSlice";
+import { openSignupModal, openSigninModal } from "../../features/modal/modalSlice";
 import LoadingIndicator from "../LoadingIndicator";
 import styled from "styled-components";
 
@@ -113,13 +113,6 @@ function SignupModal() {
 
   const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (isSuccess || user) {
-      navigate("/");
-    }
-    dispatch(reset()); // 상태 모두 리셋
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
-
   const handleInputValue = (key) => (e) => {
     setUserData({ ...userData, [key]: e.target.value });
   };
@@ -141,13 +134,13 @@ function SignupModal() {
       setErrorMessage("비밀번호가 일치하지 않습니다");
       return;
     }
-    const userData = {
+    const signupData = {
       username,
       email,
       password,
     };
 
-    dispatch(signup(userData));
+    dispatch(signup(signupData));
     dispatch(openSignupModal(false));
   };
 
@@ -155,13 +148,20 @@ function SignupModal() {
     return <LoadingIndicator />;
   }
 
+  useEffect(() => {
+    dispatch(reset()); // 상태 모두 리셋
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
   return (
     <>
       <ModalBackdrop>
         <ModalView>
           <CloseButton>
             <Icon
-              onClick={() => dispatch(openSignupModal(false))}
+              onClick={() => {
+                dispatch(openSigninModal(false));
+                dispatch(openSignupModal(false));
+              }}
               className="fa-solid fa-xmark"
             ></Icon>
           </CloseButton>
