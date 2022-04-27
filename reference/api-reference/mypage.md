@@ -133,7 +133,7 @@ err
 {% endswagger-response %}
 {% endswagger %}
 
-{% swagger method="delete" path="/mypage" baseUrl="https://happydeving.com" summary="회원정보 수정" %}
+{% swagger method="delete" path="/mypage" baseUrl="https://happydeving.com" summary="회원정보 삭제" %}
 {% swagger-description %}
 
 {% endswagger-description %}
