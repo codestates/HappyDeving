@@ -1,9 +1,9 @@
-import React from "react";
 import styled from "styled-components";
 import Content from "../styles/Content.styled";
 import React, { useState } from "react";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { langImg } from "../../static/images/langImg";
 
 const StyledSearch = styled(Content)`
   grid-column: 3/ 13;
@@ -111,11 +111,22 @@ const Icon = styled.span`
 //   }
 // };
 
-const Modal = styled(Content)`
-  display: ${(props) => (props.modal ? "block" : "none")};
-  grid-column: ${(props) => props.modal};
-  z-index: 1;
-  position: relative;
+// const Modal = styled(Content)`
+//   display: ${(props) => (props.modal ? "block" : "none")};
+//   grid-column: ${(props) => props.modal};
+//   z-index: 1;
+//   position: relative;
+//   &:after {
+//     content: "";
+//     display: block;
+//     padding-bottom: 100%;
+//   }
+// `;
+
+const LocationModal = styled(Content)`
+  grid-column: 2/8;
+  display: ${(props) => (props.modal === "location" ? "block" : "none")};
+
   &:after {
     content: "";
     display: block;
@@ -123,27 +134,65 @@ const Modal = styled(Content)`
   }
 `;
 
+const DateModal = styled(Content)`
+  grid-column: 5/11;
+  display: ${(props) => (props.modal === "date" ? "block" : "none")};
+
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+`;
+
+const LanguageModal = styled(Content)`
+  grid-column: 8/14;
+  display: ${(props) => (props.modal === "language" ? "block" : "none")};
+  position: relative;
+  display: flex;
+  justify-content: space-around;
+
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+
+  > img {
+    position: absolute;
+    display: block;
+    width: 30%;
+    margin: 5%;
+  }
+`;
+
+const langIcons = () => {
+  let keyArr = Object.keys(langImg);
+  return keyArr.map((key, idx) => <img src={langImg[key]} key={idx} />);
+};
+
 const Search = () => {
   const [modal, setModal] = useState(null);
   //display : none으로 위에서 막아버림
 
   const clickHandler = (id) => {
-    switch (id) {
-      case "location":
-        setModal("2/8");
-        //이상하게 styled-component는 props 이용 조건부 렌더링 시 string으로 해야 먹힌다
-        break;
-      case "date":
-        setModal("5/11");
-        break;
+    setModal(id);
+    // switch (id) {
+    //   case "location":
+    //     setModal("2/8");
+    //     //이상하게 styled-component는 props 이용 조건부 렌더링 시 string으로 해야 먹힌다
+    //     break;
+    //   case "date":
+    //     setModal("5/11");
+    //     break;
 
-      case "language":
-        setModal("8/14");
-        break;
-      case "search":
-        setModal(null);
-        break;
-    }
+    //   case "language":
+    //     setModal("8/14");
+    //     break;
+    //   case "search":
+    //     setModal(null);
+    //     break;
+    // }
   };
 
   return (
@@ -165,8 +214,9 @@ const Search = () => {
           <FontAwesomeIcon icon={faSearch} size="1.5x" color="white" />
         </Icon>
       </StyledSearch>
-
-      <Modal modal={modal} />
+      <LocationModal modal={modal} />
+      <DateModal modal={modal} />
+      <LanguageModal modal={modal}>{langIcons()}</LanguageModal>
     </>
   );
 };
