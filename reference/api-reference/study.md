@@ -13,16 +13,12 @@
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="city" required="false" %}
+{% swagger-parameter in="query" name="language" %}
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="name" %}
-
-{% endswagger-parameter %}
-
-{% swagger-parameter in="query" name="roadAddress" %}
-
+{% swagger-parameter in="query" name="date" %}
+date ~ date + 10일 
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
@@ -47,6 +43,7 @@ data: {
                             },
                             ...
                             ], 
+                    "startdate": "ㅓ  2019-03-11",
                     "createdAt": "2019-02-24T16:17:47.000Z",
                     "updatedAt": "2019-02-24T16:17:47.000Z"
                     }
@@ -76,7 +73,7 @@ data: {
 
 {% endswagger-description %}
 
-{% swagger-parameter in="path" name="id" type="Int" required="true" %}
+{% swagger-parameter in="path" name="id (studyId)" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
@@ -88,14 +85,15 @@ data: {
                     {
                     "id": 1,
                     "username": "somi",
-                    "content": 
-                            {
-                            "title": "스터디 구함",
-                            "description": "airbnb 클론 코딩 하신 분"
-                            },
+                    "content": "airbnb 클론 코딩 하신 분",
+                    "title": "스터디 구함",
                     "kakaoLink": "https://kakao.com", 
                     "closed": false,
-                   "location":  { lat: 33.450705, lng: 126.570677 },
+                    "location":  
+                            { 
+                            lat: 33.450705, 
+                            lng: 126.570677 
+                            },
                     "language": [
                             {
                             "id": 1,
@@ -134,7 +132,7 @@ data: {
 
 {% endswagger-description %}
 
-{% swagger-parameter in="path" name="id" type="Int" required="true" %}
+{% swagger-parameter in="path" name="id (userId)" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
@@ -174,6 +172,14 @@ name, roadAddress, latitude, longitude
 0.normal 1.github 2.google
 {% endswagger-parameter %}
 
+{% swagger-parameter in="body" name="startDate" required="true" type="Date" %}
+
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="language_id" required="true" type="Int" %}
+
+{% endswagger-parameter %}
+
 {% swagger-response status="201: Created" description="" %}
 ```javascript
 ```
@@ -198,7 +204,7 @@ name, roadAddress, latitude, longitude
 
 {% endswagger-description %}
 
-{% swagger-parameter in="path" name="id" type="Int" required="true" %}
+{% swagger-parameter in="path" name="id (userId)" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
@@ -222,6 +228,10 @@ access token
 
 {% endswagger-parameter %}
 
+{% swagger-parameter in="body" name="title" %}
+
+{% endswagger-parameter %}
+
 {% swagger-parameter in="body" name="kakaoLink" required="false" %}
 
 {% endswagger-parameter %}
@@ -232,6 +242,14 @@ access token
 
 {% swagger-parameter in="body" name="location" type="Array" required="false" %}
 name, roadAddress, latitude, longitude
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="startDate" type="Date" %}
+
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="language_id" type="Int" %}
+
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="loginMethod" required="true" type="Int" %}
@@ -246,11 +264,8 @@ name, roadAddress, latitude, longitude
                     {
                     "id": 1,
                     "username": "somi",
-                    "content": 
-                            {
-                            "title": "스터디 구함",
-                            "description": "airbnb 클론 코딩 하신 분"
-                            },
+                    "content": "airbnb 클론 코딩 하신 분",
+                    "title": "스터디 구함",
                     "kakaoLink": "https://kakao.com", 
                     "closed": false, 
                     "location_id": 1,

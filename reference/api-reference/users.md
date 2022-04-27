@@ -83,11 +83,9 @@ Nodemailer 사용
         "id": 1,
         "username": "nikki"
         "email": "nikki@gmail.com",
-        "verified": false,
         "createdAt": "2019-02-24T16:17:47.000Z",
         "updatedAt": "2019-02-24T16:17:47.000Z"
     }
-    
 }
 ```
 {% endswagger-response %}
@@ -258,30 +256,7 @@ authorization code
 {% endswagger-response %}
 {% endswagger %}
 
-{% swagger method="get" path="/users/:id/verify/:token" baseUrl="https://happydeving.com" summary="이메일 인증" %}
-{% swagger-description %}
-
-{% endswagger-description %}
-
-{% swagger-response status="200: OK" description="" %}
-```javascript
-{ message: "Email verified successfully" }
-```
-{% endswagger-response %}
-
-{% swagger-response status="400: Bad Request" description="" %}
-```javascript
-{ message: "Invalid link" }
-```
-{% endswagger-response %}
-
-{% swagger-response status="500: Internal Server Error" description="" %}
-```javascript
-```
-{% endswagger-response %}
-{% endswagger %}
-
-{% swagger method="delete" path="/users/withdrawal" baseUrl="https://happydeving.com" summary="회원탈퇴" %}
+{% swagger method="delete" path="/users/withdrawal" baseUrl="https://happydeving.com" summary="google social login" %}
 {% swagger-description %}
 
 {% endswagger-description %}
