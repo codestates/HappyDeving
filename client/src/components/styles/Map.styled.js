@@ -5,61 +5,29 @@ import { markerdata as dummydata } from "./Marker.data";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 
-const { kakao } = window;
-
-const studies = dummydata.data.studies;
-const markerdata = studies.map((el) => {
-  return {
-    id: el.id,
-    title: el.content.title,
-    latlng: { lat: el.location.lat, lng: el.location.lng },
-    img: langImg[el.language[0].name],
-    info: el.createdAt.split("T")[0],
-  };
-});
-// const markerdata1 = [
-//   {
-//     title: "카카오",
-//     latlng: { lat: 33.450705, lng: 126.570677 },
-//     img: "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1",
-//     info: "info",
-//   },
-//   {
-//     title: "생태연못",
-//     latlng: { lat: 33.450936, lng: 126.569477 },
-//     img: "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1",
-//     info: "info",
-//   },
-//   {
-//     title: "텃밭",
-//     latlng: { lat: 33.450879, lng: 126.56994 },
-//     img: "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1",
-//     info: "info",
-//   },
-//   {
-//     title: "근린공원",
-//     latlng: { lat: 33.451393, lng: 126.570738 },
-//     img: "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1",
-//     info: "info",
-//   },
-// ];
-
-const View = styled(Content)`
-  grid-column: 2/ 14;
-  height: 400px;
-`;
-
 const Map = () => {
+  const { kakao } = window;
+
+  const MapView = styled(Content)`
+    grid-column: 2/ 14;
+    height: 400px;
+    position: relative;
+    z-index: 0;
+  `;
+
   const container = useRef(null);
 
-  //content는 string으로 적어야 하고 js로 적어야 한다
-  //click 함수를 써야 한다
-
-  var // 마커이미지의 주소입니다
-    imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
-    imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-
-  // 마커가 지도 위에 표시되도록 설정합니다
+  //검색한 조건에 맞는 스터디들의 목록
+  const studies = dummydata.data.studies;
+  const markerdata = studies.map((el) => {
+    return {
+      id: el.id,
+      title: el.content.title,
+      latlng: { lat: el.location.lat, lng: el.location.lng },
+      img: langImg[el.language[0].name],
+      info: el.createdAt.split("T")[0],
+    };
+  });
 
   const mapscript = () => {
     const options = {
@@ -67,7 +35,12 @@ const Map = () => {
       center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
       level: 3, //지도의 레벨(확대, 축소 정도)
     };
+
     var map = new kakao.maps.Map(container.current, options);
+
+    var // 마커이미지의 주소입니다
+      imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
+      imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
     markerdata.forEach((el) => {
       var marker = new kakao.maps.Marker({
@@ -76,17 +49,14 @@ const Map = () => {
         title: el.title,
         image: new kakao.maps.MarkerImage(el.img, imageSize, imageOption),
       });
+      //marker 배열 내용을 하나씩 넣어서 만드는 과정
 
       marker.setClickable(true);
       marker.getClickable(true);
-
       // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
 
-      //   <i class="fa-regular fa-heart fa-2xl">
-      //   </i>
-
       function heartHandler() {
-        // console.log(icon.className);
+        // el.id;
         if (icon.className === "fa-solid fa-heart fa-2x") {
           icon.className = "fa-regular fa-heart fa-2x";
         } else {
@@ -95,10 +65,11 @@ const Map = () => {
       }
       //el.id 스터디 아이디가 담겨온다.
       function contentHandler() {
-        //상세스터디 페이지로 이동
+        //모달 창 클릭 시 상세스터디 페이지로 이동
         document.location.href = `/study/${el.id}`;
       }
 
+      //모달창 내용 구현 : 바닐라JS로 해야 함
       const content = document.createElement("div");
       content.id = "content";
 
@@ -129,24 +100,20 @@ const Map = () => {
       desc.append(info, icon);
       content.append(title, img, desc);
 
+      //overlay로 maps에 뿌려줌
       var overlay = new kakao.maps.CustomOverlay({
         content: content,
         position: marker.getPosition(),
         clickable: true,
       });
-      // like
-      //map:map을 안에 설정해주면 default로 marker가 올라간 채 나온다
 
+      //마커를 클릭하면 지도에 모달창 생성
       kakao.maps.event.addListener(marker, "click", function () {
         overlay.setMap(map);
       });
 
-      kakao.maps.event.addListener(overlay, "click", function () {
-        console.log("overlay");
-      });
-
-      kakao.maps.event.addListener(map, "click", function (mouseEvent) {
-        console.log(mouseEvent);
+      //마커 외의 map을 클릭하면 모달창이 사라진다
+      kakao.maps.event.addListener(map, "click", function () {
         overlay.setMap(null);
       });
     });
@@ -158,8 +125,7 @@ const Map = () => {
 
   return (
     <>
-      {/* <i className={`${click} fa-heart fa-2x`} onClick={clickHandler}></i> */}
-      <View id="map" ref={container} />
+      <MapView id="map" ref={container} />
     </>
   );
 };
