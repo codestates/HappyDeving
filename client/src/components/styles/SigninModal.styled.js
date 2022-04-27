@@ -112,9 +112,6 @@ function SigninModal() {
   const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    // if (isSuccess || user) {
-    //   navigate("/"); 모달창이니까 안 해도 될 것 같다.
-    // }
     dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 

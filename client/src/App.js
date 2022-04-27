@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { useSelector } from "react-redux";
@@ -15,8 +15,6 @@ import Study from "./pages/Study";
 import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
 import LikedStudy from "./pages/LikedStudy";
-import axios from "axios";
-import { REACT_APP_API_URL } from "./config";
 import "./static/fonts/font.css";
 
 const theme = {
@@ -37,14 +35,6 @@ const theme = {
 
 function App() {
   const { signinModal, signupModal } = useSelector((store) => store.modal);
-  const [info, setInfo] = useState("");
-
-  useEffect(() => {
-    axios.get(`${REACT_APP_API_URL}/users/5`).then((res) => {
-      setInfo(res);
-      console.log("userInfo:: ", res);
-    });
-  }, []);
 
   return (
     <Router>
