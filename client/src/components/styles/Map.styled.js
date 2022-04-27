@@ -63,7 +63,7 @@ const Map = () => {
           icon.className = "fa-solid fa-heart fa-2x";
         }
       }
-
+      //el.id 스터디 아이디가 담겨온다.
       function contentHandler() {
         //모달 창 클릭 시 상세스터디 페이지로 이동
         document.location.href = `/study/${el.id}`;
