@@ -19,12 +19,10 @@ import axios from "axios";
 import { REACT_APP_API_URL } from "./config";
 import "./static/fonts/font.css";
 import "./App.css";
-import { REACT_APP_API_URL } from "./config";
 
 function App() {
   const [info, setInfo] = useState("");
   const { signinModal, signupModal } = useSelector((store) => store.modal);
-
 
   const theme = {
     colors: {
@@ -42,14 +40,10 @@ function App() {
     font: {},
   };
 
-
-
-
   useEffect(() => {
     axios.get(`${REACT_APP_API_URL}/users/5`).then((res) => {
       setInfo(res);
       console.log("userInfo:: ", res);
-
     });
   }, []);
 

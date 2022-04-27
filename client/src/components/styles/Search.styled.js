@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Content from "../styles/Content.styled";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
@@ -13,28 +13,7 @@ import {
   dateModal,
   reset,
 } from "../../features/searchModals/searchModalSlice";
-import CalenderDate from "../Calendar";
-
-// const moment = require("moment");
-// const dispatch = useDispatch();
-// return (
-//   <StyledSection>
-{
-  /* 전역 변수에 저장 방식 정하기! 위에 방식이 더 정학히 비교할 수는 있지만? 약간 오류생김
-      {moment(calenderDateValue).format("M월 D일")} => Wed Apr 13 2022 00:00:00 GMT+0900 (한국 표준시) 
-    {calenderDateValue}  => 4월 13일*/
-}
-{
-  /* <div>{moment(calenderDateValue).format("M월 D일")}</div> */
-}
-{
-  /* <div onClick={() => dispatch(openCalenderModal(!calenderModal))}>search</div> */
-}
-{
-  /* </StyledSection>
-  );
-} */
-}
+import CalenderDate from "../Calendar.js";
 
 const { kakao } = window;
 
@@ -186,7 +165,6 @@ const LanguageModal = styled(Content)`
 `;
 
 const Search = () => {
-  //display : none으로 위에서 막아버림
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [locationList, setLocationList] = useState([]);
@@ -207,9 +185,6 @@ const Search = () => {
   // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
   function placesSearchCB(data, status) {
     if (status === kakao.maps.services.Status.OK) {
-      // 정상적으로 검색이 완료됐으면
-      // 검색 목록과 마커를 표출합니다
-      // 페이지 번호를 표출합니다
       setLocationList(data);
     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
       alert("검색 결과가 존재하지 않습니다.");
@@ -242,8 +217,6 @@ const Search = () => {
       />
     ));
   };
-
-  //console.log(searchPlaces("송파구"));
 
   const handleInputValue = (e) => {
     if (e.key === "Enter") {
@@ -284,9 +257,15 @@ const Search = () => {
           <span className="title">location</span>
           <span className="desc">{data.location ? data.location : "위치를 검색해주세요"}</span>
         </Location>
-        <Date id="date" onClick={() => dispatch(dateModal())}>
+        <Date
+          id="date"
+          onClick={() => {
+            dispatch(dateModal());
+            console.log(date);
+          }}
+        >
           <span className="title">Start Date</span>
-          <span className="desc">{calenderDateValue}</span>
+          <span className="desc">{data.date ? calenderDateValue : "시작일을 선택해주세요"}</span>
         </Date>
         <Language id="language" onClick={() => dispatch(languageModal())}>
           <span className="title">Language</span>
@@ -310,14 +289,13 @@ const Search = () => {
           <input onKeyDown={(e) => handleInputValue(e)} placeholder="ex. 송파구 오륜동"></input>
           <div></div>
           {locationListHandler(locationList)}
-          {/* ['address_name', 'category_group_code', 'category_group_name', 'category_name', 'distance', 'id', 'phone', 'place_name', 'place_url', 'road_address_name', 'x', 'y'] */}
-
-          {/* <div>
-            {options.map((x,i) => x.indexof(handleComboBox) > -1 ? <div onClick={() => onClick(i)}>{x}</div>:null)}
-          </div> */}
         </LocationModal>
       ) : null}
-      {date ? <DateModal /> : null}
+      {date ? (
+        <DateModal>
+          <CalenderDate />
+        </DateModal>
+      ) : null}
       {language ? (
         <LanguageModal>
           <div>{langIcons()}</div>
