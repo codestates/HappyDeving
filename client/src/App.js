@@ -16,11 +16,11 @@ import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
 import LikedStudy from "./pages/LikedStudy";
 import "./static/fonts/font.css";
+import "./App.css";
 
 function App() {
   const [info, setInfo] = useState("");
   const { signinModal, signupModal } = useSelector((store) => store.modal);
-
 
   const theme = {
     colors: {
