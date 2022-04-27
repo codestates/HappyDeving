@@ -123,7 +123,7 @@ data: {
 
 {% endswagger-description %}
 
-{% swagger-parameter in="path" name="id" type="Int" required="true" %}
+{% swagger-parameter in="path" name="id (userId)" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
@@ -195,7 +195,7 @@ name, roadAddress, latitude, longitude
 
 {% endswagger-description %}
 
-{% swagger-parameter in="path" name="id" type="Int" required="true" %}
+{% swagger-parameter in="path" name="id (userId)" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
