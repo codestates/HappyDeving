@@ -93,7 +93,7 @@ const Map = () => {
           icon.className = "fa-solid fa-heart fa-2x";
         }
       }
-
+      //el.id 스터디 아이디가 담겨온다.
       function contentHandler() {
         //상세스터디 페이지로 이동
         document.location.href = `/study/${el.id}`;
@@ -134,7 +134,7 @@ const Map = () => {
         position: marker.getPosition(),
         clickable: true,
       });
-
+      // like
       //map:map을 안에 설정해주면 default로 marker가 올라간 채 나온다
 
       kakao.maps.event.addListener(marker, "click", function () {
