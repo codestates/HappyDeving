@@ -29,15 +29,14 @@ accessToken
                     {
                     "id": 1, 
                     "username": "nikki"
-                    "content": "airbnb 클론 코딩 하신 분" 
-                    "title": "스터디 구함",
+                    "content": 
+                            {
+                            "title": "스터디 구함",
+                            "description": "airbnb 클론 코딩 하신 분"
+                            },
                     "kakaoLink": "https://kakao.com", 
                     "closed": false, 
-                    "location":  
-                                { 
-                                "lat": "33.450705", 
-                                "lng": "126.570677" 
-                                },
+                    "location":  { lat: 33.450705, lng: 126.570677 },
                     "language": [
                             {
                             "id": 1,
@@ -134,7 +133,7 @@ err
 {% endswagger-response %}
 {% endswagger %}
 
-{% swagger method="delete" path="/mypage" baseUrl="https://happydeving.com" summary="회원정보 삭제" %}
+{% swagger method="delete" path="/mypage" baseUrl="https://happydeving.com" summary="회원정보 수정" %}
 {% swagger-description %}
 
 {% endswagger-description %}
