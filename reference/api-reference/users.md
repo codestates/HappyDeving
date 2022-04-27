@@ -257,7 +257,7 @@ authorization code
 {% endswagger-response %}
 {% endswagger %}
 
-{% swagger method="delete" path="/users/withdrawal" baseUrl="https://happydeving.com" summary="" %}
+{% swagger method="delete" path="/users/withdrawal" baseUrl="https://happydeving.com" summary="회원탈퇴" %}
 {% swagger-description %}
 
 {% endswagger-description %}
