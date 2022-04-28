@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import { useSelector } from "react-redux";
@@ -15,13 +15,11 @@ import Study from "./components/styles/StudyDesc.styled";
 import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
 import LikedStudy from "./pages/LikedStudy";
-import axios from "axios";
-import { REACT_APP_API_URL } from "./config";
+
 import "./static/fonts/font.css";
 import "./App.css";
 
 function App() {
-  const [info, setInfo] = useState("");
   const { signinModal, signupModal } = useSelector((store) => store.modal);
 
   const theme = {
@@ -45,13 +43,6 @@ function App() {
     font: {},
   };
 
-  useEffect(() => {
-    axios.get(`${REACT_APP_API_URL}/users/5`).then((res) => {
-      setInfo(res);
-      console.log("userInfo:: ", res);
-    });
-  }, []);
-
   return (
     <Router>
       <ThemeProvider theme={theme}>
@@ -59,13 +50,7 @@ function App() {
           <Header img={theme.icons} />
 
           <div className="App">
-            <header className="App-header">
-              <p>{info}</p>
-              <p>{info.id}</p>
-              <p>{info.firstName}</p>
-              <p>{info.lastName}</p>
-              <p>{info.email}</p>
-            </header>
+            <header className="App-header"></header>
           </div>
 
           {signinModal ? <SigninModal /> : null}
