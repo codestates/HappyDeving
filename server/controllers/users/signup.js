@@ -3,8 +3,6 @@ const bcrypt = require("bcrypt");
 const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
 const sendEmail = require("../../utils/sendEmail");
 
-// const { hashPassword } = require("../tokenFunctions/security");
-
 module.exports = {
   post: async (req, res) => {
     try {
@@ -44,11 +42,31 @@ module.exports = {
         accessToken: newAccessToken,
         message: "An Email sent to your account please verify",
       });
-
-      return res.send({ data: { newUser }, newAccessToken });
     } catch (err) {
       console.error(err);
       return res.status(500).json();
+    }
+  },
+  get: async (req, res) => {
+    try {
+      const user = await User.findOne({ where: { id: req.params.id } });
+      if (!user) return res.status(400).send({ message: "Invalid link" });
+
+      if (!req.cookies.accessToken) {
+        return res.status(400).send({ message: "Invalid link" });
+      }
+
+      await User.update(
+        { verified: true }, // true가 아니라 1로 저장이 되는 이유는? 아마도 verified가 아직 boolean으로 안 바뀌어서?
+        {
+          where: {
+            id: user.id,
+          },
+        }
+      );
+      res.status(200).send({ message: "Email verified successfully" });
+    } catch (error) {
+      res.status(500).send({ message: "Internal Server Error" });
     }
   },
 };
