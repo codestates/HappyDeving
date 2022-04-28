@@ -21,7 +21,7 @@ module.exports = {
         where: {
           id: paramsId,
         },
-        attributes: ["id", "username", "email", "verified", "createdAt", "updatedAt"],
+        // attributes: ["id", "username", "email", "verified", "createdAt", "updatedAt"],
         include: [
           {
             model: Study,
@@ -67,62 +67,25 @@ module.exports = {
           users.study_comment[i].dataValues.username = username;
         }
       }
-
-      const { id, username, email, verified, createdAt, updatedAt, study, study_comment } = users;
+      console.log("users========", users);
+      const {
+        id,
+        username,
+        email,
+        verified,
+        github,
+        blog,
+        bio,
+        createdAt,
+        updatedAt,
+        study,
+        study_comment,
+      } = users;
 
       return res.json({
         data: {
-          userInfo: { id, username, email, verified, createdAt, updatedAt },
-          studies: study,
+          userInfo: { id, username, email, verified, github, blog, bio, createdAt, updatedAt },
           comments: study_comment,
-        },
-      });
-
-      // const findStudy = await Study.findAll({
-      //   where: { study_id: paramsId },
-      //   include: ["language"],
-      // });
-
-      // console.log(findStudy);
-
-      // console.log(findStudy[0].dataValues);
-
-      // findStudy.forEach(el => el.)
-
-      // const comment = await Study_comment.findAll({
-      //   where: { user_id: paramsId },
-      // });
-
-      // const findLanguage = await Language.findAll({
-      //   where: { study_id: findStudyId },
-      // });
-
-      // console.log(findLanguage);
-
-      // const { id, username, email, verified, createdAt, updatedAt } = users.dataValues;
-
-      // let study = [];
-      // for (let i = 0; i < findStudy.length; i++) {
-      //   const { username } = users.dataValues;
-      //   const { id, title, content, kakaoLink, closed, location_id, createdAt, updatedAt } =
-      //     findStudy[i].dataValues;
-
-      //   study.push({
-      //     id,
-      //     username,
-      //     content: { description: content, title },
-      //     kakaoLink,
-      //     closed,
-      //     location_id,
-      //     createdAt,
-      //     updatedAt,
-      //   });
-      // }
-
-      return res.json({
-        data: {
-          userInfo: { id, username, email, verified, createdAt, updatedAt },
-          // studies: findStudy,
         },
       });
     } catch (err) {

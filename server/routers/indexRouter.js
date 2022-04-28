@@ -6,6 +6,9 @@ router.get("/", (req, res) => res.send("Happy deving!"));
 // 스터디 검색 결과
 router.get("/search", study.search.get);
 
+// 내가 쓴 스터디 목록
+router.get("/mystudy/:id", study.mystudy.get);
+
 // 댓글 생성, 수정, 삭제
 router.get("/studies/comment/:id", study.comment.get);
 router.post("/studies/comment", study.comment.post);
