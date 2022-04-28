@@ -3,4 +3,5 @@ module.exports = {
   search: require("./search"),
   comment: require("./comment"),
   like: require("./like"),
+  mystudy: require("./mystudy"),
 };

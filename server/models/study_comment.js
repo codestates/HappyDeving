@@ -9,8 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ User, Study }) {
       // define association here
-      this.belongsTo(User, { foreignKey: "user_id", as: "user" });
-      this.belongsTo(Study, { foreignKey: "study_id", as: "study" });
     }
 
     toJSON() {
@@ -30,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       parentId: {
         type: DataTypes.INTEGER,
         allowNull: true,
+        defaultValue: null,
       },
     },
     {
