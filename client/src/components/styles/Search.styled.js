@@ -1,47 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Content from "../styles/Content.styled";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { langImg } from "../../static/images/langImg";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getStudiesMapApi } from "../../api/study";
 import {
   languageModal,
   locationModal,
   dateModal,
   reset,
-} from "../../features/searchModals/searchModalSlice";
-import CalenderDate from "../Calendar";
+} from "../../features/Search/searchModalSlice";
+import {
+  setLocationData,
+  // setDateData,
+  setLanguageData,
+  resetData,
+} from "../../features/Search/searchDataSlice";
+import CalenderDate from "../Calendar.js";
 
-// const moment = require("moment");
-// const dispatch = useDispatch();
-// return (
-//   <StyledSection>
-{
-  /* 전역 변수에 저장 방식 정하기! 위에 방식이 더 정학히 비교할 수는 있지만? 약간 오류생김
-      {moment(calenderDateValue).format("M월 D일")} => Wed Apr 13 2022 00:00:00 GMT+0900 (한국 표준시) 
-    {calenderDateValue}  => 4월 13일*/
-}
-{
-  /* <div>{moment(calenderDateValue).format("M월 D일")}</div> */
-}
-{
-  /* <div onClick={() => dispatch(openCalenderModal(!calenderModal))}>search</div> */
-}
-{
-  /* </StyledSection>
-  );
-} */
-}
+const { kakao } = window;
 
 const StyledSearch = styled(Content)`
   grid-column: 3/ 13;
   border-radius: 50px;
   height: 80px;
-  font-family: "hanna";
+  font-family: "Bold";
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  margin-bottom: 0px;
+  margin-bottom: 40px;
   //grid가 상속이 안됨 왜??
   div {
     box-shadow: none;
@@ -50,24 +39,24 @@ const StyledSearch = styled(Content)`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     &:hover {
-      background-color: #f0f0e5;
-      opacity: 0.7;
+      background-color: rgba(94, 23, 235, 0.9);
+      /* color: white; */
+      color: white;
+      box-shadow: ${(props) => props.theme.colors.lavender};
+      cursor: pointer;
     }
     &:active {
       box-shadow: ${(props) => props.theme.contents.boxShadow};
     }
-
     .title {
       font-family: "Bold";
-      font-size: 1.5vw;
+      font-size: 1.8vw;
       margin-bottom: 0.5vw;
     }
-
     .desc {
-      font-family: "Light";
-      font-size: 1.5vw;
+      font-family: "Medium";
+      font-size: 1.8vw;
     }
   }
 `;
@@ -87,7 +76,7 @@ const Language = styled(Content)`
   height: 80px;
 `;
 
-const Icon = styled.span`
+const SearchIcon = styled.span`
   height: 50px;
   width: 50px;
   border-radius: 50%;
@@ -95,10 +84,10 @@ const Icon = styled.span`
   text-align: center;
   margin: 15px 0px 15px 20px;
   background-color: ${(props) => props.theme.colors.purple};
-
   &:hover {
-    background-color: ${(props) => props.theme.colors.lavender};
+    background-color: ${(props) => props.theme.colors.purple};
     opacity: 0.7;
+    cursor: pointer;
   }
   &:active {
     box-shadow: ${(props) => props.theme.contents.boxShadow};
@@ -106,12 +95,42 @@ const Icon = styled.span`
 `;
 
 const LocationModal = styled(Content)`
+  position: relative;
+  box-sizing: content-box;
   grid-column: 2/8;
-
-  &:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
+  /* height: 100%; */
+  /* display: flex; */
+  /* align-items: center; */
+  /* padding-top: 3%; */
+  font-family: "Medium";
+  padding: 5% 5% 3% 5%;
+  min-height: 7vw;
+  max-height: 12vw;
+  overflow: scroll;
+  > div {
+    border-bottom: 1px solid beige;
+    text-align: center;
+    padding: 7%;
+    border-radius: 30px;
+    &:hover {
+      color: ${(props) => props.theme.colors.purple};
+      cursor: pointer;
+    }
+  }
+  > input {
+    height: 5vw;
+    width: 90%;
+    border-radius: 30px;
+    background-color: lightgray;
+    box-shadow: ${(props) => props.theme.contents.boxShadow};
+    position: absolute;
+    z-index: 30;
+    opacity: 80%;
+    text-align: center;
+    caret-color: ${(props) => props.theme.colors.purple};
+    &:focus {
+      outline: none;
+    }
   }
 `;
 
@@ -131,36 +150,111 @@ const DateModal = styled(Content)`
 
 const LanguageModal = styled(Content)`
   grid-column: 8/14;
-  position: relative;
-  display: flex;
-  justify-content: space-around;
-
-  &:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
-  }
-
-  > img {
-    position: absolute;
-    display: block;
-    width: 30%;
-    margin: 5%;
+  > div {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    width: 90%;
+    height: 90%;
+    margin: 5% auto;
+    border: none;
+    > img {
+      display: block;
+      border-radius: 30px;
+      padding: 1%;
+      width: 25%;
+      height: 25%;
+      margin: 4%;
+      &:hover {
+        box-shadow: ${(props) => props.theme.contents.boxShadow};
+        cursor: pointer;
+      }
+      &:active {
+        box-shadow: 10px 5px 15px 0.1px rgba(0, 0, 0, 0.5);
+      }
+    }
   }
 `;
 
-const langIcons = () => {
-  let keyArr = Object.keys(langImg);
-  return keyArr.map((key, idx) => <img src={langImg[key]} key={idx} />);
-};
-
 const Search = () => {
-  //display : none으로 위에서 막아버림
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [locationList, setLocationList] = useState([]);
+
+  var ps = new kakao.maps.services.Places();
+
+  // 키워드 검색을 요청하는 함수입니다
+  function searchPlaces(value) {
+    var keyword = value;
+    if (!keyword.replace(/^\s+|\s+$/g, "")) {
+      alert("키워드를 입력해주세요!");
+      return false;
+    }
+    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+    return ps.keywordSearch(keyword, placesSearchCB);
+  }
+
+  // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+  function placesSearchCB(data, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      setLocationList(data);
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      alert("검색 결과가 존재하지 않습니다.");
+      return;
+    } else if (status === kakao.maps.services.Status.ERROR) {
+      alert("검색 결과 중 오류가 발생했습니다.");
+      return;
+    }
+  }
+
   const { location, date, language } = useSelector((store) => store.search);
+  const { locationData, dateData, languageData } = useSelector((store) => store.search);
+
   const { calenderDateValue } = useSelector((store) => store.calender);
   console.log(calenderDateValue);
 
+  const langIcons = () => {
+    let keyArr = Object.keys(langImg);
+    return keyArr.map((key, idx) => (
+      <img
+        src={langImg[key]}
+        key={idx}
+        onClick={() => {
+          dispatch(setLanguageData(key));
+          dispatch(reset());
+        }}
+      />
+    ));
+  };
+
+  const handleInputValue = (e) => {
+    if (e.key === "Enter") {
+      searchPlaces(e.target.value);
+    } // true
+  };
+
+  const locationListHandler = (locationList) => {
+    const list = locationList.map(
+      (location) =>
+        location["address_name"].split(" ")[1] + " " + location["address_name"].split(" ")[2]
+    );
+    const filteredList = Array.from(new Set(list));
+    return filteredList.map((location, idx) => (
+      <div
+        key={idx}
+        onClick={() => {
+          dispatch(setLocationData(location));
+          dispatch(dateModal());
+        }}
+      >
+        {console.log(location)}
+        {location}
+      </div>
+    ));
+  };
+
+  console.log(locationListHandler(locationList));
+  console.log(locationList);
   return (
     <>
       <StyledSearch>
@@ -171,29 +265,54 @@ const Search = () => {
           }}
         >
           <span className="title">location</span>
-          <span className="desc"> location</span>
+          <span className="desc">{locationData ? locationData : "위치를 검색해주세요"}</span>
         </Location>
-        <Date id="date" onClick={() => dispatch(dateModal())}>
+        <Date
+          id="date"
+          onClick={() => {
+            dispatch(dateModal());
+            console.log(date);
+          }}
+        >
           <span className="title">Start Date</span>
-          {/* <span className="desc"> Start Date</span> */}
-          <span className="desc">{calenderDateValue}</span>
+          <span className="desc">{dateData ? calenderDateValue : "시작일을 선택해주세요"}</span>
         </Date>
         <Language id="language" onClick={() => dispatch(languageModal())}>
           <span className="title">Language</span>
-          <span className="desc"> Language</span>
+          <span className="desc">{languageData ? languageData : "언어를 선택해주세요"} </span>
         </Language>
-
-        <Icon id="search" onClick={() => dispatch(reset())}>
+        <SearchIcon
+          id="search"
+          onClick={() => {
+            getStudiesMapApi({ locationData, dateData, languageData }).then((res) =>
+              console.log(res)
+            );
+            //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
+            navigate("/map");
+            dispatch(resetData());
+            dispatch(reset());
+          }}
+        >
           <FontAwesomeIcon icon={faSearch} size="1x" color="white" />
-        </Icon>
+        </SearchIcon>
       </StyledSearch>
-      {location ? <LocationModal /> : null}
+      {location ? (
+        <LocationModal>
+          <input onKeyDown={(e) => handleInputValue(e)} placeholder="ex. 송파구 오륜동"></input>
+          <div></div>
+          {locationListHandler(locationList)}
+        </LocationModal>
+      ) : null}
       {date ? (
         <DateModal>
           <CalenderDate />
         </DateModal>
       ) : null}
-      {language ? <LanguageModal>{langIcons()}</LanguageModal> : null}
+      {language ? (
+        <LanguageModal>
+          <div>{langIcons()}</div>
+        </LanguageModal>
+      ) : null}
     </>
   );
 };

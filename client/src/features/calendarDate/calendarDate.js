@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   // calenderModal: false,
-  calenderDateValue: null,
+  calenderDateValue: "null",
 };
 
 const calenderSlice = createSlice({
