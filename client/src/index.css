@@ -9,7 +9,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   box-sizing: border-box;
-  background-color: #d8e4f4;
+  /* background-color: #d8e4f4; */
+  background-color: black;
 }
 /* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;

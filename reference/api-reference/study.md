@@ -65,6 +65,58 @@ data: {
 {% endswagger-response %}
 {% endswagger %}
 
+{% swagger method="get" path="/mystudy" baseUrl="https://happydeving.com" summary="내가 쓴 스터디 목록 " %}
+{% swagger-description %}
+
+{% endswagger-description %}
+
+{% swagger-parameter in="path" name="user_id" required="true" %}
+
+{% endswagger-parameter %}
+
+{% swagger-response status="200: OK" description="" %}
+```javascript
+{
+data: {
+            studies : [
+                    {
+                    "id": 1, 
+                    "content": "airbnb 클론 코딩 하신 분"
+                    "title": "스터디 구함",
+                    "language": [
+                            {
+                            "id": 1,
+                            "name": "javascript"
+                            },
+                            ...
+                            ], 
+                    "startdate": "2019-03-11",
+                    "createdAt": "2019-02-24T16:17:47.000Z",
+                    "updatedAt": "2019-02-24T16:17:47.000Z"
+                    }
+            ...
+            ]
+    }
+}
+```
+{% endswagger-response %}
+
+{% swagger-response status="404: Not Found" description="" %}
+```javascript
+{
+    // Response
+}
+```
+{% endswagger-response %}
+
+{% swagger-response status="500: Internal Server Error" description="" %}
+```javascript
+```
+{% endswagger-response %}
+{% endswagger %}
+
+### 스터디 상세페이지
+
 {% swagger method="get" path="/study" baseUrl="https://happydeving.com" summary="스터디 상세 페이지" %}
 {% swagger-description %}
 
@@ -217,10 +269,6 @@ access token
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="username" required="true" %}
-
-{% endswagger-parameter %}
-
 {% swagger-parameter in="body" name="content" required="false" %}
 
 {% endswagger-parameter %}
@@ -238,7 +286,9 @@ access token
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="location" type="Array" required="false" %}
-name(장소이름), latitude, longitude, guType, dongType
+latitude, longitude, guType, dongType,
+
+name(장소이름)
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="startDate" type="Date" %}
@@ -340,6 +390,62 @@ access token
 {% endswagger-response %}
 {% endswagger %}
 
+### 스터디 찜 목록&#x20;
+
+{% swagger method="get" path="/study/like" baseUrl="https://happydeving.com" summary="내가 찜한 스터디 목록 " %}
+{% swagger-description %}
+
+{% endswagger-description %}
+
+{% swagger-parameter in="path" name="user_id" required="true" %}
+
+{% endswagger-parameter %}
+
+{% swagger-parameter in="header" name="authorization" required="true" %}
+access token
+{% endswagger-parameter %}
+
+{% swagger-response status="200: OK" description="" %}
+```javascript
+{
+data: {
+            studies : [
+                    {
+                    "id": 1, 
+                    "content": "airbnb 클론 코딩 하신 분"
+                    "title": "스터디 구함",
+                    "language": [
+                            {
+                            "id": 1,
+                            "name": "javascript"
+                            },
+                            ...
+                            ], 
+                    "startdate": "2019-03-11",
+                    "createdAt": "2019-02-24T16:17:47.000Z",
+                    "updatedAt": "2019-02-24T16:17:47.000Z"
+                    }
+            ...
+            ]
+    }
+}
+```
+{% endswagger-response %}
+
+{% swagger-response status="404: Not Found" description="" %}
+```javascript
+{
+    // Response
+}
+```
+{% endswagger-response %}
+
+{% swagger-response status="500: Internal Server Error" description="" %}
+```javascript
+```
+{% endswagger-response %}
+{% endswagger %}
+
 {% swagger method="post" path="/study/like" baseUrl="https://happydeving.com" summary="스터디 찜 목록 추가" %}
 {% swagger-description %}
 
@@ -411,6 +517,8 @@ access token
 ```
 {% endswagger-response %}
 {% endswagger %}
+
+### 스터디 상세페이지 댓글
 
 {% swagger method="post" path="/studies/comment" baseUrl="https://happydeving.com" summary="스터디 상세 페이지의 댓글 생성" %}
 {% swagger-description %}

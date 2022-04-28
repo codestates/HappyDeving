@@ -12,7 +12,13 @@ import {
   locationModal,
   dateModal,
   reset,
-} from "../../features/searchModals/searchModalSlice";
+} from "../../features/Search/searchModalSlice";
+import {
+  setLocationData,
+  // setDateData,
+  setLanguageData,
+  resetData,
+} from "../../features/Search/searchDataSlice";
 import CalenderDate from "../Calendar.js";
 
 const { kakao } = window;
@@ -24,7 +30,7 @@ const StyledSearch = styled(Content)`
   font-family: "Bold";
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  margin-bottom: 0px;
+  margin-bottom: 40px;
   //grid가 상속이 안됨 왜??
   div {
     box-shadow: none;
@@ -33,24 +39,24 @@ const StyledSearch = styled(Content)`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     &:hover {
-      background-color: #f0f0e5;
-      opacity: 0.7;
+      background-color: rgba(94, 23, 235, 0.9);
+      /* color: white; */
+      color: white;
+      box-shadow: ${(props) => props.theme.colors.lavender};
+      cursor: pointer;
     }
     &:active {
       box-shadow: ${(props) => props.theme.contents.boxShadow};
     }
-
     .title {
       font-family: "Bold";
-      font-size: 1.5vw;
+      font-size: 1.8vw;
       margin-bottom: 0.5vw;
     }
-
     .desc {
-      font-family: "Light";
-      font-size: 1.5vw;
+      font-family: "Medium";
+      font-size: 1.8vw;
     }
   }
 `;
@@ -78,10 +84,10 @@ const SearchIcon = styled.span`
   text-align: center;
   margin: 15px 0px 15px 20px;
   background-color: ${(props) => props.theme.colors.purple};
-
   &:hover {
-    background-color: ${(props) => props.theme.colors.lavender};
+    background-color: ${(props) => props.theme.colors.purple};
     opacity: 0.7;
+    cursor: pointer;
   }
   &:active {
     box-shadow: ${(props) => props.theme.contents.boxShadow};
@@ -122,6 +128,7 @@ const LocationModal = styled(Content)`
     z-index: 30;
     opacity: 80%;
     text-align: center;
+    caret-color: ${(props) => props.theme.colors.purple};
 
     &:focus {
       outline: none;
@@ -157,9 +164,19 @@ const LanguageModal = styled(Content)`
 
     > img {
       display: block;
+      border-radius: 30px;
+      padding: 1%;
       width: 25%;
       height: 25%;
       margin: 4%;
+
+      &:hover {
+        box-shadow: ${(props) => props.theme.contents.boxShadow};
+        cursor: pointer;
+      }
+      &:active {
+        box-shadow: 10px 5px 15px 0.1px rgba(0, 0, 0, 0.5);
+      }
     }
   }
 `;
@@ -196,11 +213,8 @@ const Search = () => {
   }
 
   const { location, date, language } = useSelector((store) => store.search);
-  const [data, setData] = useState({
-    location: "",
-    date: "",
-    language: "",
-  });
+  const { locationData, dateData, languageData } = useSelector((store) => store.search);
+
   const { calenderDateValue } = useSelector((store) => store.calender);
   console.log(calenderDateValue);
 
@@ -211,7 +225,7 @@ const Search = () => {
         src={langImg[key]}
         key={idx}
         onClick={() => {
-          setData({ ...data, language: key });
+          dispatch(setLanguageData(key));
           dispatch(reset());
         }}
       />
@@ -230,15 +244,16 @@ const Search = () => {
         location["address_name"].split(" ")[1] + " " + location["address_name"].split(" ")[2]
     );
     const filteredList = Array.from(new Set(list));
-    return filteredList.map((list, idx) => (
+    return filteredList.map((location, idx) => (
       <div
         key={idx}
         onClick={() => {
-          setData({ ...data, location: list });
+          dispatch(setLocationData(location));
           dispatch(dateModal());
         }}
       >
-        {list}
+        {console.log(location)}
+        {location}
       </div>
     ));
   };
@@ -255,7 +270,7 @@ const Search = () => {
           }}
         >
           <span className="title">location</span>
-          <span className="desc">{data.location ? data.location : "위치를 검색해주세요"}</span>
+          <span className="desc">{locationData ? locationData : "위치를 검색해주세요"}</span>
         </Location>
         <Date
           id="date"
@@ -265,19 +280,21 @@ const Search = () => {
           }}
         >
           <span className="title">Start Date</span>
-          <span className="desc">{data.date ? calenderDateValue : "시작일을 선택해주세요"}</span>
+          <span className="desc">{dateData ? calenderDateValue : "시작일을 선택해주세요"}</span>
         </Date>
         <Language id="language" onClick={() => dispatch(languageModal())}>
           <span className="title">Language</span>
-          <span className="desc">{data.language ? data.language : "언어를 선택해주세요"} </span>
+          <span className="desc">{languageData ? languageData : "언어를 선택해주세요"} </span>
         </Language>
         <SearchIcon
           id="search"
           onClick={() => {
-            getStudiesMapApi(data).then((res) => console.log(res));
+            getStudiesMapApi({ locationData, dateData, languageData }).then((res) =>
+              console.log(res)
+            );
             //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
             navigate("/map");
-            setData({ location: "", date: "", language: "" });
+            dispatch(resetData());
             dispatch(reset());
           }}
         >

@@ -1,16 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import Content from "../styles/Content.styled";
 
-const StyledFooter = styled(Content)`
-  grid-column: 3 / 13;
+const StyledFooter = styled.div`
+  grid-column: 2/14;
   height: 120px;
-  text-align: center;
+  color: white;
+  border-top: 1px solid #5e17eb;
+  /* lavender: "#C593FE",; */
 `;
 
 const Footer = () => {
   return (
     <StyledFooter>
+      <div>Footer</div>
+      <div>Footer</div>
+      <div>Footer</div>
       <div>Footer</div>
     </StyledFooter>
   );
