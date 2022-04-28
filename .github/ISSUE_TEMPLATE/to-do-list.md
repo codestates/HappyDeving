@@ -3,7 +3,7 @@ name: To Do List
 about: To Do List
 title: ''
 labels: to do
-assignees: nicky0830, TripToCodes, almond-flavoured, youngseoJi
+assignees: almond-flavoured, nicky0830, TripToCodes, youngseoJi
 
 ---
 
