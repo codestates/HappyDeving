@@ -15,7 +15,7 @@ import {
 } from "../../features/Search/searchModalSlice";
 import {
   setLocationData,
-  setDateData,
+  // setDateData,
   setLanguageData,
   resetData,
 } from "../../features/Search/searchDataSlice";
@@ -39,7 +39,6 @@ const StyledSearch = styled(Content)`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     &:hover {
       background-color: rgba(94, 23, 235, 0.9);
       /* color: white; */
@@ -50,13 +49,11 @@ const StyledSearch = styled(Content)`
     &:active {
       box-shadow: ${(props) => props.theme.contents.boxShadow};
     }
-
     .title {
       font-family: "Bold";
       font-size: 1.8vw;
       margin-bottom: 0.5vw;
     }
-
     .desc {
       font-family: "Medium";
       font-size: 1.8vw;
@@ -87,7 +84,6 @@ const SearchIcon = styled.span`
   text-align: center;
   margin: 15px 0px 15px 20px;
   background-color: ${(props) => props.theme.colors.purple};
-
   &:hover {
     background-color: ${(props) => props.theme.colors.purple};
     opacity: 0.7;
