@@ -22,8 +22,6 @@ module.exports = {
         include: { model: Language, as: "language", attributes: ["id", "name"] },
       });
 
-      console.log(studyList);
-
       res.json({ data: { studies: studyList } });
     } catch (err) {
       console.error(err);

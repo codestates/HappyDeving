@@ -37,8 +37,6 @@ module.exports = {
         user_id,
       } = study;
 
-      console.log(study);
-
       const findUsername = await User.findOne({
         where: { id: user_id },
         attributes: ["username"],
@@ -88,17 +86,15 @@ module.exports = {
         loginMethod,
       } = req.body;
 
-      console.log(req.body);
-
       const data = checkAccessToken(req);
       const { id } = req.params;
 
       if (!data) {
         return res.status(401).json("signin required");
       }
-      if (data.id !== Number(id)) {
-        return res.status(401).json("wrong req params");
-      }
+      // if (data.id !== Number(id)) {
+      //   return res.status(401).json("wrong req params");
+      // }
 
       if (
         !username ||
@@ -143,7 +139,6 @@ module.exports = {
         location,
       });
 
-      console.log(language_id);
       for (let i = 0; i < language_id.length; i++) {
         await Study_language.create({
           study_id: post.id,

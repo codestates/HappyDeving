@@ -5,8 +5,6 @@ module.exports = {
     try {
       const { guType, dongType, language, startDate } = req.query;
 
-      console.log(guType, dongType);
-
       if (language && !startDate) {
         const locationList = await Study.findAll({
           include: [
@@ -89,7 +87,6 @@ module.exports = {
             "updatedAt",
           ],
         });
-        console.log(locationList);
         return res.status(200).json(locationList);
       }
       const locationList = await Study.findAll({
@@ -117,7 +114,6 @@ module.exports = {
           "updatedAt",
         ],
       });
-      console.log(locationList);
       return res.status(200).json(locationList);
     } catch (err) {
       console.error(err);

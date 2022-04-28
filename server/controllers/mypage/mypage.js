@@ -12,7 +12,6 @@ module.exports = {
       }
       const { id: paramsId } = req.params;
 
-      console.log("data-----", typeof data.id);
       if (data.id !== Number(paramsId)) {
         return res.status(401).json("wrong req params");
       }
@@ -55,7 +54,7 @@ module.exports = {
       for (let i = 0; i < users.study.length; i++) {
         const { username } = users;
         let { location_id } = users.study[i];
-        console.log(location_id);
+
         let location = await Location.findOne({
           attributes: ["latitude", "longitude"],
         });
@@ -67,7 +66,6 @@ module.exports = {
           users.study_comment[i].dataValues.username = username;
         }
       }
-      console.log("users========", users);
       const {
         id,
         username,
