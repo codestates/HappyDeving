@@ -36,8 +36,8 @@ module.exports = {
       // delete userInfo.dataValues.password;
 
       const newAccessToken = generateAccessToken({ id, username, email });
-      const newrefreshToekn = generaterefreshToken({ id, username, email });
-      sendTocookie(res, newAccessToken, newrefreshToekn);
+      const newrefreshToken = generaterefreshToken({ id, username, email });
+      sendTocookie(res, newAccessToken, newrefreshToken);
 
       res
         .status(200)

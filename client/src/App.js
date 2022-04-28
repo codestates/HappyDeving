@@ -14,12 +14,13 @@ import Map from "././components/styles/Map.styled";
 import Study from "./pages/Study";
 import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
+import ProfileEdit from "./pages/ProfileEdit";
 import LikedStudy from "./pages/LikedStudy";
 import "./static/fonts/font.css";
 import "./App.css";
+import "./static/fonts/font.css";
 
 function App() {
-  const [info, setInfo] = useState("");
   const { signinModal, signupModal } = useSelector((store) => store.modal);
 
   const theme = {
@@ -37,7 +38,6 @@ function App() {
     },
     font: {},
   };
-
 
   return (
     <Router>
@@ -69,7 +69,8 @@ function App() {
               }
             />{" "}
             <Route path="/study/:id" element={<Study />} />
-            <Route path="/profile/" element={<Profile />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/editprofile" element={<ProfileEdit />} />
             <Route path="/mystudy" element={<MyStudy />} />
             <Route path="/likedStudy" element={<LikedStudy />} />
           </Routes>
