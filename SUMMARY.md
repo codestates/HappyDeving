@@ -7,5 +7,5 @@
 
 * [API Reference](reference/api-reference/README.md)
   * [users](reference/api-reference/users.md)
-  * [study](reference/api-reference/study.md)
   * [mypage](reference/api-reference/mypage.md)
+  * [study](reference/api-reference/study.md)

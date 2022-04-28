@@ -29,12 +29,11 @@ function CalenderDate() {
   console.log(dateData);
   console.log(language);
 
+
   return (
     <div>
       <Calendar
-        // onChange={() => {
-        //   onChange(), dispatch(languageModal());
-        // }}
+
         onChange={() => {
           handleDate(), dispatch(languageModal());
         }}

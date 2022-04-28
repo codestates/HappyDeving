@@ -4,41 +4,61 @@ import { useDispatch, useSelector } from "react-redux";
 import { openSigninModal } from "../../features/modal/modalSlice";
 import { Link, useNavigate } from "react-router-dom";
 
+const icons = {
+  logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
+  write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+  login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+  mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+};
+
 const StyledHeader = styled.header`
   font-family: "Bold";
   display: flex;
   justify-content: space-between;
   align-items: center;
-  grid-column: 3/13;
+  grid-column: 2/14;
   position: relative;
+  margin-bottom: 40px;
+  margin-top: 40px;
 
   > .logo {
-    width: 200px;
+    width: 20vw;
     margin-left: 0px;
+    &:hover {
+      cursor: pointer;
+    }
   }
   > div {
     color: #5e17eb;
     text-align: center;
     font-size: 25px;
-    font-family: "hanna";
-
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
     .write {
+      width: 10vw;
       margin-right: 20px;
+      &:hover {
+        cursor: pointer;
+      }
     }
-    .login {
+    .mypage {
+      width: 10vw;
+
       margin-right: 20px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    .login {
+      width: 10vw;
+      margin-right: 20px;
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
-`;
-
-const Circle = styled.div`
-  width: 100%;
-  height: 180px;
-  border-radius: 0 0 100% 100%;
-  background-color: rgb(255, 255, 0);
-  margin-top: -150px;
-  margin-bottom: 20px;
-  grid-column: 1/15;
 `;
 
 const Header = () => {
@@ -53,41 +73,24 @@ const Header = () => {
   return (
     <>
       <StyledHeader>
-        <img
-          onClick={goToHome}
-          className="logo"
-          src="https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png"
-        />
+        <img onClick={goToHome} className="logo" src={icons.logo} />
         <div>
           <Link to="/write">
-            <span className="write">새 글 쓰기</span>
+            <img className="write" src={icons.write} />
           </Link>
           {user ? (
-            <span className="mypage">마이페이지</span>
+            <img className="mypage" src={icons.mypage} />
           ) : (
-            <span onClick={() => dispatch(openSigninModal(true))} className="login">
-              로그인
-            </span>
+            <img
+              onClick={() => dispatch(openSigninModal(true))}
+              className="login"
+              src={icons.login}
+            />
           )}
         </div>
       </StyledHeader>
-      <Circle />
     </>
   );
 };
 
 export default Header;
-{
-  /* <header>
-<div style={{ display: "flex", justifyContent: "space-between" }}>
-  <img
-    src="https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png"
-    style={{ width: "200px", marginLeft: "0px", display: "inline-block" }}
-  />
-  <div>
-    <span style={{ marginRight: "10px" }}>새 글 쓰기</span>
-    <span>로그인</span>
-  </div>
-</div>
-</header> */
-}

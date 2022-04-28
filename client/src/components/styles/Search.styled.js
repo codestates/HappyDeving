@@ -112,6 +112,7 @@ const LocationModal = styled(Content)`
     text-align: center;
     padding: 7%;
     border-radius: 30px;
+
     &:hover {
       color: ${(props) => props.theme.colors.purple};
       cursor: pointer;
@@ -128,6 +129,7 @@ const LocationModal = styled(Content)`
     opacity: 80%;
     text-align: center;
     caret-color: ${(props) => props.theme.colors.purple};
+
     &:focus {
       outline: none;
     }
@@ -150,6 +152,7 @@ const DateModal = styled(Content)`
 
 const LanguageModal = styled(Content)`
   grid-column: 8/14;
+
   > div {
     display: flex;
     flex-wrap: wrap;
@@ -158,6 +161,7 @@ const LanguageModal = styled(Content)`
     height: 90%;
     margin: 5% auto;
     border: none;
+
     > img {
       display: block;
       border-radius: 30px;
@@ -165,6 +169,7 @@ const LanguageModal = styled(Content)`
       width: 25%;
       height: 25%;
       margin: 4%;
+
       &:hover {
         box-shadow: ${(props) => props.theme.contents.boxShadow};
         cursor: pointer;
