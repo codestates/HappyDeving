@@ -19,6 +19,7 @@ const StyledHeader = styled.header`
   grid-column: 2/14;
   position: relative;
   margin-bottom: 40px;
+  margin-top: 40px;
 
   > .logo {
     width: 20vw;
