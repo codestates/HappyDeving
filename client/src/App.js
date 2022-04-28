@@ -30,10 +30,15 @@ function App() {
       lavender: "#C593FE",
       bg: "#d8e4f4",
     },
-    logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
+    icons: {
+      logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
+      write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+      login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+      mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+    },
     contents: {
       marginBottom: "15px",
-      bg: "rgb(252, 252, 239)",
+      bg: "white",
       borderRadius: "30px",
       boxShadow: "10px 5px 15px 0.1px rgba(0, 0, 0, 0.1)",
     },
@@ -51,7 +56,7 @@ function App() {
     <Router>
       <ThemeProvider theme={theme}>
         <Container>
-          <Header />
+          <Header img={theme.icons} />
 
           <div className="App">
             <header className="App-header">
