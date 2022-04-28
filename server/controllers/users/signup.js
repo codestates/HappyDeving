@@ -1,6 +1,7 @@
 const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
+const sendEmail = require("../../utils/sendEmail");
 
 // const { hashPassword } = require("../tokenFunctions/security");
 
@@ -28,9 +29,21 @@ module.exports = {
         password: hashedPassword,
       });
 
+      console.log("newUser.verified::", newUser.verified); // undefined (false 여야 한다)
       const newAccessToken = generateAccessToken({ username, email });
       const newrefreshToken = generaterefreshToken({ username, email });
-      sendTocookie(res, newrefreshToken);
+      sendTocookie(res, newAccessToken, newrefreshToken);
+
+      if (!newUser.verified) {
+        const url = `${process.env.BASE_URL}users/${newUser.id}/verify/${newAccessToken}`;
+        await sendEmail(newUser.email, "Verify Email", url);
+      }
+
+      return res.status(201).send({
+        newUser,
+        accessToken: newAccessToken,
+        message: "An Email sent to your account please verify",
+      });
 
       return res.send({ data: { newUser }, newAccessToken });
     } catch (err) {
