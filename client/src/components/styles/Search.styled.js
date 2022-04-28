@@ -256,7 +256,8 @@ const Search = () => {
           dispatch(dateModal());
         }}
       >
-        {list}
+        {console.log(location)}
+        {location}
       </div>
     ));
   };

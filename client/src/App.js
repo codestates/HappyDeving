@@ -9,9 +9,9 @@ import Footer from "../src/components/styles/Footer.styled";
 import SigninModal from "./components/styles/SigninModal.styled";
 import SignupModal from "./components/styles/SignupModal.styled";
 import Landing from "./pages/Landing";
-import Write from "./pages/Write";
+import Write from "././components/styles/WriteStudyDesc.styled";
 import Map from "././components/styles/Map.styled";
-import Study from "./pages/Study";
+import Study from "./components/styles/StudyDesc.styled";
 import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
 import LikedStudy from "./pages/LikedStudy";
@@ -37,7 +37,7 @@ function App() {
       mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
     },
     contents: {
-      marginBottom: "15px",
+      marginBottom: "20px",
       bg: "white",
       borderRadius: "30px",
       boxShadow: "10px 5px 15px 0.1px rgba(0, 0, 0, 0.1)",
@@ -91,7 +91,7 @@ function App() {
                   <Map />
                 </>
               }
-            />{" "}
+            />
             <Route path="/study/:id" element={<Study />} />
             <Route path="/profile/" element={<Profile />} />
             <Route path="/mystudy" element={<MyStudy />} />
