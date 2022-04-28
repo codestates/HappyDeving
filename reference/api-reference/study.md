@@ -401,6 +401,10 @@ access token
 
 {% endswagger-parameter %}
 
+{% swagger-parameter in="header" name="authorization" required="true" %}
+access token
+{% endswagger-parameter %}
+
 {% swagger-response status="200: OK" description="" %}
 ```javascript
 {
