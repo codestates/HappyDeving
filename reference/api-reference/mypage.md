@@ -22,33 +22,12 @@ accessToken
             "username": "nikki"
             "email": "nikki@gmail.com",
             "verified": true,
+            "github": null,
+            "blog": null,
+            "bio": null,  
             "createdAt": "2019-02-24T16:17:47.000Z",
             "updatedAt": "2019-02-24T16:17:47.000Z"
         },   
-        studies : [
-                    {
-                    "id": 1, 
-                    "username": "nikki"
-                    "content": 
-                            {
-                            "title": "스터디 구함",
-                            "description": "airbnb 클론 코딩 하신 분"
-                            },
-                    "kakaoLink": "https://kakao.com", 
-                    "closed": false, 
-                    "location":  { lat: 33.450705, lng: 126.570677 },
-                    "language": [
-                            {
-                            "id": 1,
-                            "name": "javascript"
-                            },
-                            ...
-                            ], 
-                    "createdAt": "2019-02-24T16:17:47.000Z",
-                    "updatedAt": "2019-02-24T16:17:47.000Z"
-                    }
-                    ...
-            ],
         comments:[ 
                     {
                     "id": 1,
@@ -101,6 +80,22 @@ accessToken
 
 {% endswagger-parameter %}
 
+{% swagger-parameter in="body" name="email" %}
+
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="github" %}
+
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="blog" %}
+
+{% endswagger-parameter %}
+
+{% swagger-parameter in="body" name="verified" type="Boolean" %}
+
+{% endswagger-parameter %}
+
 {% swagger-response status="200: OK" description="" %}
 ```javascript
 {
@@ -109,6 +104,9 @@ accessToken
             "id": 1,
             "username": "nikki"
             "email": "nikki@gmail.com",
+            "github": "https://nikki.github.io",
+            "blog": null,
+            "bio": "grow everyday",  
             "verified": true,
             "createdAt": "2019-02-24T16:17:47.000Z",
             "updatedAt": "2019-02-24T16:17:47.000Z"
@@ -133,7 +131,7 @@ err
 {% endswagger-response %}
 {% endswagger %}
 
-{% swagger method="delete" path="/mypage" baseUrl="https://happydeving.com" summary="회원정보 수정" %}
+{% swagger method="delete" path="/mypage" baseUrl="https://happydeving.com" summary="회원정보 삭제" %}
 {% swagger-description %}
 
 {% endswagger-description %}
