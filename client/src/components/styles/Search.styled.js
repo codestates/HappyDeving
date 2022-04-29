@@ -16,7 +16,9 @@ import {
   dateModal,
   reset,
 } from "../../features/Search/searchModalSlice";
+
 import { setLocationData, setLanguageData, resetData } from "../../features/Search/searchDataSlice";
+
 import CalenderDate from "../Calendar.js";
 
 const { kakao } = window;
@@ -37,7 +39,6 @@ const StyledSearch = styled(Content)`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     &:hover {
       background-color: rgba(94, 23, 235, 0.9);
       /* color: white; */
@@ -79,7 +80,6 @@ const SearchIcon = styled.span`
   text-align: center;
   margin: 15px 0px 15px 20px;
   background-color: ${(props) => props.theme.colors.purple};
-
   &:hover {
     background-color: ${(props) => props.theme.colors.purple};
     opacity: 0.7;

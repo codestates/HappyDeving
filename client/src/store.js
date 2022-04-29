@@ -4,7 +4,9 @@ import authReducer from "./features/auth/authSlice";
 import searchModalReducer from "./features/Search/searchModalSlice";
 import calenderReducer from "./features/calendarDate/calendarDate";
 import likedStudyCardsReducer from "./features/likedStudies/likedStudiesSlice";
+import writeMyStudyCardsSlice from "./features/myStudies/myStudiesSlice";
 import searchDataReducer from "./features/Search/searchDataSlice";
+import myPageReducer from "./features/myPage/myPageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -14,5 +16,7 @@ export const store = configureStore({
     calender: calenderReducer,
     likedStudyCards: likedStudyCardsReducer,
     searchData: searchDataReducer,
+    writeMyStudyCards: writeMyStudyCardsSlice,
+    myPage: myPageReducer,
   },
 });
