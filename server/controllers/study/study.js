@@ -204,8 +204,8 @@ module.exports = {
         where: { study_id: id },
         attributes: ["id"],
       });
-      const study_languageId = [];
 
+      const study_languageId = [];
       study_languageInfo.forEach((el) => study_languageId.push(el.id));
 
       if (language_id) {
