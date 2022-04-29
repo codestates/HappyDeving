@@ -6,6 +6,7 @@ const StyledFooter = styled.div`
   height: 120px;
   color: white;
   border-top: 1px solid #5e17eb;
+  margin-top: 80px;
   /* lavender: "#C593FE",; */
 `;
 

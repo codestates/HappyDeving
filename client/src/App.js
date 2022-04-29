@@ -4,7 +4,7 @@ import { ThemeProvider } from "styled-components";
 import { useSelector } from "react-redux";
 import Container from "../src/components/styles/Container.styled";
 import Header from "../src/components/styles/Header.styled";
-import Search from "../src/components/styles/Search.styled";
+import { Search } from "../src/components/styles/Search.styled";
 import Footer from "../src/components/styles/Footer.styled";
 import SigninModal from "./components/styles/SigninModal.styled";
 import SignupModal from "./components/styles/SignupModal.styled";

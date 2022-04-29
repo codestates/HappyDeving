@@ -6,6 +6,8 @@ const StyledLanding = styled(Content)`
   grid-column: 2 / 14;
   height: 400px;
   text-align: center;
+  position: relative;
+  z-index: 0;
   /* x, y, blur-radius, spread */
 `;
 
