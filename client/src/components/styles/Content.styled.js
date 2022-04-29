@@ -5,6 +5,8 @@ const Content = styled.div`
   margin-bottom: ${(props) => props.theme.contents.marginBottom};
   border-radius: ${(props) => props.theme.contents.borderRadius};
   box-shadow: ${(props) => props.theme.contents.boxShadow};
+  position: relative;
+  z-index: 0;
 `;
 
 export default Content;

@@ -138,6 +138,7 @@ const Search = () => {
   const { location, date, language } = useSelector((store) => store.search);
   const { locationData, dateData, languageData } = useSelector((store) => store.search);
 
+  console.log(locationData);
   const { calenderDateValue } = useSelector((store) => store.calender);
   console.log(calenderDateValue);
 
