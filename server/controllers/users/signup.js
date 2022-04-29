@@ -1,7 +1,10 @@
 const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
-// const sendEmail = require("../../utils/sendEmail");
+
+
+const sendEmail = require("../../utils/sendEmail");
+
 
 module.exports = {
   post: async (req, res) => {
@@ -14,10 +17,10 @@ module.exports = {
       }
 
       const userInfo = await User.findOne({ where: { email } });
+
       if (userInfo) {
         return res.status(409).json({ message: "user already exists" });
       }
-
       const salt = await bcrypt.genSalt(12);
       const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -31,6 +34,7 @@ module.exports = {
       const newAccessToken = generateAccessToken({ username, email });
       const newrefreshToken = generaterefreshToken({ username, email });
       sendTocookie(res, newAccessToken, newrefreshToken);
+      
 
       // if (!newUser.verified) {
       //   const url = `${process.env.BASE_URL}users/${newUser.id}/verify/${newAccessToken}`;
