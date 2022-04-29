@@ -9,7 +9,7 @@
 accessToken
 {% endswagger-parameter %}
 
-{% swagger-parameter in="path" type="Int" required="true" %}
+{% swagger-parameter in="path" type="Int" required="true" name="id (userid)" %}
 
 {% endswagger-parameter %}
 
@@ -69,11 +69,11 @@ err
 accessToken
 {% endswagger-parameter %}
 
-{% swagger-parameter in="path" type="Int" required="true" %}
+{% swagger-parameter in="path" type="Int" required="true" name="id (userid)" %}
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" required="true" %}
+{% swagger-parameter in="body" required="true" name="id" %}
 
 {% endswagger-parameter %}
 
