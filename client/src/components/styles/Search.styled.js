@@ -7,18 +7,18 @@ import { langImg } from "../../static/images/langImg";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getStudiesMapApi } from "../../api/study";
+import LanguageModal from "./Modals/LanguageModal";
+import LocationModal from "./Modals/LocationModal";
+import DateModal from "./Modals/DateModal";
 import {
   languageModal,
   locationModal,
   dateModal,
   reset,
 } from "../../features/Search/searchModalSlice";
-import {
-  setLocationData,
-  // setDateData,
-  setLanguageData,
-  resetData,
-} from "../../features/Search/searchDataSlice";
+
+import { setLocationData, setLanguageData, resetData } from "../../features/Search/searchDataSlice";
+
 import CalenderDate from "../Calendar.js";
 
 const { kakao } = window;
@@ -49,14 +49,10 @@ const StyledSearch = styled(Content)`
     &:active {
       box-shadow: ${(props) => props.theme.contents.boxShadow};
     }
-    .title {
-      font-family: "Bold";
-      font-size: 1.8vw;
-      margin-bottom: 0.5vw;
-    }
+
     .desc {
-      font-family: "Medium";
-      font-size: 1.8vw;
+      font-family: "Bold";
+      font-size: 2.3vw;
     }
   }
 `;
@@ -94,97 +90,24 @@ const SearchIcon = styled.span`
   }
 `;
 
-const LocationModal = styled(Content)`
-  position: relative;
-  box-sizing: content-box;
-  grid-column: 2/8;
-  /* height: 100%; */
-  /* display: flex; */
-  /* align-items: center; */
-  /* padding-top: 3%; */
-  font-family: "Medium";
-  padding: 5% 5% 3% 5%;
-  min-height: 7vw;
-  max-height: 12vw;
-  overflow: scroll;
-  > div {
-    border-bottom: 1px solid beige;
-    text-align: center;
-    padding: 7%;
-    border-radius: 30px;
-
-    &:hover {
-      color: ${(props) => props.theme.colors.purple};
-      cursor: pointer;
-    }
-  }
-  > input {
-    height: 5vw;
-    width: 90%;
-    border-radius: 30px;
-    background-color: lightgray;
-    box-shadow: ${(props) => props.theme.contents.boxShadow};
-    position: absolute;
-    z-index: 30;
-    opacity: 80%;
-    text-align: center;
-    caret-color: ${(props) => props.theme.colors.purple};
-
-    &:focus {
-      outline: none;
-    }
-  }
-`;
-
-const DateModal = styled(Content)`
-  grid-column: 5/11;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
-  /* align-items: center; */
-  margin: 5% auto;
-  &:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
-  }
-`;
-
-const LanguageModal = styled(Content)`
-  grid-column: 8/14;
-
-  > div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    width: 90%;
-    height: 90%;
-    margin: 5% auto;
-    border: none;
-
-    > img {
-      display: block;
-      border-radius: 30px;
-      padding: 1%;
-      width: 25%;
-      height: 25%;
-      margin: 4%;
-
-      &:hover {
-        box-shadow: ${(props) => props.theme.contents.boxShadow};
-        cursor: pointer;
-      }
-      &:active {
-        box-shadow: 10px 5px 15px 0.1px rgba(0, 0, 0, 0.5);
-      }
-    }
-  }
-`;
-
 const Search = () => {
+  const [locationList, setLocationList] = useState([]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [locationList, setLocationList] = useState([]);
+
+  const LangIcons = () => {
+    let keyArr = Object.keys(langImg);
+    return keyArr.map((key, idx) => (
+      <img
+        src={langImg[key]}
+        key={idx}
+        onClick={() => {
+          dispatch(setLanguageData(key));
+          dispatch(reset());
+        }}
+      />
+    ));
+  };
 
   var ps = new kakao.maps.services.Places();
 
@@ -217,20 +140,6 @@ const Search = () => {
 
   const { calenderDateValue } = useSelector((store) => store.calender);
   console.log(calenderDateValue);
-
-  const langIcons = () => {
-    let keyArr = Object.keys(langImg);
-    return keyArr.map((key, idx) => (
-      <img
-        src={langImg[key]}
-        key={idx}
-        onClick={() => {
-          dispatch(setLanguageData(key));
-          dispatch(reset());
-        }}
-      />
-    ));
-  };
 
   const handleInputValue = (e) => {
     if (e.key === "Enter") {
@@ -269,8 +178,7 @@ const Search = () => {
             dispatch(locationModal());
           }}
         >
-          <span className="title">location</span>
-          <span className="desc">{locationData ? locationData : "위치를 검색해주세요"}</span>
+          <span className="desc">{locationData ? locationData : "위치"}</span>
         </Location>
         <Date
           id="date"
@@ -279,12 +187,10 @@ const Search = () => {
             console.log(date);
           }}
         >
-          <span className="title">Start Date</span>
-          <span className="desc">{dateData ? calenderDateValue : "시작일을 선택해주세요"}</span>
+          <span className="desc">{dateData ? calenderDateValue : "시작일"}</span>
         </Date>
         <Language id="language" onClick={() => dispatch(languageModal())}>
-          <span className="title">Language</span>
-          <span className="desc">{languageData ? languageData : "언어를 선택해주세요"} </span>
+          <span className="desc">{languageData ? languageData : "언어"} </span>
         </Language>
         <SearchIcon
           id="search"
@@ -315,11 +221,11 @@ const Search = () => {
       ) : null}
       {language ? (
         <LanguageModal>
-          <div>{langIcons()}</div>
+          <div>{LangIcons()}</div>
         </LanguageModal>
       ) : null}
     </>
   );
 };
 
-export default Search;
+export { Search, DateModal, LocationModal, LanguageModal };
