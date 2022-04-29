@@ -1,35 +1,30 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("location", {
+    await queryInterface.createTable("study_comment", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      name: {
-        type: Sequelize.STRING,
-      },
-      roadAddress: {
-        type: Sequelize.STRING,
-      },
-      latitude: {
+      user_id: {
         allowNull: false,
-        type: Sequelize.DECIMAL,
+        type: Sequelize.INTEGER,
+        references: { model: "user", key: "id" },
       },
-      longitude: {
+      study_id: {
+        type: Sequelize.INTEGER,
         allowNull: false,
-        type: Sequelize.DECIMAL,
+        references: { model: "study", key: "id", onDelete: "cascade" },
       },
-      city: {
-        type: Sequelize.STRING,
+      content: {
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
-      guType: {
-        type: Sequelize.STRING,
-      },
-      dongType: {
-        type: Sequelize.STRING,
+      parentId: {
+        type: Sequelize.INTEGER,
+        defaultValue: null,
       },
       createdAt: {
         allowNull: false,
@@ -42,6 +37,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("location");
+    await queryInterface.dropTable("study_comment");
   },
 };

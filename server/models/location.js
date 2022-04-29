@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ Study }) {
       // define association here
-      this.hasMany(Study, { foreignKey: "location_id", as: "study" });
     }
 
     toJSON() {
@@ -21,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       roadAddress: DataTypes.STRING,
       latitude: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notNull: { msg: `latitude not allowed null` },
@@ -29,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       longitude: {
-        type: DataTypes.DECIMAL,
+        type: DataTypes.STRING,
         allowNull: false,
         validate: {
           notNull: { msg: `latitude not allowed null` },

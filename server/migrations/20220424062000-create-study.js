@@ -11,6 +11,7 @@ module.exports = {
       user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        references: { model: "user", key: "id" },
       },
       content: {
         allowNull: false,
@@ -31,6 +32,7 @@ module.exports = {
       location_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        references: { model: "location", key: "id" },
       },
       startDate: {
         allowNull: false,

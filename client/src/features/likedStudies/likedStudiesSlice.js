@@ -10,34 +10,28 @@ const initialState = {
   message: "",
 };
 
-// 좋아하는 카드가 추가될때 add cards
-export const addLikedCard = createAsyncThunk(
-  "studyCards/addLikedCard",
-  async (CardsData, thunkAPI) => {
-    try {
-      // const token = thunkAPI.getState().auth.user.token
-      return await addLikedStudyApi(CardsData).then((res) => {
-        return res.dataValues;
-        // return res.dataValues;
-      });
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+// 찜 목록 스터디 불러오기
+export const addLikedCard = createAsyncThunk("studyCards/addLikedCard", async (thunkAPI) => {
+  try {
+    // const token = thunkAPI.getState().auth.user.token
+    return await addLikedStudyApi().then((res) => {
+      return res.data;
+      // return res.data;
+    });
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
 
-export const unLikedCard = createAsyncThunk(
-  "studyCards/unLikedCard",
-  async (CardsData, thunkAPI) => {
-    try {
-      return await UnLikedStudyApi(CardsData).then((res) => {
-        return res.dataValues;
-      });
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+export const unLikedCard = createAsyncThunk("studyCards/unLikedCard", async (thunkAPI) => {
+  try {
+    return await UnLikedStudyApi().then((res) => {
+      return res.data;
+    });
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
 // export const unLikedCard = createAsyncThunk("likedCard/likedStudy", async () => {
 //   await localStorage.removeItem("likedStudyCards");
 // });

@@ -32,16 +32,17 @@ module.exports = {
       }
 
       // 회원 비밀번호 삭제 후 accessToken 발급
-      // 민감한 정보 payload에 답으면 안됨
+      // 민감한 정보 payload에 담으면 안됨
       // delete userInfo.dataValues.password;
 
       const newAccessToken = generateAccessToken({ id, username, email });
-      const newrefreshToekn = generaterefreshToken({ id, username, email });
-      sendTocookie(res, newAccessToken, newrefreshToekn);
+      const newrefreshToken = generaterefreshToken({ id, username, email });
+      sendTocookie(res, newAccessToken, newrefreshToken);
 
-      res
-        .status(200)
-        .json({ data: { userInfo: { id, username, createdAt, updatedAt, loginMethod: 1 } } });
+      res.status(200).json({
+        data: { userInfo: { id, username, createdAt, updatedAt, loginMethod: 1 } },
+        newAccessToken,
+      });
     } catch (err) {
       console.error(err);
       return res.status(500).json();
