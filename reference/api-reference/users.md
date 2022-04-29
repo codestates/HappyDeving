@@ -290,8 +290,8 @@ authorization code
 0.normal 1.github 2.google
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="user" type="Int" required="true" %}
-userId
+{% swagger-parameter in="path" name="id (userId)" required="true" %}
+
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
