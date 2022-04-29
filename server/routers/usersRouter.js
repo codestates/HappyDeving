@@ -6,7 +6,7 @@ router.post("/signin", users.signin.post);
 router.post("/signup", users.signup.post);
 router.get("/:id/verify/:token", users.signup.get);
 router.post("/signout", users.signout.post);
-router.delete("/withdrawal", users.withdrawal.delete);
+router.delete("/withdrawal/:id", users.withdrawal.delete);
 router.post("/login/github", users.github.post);
 router.post("/login/google", users.google.post);
 
