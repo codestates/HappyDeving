@@ -4,7 +4,7 @@ const { users } = require("../controllers");
 // /users
 router.post("/signin", users.signin.post);
 router.post("/signup", users.signup.post);
-router.get("/:id/verify/:token", users.signup.get);
+router.patch("/:id/verify/:token", users.signup.patch);
 router.post("/signout", users.signout.post);
 router.delete("/withdrawal", users.withdrawal.delete);
 router.post("/login/github", users.github.post);
