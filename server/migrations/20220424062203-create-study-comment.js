@@ -1,7 +1,7 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("study", {
+    await queryInterface.createTable("study_comment", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,30 +11,20 @@ module.exports = {
       user_id: {
         allowNull: false,
         type: Sequelize.INTEGER,
+        references: { model: "user", key: "id" },
+      },
+      study_id: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: { model: "study", key: "id", onDelete: "cascade" },
       },
       content: {
-        allowNull: false,
         type: Sequelize.TEXT,
-      },
-      title: {
-        type: Sequelize.STRING,
         allowNull: false,
       },
-      kakaoLink: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      closed: {
-        allowNull: false,
-        type: Sequelize.BOOLEAN,
-      },
-      location_id: {
-        allowNull: false,
+      parentId: {
         type: Sequelize.INTEGER,
-      },
-      startDate: {
-        allowNull: false,
-        type: Sequelize.DATE,
+        defaultValue: null,
       },
       createdAt: {
         allowNull: false,
@@ -47,6 +37,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("study");
+    await queryInterface.dropTable("study_comment");
   },
 };

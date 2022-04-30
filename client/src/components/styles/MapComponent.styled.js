@@ -1,34 +1,34 @@
-import React, { useRef, useEffect } from "react";
-import Content from "./Content.styled";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
+import Content from "../styles/Content.styled";
 import { markerdata as dummydata } from "../../data/Marker.data";
-import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
+const { kakao } = window;
 
-const Map = () => {
-  const { kakao } = window;
+//검색한 조건에 맞는 스터디들의 목록
 
-  const MapView = styled(Content)`
-    grid-column: 2/14;
-    height: 400px;
-    position: relative;
-    z-index: 0;
-  `;
+const MapView = styled(Content)`
+  width: 100%;
+  height: 100px;
+  position: relative;
+  z-index: 0;
+  margin-bottom: 5px;
+`;
+
+const MapComponent = () => {
   const container = useRef(null);
 
-  //검색한 조건에 맞는 스터디들의 목록
-  const studies = dummydata.data.studies;
-  const markerdata = studies.map((el) => {
-    return {
-      id: el.id,
-      title: el.content.title,
-      latlng: { lat: el.location.lat, lng: el.location.lng },
-      img: langImg[el.language[0].name],
-      info: el.createdAt.split("T")[0],
-    };
-  });
-
   const mapscript = () => {
+    const studies = dummydata.data.studies;
+    const markerdata = studies.map((el) => {
+      return {
+        id: el.id,
+        title: el.content.title,
+        latlng: { lat: el.location.lat, lng: el.location.lng },
+        img: langImg[el.language[0].name],
+        info: el.createdAt.split("T")[0],
+      };
+    });
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
@@ -120,13 +120,9 @@ const Map = () => {
 
   useEffect(() => {
     mapscript();
-  });
+  }, []);
 
-  return (
-    <>
-      <MapView id="map" ref={container} />
-    </>
-  );
+  return <MapView ref={container} />;
 };
 
-export default Map;
+export default MapComponent;

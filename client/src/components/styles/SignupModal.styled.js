@@ -113,6 +113,10 @@ function SignupModal() {
 
   const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
 
+  useEffect(() => {
+    dispatch(reset()); // 상태 모두 리셋
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
   const handleInputValue = (key) => (e) => {
     setUserData({ ...userData, [key]: e.target.value });
   };
@@ -147,10 +151,6 @@ function SignupModal() {
   if (isLoading) {
     return <LoadingIndicator />;
   }
-
-  useEffect(() => {
-    dispatch(reset()); // 상태 모두 리셋
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   return (
     <>

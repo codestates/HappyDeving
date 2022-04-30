@@ -1,44 +1,42 @@
 "use strict";
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("user", {
+    await queryInterface.createTable("study", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      username: {
+      user_id: {
+        allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: "user", key: "id" },
+      },
+      content: {
+        allowNull: false,
+        type: Sequelize.TEXT,
+      },
+      title: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      email: {
-        type: Sequelize.STRING,
+      kakaoLink: {
         allowNull: false,
+        type: Sequelize.STRING,
       },
-      verified: {
+      closed: {
+        allowNull: false,
         type: Sequelize.BOOLEAN,
-        defaultValue: false,
       },
-      password: {
-        type: Sequelize.STRING,
+      location_id: {
         allowNull: false,
+        type: Sequelize.INTEGER,
+        references: { model: "location", key: "id" },
       },
-      github: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      blog: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      bio: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      image: {
-        type: Sequelize.STRING,
-        defaultValue: "https://i.ibb.co/nr4FYns/happydevil.png",
+      startDate: {
+        allowNull: false,
+        type: Sequelize.DATEONLY,
       },
       createdAt: {
         allowNull: false,
@@ -51,6 +49,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("user");
+    await queryInterface.dropTable("study");
   },
 };

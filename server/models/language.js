@@ -9,7 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ Study_language }) {
       // define association here
-      this.hasMany(Study_language, { foreignKey: "language_id", as: "study_language" });
     }
 
     toJSON() {
@@ -31,6 +30,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       tableName: "language",
       modelName: "Language",
+      charset: "utf8",
+      collate: "utf8_general_ci",
     }
   );
   return Language;

@@ -9,9 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({ Study_comment, Study, User_likes_study }) {
       // define association here
-      this.hasMany(Study, { foreignKey: "user_id", as: "study" });
-      this.hasMany(Study_comment, { foreignKey: "user_id", as: "study_comment" });
-      this.hasMany(User_likes_study, { foreignKey: "user_id", as: "user_likes_study" });
     }
 
     toJSON() {
@@ -39,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       verified: {
         type: DataTypes.BOOLEAN,
+        defaultValue: false,
       },
       password: {
         type: DataTypes.STRING,
@@ -60,11 +58,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      image: {
+        type: DataTypes.STRING,
+        defaultValue: "https://i.ibb.co/nr4FYns/happydevil.png",
+      },
     },
     {
       sequelize,
       tableName: "user",
       modelName: "User",
+      charset: "utf8",
+      collate: "utf8_general_ci",
     }
   );
   return User;
