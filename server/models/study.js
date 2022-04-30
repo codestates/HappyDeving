@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       startDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
         validate: {
           notNull: { msg: `startDate not allowed null` },

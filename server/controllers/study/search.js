@@ -3,7 +3,10 @@ const { Study, Language, Location } = require("../../models");
 module.exports = {
   get: async (req, res) => {
     try {
+      const decoded = decodeURI(req.url);
       const { guType, dongType, language, startDate } = req.query;
+
+      console.log(decoded);
 
       if (language && !startDate) {
         const locationList = await Study.findAll({
