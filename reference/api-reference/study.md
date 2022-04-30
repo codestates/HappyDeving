@@ -138,6 +138,7 @@ data: {
                     "title": "스터디 구함",
                     "kakaoLink": "https://kakao.com", 
                     "closed": false,
+                    "ㄴ
                     "location":  
                             { 
                             lat: 33.450705, 
