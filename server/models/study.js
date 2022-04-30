@@ -50,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       startDate: {
-        type: DataTypes.DATE,
+        type: DataTypes.DATEONLY,
         allowNull: false,
         validate: {
           notNull: { msg: `startDate not allowed null` },
@@ -62,6 +62,8 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       tableName: "study",
       modelName: "Study",
+      charset: "utf8",
+      collate: "utf8_general_ci",
     }
   );
   return Study;
