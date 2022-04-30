@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import Content from "./Content.styled";
 import styled from "styled-components";
-import { markerdata as dummydata } from "../../data/Marker.data";
+import { useSelector } from "react-redux";
+// import { markerdata as dummydata } from "../../data/Marker.data";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 
@@ -17,21 +18,28 @@ const Map = () => {
   const container = useRef(null);
 
   //검색한 조건에 맞는 스터디들의 목록
-  const studies = dummydata.data.studies;
+
+  const { studies } = useSelector((store) => store.studies);
+  console.log(studies);
+  studies.map((el) => console.log(el.startDate));
   const markerdata = studies.map((el) => {
     return {
       id: el.id,
-      title: el.content.title,
-      latlng: { lat: el.location.lat, lng: el.location.lng },
+      title: el.title,
+      lat: Number(el.location.latitude),
+      lng: Number(el.location.longitude),
       img: langImg[el.language[0].name],
-      info: el.createdAt.split("T")[0],
+      info: el.startDate,
     };
   });
 
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(33.450701, 126.570667), //지도의 중심좌표.
+      center:
+        studies.length === 0
+          ? new kakao.maps.LatLng(37.570975, 126.977759)
+          : new kakao.maps.LatLng(markerdata[0].lat, markerdata[0].lng), //지도의 중심좌표.
       level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
@@ -44,7 +52,7 @@ const Map = () => {
     markerdata.forEach((el) => {
       var marker = new kakao.maps.Marker({
         map: map,
-        position: new kakao.maps.LatLng(el.latlng.lat, el.latlng.lng),
+        position: new kakao.maps.LatLng(el.lat, el.lng),
         title: el.title,
         image: new kakao.maps.MarkerImage(el.img, imageSize, imageOption),
       });
