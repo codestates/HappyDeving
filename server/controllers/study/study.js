@@ -31,6 +31,7 @@ module.exports = {
         closed,
         study_comment,
         location_id,
+        startDate,
         createdAt,
         updatedAt,
         language,
@@ -60,6 +61,7 @@ module.exports = {
             closed,
             location: findLocation,
             language,
+            startDate,
             createdAt,
             updatedAt,
           },
@@ -204,8 +206,8 @@ module.exports = {
         where: { study_id: id },
         attributes: ["id"],
       });
-      const study_languageId = [];
 
+      const study_languageId = [];
       study_languageInfo.forEach((el) => study_languageId.push(el.id));
 
       if (language_id) {
