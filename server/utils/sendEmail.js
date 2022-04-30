@@ -1,22 +1,49 @@
 const nodemailer = require("nodemailer");
-// 현재는 text에 인증 주소만 넘어오는데 html로 꾸며야 한다.
-module.exports = async (email, subject, text) => {
+const { google } = require("googleapis");
+const env = process.env.NODE_ENV || "development";
+const config = require(__dirname + "/../config/config.js")[env];
+const OAuth2 = google.auth.OAuth2;
+const OAuth2_client = new OAuth2(config.googleClientId, config.googleClientSecret);
+OAuth2_client.setCredentials({ refresh_token: config.googleRefreshToken });
+const getHtmlMessage = require("./getHtmlMessage.js");
+
+module.exports = async (recipient, subject, url) => {
   try {
-    const transporter = nodemailer.createTransport({
+    console.log("refreshToken: ", config.googleRefreshToken);
+    const accessToken = await OAuth2_client.getAccessToken();
+    console.log("accessToken: ", accessToken);
+    const mailerConfig = {
       host: process.env.HOST,
       service: process.env.SERVICE,
       port: Number(process.env.EMAIL_PORT),
       secure: Boolean(process.env.SECURE),
       auth: {
-        user: process.env.USER,
-        pass: process.env.PASS,
+        type: "OAuth2",
+        user: config.googleUser,
+        pass: config.googlePassword,
+        clientId: config.googleClientId,
+        clientSecret: config.googleClientSecret,
+        refreshToken: config.googleRefreshToken,
+        accessToken: accessToken.token,
       },
-    });
-    await transporter.sendMail({
-      from: process.env.USER,
-      to: email,
+    };
+    console.log("mailerConfig: ", mailerConfig);
+    const transporter = nodemailer.createTransport(mailerConfig);
+    const emailOptions = {
+      //`HappyDeving <${config.USER}>`
+      from: config.googleUser,
+      to: recipient.email,
       subject: subject,
-      text: text,
+      html: getHtmlMessage(recipient.username, url),
+    };
+    console.log("emailOptions: ", emailOptions);
+    await transporter.sendMail(emailOptions, function (error, result) {
+      if (error) {
+        console.log("Error: ", error);
+      } else {
+        console.log("Success: ", result);
+      }
+      transporter.close();
     });
     console.log("Email sent successfully");
   } catch (error) {

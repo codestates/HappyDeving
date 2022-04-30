@@ -30,16 +30,16 @@ module.exports = {
         password: hashedPassword,
       });
 
-      console.log("newUser.verified::", newUser.verified); // undefined (false 여야 한다)
+      // console.log("newUser.verified::", newUser.verified);
       const newAccessToken = generateAccessToken({ username, email });
       const newrefreshToken = generaterefreshToken({ username, email });
       sendTocookie(res, newAccessToken, newrefreshToken);
       
 
-      // if (!newUser.verified) {
-      //   const url = `${process.env.BASE_URL}users/${newUser.id}/verify/${newAccessToken}`;
-      //   await sendEmail(newUser.email, "Verify Email", url);
-      // }
+      if (!newUser.verified) {
+        const url = `${process.env.BASE_URL}/users/${newUser.id}/verify/${newAccessToken}`;
+        await sendEmail(newUser, "해피데빙 인증메일", url);
+      }
 
       return res.status(201).send({
         newUser,
@@ -51,7 +51,7 @@ module.exports = {
       return res.status(500).json();
     }
   },
-  get: async (req, res) => {
+  patch: async (req, res) => {
     try {
       const user = await User.findOne({ where: { id: req.params.id } });
       if (!user) return res.status(400).send({ message: "Invalid link" });
@@ -61,7 +61,7 @@ module.exports = {
       }
 
       await User.update(
-        { verified: true }, // true가 아니라 1로 저장이 되는 이유는? 아마도 verified가 아직 boolean으로 안 바뀌어서?
+        { verified: true },
         {
           where: {
             id: user.id,
