@@ -10,15 +10,14 @@ import { getStudiesMapApi } from "../../api/study";
 import LanguageModal from "./Modals/LanguageModal";
 import LocationModal from "./Modals/LocationModal";
 import DateModal from "./Modals/DateModal";
+import { setStudiesData } from "../../features/studies/studiesSlice";
 import {
   languageModal,
   locationModal,
   dateModal,
   reset,
 } from "../../features/Search/searchModalSlice";
-
 import { setLocationData, setLanguageData, resetData } from "../../features/Search/searchDataSlice";
-
 import CalenderDate from "../Calendar.js";
 
 const { kakao } = window;
@@ -136,11 +135,13 @@ const Search = () => {
   }
 
   const { location, date, language } = useSelector((store) => store.search);
-  const { locationData, dateData, languageData } = useSelector((store) => store.search);
-
-  console.log(locationData);
+  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
   const { calenderDateValue } = useSelector((store) => store.calender);
-  console.log(calenderDateValue);
+
+  console.log(locationData, dateData, languageData);
+
+  const guType = locationData.split(" ")[0];
+  const dongType = locationData.split(" ")[1];
 
   const handleInputValue = (e) => {
     if (e.key === "Enter") {
@@ -158,18 +159,16 @@ const Search = () => {
       <div
         key={idx}
         onClick={() => {
+          console.log(location);
           dispatch(setLocationData(location));
           dispatch(dateModal());
         }}
       >
-        {console.log(location)}
         {location}
       </div>
     ));
   };
 
-  console.log(locationListHandler(locationList));
-  console.log(locationList);
   return (
     <>
       <StyledSearch>
@@ -180,6 +179,7 @@ const Search = () => {
           }}
         >
           <span className="desc">{locationData ? locationData : "위치"}</span>
+          {console.log(locationData)}
         </Location>
         <Date
           id="date"
@@ -196,8 +196,8 @@ const Search = () => {
         <SearchIcon
           id="search"
           onClick={() => {
-            getStudiesMapApi({ locationData, dateData, languageData }).then((res) =>
-              console.log(res)
+            getStudiesMapApi({ guType, dongType, languageData, dateData }).then((res) =>
+              dispatch(setStudiesData(res.data))
             );
             //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
             navigate("/map");
