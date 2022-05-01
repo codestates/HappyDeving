@@ -278,46 +278,42 @@ const { kakao } = window;
 const MapView = styled(Content)`
   grid-column: 2/14;
   height: 200px;
-  position: relative;
-  z-index: 0;
 `;
 
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
 
 const StudyDesc = () => {
   const container = useRef(null);
-  const [location, setLocation] = useState({ place_name: "광화문", x: 37.570975, y: 126.977759 });
+  const [location, setLocation] = useState({
+    place_name: "광화문",
+    x: 37.570975,
+    y: 126.977759,
+  });
   console.log(location);
-
-  const markerMaker = (location) => {
-    return {
-      lat: location.x,
-      lng: location.y,
-      img: "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1",
-    };
-  };
-
-  const markerdata = markerMaker(location);
-  console.log(markerdata.lat);
 
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(markerdata.x, markerdata.y), //지도의 중심좌표.
-      level: 3, //지도의 레벨(확대, 축소 정도)
+      center: new kakao.maps.LatLng(location.x, location.y), //지도의 중심좌표
+      level: 10, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
+    console.log(container);
+
+    map.relayout();
 
     var // 마커이미지의 주소입니다
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
-      imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+      imageOption = { offset: new kakao.maps.Point(27, 69) };
+    // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
+    var img =
+      "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1";
 
     var marker = new kakao.maps.Marker({
       map: map,
-      position: new kakao.maps.LatLng(markerdata.lat, markerdata.lng),
-      title: markerdata.title,
-      image: new kakao.maps.MarkerImage(markerdata.img, imageSize, imageOption),
+      position: new kakao.maps.LatLng(location.x, location.y),
+      image: new kakao.maps.MarkerImage(img, imageSize, imageOption),
     });
     //marker 만들기
 
@@ -329,6 +325,7 @@ const StudyDesc = () => {
 
     //el.id 스터디 아이디가 담겨온다.
   };
+
   useEffect(() => {
     mapscript();
   }, [location]);
@@ -472,7 +469,7 @@ const StudyDesc = () => {
                       placeholder="ex. 송파구 오륜동"
                     ></input>
                     {locationListHandler([
-                      { place_name: "롯데월드", x: 127.09806349478795, y: 37.51131985755065 },
+                      { place_name: "롯데월드", y: 127.09806349478795, x: 37.51131985755065 },
                       { place_name: "올림픽공원", x: 127.09806349478795, y: 37.51131985755065 },
                     ])}
                   </DescLocationModal>
@@ -484,7 +481,6 @@ const StudyDesc = () => {
                 </div>
               )}
             </div>
-            {/* {data.location ? <MapView ref={container} /> : null} */}
             <MapView id="map" ref={container} />
             <div className="content">
               <span>내용</span>

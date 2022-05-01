@@ -1,28 +1,22 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import { useSelector } from "react-redux";
 import Container from "../src/components/styles/Container.styled";
 import Header from "../src/components/styles/Header.styled";
 import { Search } from "../src/components/styles/Search.styled";
 import Footer from "../src/components/styles/Footer.styled";
-import SigninModal from "./components/styles/SigninModal.styled";
-import SignupModal from "./components/styles/SignupModal.styled";
 import Landing from "./pages/Landing";
 import Write from "././components/styles/WriteStudyDesc.styled";
 import Map from "././components/styles/Map.styled";
 import Study from "./components/styles/StudyDesc.styled";
 import MyStudy from "./pages/MyStudy";
 // import Profile from "./pages/Profile";
-import ProfileEdit from "./pages/ProfileEdit";
 import LikedStudy from "./pages/LikedStudy";
 import "./static/fonts/font.css";
 import "./App.css";
 import "./static/fonts/font.css";
 
 function App() {
-  const { signinModal, signupModal } = useSelector((store) => store.modal);
-
   const theme = {
     colors: {
       purple: "#5E17EB",
@@ -53,8 +47,6 @@ function App() {
           <div className="App">
             <header className="App-header"></header>
           </div>
-          {signinModal ? <SigninModal /> : null}
-          {signupModal ? <SignupModal /> : null}
           <Routes>
             <Route
               path="/"
@@ -79,7 +71,6 @@ function App() {
             />
             <Route path="/study/:id" element={<Study />} />
             {/* <Route path="/profile" element={<Profile />} /> */}
-            <Route path="/editprofile" element={<ProfileEdit />} />
             <Route path="/mystudy" element={<MyStudy />} />
             <Route path="/likedStudy" element={<LikedStudy />} />
           </Routes>
