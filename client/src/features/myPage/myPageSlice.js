@@ -10,11 +10,14 @@ const initialState = {
 };
 
 export const getProfile = createAsyncThunk("myPage/getProfile", async (id, thunkAPI) => {
+  console.log("getProfile id ", id); // 잘 들어옴
   try {
     return await getProfileApi(id).then((res) => {
+      console.log("getProfile.response: ", res); // 잘 들어옴
       return res.data;
     });
   } catch (error) {
+    console.log("getProfile.error: ", error); // 잘 들어옴
     return thunkAPI.rejectWithValue(error);
   }
 });
@@ -22,7 +25,7 @@ export const getProfile = createAsyncThunk("myPage/getProfile", async (id, thunk
 export const editProfile = createAsyncThunk(
   "myPage/editProfile",
   async ({ id, userData }, thunkAPI) => {
-    // console.log("userData: ", userData); // 여기까진 들어옴, 401 unauthorized, 헤더에 토큰이 없었음
+    console.log("userData: ", userData); // 여기까진 들어옴, 401 unauthorized, 헤더에 토큰이 없었음
     try {
       return await editProfileApi(id, userData).then((res) => {
         console.log("edit res::", res);
@@ -68,7 +71,7 @@ export const myPageSlice = createSlice({
       .addCase(getProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.message = action.payload.message;
         state.user = null;
       })
       .addCase(editProfile.pending, (state) => {

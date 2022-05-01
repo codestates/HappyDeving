@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { openSigninModal } from "../../features/modal/modalSlice";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const icons = {
@@ -65,7 +64,6 @@ const Header = () => {
   // const user = JSON.parse(localStorage.getItem("user"));
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const goToHome = () => {
     navigate("/");
@@ -79,13 +77,13 @@ const Header = () => {
             <img className="write" src={icons.write} />
           </Link>
           {user ? (
-            <img className="mypage" src={icons.mypage} />
+            <Link to="/profile">
+              <img className="mypage" src={icons.mypage} />
+            </Link>
           ) : (
-            <img
-              onClick={() => dispatch(openSigninModal(true))}
-              className="login"
-              src={icons.login}
-            />
+            <Link to="/signin">
+              <img className="login" src={icons.login} />
+            </Link>
           )}
         </div>
       </StyledHeader>
