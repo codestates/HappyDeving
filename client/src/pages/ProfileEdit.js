@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { reset, getUserInfo, editUserData, deleteUser } from "../features/myPage/myPageSlice";
+import { reset, getProfile, editProfile, deleteUser } from "../features/myPage/myPageSlice";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 import { signout } from "../features/auth/authSlice";
+const signinData = JSON.parse(localStorage.getItem("user"));
+// console.log("signinData.newAccessToken: ", signinData.newAccessToken); // 잘 들어옴
 
 const StyledEditProfile = styled(Content)`
   grid-column: 3 / 13;
   text-align: left;
+  /* border: 2px solid white; */
   /* x, y, blur-radius, spread */
 `;
 const ProfileImg = styled.div`
@@ -22,22 +25,23 @@ const ProfileImg = styled.div`
   font-size: 12px;
 `;
 
-const Title = styled.h1`
+const Title = styled(Content)`
   /* background-color: green; */
+  margin-top: 10px;
   margin-left: 30px;
   margin-bottom: 30px;
   font-size: 20px;
 `;
-const ProfileWrap = styled.div`
+const ProfileWrap = styled(Content)`
   /* background-color: red; */
+  /* grid-column: 3 / 13; */
+  width: 70vw;
   display: inline-flexbox;
 `;
 
-const InputWrap = styled.div`
+const InputWrap = styled(Content)`
   /* background-color: blue; */
-  margin-left: 30px;
-  margin-bottom: 20px;
-  width: 400px;
+  width: 30vw;
 `;
 const InputBox = styled.input`
   /* background-color: yellow; */
@@ -67,50 +71,42 @@ const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [userData, setUserData] = useState({});
-  const { username, bio, github, blog } = userData;
+  const [userData, setUserData] = useState({
+    username: "",
+    bio: "",
+    github: "",
+    blog: "",
+  });
 
   const handleInputValue = (key) => (e) => {
     setUserData({ ...userData, [key]: e.target.value });
   };
 
   const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.myPage);
+  console.log("getProfile user: ", user);
 
   useEffect(() => {
-    dispatch(getUserInfo()).then((res) => {
-      console.log("data 들어오나", res); // userInfo 없음. 나중에 다시 볼 것
-      // Uncaught (in promise) TypeError: Cannot read properties of null (reading 'username')
-      setUserData({
-        username: user.username,
-        bio: user.bio,
-        github: user.github,
-        blog: user.blog,
-      });
-    });
-    dispatch(reset());
-  }, [dispatch]);
+    dispatch(getProfile(signinData.data.userInfo.id));
+  }, []);
 
   const handleEditing = async (e) => {
     e.preventDefault();
     if (isError) {
-      console.log(message);
+      console.log("editProfile.rejected :", message);
     }
-    if (isSuccess) {
-      navigate(-1);
-    }
-    const editingData = {
-      username,
-      bio,
-      github,
-      blog,
-    };
-    dispatch(editUserData(editingData));
+    // if (isSuccess || user) {
+    //   navigate(-1);
+    // }
+    console.log("userData: ", userData);
+    dispatch(editProfile({ id: signinData.data.userInfo.id, userData: userData }));
+    dispatch(reset());
   };
 
   const handlePermanentDeletion = (e) => {
     e.preventDefault();
     dispatch(deleteUser());
     dispatch(signout());
+    dispatch(reset());
     navigate("/");
   };
 
@@ -128,21 +124,25 @@ const MyPage = () => {
             <Text>닉네임</Text>
             <InputBox
               type="username"
-              placeholder={username}
+              placeholder={user?.username}
               onChange={handleInputValue("username")}
             />
           </InputWrap>
           <InputWrap>
             <Text>자기 소개</Text>
-            <InputBox type="bio" placeholder={bio} onChange={handleInputValue("bio")} />
+            <InputBox type="bio" placeholder={user?.bio} onChange={handleInputValue("bio")} />
           </InputWrap>
           <InputWrap>
             <Text>깃허브 주소</Text>
-            <InputBox type="github" placeholder={github} onChange={handleInputValue("github")} />
+            <InputBox
+              type="github"
+              placeholder={user?.github}
+              onChange={handleInputValue("github")}
+            />
           </InputWrap>
           <InputWrap>
             <Text>블로그 주소</Text>
-            <InputBox type="blog" placeholder={blog} onChange={handleInputValue("blog")} />
+            <InputBox type="blog" placeholder={user?.blog} onChange={handleInputValue("blog")} />
           </InputWrap>
           <ButtonWrap>
             <Link to="/profile">
