@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signin, reset } from "../features/auth/authSlice";
+import { signin, reset } from "../features/user/userSlice";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
@@ -113,14 +113,13 @@ function Login() {
     email: "",
     password: "",
   });
-  const { email, password } = userData;
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
@@ -136,11 +135,9 @@ function Login() {
       setErrorMessage("모든 항목을 입력해 주세요.");
       return;
     }
-    const signinData = {
-      email,
-      password,
-    };
-    dispatch(signin(signinData));
+
+    dispatch(signin(userData));
+    navigate("/");
   };
 
   if (isLoading) {

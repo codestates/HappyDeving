@@ -8,7 +8,7 @@ import LanguageModal from "./Modals/LanguageModal";
 import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setDateModal, setLanguageModal } from "../../features/studies/studyModalSlice";
 {
   /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
@@ -342,13 +342,12 @@ const StudyDesc = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-
   const dispatch = useDispatch();
   const { dateModal, languageModal } = useSelector((store) => store.studyModal);
   const { calenderDateValue } = useSelector((store) => store.calender);
   console.log(calenderDateValue);
   console.log(languageModal);
-  
+
   const [data, setData] = useState({
     username: user.username,
     title: "",
@@ -390,7 +389,7 @@ const StudyDesc = () => {
     console.log(data);
   };
 
-  const { calenderDateValue } = useSelector((store) => store.calender);
+  // const { calenderDateValue } = useSelector((store) => store.calender);
 
   return (
     <>
@@ -428,10 +427,8 @@ const StudyDesc = () => {
                           src={langImg[key]}
                           key={idx}
                           onClick={() => {
-
                             handleInputValue("language", key);
                             setOpen({ ...open, language: false });
-
                           }}
                         />
                       ))}
@@ -453,11 +450,8 @@ const StudyDesc = () => {
                   </DescDateModal>
                 ) : (
                   <div className="dateContainer">
-
-
                     <div className="dateInput">{calenderDateValue}</div>
                     <button onClick={() => dispatch(setDateModal(true))}>선택</button>
-
                   </div>
                 )}
               </div>
