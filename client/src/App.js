@@ -15,6 +15,8 @@ import LikedStudy from "./pages/LikedStudy";
 import "./static/fonts/font.css";
 import "./App.css";
 import "./static/fonts/font.css";
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
 
 function App() {
   const theme = {
@@ -73,6 +75,8 @@ function App() {
             {/* <Route path="/profile" element={<Profile />} /> */}
             <Route path="/mystudy" element={<MyStudy />} />
             <Route path="/likedStudy" element={<LikedStudy />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/signup" element={<Signup />} />
           </Routes>
           <Footer />
         </Container>
