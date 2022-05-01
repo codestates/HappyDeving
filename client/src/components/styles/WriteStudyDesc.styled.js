@@ -8,7 +8,8 @@ import LanguageModal from "./Modals/LanguageModal";
 import DateModal from "./Modals/DateModal";
 import Map from "./MapComponent.styled";
 import CalenderDate from "../Calendar.js";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setDateModal, setLanguageModal } from "../../features/studies/studyModalSlice";
 {
   /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
   // 입력칸들 5-14 
@@ -103,6 +104,7 @@ const Desc = styled(Content)`
       align-self: center;
       width: 15px;
       height: 15px;
+
       &:hover {
         cursor: pointer;
       }
@@ -207,11 +209,16 @@ const keyArr = Object.keys(langImg);
 
 const StudyDesc = () => {
   const [checked, setChecked] = useState(false);
-  const [open, setOpen] = useState({
-    language: false,
-    date: false,
-    location: false,
-  });
+  // const [open, setOpen] = useState({
+  //   language: false,
+  //   date: false,
+  //   location: false,
+  // });
+  const dispatch = useDispatch();
+  const { dateModal, languageModal } = useSelector((store) => store.studyModal);
+  const { calenderDateValue } = useSelector((store) => store.calender);
+  console.log(calenderDateValue);
+  console.log(languageModal);
   const [data, setData] = useState({
     language: "",
     date: "",
@@ -235,7 +242,7 @@ const StudyDesc = () => {
             <div className="langanddate">
               <div className="lang">
                 <span>언어</span>
-                {open.language ? (
+                {languageModal ? (
                   <DescLanguageModal>
                     <div>
                       {keyArr.map((key, idx) => (
@@ -243,31 +250,30 @@ const StudyDesc = () => {
                           src={langImg[key]}
                           key={idx}
                           onClick={() => {
-                            setData({ ...data, language: key }),
-                              setOpen({ ...open, language: false });
+                            setData({ ...data, language: key }), dispatch(setLanguageModal(false));
                           }}
                         />
                       ))}
                     </div>
+                    console.log(languageModal);
                   </DescLanguageModal>
                 ) : (
                   <div className="langContainer">
                     <div className="langInput">{data.language}</div>
-                    <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
+                    <button onClick={() => dispatch(setLanguageModal(true))}>선택</button>
                   </div>
                 )}
               </div>
-
               <div className="date">
                 <span>시작일</span>
-                {open.date ? (
+                {dateModal ? (
                   <DescDateModal>
                     <CalenderDate />
                   </DescDateModal>
                 ) : (
                   <div className="dateContainer">
-                    <div className="dateInput">{data.date}</div>
-                    <button onClick={() => setOpen({ ...open, date: true })}>선택</button>
+                    <div className="dateInput">{calenderDateValue}</div>
+                    <button onClick={() => dispatch(setDateModal(true))}>선택</button>
                   </div>
                 )}
               </div>
