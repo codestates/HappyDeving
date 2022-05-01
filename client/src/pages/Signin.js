@@ -1,26 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-<<<<<<< HEAD
-import { signin, reset } from "../features/auth/authSlice";
-=======
 import { signin, reset } from "../features/user/userSlice";
->>>>>>> 3a00174 (upload omitted files)
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
 import Container from "../components/styles/Container.styled";
 import Content from "../components/styles/Content.styled";
-<<<<<<< HEAD
 
 const Background = styled(Container)`
-=======
-// const Footer = styled(Content)`
-//   grid-column: 3 / 13;
-//   height: 120px;
-// `;
-const ModalBackdrop = styled(Container)`
->>>>>>> 3a00174 (upload omitted files)
   grid-column: 1/ 15;
   justify-content: center;
   align-items: center;
@@ -31,11 +19,7 @@ const ModalBackdrop = styled(Container)`
   font-weight: 500;
 `;
 
-<<<<<<< HEAD
 const SigninWrap = styled(Content)`
-=======
-const ModalView = styled(Content)`
->>>>>>> 3a00174 (upload omitted files)
   display: flex;
   min-width: 400px;
   height: 100%;
@@ -82,10 +66,6 @@ const Title = styled.div`
 `;
 const Text = styled.div`
   margin-right: 10px;
-<<<<<<< HEAD
-=======
-
->>>>>>> 3a00174 (upload omitted files)
   color: #6733e5;
   font-size: 20px;
 `;
@@ -133,21 +113,13 @@ function Login() {
     email: "",
     password: "",
   });
-<<<<<<< HEAD
-  const { email, password } = userData;
-=======
->>>>>>> 3a00174 (upload omitted files)
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-<<<<<<< HEAD
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
-=======
   const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
->>>>>>> 3a00174 (upload omitted files)
 
   useEffect(() => {
     dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
@@ -163,17 +135,9 @@ function Login() {
       setErrorMessage("모든 항목을 입력해 주세요.");
       return;
     }
-<<<<<<< HEAD
-    const signinData = {
-      email,
-      password,
-    };
-    dispatch(signin(signinData));
-=======
 
     dispatch(signin(userData));
     navigate("/");
->>>>>>> 3a00174 (upload omitted files)
   };
 
   if (isLoading) {
@@ -182,70 +146,37 @@ function Login() {
 
   return (
     <>
-<<<<<<< HEAD
       <Background>
         <SigninWrap>
-=======
-      <ModalBackdrop>
-        <ModalView>
->>>>>>> 3a00174 (upload omitted files)
           <form onSubmit={handleSignin}>
             <Title>
               <h1 className="text-grey-600">로그인</h1>
             </Title>
-<<<<<<< HEAD
-=======
-            {/* <InputWrap> */}
->>>>>>> 3a00174 (upload omitted files)
             <Text>이메일</Text>
             <input
               type="email"
               placeholder="이메일을 입력해주세요"
               onChange={handleInputValue("email")}
             />
-<<<<<<< HEAD
-=======
-            {/* </InputWrap> */}
-            {/* <InputWrap> */}
->>>>>>> 3a00174 (upload omitted files)
             <Text>비밀번호</Text>
             <input
               type="password"
               placeholder="비밀번호를 입력해주세요"
               onChange={handleInputValue("password")}
             />
-<<<<<<< HEAD
-=======
-            {/* </InputWrap> */}
-
-            {/* <InputWrap className="underline"> */}
-
->>>>>>> 3a00174 (upload omitted files)
             <Resister>
               <p>아직 아이디가 없으신가요? </p>
               <Link to="/signup">
                 <span>회원가입하기</span>
               </Link>
             </Resister>
-<<<<<<< HEAD
-=======
-
-            {/* </InputWrap> */}
->>>>>>> 3a00174 (upload omitted files)
             <ButtonWrap>
               <button type="submit">로그인</button>
             </ButtonWrap>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>
-<<<<<<< HEAD
         </SigninWrap>
       </Background>
-=======
-          {/* </SigninContainer> */}
-          {/* </Containers> */}
-        </ModalView>
-      </ModalBackdrop>
->>>>>>> 3a00174 (upload omitted files)
     </>
   );
 }

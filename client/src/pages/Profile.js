@@ -60,7 +60,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isLoading } = useSelector((state) => state.user);
-  console.log("user 왔니: ", user);
+  console.log("profile user: ", user);
 
   const MoveToEditPage = (e) => {
     e.preventDefault();
@@ -83,12 +83,12 @@ const Profile = () => {
     <StyledProfileContainer>
       <ProfileWrap>
         <Title>회원 정보 수정</Title>
-        <ProfileImg>{user.data.userInfo?.image}</ProfileImg>
+        <ProfileImg>{user?.image}</ProfileImg>
         <ProfileInfoWrap>
-          <Name>{user.data.userInfo?.username}</Name>
-          <Biography>{user.data.userInfo?.bio}</Biography>
-          <GitHub>{user.data.userInfo?.github}</GitHub>
-          <Blog>{user.data.userInfo?.blog}</Blog>
+          <Name>{user?.username}</Name>
+          <Biography>{user?.bio}</Biography>
+          <GitHub>{user?.github}</GitHub>
+          <Blog>{user?.blog}</Blog>
         </ProfileInfoWrap>
       </ProfileWrap>
       <ButtonWrap>

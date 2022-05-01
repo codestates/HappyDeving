@@ -5,8 +5,6 @@ import { signout, reset, editProfile, deleteUser } from "../features/user/userSl
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
-// const signinData = JSON.parse(localStorage.getItem("user"));
-// console.log("signinData.newAccessToken: ", signinData.newAccessToken); // 잘 들어옴
 
 const StyledEditProfile = styled(Content)`
   grid-column: 3 / 13;
@@ -69,17 +67,16 @@ const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isLoading, isError, message } = useSelector((state) => state.user);
-  console.log("userSlice user: ", user); // null
+  console.log("userSlice user: ", user); // 들어오다가 undefined 바뀜
 
   const [userData, setUserData] = useState({
-    username: user.data.userInfo.username,
-    bio: user.data.userInfo.bio || "",
-    github: user.data.userInfo.github || "",
-    blog: user.data.userInfo.blog || "",
+    username: "",
+    bio: "",
+    github: "",
+    blog: "",
   });
 
   const handleInputValue = (key) => (e) => {
-    console.log("userData 왜 undefined? ", userData);
     setUserData({ ...userData, [key]: e.target.value });
   };
 
@@ -88,8 +85,9 @@ const MyPage = () => {
     if (isError) {
       console.log("editProfile.rejected :", message);
     }
-    dispatch(editProfile({ id: user.data.userInfo.id, userData: userData }));
+    dispatch(editProfile({ id: user.id, userData: userData }));
     dispatch(reset());
+    navigate("/profile");
   };
 
   const handlePermanentDeletion = (e) => {
@@ -114,33 +112,25 @@ const MyPage = () => {
             <Text>닉네임</Text>
             <InputBox
               type="username"
-              defaultValue={user.data.userInfo.username}
+              defaultValue={user?.username}
               onChange={handleInputValue("username")}
             />
           </InputWrap>
           <InputWrap>
             <Text>자기 소개</Text>
-            <InputBox
-              type="bio"
-              defaultValue={user.data.userInfo.bio}
-              onChange={handleInputValue("bio")}
-            />
+            <InputBox type="bio" defaultValue={user?.bio} onChange={handleInputValue("bio")} />
           </InputWrap>
           <InputWrap>
             <Text>깃허브 주소</Text>
             <InputBox
               type="github"
-              defaultValue={user.data.userInfo.github}
+              defaultValue={user?.github}
               onChange={handleInputValue("github")}
             />
           </InputWrap>
           <InputWrap>
             <Text>블로그 주소</Text>
-            <InputBox
-              type="blog"
-              defaultValue={user.data.userInfo.blog}
-              onChange={handleInputValue("blog")}
-            />
+            <InputBox type="blog" defaultValue={user?.blog} onChange={handleInputValue("blog")} />
           </InputWrap>
           <ButtonWrap>
             <Link to="/profile">
