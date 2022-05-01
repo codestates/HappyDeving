@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { signout, reset, editProfile, deleteUser } from "../features/user/userSlice";
+import { signout, reset, editProfile, deleteUser } from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
-// const signinData = JSON.parse(localStorage.getItem("user"));
-// console.log("signinData.newAccessToken: ", signinData.newAccessToken); // 잘 들어옴
 
 const StyledEditProfile = styled(Content)`
   grid-column: 3 / 13;
