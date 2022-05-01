@@ -61,8 +61,7 @@ const StyledHeader = styled.header`
 `;
 
 const Header = () => {
-  // const user = JSON.parse(localStorage.getItem("user"));
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const goToHome = () => {
