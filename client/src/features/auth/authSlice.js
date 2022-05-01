@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { signinApi, signupApi } from "../../api/users";
+const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
-  user: null,
+  user: user ? user : null,
   isError: false,
   isSuccess: false,
   isLoading: false,
@@ -23,8 +24,8 @@ export const signin = createAsyncThunk("auth/signin", async (signinData, thunkAP
   try {
     return await signinApi(signinData).then((res) => {
       if (res) {
-        // console.log("signin res::", res);
-        localStorage.setItem("user", JSON.stringify(res.data.data.userInfo.username));
+        // console.log("signin res::", res); // 잘 들어옴
+        localStorage.setItem("user", JSON.stringify(res.data));
       }
       return res.data;
     });

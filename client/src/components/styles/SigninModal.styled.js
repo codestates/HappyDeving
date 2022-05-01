@@ -101,7 +101,7 @@ function SigninModal() {
     email: "",
     password: "",
   });
-  const { email, password } = userData;
+  // const { email, password } = userData;
 
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -112,7 +112,7 @@ function SigninModal() {
 
   useEffect(() => {
     dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
+  }, [user, isError, isSuccess, message, navigate]);
 
   const handleInputValue = (key) => (e) => {
     setUserData({ ...userData, [key]: e.target.value });
@@ -124,11 +124,8 @@ function SigninModal() {
       setErrorMessage("모든 항목을 입력해 주세요.");
       return;
     }
-    const signinData = {
-      email,
-      password,
-    };
-    dispatch(signin(signinData));
+
+    dispatch(signin(userData));
     dispatch(openSigninModal(false));
   };
 
