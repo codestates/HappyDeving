@@ -58,11 +58,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
       },
+      image: {
+        type: DataTypes.STRING,
+        defaultValue: "https://i.ibb.co/nr4FYns/happydevil.png",
+      },
     },
     {
       sequelize,
       tableName: "user",
       modelName: "User",
+      charset: "utf8",
+      collate: "utf8_general_ci",
     }
   );
   return User;

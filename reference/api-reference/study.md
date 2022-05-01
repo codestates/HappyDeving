@@ -18,7 +18,7 @@
 {% endswagger-parameter %}
 
 {% swagger-parameter in="query" name="date" %}
-date 
+YYYY-MM-DD
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}

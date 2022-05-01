@@ -1,6 +1,6 @@
 # users
 
-{% swagger method="post" path="/users/signin" baseUrl="https://happydeving.com" summary="signin" %}
+{% swagger method="post" path="/users/signin" baseUrl="https://happydeving.com" summary="signin " %}
 {% swagger-description %}
 signin 성공 시 기입한 id, pw 일치하는 user 정보 찾아서 돌려주기
 {% endswagger-description %}
@@ -190,7 +190,7 @@ authorization code
             "username": "nikki"
             "createdAt": "2019-02-24T16:17:47.000Z",
             "updatedAt": "2019-02-24T16:17:47.000Z"
-            "loginMethod": 1
+            "loginMethod": 2
         },
         res.cookie: {
           accessToken:asdfasdfasdfas,
@@ -233,7 +233,50 @@ authorization code
             "username": "nikki"
             "createdAt": "2019-02-24T16:17:47.000Z",
             "updatedAt": "2019-02-24T16:17:47.000Z"
-            "loginMethod": 1
+            "loginMethod": 3
+        },
+        res.cookie: {
+          accessToken:asdfasdfasdfas,
+          refreshToken:asdfasdfasdfas,
+        }
+     
+}
+```
+{% endswagger-response %}
+
+{% swagger-response status="404: Not Found" description="" %}
+```javascript
+{
+    // Response
+}
+```
+{% endswagger-response %}
+
+{% swagger-response status="500: Internal Server Error" description="" %}
+```javascript
+```
+{% endswagger-response %}
+{% endswagger %}
+
+{% swagger method="post" path="/users/login/kakao" baseUrl="https://happydeving.com" summary="naver social login" %}
+{% swagger-description %}
+
+{% endswagger-description %}
+
+{% swagger-parameter in="body" name="code*" %}
+authorization code
+{% endswagger-parameter %}
+
+{% swagger-response status="200: OK" description="" %}
+```javascript
+{
+    data:{
+        userInfo:{
+            "id": 1,
+            "username": "nikki"
+            "createdAt": "2019-02-24T16:17:47.000Z",
+            "updatedAt": "2019-02-24T16:17:47.000Z"
+            "loginMethod": 4
         },
         res.cookie: {
           accessToken:asdfasdfasdfas,
@@ -287,11 +330,11 @@ authorization code
 {% endswagger-description %}
 
 {% swagger-parameter in="body" name="loginMethod" type="Int" required="true" %}
-0.normal 1.github 2.google
+0.normal 1.github 2.google3.kakao4.naver
 {% endswagger-parameter %}
 
-{% swagger-parameter in="query" name="user" type="Int" required="true" %}
-userId
+{% swagger-parameter in="path" name="id (userId)" required="true" %}
+
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}

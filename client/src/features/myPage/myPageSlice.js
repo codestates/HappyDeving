@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getUserInfoApi, editUserDataApi, deleteUserApi } from "../../api/mypage";
+import { getProfileApi, editProfileApi, deleteUserApi } from "../../api/mypage";
 
 const initialState = {
   user: null,
@@ -9,22 +9,23 @@ const initialState = {
   message: "",
 };
 
-export const getUserInfo = createAsyncThunk("user/getUserInfo", async (thunkAPI) => {
+export const getProfile = createAsyncThunk("myPage/getProfile", async (id, thunkAPI) => {
   try {
-    return await getUserInfoApi().then((res) => {
-      console.log("mypage res::", res);
-      return res;
+    return await getProfileApi(id).then((res) => {
+      return res.data;
     });
   } catch (error) {
     return thunkAPI.rejectWithValue(error);
   }
 });
 
-export const editUserData = createAsyncThunk(
-  "mypage/editUserData",
-  async (editingData, thunkAPI) => {
+export const editProfile = createAsyncThunk(
+  "myPage/editProfile",
+  async ({ id, userData }, thunkAPI) => {
+    // console.log("userData: ", userData); // 여기까진 들어옴, 401 unauthorized, 헤더에 토큰이 없었음
     try {
-      return await editUserDataApi(editingData).then((res) => {
+      return await editProfileApi(id, userData).then((res) => {
+        console.log("edit res::", res);
         return res.data;
       });
     } catch (error) {
@@ -33,7 +34,7 @@ export const editUserData = createAsyncThunk(
   }
 );
 
-export const deleteUser = createAsyncThunk("mypage/deleteUser", async (thunkAPI) => {
+export const deleteUser = createAsyncThunk("myPage/deleteUser", async (thunkAPI) => {
   try {
     return await deleteUserApi().then((res) => {
       return res.data;
@@ -56,29 +57,29 @@ export const myPageSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getUserInfo.pending, (state) => {
+      .addCase(getProfile.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getUserInfo.fulfilled, (state, action) => {
+      .addCase(getProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.user = action.payload.data.userInfo;
       })
-      .addCase(getUserInfo.rejected, (state, action) => {
+      .addCase(getProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
         state.user = null;
       })
-      .addCase(editUserData.pending, (state) => {
+      .addCase(editProfile.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(editUserData.fulfilled, (state, action) => {
+      .addCase(editProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.user = action.payload;
       })
-      .addCase(editUserData.rejected, (state, action) => {
+      .addCase(editProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

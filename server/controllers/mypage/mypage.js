@@ -74,6 +74,7 @@ module.exports = {
         github,
         blog,
         bio,
+        image,
         createdAt,
         updatedAt,
         study,
@@ -82,7 +83,18 @@ module.exports = {
 
       return res.json({
         data: {
-          userInfo: { id, username, email, verified, github, blog, bio, createdAt, updatedAt },
+          userInfo: {
+            id,
+            username,
+            email,
+            verified,
+            github,
+            blog,
+            bio,
+            image,
+            createdAt,
+            updatedAt,
+          },
           comments: study_comment,
         },
       });
@@ -91,17 +103,37 @@ module.exports = {
       return res.status(500).json();
     }
   },
-  patch: (req, res) => {
+  patch: async (req, res) => {
     try {
-      res.send("mypage patch ok");
-    } catch (err) {
-      console.error(err);
-      return res.status(500).json();
-    }
-  },
-  delete: (req, res) => {
-    try {
-      res.send("mypage delete ok");
+      const data = checkAccessToken(req);
+
+      if (!data) {
+        return res.status(401).json("signin required");
+      }
+      const { id: paramsId } = req.params;
+
+      if (data.id !== Number(paramsId)) {
+        return res.status(401).json("wrong req params");
+      }
+
+      const { username, github, blog, bio, image } = req.body;
+
+      const userInfo = await User.findOne({ where: { id: paramsId } });
+
+      await User.update(
+        {
+          username: username ? username : userInfo.username,
+          github: github ? github : userInfo.github,
+          blog: blog ? blog : userInfo.blog,
+          bio: bio ? bio : userInfo.bio,
+          image: image ? image : userInfo.image,
+        },
+        { where: { id: paramsId } }
+      );
+
+      const result = await User.findOne({ where: { id: paramsId } });
+
+      res.status(200).json(result);
     } catch (err) {
       console.error(err);
       return res.status(500).json();
