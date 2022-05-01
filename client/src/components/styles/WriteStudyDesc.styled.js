@@ -2,14 +2,14 @@ import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
-import { useSelector } from "react-redux";
 import { langImg } from "../../static/images/langImg";
 import LanguageModal from "./Modals/LanguageModal";
 import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setDateModal, setLanguageModal } from "../../features/studies/studyModalSlice";
+import { setDateModal } from "../../features/studies/studyModalSlice";
+import { writeStudyApi } from "../../api/study";
 {
   /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
   // 입력칸들 5-14 
@@ -271,6 +271,21 @@ const DescLocationModal = styled(LocationModal)`
 const FuncBar = styled(Content)`
   grid-column: 2/14;
   height: 40px;
+  padding: 3px 10px;
+  button {
+    float: right;
+    width: 15vw;
+    height: 30px;
+    color: white;
+    text-align: center;
+    line-height: 30px;
+    background-color: ${(props) => props.theme.colors.purple};
+    border-radius: 30px;
+    box-shadow: 3px 2px 1px 1px #c593fe;
+    &:hover {
+      background-color: ${(props) => props.theme.colors.lavender};
+    }
+  }
 `;
 
 const keyArr = Object.keys(langImg);
@@ -288,22 +303,50 @@ const StudyDesc = () => {
   const container = useRef(null);
   const [location, setLocation] = useState({
     place_name: "광화문",
-    x: 37.570975,
-    y: 126.977759,
+    y: 37.570975,
+    x: 126.977759,
   });
-  console.log(location);
+  const [locationList, setLocationList] = useState([]);
+  var ps = new kakao.maps.services.Places();
+
+  // 키워드 검색을 요청하는 함수입니다
+  function searchPlaces(value) {
+    var keyword = value;
+    if (!keyword.replace(/^\s+|\s+$/g, "")) {
+      alert("키워드를 입력해주세요!");
+      return false;
+    }
+    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+    return ps.keywordSearch(keyword, placesSearchCB);
+  }
+
+  // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+  function placesSearchCB(data, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      setLocationList(data);
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      alert("검색 결과가 존재하지 않습니다.");
+      return;
+    } else if (status === kakao.maps.services.Status.ERROR) {
+      alert("검색 결과 중 오류가 발생했습니다.");
+      return;
+    }
+  }
+
+  const handleLocationValue = (e) => {
+    if (e.key === "Enter") {
+      searchPlaces(e.target.value);
+    } // true
+  };
 
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(location.x, location.y), //지도의 중심좌표
-      level: 10, //지도의 레벨(확대, 축소 정도)
+      center: new kakao.maps.LatLng(location.y, location.x), //지도의 중심좌표
+      level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
-    console.log(container);
-
-    map.relayout();
 
     var // 마커이미지의 주소입니다
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
@@ -314,7 +357,7 @@ const StudyDesc = () => {
 
     var marker = new kakao.maps.Marker({
       map: map,
-      position: new kakao.maps.LatLng(location.x, location.y),
+      position: new kakao.maps.LatLng(location.y, location.x),
       image: new kakao.maps.MarkerImage(img, imageSize, imageOption),
     });
     //marker 만들기
@@ -342,13 +385,10 @@ const StudyDesc = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-
   const dispatch = useDispatch();
-  const { dateModal, languageModal } = useSelector((store) => store.studyModal);
+  const { dateModal } = useSelector((store) => store.studyModal);
   const { calenderDateValue } = useSelector((store) => store.calender);
-  console.log(calenderDateValue);
-  console.log(languageModal);
-  
+
   const [data, setData] = useState({
     username: user.username,
     title: "",
@@ -374,8 +414,9 @@ const StudyDesc = () => {
       <div
         key={idx}
         onClick={() => {
-          console.log(location);
           setLocation(location);
+          setData({ ...data, location: location.place_name });
+          setOpen({ ...open, location: false });
           //클릭한 장소로 location 새로 세팅
         }}
       >
@@ -384,13 +425,9 @@ const StudyDesc = () => {
     ));
   };
 
-  console.log(localStorage.getItem("user"));
   const handleInputValue = (id, e) => {
     setData({ ...data, [id]: e });
-    console.log(data);
   };
-
-  const { calenderDateValue } = useSelector((store) => store.calender);
 
   return (
     <>
@@ -411,7 +448,6 @@ const StudyDesc = () => {
                 id="closed"
                 onClick={() => {
                   setChecked(!checked);
-                  console.log(data);
                 }}
               ></input>
               {console.log(data)}
@@ -420,7 +456,7 @@ const StudyDesc = () => {
             <div className="langanddate">
               <div className="lang">
                 <span>언어</span>
-                {languageModal ? (
+                {open.language ? (
                   <DescLanguageModal>
                     <div>
                       {keyArr.map((key, idx) => (
@@ -428,20 +464,17 @@ const StudyDesc = () => {
                           src={langImg[key]}
                           key={idx}
                           onClick={() => {
-
                             handleInputValue("language", key);
                             setOpen({ ...open, language: false });
-
                           }}
                         />
                       ))}
                     </div>
-                    console.log(languageModal);
                   </DescLanguageModal>
                 ) : (
                   <div className="langContainer">
                     <div className="langInput">{data.language}</div>
-                    <button onClick={() => dispatch(setLanguageModal(true))}>선택</button>
+                    <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
                   </div>
                 )}
               </div>
@@ -453,11 +486,8 @@ const StudyDesc = () => {
                   </DescDateModal>
                 ) : (
                   <div className="dateContainer">
-
-
                     <div className="dateInput">{calenderDateValue}</div>
                     <button onClick={() => dispatch(setDateModal(true))}>선택</button>
-
                   </div>
                 )}
               </div>
@@ -473,13 +503,10 @@ const StudyDesc = () => {
                 <>
                   <DescLocationModal>
                     <input
-                      onKeyDown={(e) => handleInputValue("location", e)}
+                      onKeyDown={(e) => handleLocationValue(e)}
                       placeholder="ex. 송파구 오륜동"
                     ></input>
-                    {locationListHandler([
-                      { place_name: "롯데월드", y: 127.09806349478795, x: 37.51131985755065 },
-                      { place_name: "올림픽공원", x: 127.09806349478795, y: 37.51131985755065 },
-                    ])}
+                    {locationListHandler(locationList)}
                   </DescLocationModal>
                 </>
               ) : (
@@ -494,9 +521,13 @@ const StudyDesc = () => {
               <span>내용</span>
               <textarea onChange={(e) => handleInputValue("content", e.target.value)}></textarea>
             </div>
-            {console.log(data)}
           </Desc>
-          <FuncBar />
+          <FuncBar>
+            {console.log(data)}
+            <button onClick={() => writeStudyApi(user.id, data).then((res) => console.log(res))}>
+              저장
+            </button>
+          </FuncBar>
         </div>
       </ContentDiv>
     </>
