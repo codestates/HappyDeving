@@ -7,11 +7,7 @@ import styled from "styled-components";
 import Container from "../components/styles/Container.styled";
 import Content from "../components/styles/Content.styled";
 
-// const Footer = styled(Content)`
-//   grid-column: 3 / 13;
-//   height: 120px;
-// `;
-const ModalBackdrop = styled(Container)`
+const SignupContainer = styled(Container)`
   grid-column: 1/ 15;
   justify-content: center;
   align-items: center;
@@ -22,7 +18,7 @@ const ModalBackdrop = styled(Container)`
   font-weight: 500;
 `;
 
-const ModalView = styled(Content)`
+const SignupWrap = styled(Content)`
   display: flex;
   min-width: 400px;
   width: 100%;
@@ -159,8 +155,8 @@ function Signup() {
 
   return (
     <>
-      <ModalBackdrop>
-        <ModalView>
+      <SignupContainer>
+        <SignupWrap>
           <form onSubmit={handleSignup}>
             <Title>
               <h1>회원가입</h1>
@@ -182,8 +178,8 @@ function Signup() {
             </ButtonWrap>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>
-        </ModalView>
-      </ModalBackdrop>
+        </SignupWrap>
+      </SignupContainer>
     </>
   );
 }

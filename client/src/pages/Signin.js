@@ -7,11 +7,8 @@ import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
 import Container from "../components/styles/Container.styled";
 import Content from "../components/styles/Content.styled";
-// const Footer = styled(Content)`
-//   grid-column: 3 / 13;
-//   height: 120px;
-// `;
-const ModalBackdrop = styled(Container)`
+
+const Background = styled(Container)`
   grid-column: 1/ 15;
   justify-content: center;
   align-items: center;
@@ -22,7 +19,7 @@ const ModalBackdrop = styled(Container)`
   font-weight: 500;
 `;
 
-const ModalView = styled(Content)`
+const SigninWrap = styled(Content)`
   display: flex;
   min-width: 400px;
   height: 100%;
@@ -69,7 +66,6 @@ const Title = styled.div`
 `;
 const Text = styled.div`
   margin-right: 10px;
-
   color: #6733e5;
   font-size: 20px;
 `;
@@ -153,48 +149,37 @@ function Login() {
 
   return (
     <>
-      <ModalBackdrop>
-        <ModalView>
+      <Background>
+        <SigninWrap>
           <form onSubmit={handleSignin}>
             <Title>
               <h1 className="text-grey-600">로그인</h1>
             </Title>
-            {/* <InputWrap> */}
             <Text>이메일</Text>
             <input
               type="email"
               placeholder="이메일을 입력해주세요"
               onChange={handleInputValue("email")}
             />
-            {/* </InputWrap> */}
-            {/* <InputWrap> */}
             <Text>비밀번호</Text>
             <input
               type="password"
               placeholder="비밀번호를 입력해주세요"
               onChange={handleInputValue("password")}
             />
-            {/* </InputWrap> */}
-
-            {/* <InputWrap className="underline"> */}
-
             <Resister>
               <p>아직 아이디가 없으신가요? </p>
               <Link to="/signup">
                 <span>회원가입하기</span>
               </Link>
             </Resister>
-
-            {/* </InputWrap> */}
             <ButtonWrap>
               <button type="submit">로그인</button>
             </ButtonWrap>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>
-          {/* </SigninContainer> */}
-          {/* </Containers> */}
-        </ModalView>
-      </ModalBackdrop>
+        </SigninWrap>
+      </Background>
     </>
   );
 }

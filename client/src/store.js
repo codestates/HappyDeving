@@ -7,6 +7,7 @@ import likedStudyCardsReducer from "./features/likedStudies/likedStudiesSlice";
 import writeMyStudyCardsSlice from "./features/myStudies/myStudiesSlice";
 import searchDataReducer from "./features/Search/searchDataSlice";
 import setStudiesReducer from "./features/studies/studiesSlice";
+import setStudyModal from "./features/studies/studyModalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     searchData: searchDataReducer,
     writeMyStudyCards: writeMyStudyCardsSlice,
     studies: setStudiesReducer,
+    studyModal: setStudyModal,
   },
 });
