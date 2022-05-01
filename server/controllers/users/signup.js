@@ -2,7 +2,6 @@ const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
 
-
 const sendEmail = require("../../utils/sendEmail");
 
 
