@@ -4,7 +4,6 @@ import { REACT_APP_API_URL } from "../config";
 
 axios.defaults.baseURL = `${REACT_APP_API_URL}`;
 axios.defaults.withCredentials = true;
-axios.defaults.headers = { "Content-Type": "application/json" };
 
 // 스터디 검색 결과
 export const getStudiesMapApi = ({ guType, dongType, dateData, languageData }) => {
@@ -27,13 +26,15 @@ export const getStudiesMapApi = ({ guType, dongType, dateData, languageData }) =
   }
 };
 // 스터디 상세 페이지
-export const studyApi = ({ id }) => axios.get(`/study/${id}`);
+export const studyApi = (id) => axios.get(`/study/${id}`);
+// 스터디 글 수정
+export const editStudyApi = (id, data) => axios.patch(`/study/${id}`, data);
 // 스터디 글 삭제
-export const deleteStudyApi = ({ id }) => axios.delete(`/study/${id}`);
+export const deleteStudyApi = (id) => axios.delete(`/study/${id}`);
+
 // 찜 목록 스터디 불러오기
-export const addLikedStudyApi = () => axios.get("/study/like");
+export const addLikedStudyApi = (id) => axios.get(`/study/like/${id}`);
 //  찜 목록 스터디 삭제
 export const UnLikedStudyApi = () => axios.delete("/study/like");
-// 스터디 상세페이지
-// 스터디 글쓰기 페이지
-export const getMyStudyApi = (data) => axios.post("mystudy", data);
+// 내가 쓴 스터디 목록
+export const getMyStudyApi = (id) => axios.post(`/mystudy/${id}`);

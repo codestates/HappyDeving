@@ -12,7 +12,6 @@ const signinData = JSON.parse(localStorage.getItem("user"));
 const StyledEditProfile = styled(Content)`
   grid-column: 3 / 13;
   text-align: left;
-  /* border: 2px solid white; */
   /* x, y, blur-radius, spread */
 `;
 const ProfileImg = styled.div`
@@ -82,8 +81,7 @@ const MyPage = () => {
     setUserData({ ...userData, [key]: e.target.value });
   };
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.myPage);
-  console.log("getProfile user: ", user);
+  const { user, isLoading, isError, message } = useSelector((state) => state.myPage);
 
   useEffect(() => {
     dispatch(getProfile(signinData.data.userInfo.id));
@@ -94,9 +92,7 @@ const MyPage = () => {
     if (isError) {
       console.log("editProfile.rejected :", message);
     }
-    // if (isSuccess || user) {
-    //   navigate(-1);
-    // }
+
     console.log("userData: ", userData);
     dispatch(editProfile({ id: signinData.data.userInfo.id, userData: userData }));
     dispatch(reset());
