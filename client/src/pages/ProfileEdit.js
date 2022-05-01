@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { reset, getProfile, editProfile, deleteUser } from "../features/myPage/myPageSlice";
+import { signout, reset, editProfile, deleteUser } from "../features/user/userSlice";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
-import { signout } from "../features/auth/authSlice";
-const signinData = JSON.parse(localStorage.getItem("user"));
+// const signinData = JSON.parse(localStorage.getItem("user"));
 // console.log("signinData.newAccessToken: ", signinData.newAccessToken); // 잘 들어옴
 
 const StyledEditProfile = styled(Content)`
@@ -69,32 +68,27 @@ const Button = styled.button`
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { user, isLoading, isError, message } = useSelector((state) => state.user);
+  console.log("userSlice user: ", user); // null
 
   const [userData, setUserData] = useState({
-    username: "",
-    bio: "",
-    github: "",
-    blog: "",
+    username: user.data.userInfo.username,
+    bio: user.data.userInfo.bio || "",
+    github: user.data.userInfo.github || "",
+    blog: user.data.userInfo.blog || "",
   });
 
   const handleInputValue = (key) => (e) => {
+    console.log("userData 왜 undefined? ", userData);
     setUserData({ ...userData, [key]: e.target.value });
   };
-
-  const { user, isLoading, isError, message } = useSelector((state) => state.myPage);
-
-  useEffect(() => {
-    dispatch(getProfile(signinData.data.userInfo.id));
-  }, []);
 
   const handleEditing = async (e) => {
     e.preventDefault();
     if (isError) {
       console.log("editProfile.rejected :", message);
     }
-
-    console.log("userData: ", userData);
-    dispatch(editProfile({ id: signinData.data.userInfo.id, userData: userData }));
+    dispatch(editProfile({ id: user.data.userInfo.id, userData: userData }));
     dispatch(reset());
   };
 
@@ -120,25 +114,33 @@ const MyPage = () => {
             <Text>닉네임</Text>
             <InputBox
               type="username"
-              placeholder={user?.username}
+              defaultValue={user.data.userInfo.username}
               onChange={handleInputValue("username")}
             />
           </InputWrap>
           <InputWrap>
             <Text>자기 소개</Text>
-            <InputBox type="bio" placeholder={user?.bio} onChange={handleInputValue("bio")} />
+            <InputBox
+              type="bio"
+              defaultValue={user.data.userInfo.bio}
+              onChange={handleInputValue("bio")}
+            />
           </InputWrap>
           <InputWrap>
             <Text>깃허브 주소</Text>
             <InputBox
               type="github"
-              placeholder={user?.github}
+              defaultValue={user.data.userInfo.github}
               onChange={handleInputValue("github")}
             />
           </InputWrap>
           <InputWrap>
             <Text>블로그 주소</Text>
-            <InputBox type="blog" placeholder={user?.blog} onChange={handleInputValue("blog")} />
+            <InputBox
+              type="blog"
+              defaultValue={user.data.userInfo.blog}
+              onChange={handleInputValue("blog")}
+            />
           </InputWrap>
           <ButtonWrap>
             <Link to="/profile">
