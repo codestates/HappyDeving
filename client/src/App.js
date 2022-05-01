@@ -11,7 +11,6 @@ import Map from "././components/styles/Map.styled";
 import Study from "./components/styles/StudyDesc.styled";
 import MyStudy from "./pages/MyStudy";
 // import Profile from "./pages/Profile";
-import ProfileEdit from "./pages/ProfileEdit";
 import LikedStudy from "./pages/LikedStudy";
 import "./static/fonts/font.css";
 import "./App.css";
@@ -74,7 +73,6 @@ function App() {
             />
             <Route path="/study/:id" element={<Study />} />
             {/* <Route path="/profile" element={<Profile />} /> */}
-            <Route path="/editprofile" element={<ProfileEdit />} />
             <Route path="/mystudy" element={<MyStudy />} />
             <Route path="/likedStudy" element={<LikedStudy />} />
             <Route path="/signin" element={<Signin />} />

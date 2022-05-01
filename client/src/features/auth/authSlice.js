@@ -24,8 +24,8 @@ export const signin = createAsyncThunk("auth/signin", async (signinData, thunkAP
   try {
     return await signinApi(signinData).then((res) => {
       if (res) {
-        // console.log("signin res::", res); // 잘 들어옴
-        localStorage.setItem("user", JSON.stringify(res.data));
+        // console.log("signin res::", res);
+        localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
       }
       return res.data;
     });
