@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signup, reset } from "../features/auth/authSlice";
+import { signup, reset } from "../features/user/userSlice";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Container from "../components/styles/Container.styled";
@@ -106,23 +106,22 @@ const AlertBox = styled.div`
 `;
 
 function Signup() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     username: "",
     email: "",
     password: "",
     confirmPassword: "",
   });
-  const { username, email, password, confirmPassword } = userData;
+  const { email, password, confirmPassword } = userData;
 
   const [errorMessage, setErrorMessage] = useState("");
 
   const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
   const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/; // 8~24자, 소문자, 대문자, 숫자, 특수문자 1개 이상
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.auth);
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(reset()); // 상태 모두 리셋
@@ -149,12 +148,8 @@ function Signup() {
       setErrorMessage("비밀번호가 일치하지 않습니다");
       return;
     }
-    const signupData = {
-      username,
-      email,
-      password,
-    };
-    dispatch(signup(signupData));
+
+    dispatch(signup(userData));
     navigate("/");
   };
 
