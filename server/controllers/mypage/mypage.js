@@ -2,7 +2,6 @@ const { User, Study_comment, Study, Language, Location } = require("../../models
 const { checkAccessToken } = require("../tokenFunctions");
 
 module.exports = {
-  // ! 완료
   get: async (req, res) => {
     try {
       const data = checkAccessToken(req);
