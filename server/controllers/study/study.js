@@ -1,6 +1,6 @@
 const { User, Study, Study_comment, Language, Study_language, Location } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
-const { Op, DECIMAL } = require("sequelize");
+const { Op } = require("sequelize");
 
 module.exports = {
   // ! 완료
