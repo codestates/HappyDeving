@@ -196,7 +196,7 @@ data: {
 access token
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="id" type="Int" required="true" %}
+{% swagger-parameter in="body" name="user_id" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
@@ -232,7 +232,7 @@ access token
 access token
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="id" type="Int" required="true" %}
+{% swagger-parameter in="body" name="user_id" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
