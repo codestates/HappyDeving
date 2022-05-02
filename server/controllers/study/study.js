@@ -200,10 +200,6 @@ module.exports = {
         ],
       });
 
-      console.log();
-
-      console.log(data);
-
       if (data.id !== studyInfo.dataValues.user_id) {
         return res.status(401).json("wrong user");
       }
