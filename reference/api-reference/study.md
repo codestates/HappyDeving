@@ -91,7 +91,8 @@ data: {
                     "location":  
                             { 
                             lat: 33.450705, 
-                            lng: 126.570677 
+                            lng: 126.570677, 
+                            place_name: "롯데월드"
                             },
                     "language": [
                             {
