@@ -1,6 +1,6 @@
 const { User, Study, Study_comment, Language, Study_language, Location } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
-const { Op } = require("sequelize");
+const { Op, DECIMAL } = require("sequelize");
 
 module.exports = {
   // ! 완료
@@ -45,7 +45,7 @@ module.exports = {
 
       const findLocation = await Location.findOne({
         where: { id: location_id },
-        attributes: ["latitude", "longitude"],
+        attributes: ["latitude", "longitude", "name"],
       });
 
       study_comment.forEach((el) => (el.dataValues.username = findUsername.username));
@@ -112,6 +112,23 @@ module.exports = {
         return res.status(401).json("body required");
       }
 
+      const findDong = location[3].split("");
+      const findGu = location[2].split("");
+
+      if (
+        !location[0] ||
+        typeof location[0] !== "string" ||
+        !location[1] ||
+        typeof location[1] !== "string" ||
+        !location[2] ||
+        !location[3] ||
+        findDong[findDong.length - 1] !== "동" ||
+        findGu[findGu.length - 1] !== "구" ||
+        !location[4]
+      ) {
+        return res.status(401).json("location array incorrent");
+      }
+
       const findOrCreateLocation = await Location.findOrCreate({
         where: {
           latitude: location[0],
@@ -148,7 +165,7 @@ module.exports = {
         });
       }
 
-      res.json(post);
+      res.status(201).json(post);
     } catch (err) {
       console.error(err);
       return res.status(500).json();
