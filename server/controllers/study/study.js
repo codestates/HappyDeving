@@ -3,7 +3,6 @@ const { checkAccessToken } = require("../tokenFunctions");
 const { Op } = require("sequelize");
 
 module.exports = {
-  // ! 완료
   get: async (req, res) => {
     try {
       const study = await Study.findOne({
@@ -73,7 +72,6 @@ module.exports = {
       return res.status(500).json();
     }
   },
-  // ! 완료
   post: async (req, res) => {
     try {
       const {
@@ -202,6 +200,10 @@ module.exports = {
         ],
       });
 
+      if (data.id !== studyInfo.dataValues.user_id) {
+        return res.status(401).json("wrong user");
+      }
+
       let studylangueId = [];
       for (let i = 0; i < studyInfo.language.length; i++) {
         studylangueId.push(studyInfo.language[i].Study_language.language_id);
@@ -301,7 +303,6 @@ module.exports = {
       return res.status(500).json();
     }
   },
-  // ! 완료
   delete: async (req, res) => {
     try {
       const data = checkAccessToken(req);
