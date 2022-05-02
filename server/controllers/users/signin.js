@@ -22,6 +22,10 @@ module.exports = {
         username,
         email,
         password: userInfoPassword,
+        github,
+        blog,
+        bio,
+        image,
         createdAt,
         updatedAt,
       } = userInfo.dataValues;
@@ -40,7 +44,20 @@ module.exports = {
       sendTocookie(res, newAccessToken, newrefreshToken);
 
       res.status(200).json({
-        data: { userInfo: { id, username, createdAt, updatedAt, loginMethod: 1 } },
+        data: {
+          userInfo: {
+            id,
+            username,
+            email,
+            github,
+            blog,
+            bio,
+            image,
+            createdAt,
+            updatedAt,
+            loginMethod: 1,
+          },
+        },
         newAccessToken,
       });
     } catch (err) {
