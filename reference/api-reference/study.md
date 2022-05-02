@@ -245,7 +245,7 @@ name(장소이름)
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="language_id" type="Int" %}
+{% swagger-parameter in="body" name="language_id" type="Array" %}
 
 {% endswagger-parameter %}
 
