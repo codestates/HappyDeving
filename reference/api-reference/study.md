@@ -175,7 +175,7 @@ latitude, longitude, guType, dongType, name
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="language_id" required="true" type="Int" %}
+{% swagger-parameter in="body" name="language_id" required="true" type="Array" %}
 
 {% endswagger-parameter %}
 
