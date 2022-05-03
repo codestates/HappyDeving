@@ -1,9 +1,15 @@
+require("dotenv").config();
+require("dotenv").config();
+const axios = require("axios");
+
 module.exports = {
-  post: (req, res) => {
+  post: async (req, res) => {
     try {
-      axios.get(
-        "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}"
+      const code = await axios.get(
+        `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_REST_API_KEY}&redirect_uri=${process.env.KAKAO_REDIRECT_URL}`
       );
+
+      console.log(code);
 
       if (!code) {
         return res.status(400).json();

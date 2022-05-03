@@ -25,13 +25,13 @@ module.exports = {
       if (!data) {
         return res.status(401).json("signin required");
       }
-      const { user_id, study_id, content } = req.body;
+      const { user_id, study_id, content, parentId } = req.body;
 
-      if (!user_id || !study_id || !content) {
+      if (!user_id || !study_id || !content || !parentId === null) {
         return res.status(401).json("body required");
       }
 
-      const comment = await Study_comment.create({ user_id, study_id, content, parentId: null });
+      const comment = await Study_comment.create({ user_id, study_id, content, parentId });
 
       res.status(201).json(comment);
     } catch (err) {
@@ -48,7 +48,7 @@ module.exports = {
       }
       const { id: _id, content: _content } = req.body;
 
-      if (!_id) {
+      if (!_id || !_content) {
         return res.status(401).json("body required");
       }
 
