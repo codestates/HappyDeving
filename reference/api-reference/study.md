@@ -176,8 +176,8 @@ latitude, longitude, guType, dongType, name
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="language_id" required="true" type="Array" %}
-
+{% swagger-parameter in="body" name="language" required="true" type="Array" %}
+\[{id: 1, name:'javascript'}]
 {% endswagger-parameter %}
 
 {% swagger-response status="201: Created" description="" %}
@@ -246,8 +246,8 @@ name(장소이름)
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="language_id" type="Array" %}
-
+{% swagger-parameter in="body" name="language" type="Array" %}
+\[{id: 1, name:'javascript'}]
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="loginMethod" required="true" type="Int" %}
@@ -311,10 +311,6 @@ name(장소이름)
 
 {% swagger-parameter in="header" name="authorization" required="true" %}
 access token
-{% endswagger-parameter %}
-
-{% swagger-parameter in="body" name="id" type="Int" required="true" %}
-
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="study_id" type="Int" required="true" %}

@@ -323,6 +323,7 @@ const StudyDesc = () => {
     });
   }, []);
 
+  console.log(data);
   //checked의 상태 변화 기다리기 위해
 
   return (

@@ -347,13 +347,14 @@ const StudyDesc = () => {
     };
 
     var map = new kakao.maps.Map(container.current, options);
-
+    var img =
+      data.language.length === 0
+        ? "https://i.ibb.co/nr4FYns/happydevil.png"
+        : langImg[data.language[0].name];
     var // 마커이미지의 주소입니다
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img =
-      "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1";
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -388,6 +389,7 @@ const StudyDesc = () => {
   const dispatch = useDispatch();
   const { dateModal } = useSelector((store) => store.studyModal);
   const { calenderDateValue } = useSelector((store) => store.calender);
+  const { dateData } = useSelector((store) => store.searchData);
 
   const [data, setData] = useState({
     username: user.username,
@@ -397,7 +399,7 @@ const StudyDesc = () => {
     closed: false,
     //checked라는 변수를 넣으면 변경이 안됨
     //(state변수가 아니라서 렌더링되지 않음. 즉 값을 받아가는 듯)
-    language_id: [],
+    language: [],
     location: [],
     loginMethod: user.loginMethod,
     startDate: "",
@@ -405,8 +407,12 @@ const StudyDesc = () => {
   });
 
   useEffect(() => {
-    setData({ ...data, startDate: calenderDateValue });
-  }, [calenderDateValue]);
+    setData({ ...data, startDate: dateData });
+  }, [dateData]);
+
+  useEffect(() => {
+    setData({ ...data, closed: checked });
+  }, [checked]);
 
   const locationListHandler = (locationList) => {
     //검색한 조건에 맞는 스터디들의 목록을 div로 표현
@@ -419,18 +425,16 @@ const StudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
+          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const dong = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "동")[0];
           setData({
             ...data,
-            location: [
-              location.y,
-              location.x,
-              location.address_name.split(" ")[1],
-              location.address_name.split(" ")[2],
-              location.place_name,
-            ],
+            location: [location.y, location.x, gu, dong, location.place_name],
           });
-          setOpen({ ...open, location: false });
           //클릭한 장소로 location 새로 세팅
+          setOpen({ ...open, location: false });
         }}
       >
         {location.place_name}
@@ -477,7 +481,10 @@ const StudyDesc = () => {
                           src={langImg[key]}
                           key={idx}
                           onClick={() => {
-                            handleInputValue("language_id", [...data.language_id, key]);
+                            handleInputValue("language", [
+                              ...data.language,
+                              { id: idx + 1, name: key },
+                            ]);
                             setOpen({ ...open, language: false });
                           }}
                         />
@@ -486,7 +493,7 @@ const StudyDesc = () => {
                   </DescLanguageModal>
                 ) : (
                   <div className="langContainer">
-                    <div className="langInput">{data.language_id.map((el) => el + ",")}</div>
+                    <div className="langInput">{data.language.map((el) => el.name + ",")}</div>
                     <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
                   </div>
                 )}
@@ -537,7 +544,14 @@ const StudyDesc = () => {
           </Desc>
           <FuncBar>
             {console.log(data)}
-            <button onClick={() => writeStudyApi(user.id, data).then((res) => console.log(res))}>
+            <button
+              onClick={() =>
+                writeStudyApi(user.id, data).then((res) => {
+                  console.log(res);
+                  alert("저장되었습니다");
+                })
+              }
+            >
               저장
             </button>
           </FuncBar>
