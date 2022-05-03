@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import { studyApi } from "../../api/study";
+import { studyApi, deleteStudyApi } from "../../api/study";
 import { useNavigate } from "react-router-dom";
 // import { useSelector } from "react-redux";
 {
@@ -369,6 +369,7 @@ const StudyDesc = () => {
               </Desc>
               <FuncBar>
                 <button onClick={() => navigate(`/study/edit/${data.id}`)}>수정</button>
+                <button onClick={() => deleteStudyApi(data.id)}>삭제</button>
               </FuncBar>
             </div>
           </ContentDiv>

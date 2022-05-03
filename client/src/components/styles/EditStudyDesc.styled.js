@@ -379,20 +379,21 @@ const EditStudyDesc = () => {
         startDate,
         //배열이여야 할듯
       } = res.data.data.study;
+      console.log(res.data.data.study);
 
       setData({
         title,
         content,
         kakaoLink,
         closed,
-        language,
         startDate,
+        language,
       });
       setLocation(res.data.data.study.location);
       //   setData(res.data.data.study);
       //   setLocation(res.data.data.study.location);
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (data) {
@@ -476,7 +477,10 @@ const EditStudyDesc = () => {
                               src={langImg[key]}
                               key={idx}
                               onClick={() => {
-                                handleInputValue("language", key);
+                                handleInputValue("language", [
+                                  ...data.language,
+                                  { id: idx, name: key },
+                                ]);
                                 setOpen({ ...open, language: false });
                               }}
                             />
@@ -485,11 +489,7 @@ const EditStudyDesc = () => {
                       </DescLanguageModal>
                     ) : (
                       <div className="langContainer">
-                        <div className="langInput">
-                          {data.language.map((el) => (
-                            <div key={el.id}>{el.name}</div>
-                          ))}
-                        </div>
+                        <div className="langInput">{data.language.map((el) => el.name + ",")}</div>
                         <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
                       </div>
                     )}
@@ -504,7 +504,7 @@ const EditStudyDesc = () => {
                       <div className="dateContainer">
                         <div className="dateInput">
                           {/* 바뀌도록 */}
-                          {data.startDate ? data.startDate : calenderDateValue}
+                          {calenderDateValue}
                         </div>
                         <button onClick={() => dispatch(setDateModal(true))}>선택</button>
                       </div>

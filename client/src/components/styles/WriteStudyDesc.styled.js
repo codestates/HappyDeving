@@ -397,12 +397,16 @@ const StudyDesc = () => {
     closed: false,
     //checked라는 변수를 넣으면 변경이 안됨
     //(state변수가 아니라서 렌더링되지 않음. 즉 값을 받아가는 듯)
-    language: "",
+    language_id: [],
     location: [],
-    loginMethod: "",
+    loginMethod: user.loginMethod,
     startDate: "",
     //배열이여야 할듯
   });
+
+  useEffect(() => {
+    setData({ ...data, startDate: calenderDateValue });
+  }, [calenderDateValue]);
 
   const locationListHandler = (locationList) => {
     //검색한 조건에 맞는 스터디들의 목록을 div로 표현
@@ -415,7 +419,16 @@ const StudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          setData({ ...data, location: location.place_name });
+          setData({
+            ...data,
+            location: [
+              location.y,
+              location.x,
+              location.address_name.split(" ")[1],
+              location.address_name.split(" ")[2],
+              location.place_name,
+            ],
+          });
           setOpen({ ...open, location: false });
           //클릭한 장소로 location 새로 세팅
         }}
@@ -464,7 +477,7 @@ const StudyDesc = () => {
                           src={langImg[key]}
                           key={idx}
                           onClick={() => {
-                            handleInputValue("language", key);
+                            handleInputValue("language_id", [...data.language_id, key]);
                             setOpen({ ...open, language: false });
                           }}
                         />
@@ -473,7 +486,7 @@ const StudyDesc = () => {
                   </DescLanguageModal>
                 ) : (
                   <div className="langContainer">
-                    <div className="langInput">{data.language}</div>
+                    <div className="langInput">{data.language_id.map((el) => el + ",")}</div>
                     <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
                   </div>
                 )}
@@ -511,7 +524,7 @@ const StudyDesc = () => {
                 </>
               ) : (
                 <div className="locationContainer">
-                  <div className="locationInput">{data.location}</div>
+                  <div className="locationInput">{data.location[4]}</div>
                   <button onClick={() => setOpen({ ...open, location: true })}>검색</button>
                 </div>
               )}

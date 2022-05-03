@@ -41,7 +41,10 @@ export const writeStudyApi = (id, data) => axios.post(`/study/${id}`, data);
 // 스터디 글 수정
 export const editStudyApi = (id, data) => axios.patch(`/study/${id}`, data);
 // 스터디 글 삭제
-export const deleteStudyApi = (id) => axios.delete(`/study/${id}`);
+export const deleteStudyApi = (id) => {
+  console.log(id);
+  axios.delete(`/study/${id}`);
+};
 
 // 찜 목록 스터디 불러오기
 export const addLikedStudyApi = (id) => axios.get(`/study/like/${id}`);
