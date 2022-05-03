@@ -35,9 +35,14 @@ module.exports = {
         return res.status(401).json("signin required");
       }
 
-      const { id } = req.params;
+      let { id } = req.params;
       const { study_id } = req.body;
+      id = Number(id);
+      console.log(data);
 
+      if (id !== data.id) {
+        return res.status(401).json("wrong user");
+      }
       if (!study_id) {
         return res.status(401).json("body required");
       }
