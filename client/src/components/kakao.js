@@ -43,7 +43,7 @@ function KakaoShareButton() {
     }
   };
   return (
-    <div className="kakao-share-button" href="javascript:;">
+    <div className="kakao-share-button" href="#">
       <button id="kakao-link-btn">
         <img src={shareKakao} alt="kakao-share-icon" />
       </button>

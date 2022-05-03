@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import githubIcon from "../../static/images/githubIcon.png";
 import blogIcon from "../../static/images/blogIcon.png";
-import { editUserData } from "../../features/myPage/myPageSlice";
+import { editProfile } from "../../features/user/userSlice";
 
 const Container = styled(Content)`
   grid-column: 2/ 5;
@@ -55,7 +55,7 @@ const EditSideProfile = () => {
   const [image, setImage] = useState("https://i.ibb.co/nr4FYns/happydevil.png");
   const fileInput = useRef(null);
   const dispatch = useDispatch();
-  const { user } = useSelector((store) => store.myPage);
+  const { user } = useSelector((store) => store.user);
 
   const handleChangeImage = (e) => {
     e.preventDefault();
@@ -63,7 +63,7 @@ const EditSideProfile = () => {
       // dispatch( {image: "https://i.ibb.co/nr4FYns/happydevil.png" });
       setImage(e.target.files[0]);
       console.log(e.target.files[0]);
-      dispatch(editUserData({ user: e.target.files[0] }));
+      dispatch(editProfile({ user: e.target.files[0] }));
     } else {
       // 기존의 이미지
       setImage(user.image);

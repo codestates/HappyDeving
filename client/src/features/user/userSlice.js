@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { signinApi, signupApi } from "../../api/users";
-import { editProfileApi, deleteUserApi } from "../../api/mypage";
-const user = JSON.parse(localStorage.getItem("user"));
+import { signinApi, signupApi, editProfileApi, deleteUserApi } from "../../api/users";
+const user = JSON.parse(localStorage.getItem("user")); // initial state에 넣으려고 가져왔을 뿐 나중에 state.user가 업데이트 되어도 반영이 되지 않으므로 editProfile 호출 후 다시 set
 
 const initialState = {
   user: user ? user : null,
@@ -25,8 +24,11 @@ export const signin = createAsyncThunk("user/signin", async (signinData, thunkAP
   try {
     return await signinApi(signinData).then((res) => {
       if (res) {
-        console.log("signin res.data::", res.data); // 잘 들어옴
-        localStorage.setItem("user", JSON.stringify(res.data));
+        console.log("signin res.data: ", res.data);
+        // { newAccessToken,
+        //   data: {userInfo: {} }}
+        localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
+        localStorage.setItem("token", JSON.stringify(res.data.newAccessToken));
       }
       return res.data;
     });
@@ -37,20 +39,23 @@ export const signin = createAsyncThunk("user/signin", async (signinData, thunkAP
 
 export const signout = createAsyncThunk("user/signout", async () => {
   await localStorage.removeItem("user");
+  await localStorage.removeItem("token");
 });
 
-export const editProfile = createAsyncThunk("user/editProfile", async (userData, thunkAPI) => {
-  console.log("userData: ", userData); // 여기까진 들어옴, 401 unuserorized, 헤더에 토큰은 있음
-  console.log("user.id: ", user.id);
-  try {
-    return await editProfileApi(user.id, userData).then((res) => {
-      console.log("edit res::", res);
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const editProfile = createAsyncThunk(
+  "user/editProfile",
+  async ({ id, userData }, thunkAPI) => {
+    try {
+      return await editProfileApi(id, userData).then((res) => {
+        console.log("axios.patch 후 res.data::", res.data);
+        localStorage.setItem("user", JSON.stringify(res.data));
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 
 export const deleteUser = createAsyncThunk("user/deleteUser", async (thunkAPI) => {
   try {
@@ -73,6 +78,10 @@ export const userSlice = createSlice({
       state.message = "";
     },
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
   extraReducers: (builder) => {
     builder
       .addCase(signup.pending, (state) => {
@@ -95,7 +104,7 @@ export const userSlice = createSlice({
       .addCase(signin.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.user = action.payload.data.userInfo;
       })
       .addCase(signin.rejected, (state, action) => {
         state.isLoading = false;
