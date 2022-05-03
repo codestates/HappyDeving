@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import modalReducer from "./features/modal/modalSlice";
-import userReducer from "./features/user/userSlice";
+import userReducer from "./features/user/userSlice.js";
 import searchModalReducer from "./features/Search/searchModalSlice";
 import calenderReducer from "./features/calendarDate/calendarDate";
 import likedStudyCardsReducer from "./features/likedStudies/likedStudiesSlice";

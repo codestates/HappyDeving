@@ -42,7 +42,7 @@ module.exports = {
       }
 
       const check = await User_likes_study.findOne({
-        where: { study_id },
+        where: { user_id, study_id },
       });
 
       if (!check) {
@@ -64,10 +64,10 @@ module.exports = {
         return res.status(401).json("signin required");
       }
 
-      const { id, study_id } = req.body;
+      const { user_id, study_id } = req.body;
 
       let like = await User_likes_study.findOne({
-        where: { study_id: study_id, user_id: id },
+        where: { study_id: study_id, user_id: user_id },
       });
 
       await like.destroy();

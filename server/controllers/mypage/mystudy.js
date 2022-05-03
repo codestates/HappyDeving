@@ -16,13 +16,13 @@ module.exports = {
         return res.status(401).json("wrong req params");
       }
 
-      const studyList = await Study.findAll({
+      const studies = await Study.findAll({
         where: { user_id: paramsId },
         attributes: ["id", "content", "title", "startDate", "createdAt", "updatedAt"],
         include: { model: Language, as: "language", attributes: ["id", "name"] },
       });
 
-      res.json({ data: { studies: studyList } });
+      res.json({ data: { studies } });
     } catch (err) {
       console.error(err);
       return res.status(500).json();

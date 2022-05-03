@@ -6,24 +6,31 @@ import authHeader from "../features/user/authHeader";
 axios.defaults.baseURL = `${REACT_APP_API_URL}`;
 axios.defaults.withCredentials = true;
 axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
-// 스터디 검색 결과
 
+// 스터디 검색 결과
 export const getStudiesMapApi = ({ guType, dongType, dateData, languageData }) => {
   let date = "2022-04-29";
+  //위치 있는 경우
   if (guType && dongType) {
+    //날짜와 언어 있는 경우
     if (dateData && languageData) {
       return axios.get(
         `/search?guType=${guType}&dongType=${dongType}&date=${date}&language=${languageData}`
       );
     }
+    //날짜만 있는 경우
     if (dateData) {
       return axios.get(`/search?guType=${guType}&dongType=${dongType}&date=${date}`);
     }
+    //언어만 있는 경우
     if (languageData) {
       return axios.get(`/search?guType=${guType}&dongType=${dongType}&language=${languageData}`);
     }
+    //위치만 있는 경우
     return axios.get(`/search?guType=${guType}&dongType=${dongType}`);
-  } else {
+  }
+  //위치가 없는 경우
+  else {
     return "location is required";
   }
 };

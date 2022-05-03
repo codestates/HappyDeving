@@ -3,17 +3,13 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import { studyApi } from "../../api/study";
-import { useNavigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
-{
-  /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
-  // 입력칸들 5-14 
-  //(언어 input, modal(정사각형) :5-9, 
-  시작일 input, modal(정사각형) : 10-14 )
-   - 내용 input은 scroll
-// 글 저장 바 : height - 1row (40px), wㅌㅌㅌㅌidth는 위의 글이랑 같게*/
-}
+import LanguageModal from "./Modals/LanguageModal";
+import DateModal from "./Modals/DateModal";
+import LocationModal from "./Modals/LocationModal";
+import CalenderDate from "../Calendar.js";
+import { useDispatch, useSelector } from "react-redux";
+import { setDateModal } from "../../features/studies/studyModalSlice";
+import { studyApi, editStudyApi } from "../../api/study";
 
 const Title = styled(Content)`
   grid-column: 2/14;
@@ -237,6 +233,33 @@ const Desc = styled(Content)`
   }
 `;
 
+const DescLanguageModal = styled(LanguageModal)`
+  position: relative;
+  z-index: 10;
+`;
+
+const DescDateModal = styled(DateModal)`
+  position: relative;
+  z-index: 10;
+
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+  }
+`;
+
+const DescLocationModal = styled(LocationModal)`
+  position: relative;
+  padding: 10px;
+  margin: 0 auto;
+  z-index: 10;
+  input {
+    position: relative;
+    width: 50%;
+  }
+`;
+
 const FuncBar = styled(Content)`
   grid-column: 2/14;
   height: 40px;
@@ -257,6 +280,8 @@ const FuncBar = styled(Content)`
   }
 `;
 
+const keyArr = Object.keys(langImg);
+
 const { kakao } = window;
 
 const MapView = styled(Content)`
@@ -264,18 +289,45 @@ const MapView = styled(Content)`
   height: 200px;
 `;
 
-//바뀐 location으로 marker 만들기용으오로 데이터 가공
-
-const StudyDesc = () => {
+const EditStudyDesc = () => {
   const container = useRef(null);
-  const navigate = useNavigate();
-
   const [location, setLocation] = useState({
-    place_name: "광화문",
+    name: "광화문",
     latitude: 37.570975,
-    logitude: 126.977759,
+    longitude: 126.977759,
   });
-  const [data, setData] = useState();
+  const [locationList, setLocationList] = useState([]);
+  var ps = new kakao.maps.services.Places();
+
+  // 키워드 검색을 요청하는 함수입니다
+  function searchPlaces(value) {
+    var keyword = value;
+    if (!keyword.replace(/^\s+|\s+$/g, "")) {
+      alert("키워드를 입력해주세요!");
+      return false;
+    }
+    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+    return ps.keywordSearch(keyword, placesSearchCB);
+  }
+
+  // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+  function placesSearchCB(data, status) {
+    if (status === kakao.maps.services.Status.OK) {
+      setLocationList(data);
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+      alert("검색 결과가 존재하지 않습니다.");
+      return;
+    } else if (status === kakao.maps.services.Status.ERROR) {
+      alert("검색 결과 중 오류가 발생했습니다.");
+      return;
+    }
+  }
+
+  const handleLocationValue = (e) => {
+    if (e.key === "Enter") {
+      searchPlaces(e.target.value);
+    } // true
+  };
 
   const mapscript = () => {
     const options = {
@@ -290,7 +342,8 @@ const StudyDesc = () => {
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img = langImg.javascript;
+    var img =
+      "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1";
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -308,22 +361,81 @@ const StudyDesc = () => {
     //el.id 스터디 아이디가 담겨온다.
   };
 
+  const [data, setData] = useState();
+
+  const href = document.location.href.split("/");
+  const id = href[href.length - 1];
+
+  useEffect(() => {
+    studyApi(id).then((res) => {
+      const {
+        title,
+        content,
+        kakaoLink,
+        closed,
+        //checked라는 변수를 넣으면 변경이 안됨
+        //(state변수가 아니라서 렌더링되지 않음. 즉 값을 받아가는 듯)
+        language,
+        startDate,
+        //배열이여야 할듯
+      } = res.data.data.study;
+
+      setData({
+        title,
+        content,
+        kakaoLink,
+        closed,
+        language,
+        startDate,
+      });
+      setLocation(res.data.data.study.location);
+      //   setData(res.data.data.study);
+      //   setLocation(res.data.data.study.location);
+    });
+  }, []);
+
   useEffect(() => {
     if (data) {
       mapscript();
     }
   }, [data]);
 
-  useEffect(() => {
-    const href = document.location.href.split("/");
-    const id = href[href.length - 1];
-    studyApi(id).then((res) => {
-      setData(res.data.data.study);
-      setLocation(res.data.data.study.location);
-    });
-  }, []);
+  const [checked, setChecked] = useState(false);
 
-  //checked의 상태 변화 기다리기 위해
+  const [open, setOpen] = useState({
+    language: false,
+    date: false,
+    location: false,
+  });
+
+  const dispatch = useDispatch();
+  const { dateModal } = useSelector((store) => store.studyModal);
+  const { calenderDateValue } = useSelector((store) => store.calender);
+
+  const locationListHandler = (locationList) => {
+    //검색한 조건에 맞는 스터디들의 목록을 div로 표현
+    //return 문에서 사용해줘야 함
+
+    //검색한 리스트의 장소 이름으로 목록 변경
+    //중복 제외
+    return locationList.map((location, idx) => (
+      <div
+        key={idx}
+        onClick={() => {
+          setLocation(location);
+          setData({ ...data, location: { name: location.name } });
+          setOpen({ ...open, location: false });
+          //클릭한 장소로 location 새로 세팅
+        }}
+      >
+        {location.place_name}
+      </div>
+    ));
+  };
+
+  const handleInputValue = (id, e) => {
+    setData({ ...data, [id]: e });
+  };
 
   return (
     <>
@@ -331,53 +443,122 @@ const StudyDesc = () => {
         <>
           <Title>
             <div className="titleText">제목</div>
-            <div>{data.title}</div>
+            <input
+              className="titleInput"
+              defaultValue={data.title}
+              onChange={(e) => handleInputValue("title", e.target.value)}
+            ></input>
           </Title>
           <ContentDiv>
             <Profile />
             <div className="container">
-              <Desc>
+              <Desc checked={checked}>
                 <div className="closed">
-                  <div>{data.closed ? "모집마감" : "모집중"}</div>
+                  <input
+                    type="checkbox"
+                    id="closed"
+                    defaultChecked={data.closed}
+                    onClick={() => {
+                      setChecked(!checked);
+                    }}
+                  ></input>
+                  {console.log(data)}
+                  <label htmlFor="closed">모집마감</label>
                 </div>
                 <div className="langanddate">
                   <div className="lang">
                     <span>언어</span>
-                    {data.language.map((el, idx) => (
-                      <span key={idx}>{el.name}</span>
-                    ))}
+                    {open.language ? (
+                      <DescLanguageModal>
+                        <div>
+                          {keyArr.map((key, idx) => (
+                            <img
+                              src={langImg[key]}
+                              key={idx}
+                              onClick={() => {
+                                handleInputValue("language", key);
+                                setOpen({ ...open, language: false });
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </DescLanguageModal>
+                    ) : (
+                      <div className="langContainer">
+                        <div className="langInput">
+                          {data.language.map((el) => (
+                            <div key={el.id}>{el.name}</div>
+                          ))}
+                        </div>
+                        <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
+                      </div>
+                    )}
                   </div>
                   <div className="date">
                     <span>시작일</span>
-                    <span>{data.startDate}</span>
+                    {dateModal ? (
+                      <DescDateModal>
+                        <CalenderDate />
+                      </DescDateModal>
+                    ) : (
+                      <div className="dateContainer">
+                        <div className="dateInput">
+                          {/* 바뀌도록 */}
+                          {data.startDate ? data.startDate : calenderDateValue}
+                        </div>
+                        <button onClick={() => dispatch(setDateModal(true))}>선택</button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 <div className="link">
                   <span>오픈 톡방 링크</span>
-                  <span>{data.kakaoLink}</span>
+                  <input
+                    defaultValue={data.kakaoLink}
+                    onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
+                  ></input>
                 </div>
                 <div className="location">
                   <span>장소</span>
-                  <span>{data.location.name}</span>
+                  {open.location ? (
+                    <>
+                      <DescLocationModal>
+                        <input
+                          onKeyDown={(e) => handleLocationValue(e)}
+                          placeholder="ex. 송파구 오륜동"
+                        ></input>
+                        {locationListHandler(locationList)}
+                      </DescLocationModal>
+                    </>
+                  ) : (
+                    <div className="locationContainer">
+                      <div className="locationInput">{location.name}</div>
+                      <button onClick={() => setOpen({ ...open, location: true })}>검색</button>
+                    </div>
+                  )}
                 </div>
                 <MapView id="map" ref={container} />
                 <div className="content">
                   <span>내용</span>
-                  <div>{data.content}</div>
+                  <textarea
+                    onChange={(e) => handleInputValue("content", e.target.value)}
+                    defaultValue={data.content}
+                  ></textarea>
                 </div>
               </Desc>
               <FuncBar>
-                <button onClick={() => navigate(`/study/edit/${data.id}`)}>수정</button>
+                {console.log(data)}
+                <button onClick={() => editStudyApi(id, data).then((res) => console.log(res))}>
+                  저장
+                </button>
               </FuncBar>
             </div>
           </ContentDiv>
         </>
-      ) : (
-        "data가 없습니다"
-      )}
+      ) : null}
     </>
   );
 };
 
-export default StudyDesc;
+export default EditStudyDesc;
