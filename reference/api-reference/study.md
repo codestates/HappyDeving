@@ -406,7 +406,7 @@ err
 
 {% endswagger-description %}
 
-{% swagger-parameter in="body" name="id (study_comment)" type="Int" required="true" %}
+{% swagger-parameter in="body" name="study_commentId" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
@@ -464,7 +464,7 @@ err
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="study_comment id" type="Int" required="true" %}
+{% swagger-parameter in="body" name="study_commentId" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
