@@ -14,7 +14,7 @@ module.exports = {
       if (!code) {
         return res.status(400).json();
       }
-      res.send("users kakao post ok");
+      res.json("kakao ok");
     } catch (err) {
       console.error(err);
       return res.status(500).json();
