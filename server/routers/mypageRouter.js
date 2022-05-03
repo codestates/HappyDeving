@@ -9,6 +9,9 @@ router.delete("/:id/like", mypage.like.delete);
 // 내가 쓴 스터디 목록
 router.get("/:id/write", mypage.mystudy.get);
 
+// mypage 마이페이지 이미지 수정
+router.patch("/image/:id", mypage.image.patch);
+
 // /mypage 마이페이지 정보 조회, 수정
 router.get("/:id", mypage.mypage.get);
 router.patch("/:id", mypage.mypage.patch);
