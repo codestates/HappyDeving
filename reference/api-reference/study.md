@@ -246,8 +246,8 @@ name(장소이름)
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="language_id" type="Array" %}
-
+{% swagger-parameter in="body" name="language" type="Array" %}
+\[{id: 1, name:'javascript'}]
 {% endswagger-parameter %}
 
 {% swagger-parameter in="body" name="loginMethod" required="true" type="Int" %}
