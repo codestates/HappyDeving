@@ -35,22 +35,27 @@ module.exports = {
         return res.status(401).json("signin required");
       }
 
-      const { user_id, study_id } = req.body;
+      let { id } = req.params;
+      const { study_id } = req.body;
+      id = Number(id);
 
-      if (!user_id || !study_id) {
+      if (id !== data.id) {
+        return res.status(401).json("wrong user");
+      }
+      if (!study_id) {
         return res.status(401).json("body required");
       }
 
       const check = await User_likes_study.findOne({
-        where: { user_id, study_id },
+        where: { user_id: id, study_id },
       });
 
       if (!check) {
-        const like = await User_likes_study.create({ user_id, study_id });
+        const like = await User_likes_study.create({ user_id: id, study_id });
         return res.status(201).json(like);
       }
 
-      return res.status(401).json("already liked");
+      return res.status(404).json("already liked");
     } catch (err) {
       console.error(err);
       return res.status(500).json();
@@ -64,11 +69,27 @@ module.exports = {
         return res.status(401).json("signin required");
       }
 
-      const { user_id, study_id } = req.body;
+      const { study_id } = req.body;
+      let { id } = req.params;
+      id = Number(id);
+
+      // 유저 정보가 없을때
+      if (id !== data.id) {
+        return res.status(401).json("wrong user");
+      }
+
+      // body가 없을때
+      if (!study_id) {
+        return res.status(401).json("body required");
+      }
 
       let like = await User_likes_study.findOne({
-        where: { study_id: study_id, user_id: user_id },
+        where: { study_id: study_id, user_id: id },
       });
+
+      if (!like) {
+        return res.status(404).json("already deleted");
+      }
 
       await like.destroy();
 

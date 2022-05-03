@@ -360,6 +360,10 @@ access token
 access token
 {% endswagger-parameter %}
 
+{% swagger-parameter in="body" name="parentId (study_comment)" type="Int" required="true" %}
+(stu
+{% endswagger-parameter %}
+
 {% swagger-response status="201: Created" description="" %}
 ```javascript
 {
@@ -402,15 +406,11 @@ err
 
 {% endswagger-description %}
 
-{% swagger-parameter in="body" name="user_id" type="Int" required="true" %}
+{% swagger-parameter in="body" name="id (study_comment)" type="Int" required="true" %}
 
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="study_id" type="Int" required="true" %}
-
-{% endswagger-parameter %}
-
-{% swagger-parameter in="body" name="content" type="String" required="false" %}
+{% swagger-parameter in="body" name="content" type="String" required="true" %}
 
 {% endswagger-parameter %}
 
