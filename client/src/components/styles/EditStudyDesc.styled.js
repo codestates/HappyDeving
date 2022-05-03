@@ -296,6 +296,8 @@ const EditStudyDesc = () => {
     latitude: 37.570975,
     longitude: 126.977759,
   });
+
+  console.log(location);
   const [locationList, setLocationList] = useState([]);
   var ps = new kakao.maps.services.Places();
 
@@ -332,7 +334,7 @@ const EditStudyDesc = () => {
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
-      center: new kakao.maps.LatLng(location.latitude, location.longitude), //지도의 중심좌표
+      center: new kakao.maps.LatLng(location.y, location.x), //지도의 중심좌표
       level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
@@ -347,7 +349,7 @@ const EditStudyDesc = () => {
 
     var marker = new kakao.maps.Marker({
       map: map,
-      position: new kakao.maps.LatLng(location.latitude, location.longitude),
+      position: new kakao.maps.LatLng(location.y, location.x),
       image: new kakao.maps.MarkerImage(img, imageSize, imageOption),
     });
     //marker 만들기
@@ -368,13 +370,14 @@ const EditStudyDesc = () => {
 
   useEffect(() => {
     studyApi(id).then((res) => {
+      console.log(res);
+
       const {
         title,
         content,
         kakaoLink,
         closed,
-        //checked라는 변수를 넣으면 변경이 안됨
-        //(state변수가 아니라서 렌더링되지 않음. 즉 값을 받아가는 듯)
+        location,
         language,
         startDate,
         //배열이여야 할듯
@@ -385,22 +388,24 @@ const EditStudyDesc = () => {
         content,
         kakaoLink,
         closed,
-        language,
         startDate,
+        language,
       });
-      setLocation(res.data.data.study.location);
-      //   setData(res.data.data.study);
-      //   setLocation(res.data.data.study.location);
+
+      setLocation({
+        y: location.latitude,
+        x: location.longitude,
+        place_name: location.name,
+      });
+      //location이 된다음에 해야 한다
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (data) {
       mapscript();
     }
   }, [data]);
-
-  const [checked, setChecked] = useState(false);
 
   const [open, setOpen] = useState({
     language: false,
@@ -410,7 +415,11 @@ const EditStudyDesc = () => {
 
   const dispatch = useDispatch();
   const { dateModal } = useSelector((store) => store.studyModal);
-  const { calenderDateValue } = useSelector((store) => store.calender);
+  const { dateData } = useSelector((store) => store.searchData);
+
+  useEffect(() => {
+    setData({ ...data, startDate: dateData });
+  }, [dateData]);
 
   const locationListHandler = (locationList) => {
     //검색한 조건에 맞는 스터디들의 목록을 div로 표현
@@ -423,9 +432,16 @@ const EditStudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          setData({ ...data, location: { name: location.name } });
-          setOpen({ ...open, location: false });
+          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const dong = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "동")[0];
+          setData({
+            ...data,
+            location: [location.y, location.x, gu, dong, location.place_name],
+          });
           //클릭한 장소로 location 새로 세팅
+          setOpen({ ...open, location: false });
         }}
       >
         {location.place_name}
@@ -452,17 +468,16 @@ const EditStudyDesc = () => {
           <ContentDiv>
             <Profile />
             <div className="container">
-              <Desc checked={checked}>
+              <Desc>
                 <div className="closed">
                   <input
                     type="checkbox"
                     id="closed"
                     defaultChecked={data.closed}
                     onClick={() => {
-                      setChecked(!checked);
+                      setData({ ...data, closed: !data.closed });
                     }}
                   ></input>
-                  {console.log(data)}
                   <label htmlFor="closed">모집마감</label>
                 </div>
                 <div className="langanddate">
@@ -476,7 +491,10 @@ const EditStudyDesc = () => {
                               src={langImg[key]}
                               key={idx}
                               onClick={() => {
-                                handleInputValue("language", key);
+                                handleInputValue("language", [
+                                  ...data.language,
+                                  { id: idx + 1, name: key },
+                                ]);
                                 setOpen({ ...open, language: false });
                               }}
                             />
@@ -485,11 +503,8 @@ const EditStudyDesc = () => {
                       </DescLanguageModal>
                     ) : (
                       <div className="langContainer">
-                        <div className="langInput">
-                          {data.language.map((el) => (
-                            <div key={el.id}>{el.name}</div>
-                          ))}
-                        </div>
+                        {console.log(data)}
+                        <div className="langInput">{data.language?.map((el) => el.name + ",")}</div>
                         <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
                       </div>
                     )}
@@ -504,7 +519,7 @@ const EditStudyDesc = () => {
                       <div className="dateContainer">
                         <div className="dateInput">
                           {/* 바뀌도록 */}
-                          {data.startDate ? data.startDate : calenderDateValue}
+                          {data.startDate}
                         </div>
                         <button onClick={() => dispatch(setDateModal(true))}>선택</button>
                       </div>
@@ -533,7 +548,7 @@ const EditStudyDesc = () => {
                     </>
                   ) : (
                     <div className="locationContainer">
-                      <div className="locationInput">{location.name}</div>
+                      <div className="locationInput">{location.place_name}</div>
                       <button onClick={() => setOpen({ ...open, location: true })}>검색</button>
                     </div>
                   )}
@@ -549,7 +564,14 @@ const EditStudyDesc = () => {
               </Desc>
               <FuncBar>
                 {console.log(data)}
-                <button onClick={() => editStudyApi(id, data).then((res) => console.log(res))}>
+                <button
+                  onClick={() =>
+                    editStudyApi(id, data).then((res) => {
+                      console.log(res);
+                      alert("수정되었습니다");
+                    })
+                  }
+                >
                   저장
                 </button>
               </FuncBar>
