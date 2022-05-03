@@ -5,4 +5,5 @@ module.exports = {
   withdrawal: require("./withdrawal"),
   github: require("./github"),
   google: require("./google"),
+  kakao: require("./kakao"),
 };

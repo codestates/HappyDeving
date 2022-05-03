@@ -4,7 +4,6 @@ const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../
 
 const sendEmail = require("../../utils/sendEmail");
 
-
 module.exports = {
   post: async (req, res) => {
     try {
@@ -33,7 +32,6 @@ module.exports = {
       const newAccessToken = generateAccessToken({ username, email });
       const newrefreshToken = generaterefreshToken({ username, email });
       sendTocookie(res, newAccessToken, newrefreshToken);
-      
 
       if (!newUser.verified) {
         const url = `${process.env.BASE_URL}/users/${newUser.id}/verify/${newAccessToken}`;
