@@ -9,6 +9,6 @@ router.post("/signout", users.signout.post);
 router.delete("/withdrawal/:id", users.withdrawal.delete);
 router.post("/login/github", oauth.github.post);
 router.post("/login/google", oauth.google.post);
-router.post("/login/kakao", oauth.kakao.post);
+router.get("/login/kakao", oauth.kakao.post);
 
 module.exports = router;
