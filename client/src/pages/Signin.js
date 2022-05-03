@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signin, reset } from "../features/user/userSlice";
+import { signin } from "../features/user/userSlice";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
@@ -122,7 +122,7 @@ function Login() {
   const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
+    // dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   const handleInputValue = (key) => (e) => {
