@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { reset, deleteUser } from "../features/user/userSlice";
+import { reset, deleteUser, getProfile } from "../features/user/userSlice";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
@@ -13,6 +13,10 @@ const StyledProfileContainer = styled(Content)`
   text-align: center;
   /* x, y, blur-radius, spread */
 `;
+
+const MyStudyTab = styled(Content)``;
+const LikedStudyTab = styled(Content)``;
+
 const Title = styled(Content)`
   /* background-color: green; */
   margin-top: 10px;
@@ -60,7 +64,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, isLoading } = useSelector((state) => state.user);
-  console.log("profile user: ", user);
+  // console.log("profile user: ", user);
 
   const MoveToEditPage = (e) => {
     e.preventDefault();
@@ -75,12 +79,19 @@ const Profile = () => {
     navigate("/");
   };
 
+  useEffect(() => {
+    dispatch(getProfile(user.id));
+    dispatch(reset());
+  }, []);
+
   if (isLoading) {
     return <LoadingIndicator />;
   }
 
   return (
     <StyledProfileContainer>
+      <MyStudyTab onClick={() => navigate("/mystudy")}>나의 스터디</MyStudyTab>
+      <LikedStudyTab onClick={() => navigate("/likedstudy")}>찜한 스터디</LikedStudyTab>
       <ProfileWrap>
         <Title>회원 정보 수정</Title>
         <ProfileImg>{user?.image}</ProfileImg>
