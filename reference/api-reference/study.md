@@ -360,8 +360,8 @@ access token
 access token
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="parentId" type="Int" required="true" %}
-
+{% swagger-parameter in="body" name="parentId (study_comment)" type="Int" required="true" %}
+(stu
 {% endswagger-parameter %}
 
 {% swagger-response status="201: Created" description="" %}
