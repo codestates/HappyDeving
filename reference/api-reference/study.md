@@ -313,10 +313,6 @@ name(장소이름)
 access token
 {% endswagger-parameter %}
 
-{% swagger-parameter in="body" name="id" type="Int" required="true" %}
-
-{% endswagger-parameter %}
-
 {% swagger-parameter in="body" name="study_id" type="Int" required="true" %}
 
 {% endswagger-parameter %}
