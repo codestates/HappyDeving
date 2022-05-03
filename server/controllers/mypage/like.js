@@ -35,18 +35,19 @@ module.exports = {
         return res.status(401).json("signin required");
       }
 
-      const { user_id, study_id } = req.body;
+      const { id } = req.params;
+      const { study_id } = req.body;
 
-      if (!user_id || !study_id) {
+      if (!study_id) {
         return res.status(401).json("body required");
       }
 
       const check = await User_likes_study.findOne({
-        where: { user_id, study_id },
+        where: { user_id: id, study_id },
       });
 
       if (!check) {
-        const like = await User_likes_study.create({ user_id, study_id });
+        const like = await User_likes_study.create({ user_id: id, study_id });
         return res.status(201).json(like);
       }
 

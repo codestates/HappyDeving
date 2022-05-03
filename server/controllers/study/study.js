@@ -82,7 +82,7 @@ module.exports = {
         closed,
         location,
         title,
-        language_id,
+        language,
         loginMethod,
       } = req.body;
 
@@ -104,7 +104,7 @@ module.exports = {
         closed === undefined ||
         !location ||
         !title ||
-        !language_id ||
+        !language ||
         loginMethod === undefined
       ) {
         return res.status(401).json("body required");
@@ -156,7 +156,7 @@ module.exports = {
         location,
       });
 
-      for (let i = 0; i < language_id.length; i++) {
+      for (let i = 0; i < language.length; i++) {
         await Study_language.create({
           study_id: post.id,
           language_id: language_id[i],
@@ -287,6 +287,7 @@ module.exports = {
               title: result.title,
               kakaoLink: result.kakaoLink,
               closed: result.closed,
+              startDate: result.startDate,
               location: {
                 latitude: result.location.latitude,
                 longitude: result.location.longitude,
