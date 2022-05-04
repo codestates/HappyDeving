@@ -2,25 +2,30 @@ import axios from "axios";
 
 // 스터디 검색 결과
 export const getStudiesMapApi = ({ guType, dongType, dateData, languageData }) => {
-  let date = "2022-04-29";
+  console.log("gu", guType, "dong", dongType, "date", dateData, "lang", languageData);
   //위치 있는 경우
   if (guType && dongType) {
+    console.log("gudong");
     //날짜와 언어 있는 경우
     if (dateData && languageData) {
+      console.log("datelang");
       return axios.get(
-        `/search?guType=${guType}&dongType=${dongType}&date=${date}&language=${languageData}`
+        `/search?guType=${guType}&dongType=${dongType}&date=${dateData}&language=${languageData}`
       );
     }
     //날짜만 있는 경우
-    if (dateData) {
-      return axios.get(`/search?guType=${guType}&dongType=${dongType}&date=${date}`);
+    else if (dateData) {
+      console.log("date");
+      return axios.get(`/search?guType=${guType}&dongType=${dongType}&date=${dateData}`);
     }
     //언어만 있는 경우
-    if (languageData) {
+    else if (languageData) {
       return axios.get(`/search?guType=${guType}&dongType=${dongType}&language=${languageData}`);
     }
     //위치만 있는 경우
-    return axios.get(`/search?guType=${guType}&dongType=${dongType}`);
+    else {
+      return axios.get(`/search?guType=${guType}&dongType=${dongType}`);
+    }
   }
   //위치가 없는 경우
   else {

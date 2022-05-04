@@ -3,7 +3,4 @@ module.exports = {
   signup: require("./signup"),
   signout: require("./signout"),
   withdrawal: require("./withdrawal"),
-  github: require("./github"),
-  google: require("./google"),
-  kakao: require("./kakao"),
 };

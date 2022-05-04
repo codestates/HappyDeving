@@ -138,8 +138,6 @@ const Search = () => {
   const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
   const { calenderDateValue } = useSelector((store) => store.calender);
 
-  console.log(locationData, dateData, languageData);
-
   const guType = locationData.split(" ")[0];
   const dongType = locationData.split(" ")[1];
 
@@ -196,9 +194,10 @@ const Search = () => {
         <SearchIcon
           id="search"
           onClick={() => {
-            getStudiesMapApi({ guType, dongType, languageData, dateData }).then((res) =>
-              dispatch(setStudiesData(res.data))
-            );
+            getStudiesMapApi({ guType, dongType, languageData, dateData }).then((res) => {
+              console.log(res.data);
+              dispatch(setStudiesData(res.data));
+            });
             //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
             navigate("/map");
             dispatch(resetData());

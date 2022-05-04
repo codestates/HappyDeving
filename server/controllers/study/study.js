@@ -82,7 +82,7 @@ module.exports = {
         closed,
         location,
         title,
-        language_id,
+        language,
         loginMethod,
       } = req.body;
 
@@ -104,7 +104,7 @@ module.exports = {
         closed === undefined ||
         !location ||
         !title ||
-        !language_id ||
+        !language ||
         loginMethod === undefined
       ) {
         return res.status(401).json("body required");
@@ -155,11 +155,12 @@ module.exports = {
         closed,
         location,
       });
+      console.log(language.id);
 
-      for (let i = 0; i < language_id.length; i++) {
+      for (let i = 0; i < language.length; i++) {
         await Study_language.create({
           study_id: post.id,
-          language_id: language_id[i],
+          language_id: language[i].id,
         });
       }
 
@@ -182,7 +183,7 @@ module.exports = {
         closed,
         location,
         title,
-        language_id,
+        language,
         loginMethod,
       } = req.body;
 
@@ -229,12 +230,12 @@ module.exports = {
       const study_languageId = [];
       study_languageInfo.forEach((el) => study_languageId.push(el.id));
 
-      if (language_id) {
-        if (language_id.length === study_languageId) {
-          for (let i = 0; i < language_id.length; i++) {
+      if (language) {
+        if (language.length === study_languageId) {
+          for (let i = 0; i < language.length; i++) {
             await Study_language.update(
               {
-                language_id: language_id[i],
+                language_id: language[i].id,
               },
               { where: { id: study_languageId[i] } }
             );
@@ -246,10 +247,10 @@ module.exports = {
             });
           }
 
-          for (let i = 0; i < language_id.length; i++) {
+          for (let i = 0; i < language.length; i++) {
             Study_language.create({
               study_id: id,
-              language_id: language_id[i],
+              language_id: language[i].id,
             });
           }
         }
@@ -287,6 +288,7 @@ module.exports = {
               title: result.title,
               kakaoLink: result.kakaoLink,
               closed: result.closed,
+              startDate: result.startDate,
               location: {
                 latitude: result.location.latitude,
                 longitude: result.location.longitude,
