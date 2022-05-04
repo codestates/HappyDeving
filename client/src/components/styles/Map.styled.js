@@ -33,8 +33,6 @@ const Map = () => {
     };
   });
 
-  console.log(markerdata);
-
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션

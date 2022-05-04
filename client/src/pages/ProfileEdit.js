@@ -5,6 +5,7 @@ import { signout, reset, editProfile, deleteUser } from "../features/user/userSl
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
+import EditSideProfile from "../components/styles/EditSideProfile.styled.js";
 
 const StyledEditProfile = styled(Content)`
   grid-column: 5 / 14;
@@ -132,6 +133,7 @@ const MyPage = () => {
   return (
     <StyledEditProfile>
       <Title>내 정보 수정</Title>
+      <EditSideProfile />
       <ProfileWrap>
         <form>
           <InputWrap>
