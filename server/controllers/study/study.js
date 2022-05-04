@@ -1,6 +1,7 @@
 const { User, Study, Study_comment, Language, Study_language, Location } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 const { Op } = require("sequelize");
+const user = require("../../models/user");
 
 module.exports = {
   get: async (req, res) => {
@@ -13,6 +14,11 @@ module.exports = {
             model: Study_comment,
             as: "study_comment",
             attributes: ["id", "content", "createdAt", "updatedAt", "parentId"],
+            include: [{ model: User, as: "user", attributes: ["username"] }],
+          },
+          {
+            model: User,
+            as: "user",
           },
         ],
       });
@@ -21,6 +27,33 @@ module.exports = {
       if (!study) {
         return res.status(404).json("not found");
       }
+      // console.log(study);
+
+      // return res.json(study);
+
+      // for (let i = 0; i < study.study_comment.length; i++) {
+      //   // Object.assign(study.study_comment[i], { username: study.study_comment[i].user.username });
+      //   console.log((study.study_comment[i].username = study.study_comment[i].user.username));
+      //   study.study_comment[i].username = study.study_comment[i].user.username;
+      // }
+      // return res.json(study.study_comment);
+
+      // let comment_userId = [];
+      // for (let i = 0; i < study.study_comment.length; i++) {
+      //   comment_userId.push(study.study_comment[i].id);
+      // }
+
+      // const userinfo = await Study_comment.findAll({
+      //   where: { id: { [Op.in]: comment_userId } },
+      //   include: [{ model: User, as: "user" }],
+      // });
+
+      // let _username = [];
+      // for (let i = 0; i < userinfo.length; i++) {
+      //   _username.push(userinfo[i].user.username);
+      // }
+
+      // return res.json(study);
 
       const {
         id,
@@ -34,26 +67,31 @@ module.exports = {
         createdAt,
         updatedAt,
         language,
-        user_id,
       } = study;
-
-      const findUsername = await User.findOne({
-        where: { id: user_id },
-        attributes: ["username"],
-      });
 
       const findLocation = await Location.findOne({
         where: { id: location_id },
         attributes: ["latitude", "longitude", "name"],
       });
 
-      study_comment.forEach((el) => (el.dataValues.username = findUsername.username));
+      // return res.json(findLocation);
+
+      // for (let i = 0; i < study_comment.length; i++) {
+      //   study_comment[i].username = study_comment[i].user.username;
+      // }
+
+      // return res.json(study_comment);
+
+      study_comment.forEach(
+        (el) => ((el.dataValues.username = el.user.username), (el.dataValues.user = undefined))
+      );
+      // language.forEach(el => el.Study_language)
 
       res.status(200).json({
         data: {
           study: {
             id,
-            username: findUsername.username,
+            username: study.user.username,
             title,
             content,
             kakaoLink,

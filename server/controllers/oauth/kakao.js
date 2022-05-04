@@ -79,7 +79,7 @@ module.exports = {
       sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
 
       return res.status(201).send({
-        newUser,
+        userInfo: newUser,
         accessToken: kakaoAccessToken,
       });
     } catch (err) {
