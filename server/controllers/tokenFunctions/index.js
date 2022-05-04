@@ -12,13 +12,14 @@ module.exports = {
       expiresIn: "3d",
     });
   },
-  sendTocookie: (res, refreshToken) => {
+  sendTocookie: (res, accessToken, refreshToken) => {
     const cookieOption = {
       // secure: true,
       // maxAge:
       httpOnly: true,
       // sameSite: 'none'
     };
+    res.cookie("accessToken", accessToken, cookieOption);
     res.cookie("refreshToken", refreshToken, cookieOption);
   },
   // checkRefreshToken: (refreshToken) => {},
