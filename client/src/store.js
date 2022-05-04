@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./features/user/userSlice.js";
 import allStudiesReducer from "./features/studies/allStudiesSlice";
+import commentReducer from "./features/comment/commentSlice";
 import searchModalReducer from "./features/Search/searchModalSlice";
 import calenderReducer from "./features/calendarDate/calendarDate";
 import searchDataReducer from "./features/Search/searchDataSlice";
@@ -16,5 +17,6 @@ export const store = configureStore({
     studies: setStudiesReducer,
     studyModal: setStudyModal,
     allStudies: allStudiesReducer,
+    comment: commentReducer,
   },
 });

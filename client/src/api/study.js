@@ -1,11 +1,4 @@
-//study.js
 import axios from "axios";
-import { REACT_APP_API_URL } from "../config";
-import authHeader from "../features/user/authHeader";
-
-axios.defaults.baseURL = `${REACT_APP_API_URL}`;
-axios.defaults.withCredentials = true;
-axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
 
 // 스터디 검색 결과
 export const getStudiesMapApi = ({ guType, dongType, dateData, languageData }) => {

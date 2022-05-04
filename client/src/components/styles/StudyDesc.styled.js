@@ -1,11 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import Content from "./Content.styled";
+import Comments from "../Comments";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 import { studyApi, deleteStudyApi } from "../../api/study";
 import { useNavigate } from "react-router-dom";
-// import { useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 {
   /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
   // 입력칸들 5-14 
@@ -58,6 +59,12 @@ const Profile = styled(Content)`
   flex: 1;
   margin-right: 20px;
   height: 550px;
+`;
+const CommentDiv = styled(Content)`
+  background: pink;
+  grid-column: 2/14;
+  display: flex;
+  height: ;
 `;
 
 //(언어 input, modal(정사각형) :5-9,
@@ -276,6 +283,8 @@ const StudyDesc = () => {
     logitude: 126.977759,
   });
   const [data, setData] = useState();
+  const [backendComments, setBackendComments] = useState([]);
+  const { user } = useSelector((state) => state.user);
 
   const mapscript = () => {
     const options = {
@@ -319,6 +328,7 @@ const StudyDesc = () => {
     const id = href[href.length - 1];
     studyApi(id).then((res) => {
       setData(res.data.data.study);
+      setBackendComments(res.data.data.comment);
       setLocation(res.data.data.study.location);
     });
   }, []);
@@ -374,6 +384,13 @@ const StudyDesc = () => {
               </FuncBar>
             </div>
           </ContentDiv>
+          <CommentDiv>
+            <Comments
+              commentsInStudyData={backendComments}
+              studyId={data.id}
+              currentUserId={user.id}
+            />
+          </CommentDiv>
         </>
       ) : (
         "data가 없습니다"
