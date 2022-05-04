@@ -1,6 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { signinApi, signupApi, editProfileApi, deleteUserApi } from "../../api/users";
-const user = JSON.parse(localStorage.getItem("user")); // initial state에 넣으려고 가져왔을 뿐 나중에 state.user가 업데이트 되어도 반영이 되지 않으므로 editProfile 호출 후 다시 set
+import {
+  signinApi,
+  signupApi,
+  getProfileApi,
+  editProfileApi,
+  deleteUserApi,
+} from "../../api/users";
+const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
   user: user ? user : null,
@@ -42,13 +48,24 @@ export const signout = createAsyncThunk("user/signout", async () => {
   await localStorage.removeItem("token");
 });
 
+export const getProfile = createAsyncThunk("user/getProfile", async (id, thunkAPI) => {
+  // console.log("getProfile id: ", id); // 2
+  try {
+    return await getProfileApi(id).then((res) => {
+      return res.data;
+    });
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error);
+  }
+});
+
 export const editProfile = createAsyncThunk(
   "user/editProfile",
   async ({ id, userData }, thunkAPI) => {
     try {
       return await editProfileApi(id, userData).then((res) => {
-        console.log("axios.patch 후 res.data::", res.data);
-        localStorage.setItem("user", JSON.stringify(res.data));
+        // console.log("axios.patch 후 res.data::", res.data);
+        localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
         return res.data;
       });
     } catch (error) {
@@ -115,13 +132,27 @@ export const userSlice = createSlice({
       .addCase(signout.fulfilled, (state) => {
         state.user = null;
       })
+      .addCase(getProfile.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getProfile.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user = action.payload.data.userInfo;
+      })
+      .addCase(getProfile.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        state.user = null;
+      })
       .addCase(editProfile.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(editProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        state.user = action.payload.data.userInfo;
       })
       .addCase(editProfile.rejected, (state, action) => {
         state.isLoading = false;

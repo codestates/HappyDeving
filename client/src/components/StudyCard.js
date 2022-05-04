@@ -47,7 +47,6 @@ const StudyCard = ({ myStudy, likedStudy }) => {
   const [study, setStudy] = useState({});
   const [isLike, setIsLike] = useState(true);
 
-  // console.log("myStudy:", myStudy); // undefined
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -96,21 +95,3 @@ const StudyCard = ({ myStudy, likedStudy }) => {
 export default StudyCard;
 
 // like 테이블 => get 요청시 내 유저아이디만 보내도, 유저 아이디랑 스터디를 연결하는 테이블
-// const StudyCard = () => {
-//   const [isLike, setIsLike] = useState(false);
-//   const handleHeart = () => {
-//     setIsLike(!isLike);
-//   };
-
-//   return (
-//     <>
-//       <CardContainer>
-//         <CardForm>
-//           <h1>스터디명 변수갖고오기</h1>
-//           <div>언어</div>
-//           <LikeButton>
-//             {" "}
-//             <HeartIcon className="heart-icon" onClick={handleHeart}>
-//               <FontAwesomeIcon
-//                 icon={isLike ? like : unlike}
-//                 className={isLike ? "like" : "unlike"}

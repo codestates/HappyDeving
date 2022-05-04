@@ -146,7 +146,7 @@ function Signup() {
     }
 
     dispatch(signup(userData));
-    navigate("/");
+    navigate("/signin");
   };
 
   if (isLoading) {

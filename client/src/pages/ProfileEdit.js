@@ -7,48 +7,67 @@ import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 
 const StyledEditProfile = styled(Content)`
-  grid-column: 3 / 13;
+  grid-column: 5 / 14;
   text-align: left;
   /* x, y, blur-radius, spread */
 `;
-const ProfileImg = styled.div`
-  width: 100px;
-  height: 100px;
-  margin-left: 30px;
-  margin-bottom: 20px;
-  background-color: gray;
-  border-radius: 100px;
-  font-size: 12px;
-`;
 
 const Title = styled(Content)`
-  /* background-color: green; */
-  margin-top: 10px;
-  margin-left: 30px;
-  margin-bottom: 30px;
-  font-size: 20px;
+  grid-column: 2/14;
+  height: 80px;
+  padding: 20px 3%;
+  font-family: "Bold";
+  display: flex;
+  border-radius: ${(props) => props.theme.borderRadius};
+
+  .titleText {
+    flex: 1;
+    font-size: 3vw;
+    text-align: center;
+    line-height: 40px;
+    margin-left: -3%;
+    margin-right: 6%;
+  }
+
+  .titleInput {
+    flex: 3;
+    background-color: beige;
+    border-radius: inherit;
+    box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    height: 40px;
+    &:focus {
+      outline: none;
+    }
+  }
 `;
 const ProfileWrap = styled(Content)`
   /* background-color: red; */
-  /* grid-column: 3 / 13; */
-  width: 70vw;
-  display: inline-flexbox;
+  width: 62vw;
 `;
 
 const InputWrap = styled(Content)`
-  /* background-color: blue; */
-  width: 30vw;
-`;
-const InputBox = styled.input`
-  /* background-color: yellow; */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  /* background-color: pink; */
+  box-shadow: none;
+  width: 62vw;
+  height: auto;
+  padding: 0.5% 2% 1% 2%;
+  border-radius: ${(props) => props.theme.borderRadius};
+
+  input {
+    /* background-color: yellow; */
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border: 1px solid rgba(205, 201, 208, 0.8);
+  }
 `;
 
 const Text = styled.div`
   width: 120px;
+  font-family: "Medium";
 `;
 
 const ButtonWrap = styled.div`
@@ -57,10 +76,18 @@ const ButtonWrap = styled.div`
 `;
 
 const Button = styled.button`
-  font-size: 14px;
-  margin: 10px;
-  padding: 5px;
-  cursor: pointer;
+  margin-right: 1rem;
+  width: 10vw;
+  height: 30px;
+  color: white;
+  text-align: center;
+  line-height: 30px;
+  background-color: ${(props) => props.theme.colors.purple};
+  border-radius: 30px;
+  box-shadow: 3px 2px 1px 1px #c593fe;
+  &:hover {
+    background-color: ${(props) => props.theme.colors.lavender};
+  }
 `;
 
 const MyPage = () => {
@@ -106,11 +133,10 @@ const MyPage = () => {
     <StyledEditProfile>
       <Title>내 정보 수정</Title>
       <ProfileWrap>
-        <ProfileImg>소셜 로그인 이미지</ProfileImg>
         <form>
           <InputWrap>
             <Text>닉네임</Text>
-            <InputBox
+            <input
               type="username"
               defaultValue={user?.username}
               onChange={handleInputValue("username")}
@@ -118,11 +144,11 @@ const MyPage = () => {
           </InputWrap>
           <InputWrap>
             <Text>자기 소개</Text>
-            <InputBox type="bio" defaultValue={user?.bio} onChange={handleInputValue("bio")} />
+            <input type="bio" defaultValue={user?.bio} onChange={handleInputValue("bio")} />
           </InputWrap>
           <InputWrap>
             <Text>깃허브 주소</Text>
-            <InputBox
+            <input
               type="github"
               defaultValue={user?.github}
               onChange={handleInputValue("github")}
@@ -130,24 +156,14 @@ const MyPage = () => {
           </InputWrap>
           <InputWrap>
             <Text>블로그 주소</Text>
-            <InputBox type="blog" defaultValue={user?.blog} onChange={handleInputValue("blog")} />
+            <input type="blog" defaultValue={user?.blog} onChange={handleInputValue("blog")} />
           </InputWrap>
           <ButtonWrap>
             <Link to="/profile">
-              <Button
-                className="cursor-pointer px-3 py-2 text-sm text-blue-100 bg-purple-500 rounded hover:bg-purple-400"
-                onClick={handleEditing}
-              >
-                수정 완료
-              </Button>
+              <Button onClick={handleEditing}>수정 완료</Button>
             </Link>
             <Link to="/">
-              <Button
-                className="cursor-pointer px-3 py-2 text-sm text-blue-100 bg-purple-500 rounded hover:bg-purple-400"
-                onClick={handlePermanentDeletion}
-              >
-                회원 탈퇴
-              </Button>
+              <Button onClick={handlePermanentDeletion}>회원 탈퇴</Button>
             </Link>
           </ButtonWrap>
         </form>
