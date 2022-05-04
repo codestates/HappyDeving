@@ -27,6 +27,10 @@ module.exports = {
       }
       const { user_id, study_id, content, parentId } = req.body;
 
+      if (data.id !== user_id) {
+        return res.status(403).json("wrong user");
+      }
+
       if (!user_id || !study_id || !content || !parentId === null) {
         return res.status(401).json("body required");
       }

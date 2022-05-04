@@ -10,7 +10,7 @@ router.delete("/:id/like", mypage.like.delete);
 router.get("/:id/write", mypage.mystudy.get);
 
 // mypage 마이페이지 이미지 수정
-router.patch("/image/:id", mypage.image.patch);
+router.post("/image/:id", mypage.image.patch);
 
 // /mypage 마이페이지 정보 조회, 수정
 router.get("/:id", mypage.mypage.get);
