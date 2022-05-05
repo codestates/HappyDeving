@@ -62,6 +62,11 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         defaultValue: "https://i.ibb.co/nr4FYns/happydevil.png",
       },
+      loginMethod: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+      },
     },
     {
       sequelize,

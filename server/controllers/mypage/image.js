@@ -11,13 +11,14 @@ module.exports = {
       }
       const { id: paramsId } = req.params;
 
-      console.log(data);
-
       if (data.id !== Number(paramsId)) {
         return res.status(401).json("wrong req params");
       }
 
+      console.log(req);
       const { image } = req.body;
+
+      console.log("image=======", image);
 
       const userInfo = await User.findOne({ where: { id: paramsId } });
 
