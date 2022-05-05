@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Container from "../src/components/styles/Container.styled";
@@ -19,6 +19,7 @@ import "./App.css";
 import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import axios from "axios";
 
 function App() {
   const theme = {
@@ -42,7 +43,24 @@ function App() {
     font: {},
   };
 
+
+  const getAccessToken = async (authorizationCode) => {
+    let resp = await axios.post("http://localhost:4000/users/login/kakao", {
+      authorizationCode: authorizationCode,
+    });
+    console.log(resp);
+  };
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const authorizationCode = url.searchParams.get("code");
+    if (authorizationCode) {
+      getAccessToken(authorizationCode);
+    }
+  });
+
   // console.log(localStorage.getItem("user"));
+
 
   return (
     <Router>

@@ -27,33 +27,6 @@ module.exports = {
       if (!study) {
         return res.status(404).json("not found");
       }
-      // console.log(study);
-
-      // return res.json(study);
-
-      // for (let i = 0; i < study.study_comment.length; i++) {
-      //   // Object.assign(study.study_comment[i], { username: study.study_comment[i].user.username });
-      //   console.log((study.study_comment[i].username = study.study_comment[i].user.username));
-      //   study.study_comment[i].username = study.study_comment[i].user.username;
-      // }
-      // return res.json(study.study_comment);
-
-      // let comment_userId = [];
-      // for (let i = 0; i < study.study_comment.length; i++) {
-      //   comment_userId.push(study.study_comment[i].id);
-      // }
-
-      // const userinfo = await Study_comment.findAll({
-      //   where: { id: { [Op.in]: comment_userId } },
-      //   include: [{ model: User, as: "user" }],
-      // });
-
-      // let _username = [];
-      // for (let i = 0; i < userinfo.length; i++) {
-      //   _username.push(userinfo[i].user.username);
-      // }
-
-      // return res.json(study);
 
       const {
         id,
@@ -74,18 +47,9 @@ module.exports = {
         attributes: ["latitude", "longitude", "name"],
       });
 
-      // return res.json(findLocation);
-
-      // for (let i = 0; i < study_comment.length; i++) {
-      //   study_comment[i].username = study_comment[i].user.username;
-      // }
-
-      // return res.json(study_comment);
-
       study_comment.forEach(
         (el) => ((el.dataValues.username = el.user.username), (el.dataValues.user = undefined))
       );
-      // language.forEach(el => el.Study_language)
 
       res.status(200).json({
         data: {
