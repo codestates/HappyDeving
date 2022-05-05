@@ -55,7 +55,6 @@ module.exports = {
             image,
             createdAt,
             updatedAt,
-            loginMethod: 1,
           },
         },
         newAccessToken,

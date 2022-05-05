@@ -78,8 +78,8 @@ module.exports = {
         image: thumbnail_image_url,
         password: `${id}${nickname}`,
         email: `${id}${nickname}@gmail.com`,
-        loginMethod: 3,
-      });
+        loginMethod: 4,
+
 
       sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
 

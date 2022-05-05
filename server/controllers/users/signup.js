@@ -26,6 +26,7 @@ module.exports = {
         username,
         email,
         password: hashedPassword,
+        loginMethod: 0,
       });
 
       // console.log("newUser.verified::", newUser.verified);
