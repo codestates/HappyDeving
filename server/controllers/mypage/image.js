@@ -2,7 +2,7 @@ const { User, Study_comment, Study, Language, Location } = require("../../models
 const { checkAccessToken } = require("../tokenFunctions");
 
 module.exports = {
-  patch: async (req, res) => {
+  post: async (req, res) => {
     try {
       const data = checkAccessToken(req);
 
@@ -10,6 +10,8 @@ module.exports = {
         return res.status(401).json("signin required");
       }
       const { id: paramsId } = req.params;
+
+      console.log(data);
 
       if (data.id !== Number(paramsId)) {
         return res.status(401).json("wrong req params");
