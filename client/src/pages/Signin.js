@@ -135,9 +135,22 @@ function Login() {
       setErrorMessage("모든 항목을 입력해 주세요.");
       return;
     }
-
     dispatch(signin(userData));
     navigate("/");
+  };
+
+  const handleGitSignin = async () => {
+    localStorage.setItem("login", "git");
+    const client_id = "66e9a4ba9dc53441a444";
+    const redirect_url = "http://localhost:3000/callback";
+    const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_url=${redirect_url}`;
+    window.location.assign(GITHUB_LOGIN_URL);
+  };
+
+  const handleKakaoSignin = async () => {
+    localStorage.setItem("login", "kakao");
+    const kakaoURI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=5928412b923165af1772a78c664c4582&redirect_uri=http://localhost:3000`;
+    window.location.assign(kakaoURI);
   };
 
   if (isLoading) {
@@ -172,6 +185,16 @@ function Login() {
             </Resister>
             <ButtonWrap>
               <button type="submit">로그인</button>
+            </ButtonWrap>
+
+            <ButtonWrap>
+              <button onClick={handleGitSignin}>깃허브 로그인</button>
+            </ButtonWrap>
+
+            <ButtonWrap>
+              <button type="button" onClick={handleKakaoSignin}>
+                카카오
+              </button>
             </ButtonWrap>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>

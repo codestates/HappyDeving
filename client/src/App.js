@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { gitSignin, kakaoSignin } from "./features/user/userSlice";
+import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Container from "../src/components/styles/Container.styled";
@@ -42,7 +44,23 @@ function App() {
     font: {},
   };
 
-  // console.log(localStorage.getItem("user"));
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    console.log(url);
+
+    const authorizationCode = url.searchParams.get("code");
+    if (authorizationCode) {
+      if (localStorage.getItem("login") === "git") {
+        console.log("client auth git", authorizationCode);
+        dispatch(gitSignin(authorizationCode));
+      } else if (localStorage.getItem("login") === "kakao") {
+        console.log("client auth kakao", authorizationCode);
+        dispatch(kakaoSignin(authorizationCode));
+      }
+    }
+  });
 
   return (
     <Router>

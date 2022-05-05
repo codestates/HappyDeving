@@ -6,6 +6,7 @@ import {
   editProfileApi,
   deleteUserApi,
 } from "../../api/users";
+import { GithubLoginApi, KakaoLoginApi } from "../../api/socialAuth";
 const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
@@ -43,6 +44,45 @@ export const signin = createAsyncThunk("user/signin", async (signinData, thunkAP
   }
 });
 
+export const gitSignin = createAsyncThunk(
+  "user/login/github",
+  async (authorizationCode, thunkAPI) => {
+    try {
+      return await GithubLoginApi({ authorizationCode }).then((res) => {
+        if (res) {
+          console.log("gitsignin res.data: ", res.data);
+          // { newAccessToken,
+          //   data: {userInfo: {} }}
+          localStorage.setItem("user", JSON.stringify(res.data.userInfo));
+          localStorage.setItem("token", JSON.stringify(res.data.newAccessToken));
+        }
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const kakaoSignin = createAsyncThunk(
+  "user/login/kakao",
+  async (authorizationCode, thunkAPI) => {
+    try {
+      return await KakaoLoginApi({ authorizationCode }).then((res) => {
+        if (res) {
+          console.log("kakaosignin res.data: ", res.data);
+          // { newAccessToken,
+          //   data: {userInfo: {} }}
+          localStorage.setItem("user", JSON.stringify(res.data.userInfo));
+          localStorage.setItem("token", JSON.stringify(res.data.newAccessToken));
+        }
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
 export const signout = createAsyncThunk("user/signout", async () => {
   await localStorage.removeItem("user");
   await localStorage.removeItem("token");
