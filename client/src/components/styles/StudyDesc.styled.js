@@ -64,7 +64,7 @@ const CommentDiv = styled(Content)`
   /* background: pink; */
   grid-column: 2/14;
   display: flex;
-  height: ;
+  height: 100px;
 `;
 
 //(언어 input, modal(정사각형) :5-9,
