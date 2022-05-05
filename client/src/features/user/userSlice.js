@@ -7,9 +7,10 @@ import {
   deleteUserApi,
   editProfileImageApi,
 } from "../../api/users";
+import axios from "axios";
+import authHeader from "./authHeader";
 
-// import { editProfileImageApi } from "../../api/ProfileImage";
-const user = JSON.parse(localStorage.getItem("user")); // initial state에 넣으려고 가져왔을 뿐 나중에 state.user가 업데이트 되어도 반영이 되지 않으므로 editProfile 호출 후 다시 set
+const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
   user: user ? user : null,
@@ -38,6 +39,7 @@ export const signin = createAsyncThunk("user/signin", async (signinData, thunkAP
         //   data: {userInfo: {} }}
         localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
         localStorage.setItem("token", JSON.stringify(res.data.newAccessToken));
+        axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
       }
       return res.data;
     });
@@ -67,7 +69,7 @@ export const editProfile = createAsyncThunk(
   async ({ id, userData }, thunkAPI) => {
     try {
       return await editProfileApi(id, userData).then((res) => {
-        // console.log("axios.patch 후 res.data::", res.data);
+        console.log("axios.patch 후 res.body::", res.data);
         localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
         return res.data;
       });
@@ -79,12 +81,11 @@ export const editProfile = createAsyncThunk(
 
 export const editProfileImage = createAsyncThunk(
   "user/editProfileImage",
-  async ({ id, formdata }, thunkAPI) => {
-    console.log("실행은되나", { id, formdata });
+  async ({ id, formData }, thunkAPI) => {
+    console.log("실행은되나", { id, formData });
     try {
-      return await editProfileImageApi(id, formdata).then((res) => {
+      return await editProfileImageApi(id, formData).then((res) => {
         console.log("axios.patch 후 editProfileImage res.data ::", res.data);
-        localStorage.setItem("user", JSON.stringify(res.data));
         return res.data;
       });
     } catch (error) {
@@ -92,6 +93,7 @@ export const editProfileImage = createAsyncThunk(
     }
   }
 );
+
 export const deleteUser = createAsyncThunk("user/deleteUser", async (thunkAPI) => {
   try {
     return await deleteUserApi().then((res) => {
@@ -161,7 +163,7 @@ export const userSlice = createSlice({
       .addCase(getProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.message = action.payload.message;
         state.user = null;
       })
       .addCase(editProfile.pending, (state) => {
@@ -185,7 +187,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.user.image = action.payload.data.userInfo.image;
-        // console.log("action.payload);
+        console.log("action.payload.data.userInfo.image", action.payload.data.userInfo.image);
       })
       .addCase(editProfileImage.rejected, (state, action) => {
         state.isLoading = false;
@@ -193,7 +195,6 @@ export const userSlice = createSlice({
         state.message = action.payload;
         // state.user = null;
       })
-
       .addCase(deleteUser.pending, (state) => {
         state.isLoading = true;
       })

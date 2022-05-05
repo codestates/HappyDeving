@@ -30,7 +30,7 @@ const Profile = styled(Content)`
 const ProfileImage = styled.img`
   border-radius: 100px;
   width: 150px;
-  higth: 150px;
+  height: 150px;
   margin-top: 15px;
   border: 5px solid #c593fe;
 `;
@@ -57,66 +57,42 @@ const EditSideProfile = () => {
   // user.image
   const dispatch = useDispatch();
   const { user, isError, message } = useSelector((state) => state.user);
-  const [image, setImage] = useState("https://i.ibb.co/nr4FYns/happydevil.png");
   const fileInput = useRef(null);
 
-  const handleChangeImage = (e) => {
-    // e.preventDefault();
+  const [image, setImage] = useState(null);
+  const [imageData, setImageData] = useState("https://i.ibb.co/nr4FYns/happydevil.png");
+  const onChangePicture = (e) => {
     if (e.target.files[0]) {
-      // dispatch( {image: "https://i.ibb.co/nr4FYns/happydevil.png" });
+      console.log("image: ", e.target.files[0]);
       setImage(e.target.files[0]);
-      console.log(e.target.files[0]);
-    } else {
-      setImage(image);
-      return;
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImageData(reader.result);
+        console.log("reader.result", reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
     }
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImage(reader.result);
-    };
-    reader.readAsDataURL(e.target.files[0]);
   };
-  //화면에 프로필 사진 표시
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     if (reader.readyState === 2) {
-  //       setImage(reader.result);
-  //       console.log(reader.result);
-  //     }
-  //   };
-  //   reader.readAsDataURL(e.target.files[0]);
-  // };
 
-  const handleClick = (e) => {
+  const onSave = (e) => {
     e.preventDefault();
-    const formdata = new FormData();
+    const formData = new FormData();
+    formData.append("image", image);
 
-    formdata.append("image", image);
-    console.log(image);
     if (isError) {
-      console.log("editProfile.rejected :", message);
+      console.log("editProfileImage.rejected :", message);
     }
-    dispatch(editProfileImage({ id: user.id, formdata }));
+    console.log("{ id: user.id, formData }: ", { id: user.id, formData });
+    dispatch(editProfileImage({ id: user.id, formData }));
     console.log("id? :", user.id);
   };
-  // useEffect(() => {
-  //   preview();
-  //   return () => preview();
-  // });
 
-  // const preview = () => {
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     setImage(reader.result);
-  //   };
-  //   reader.readAsDataURL(image);
-  // };
   return (
     <>
       <Container>
         <div>보인다.</div>
         <Profile>
-          <ProfileImage src={image} />
+          <ProfileImage src={imageData} />
           <Button
             onClick={() => {
               fileInput.current.click();
@@ -130,14 +106,12 @@ const EditSideProfile = () => {
             style={{ display: "none" }}
             //  image 확장자만 선택적
             accept="image/jpg, image/jpeg, image/png"
-            name="profile_img"
-            onChange={handleChangeImage}
+            name="image"
+            onChange={onChangePicture}
             ref={fileInput}
           />
           {/* <label htmlFor="image">저장하기</label> */}
-          <button type="submit" onClick={handleClick}>
-            저장하기
-          </button>
+          <button onClick={onSave}>저장하기</button>
           {/* </form> */}
 
           {/* <LinkButtons>
@@ -155,3 +129,5 @@ const EditSideProfile = () => {
 };
 
 export default EditSideProfile;
+
+
