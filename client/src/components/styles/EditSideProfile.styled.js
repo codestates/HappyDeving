@@ -2,9 +2,11 @@ import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Content from "./Content.styled";
-import githubIcon from "../../static/images/githubIcon.png";
-import blogIcon from "../../static/images/blogIcon.png";
-import { editProfile } from "../../features/user/userSlice";
+// import githubIcon from "../../static/images/githubIcon.png";
+// import blogIcon from "../../static/images/blogIcon.png";
+import { editProfileImage } from "../../features/user/userSlice";
+// import { useEffect } from "react";
+// import { editProfile } from "../../features/user/userSlice";
 
 const Container = styled(Content)`
   grid-column: 2/ 5;
@@ -26,8 +28,9 @@ const Profile = styled(Content)`
   text-align: center;
 `;
 const ProfileImage = styled.img`
-  border-radius: 80px;
-  width: 12vh;
+  border-radius: 100px;
+  width: 150px;
+  height: 150px;
   margin-top: 15px;
   border: 5px solid #c593fe;
 `;
@@ -39,76 +42,86 @@ const Button = styled.button`
   background-color: #c593fe;
 `;
 
-const LinkButtons = styled.div`
-  margin-top: 20px;
-  display: flex;
-  img {
-    width: 3vh;
-  }
-  a {
-    margin-left: 5px;
-    margin-right: 5px;
-  }
-`;
+// const LinkButtons = styled.div`
+//   margin-top: 20px;
+//   display: flex;
+//   img {
+//     width: 3vh;
+//   }
+//   a {
+//     margin-left: 5px;
+//     margin-right: 5px;
+//   }
+// `;
 const EditSideProfile = () => {
   // user.image
-  const [image, setImage] = useState("https://i.ibb.co/nr4FYns/happydevil.png");
-  const fileInput = useRef(null);
   const dispatch = useDispatch();
-  const { user } = useSelector((store) => store.user);
+  const { user, isError, message } = useSelector((state) => state.user);
+  const fileInput = useRef(null);
 
-  const handleChangeImage = (e) => {
-    e.preventDefault();
+  const [image, setImage] = useState(null);
+  const [imageData, setImageData] = useState("https://i.ibb.co/nr4FYns/happydevil.png");
+  const onChangePicture = (e) => {
     if (e.target.files[0]) {
-      // dispatch( {image: "https://i.ibb.co/nr4FYns/happydevil.png" });
+      console.log("image: ", e.target.files[0]);
       setImage(e.target.files[0]);
-      console.log(e.target.files[0]);
-      dispatch(editProfile({ user: e.target.files[0] }));
-    } else {
-      // 기존의 이미지
-      setImage(user.image);
-      return;
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        setImageData(reader.result);
+        console.log("reader.result", reader.result);
+      });
+      reader.readAsDataURL(e.target.files[0]);
     }
-    //화면에 프로필 사진 표시
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImage(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
+  };
+
+  const onSave = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("image", image);
+
+    if (isError) {
+      console.log("editProfileImage.rejected :", message);
+    }
+    console.log("{ id: user.id, formData }: ", { id: user.id, formData });
+    dispatch(editProfileImage({ id: user.id, formData }));
+    console.log("id? :", user.id);
   };
 
   return (
     <>
       <Container>
+        <div>보인다.</div>
         <Profile>
-          <ProfileImage src={image} />
+          <ProfileImage src={imageData} />
           <Button
             onClick={() => {
               fileInput.current.click();
             }}
           >
-            업로드
+            미리보기
           </Button>
+          {/* <form> */}
           <input
             type="file"
             style={{ display: "none" }}
             //  image 확장자만 선택적
-            accept="image/*"
-            name="profile_img"
-            onChange={handleChangeImage}
+            accept="image/jpg, image/jpeg, image/png"
+            name="image"
+            onChange={onChangePicture}
             ref={fileInput}
           />
+          {/* <label htmlFor="image">저장하기</label> */}
+          <button onClick={onSave}>저장하기</button>
+          {/* </form> */}
 
-          <LinkButtons>
+          {/* <LinkButtons>
             <a href={user.github}>
               <img src={githubIcon}></img>
             </a>
             <a href={user.blog}>
               <img src={blogIcon}></img>
             </a>
-          </LinkButtons>
+          </LinkButtons> */}
         </Profile>
       </Container>
     </>
@@ -116,3 +129,5 @@ const EditSideProfile = () => {
 };
 
 export default EditSideProfile;
+
+

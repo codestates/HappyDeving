@@ -5,8 +5,11 @@ import {
   getProfileApi,
   editProfileApi,
   deleteUserApi,
+  editProfileImageApi,
 } from "../../api/users";
+
 import { GithubLoginApi, KakaoLoginApi } from "../../api/socialAuth";
+
 const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
@@ -36,6 +39,7 @@ export const signin = createAsyncThunk("user/signin", async (signinData, thunkAP
         //   data: {userInfo: {} }}
         localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
         localStorage.setItem("token", JSON.stringify(res.data.newAccessToken));
+        axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
       }
       return res.data;
     });
@@ -104,8 +108,23 @@ export const editProfile = createAsyncThunk(
   async ({ id, userData }, thunkAPI) => {
     try {
       return await editProfileApi(id, userData).then((res) => {
-        // console.log("axios.patch 후 res.data::", res.data);
+        console.log("axios.patch 후 res.body::", res.data);
         localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const editProfileImage = createAsyncThunk(
+  "user/editProfileImage",
+  async ({ id, formData }, thunkAPI) => {
+    console.log("실행은되나", { id, formData });
+    try {
+      return await editProfileImageApi(id, formData).then((res) => {
+        console.log("axios.patch 후 editProfileImage res.data ::", res.data);
         return res.data;
       });
     } catch (error) {
@@ -183,7 +202,7 @@ export const userSlice = createSlice({
       .addCase(getProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.message = action.payload.message;
         state.user = null;
       })
       .addCase(editProfile.pending, (state) => {
@@ -199,6 +218,21 @@ export const userSlice = createSlice({
         state.isError = true;
         state.message = action.payload;
         state.user = null;
+      })
+      .addCase(editProfileImage.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(editProfileImage.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.user.image = action.payload.data.userInfo.image;
+        console.log("action.payload.data.userInfo.image", action.payload.data.userInfo.image);
+      })
+      .addCase(editProfileImage.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+        // state.user = null;
       })
       .addCase(deleteUser.pending, (state) => {
         state.isLoading = true;

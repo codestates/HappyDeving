@@ -61,7 +61,7 @@ const Profile = styled(Content)`
   height: 550px;
 `;
 const CommentDiv = styled(Content)`
-  background: pink;
+  /* background: pink; */
   grid-column: 2/14;
   display: flex;
   height: 100px;
@@ -329,6 +329,7 @@ const StudyDesc = () => {
     studyApi(id).then((res) => {
       setData(res.data.data.study);
       setBackendComments(res.data.data.comment);
+      console.log("상세페이지 get comments: ", res.data.data.comment);
       setLocation(res.data.data.study.location);
     });
   }, []);

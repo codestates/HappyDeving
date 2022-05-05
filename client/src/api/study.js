@@ -49,6 +49,8 @@ export const likeStudyApi = (id, data) => axios.post(`/mypage/${id}/like/`, data
 // 찜 목록 스터디 불러오기
 export const getLikedStudiesApi = (id) => axios.get(`/mypage/${id}/like/`);
 // 찜 목록 스터디 삭제
-export const unLikeStudyApi = (id, data) => axios.delete(`/mypage/${id}/like/`, data);
+export const unLikeStudyApi = (id, data) => {
+  axios.delete(`/mypage/${id}/like/`, { data: data });
+};
 // 내가 쓴 스터디 목록
 export const getMyStudiesApi = (id) => axios.get(`/mypage/${id}/write`);

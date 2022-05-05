@@ -16,11 +16,13 @@ import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import LikedStudy from "./pages/LikedStudy";
 import EditStudyDesc from "./components/styles/EditStudyDesc.styled";
+import EditSideProfile from "./components/styles/EditSideProfile.styled";
 import "./static/fonts/font.css";
 import "./App.css";
 import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import axios from "axios";
 
 function App() {
   const theme = {
@@ -43,6 +45,7 @@ function App() {
     },
     font: {},
   };
+
 
   const dispatch = useDispatch();
 
@@ -96,7 +99,15 @@ function App() {
             <Route path="/study/:id" element={<Study />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/study/edit/:id" element={<EditStudyDesc />} />
-            <Route path="/editprofile" element={<ProfileEdit />} />
+            <Route
+              path="/editprofile"
+              element={
+                <>
+                  <EditSideProfile />
+                  <ProfileEdit />
+                </>
+              }
+            />
             <Route path="/mystudy" element={<MyStudy />} />
             <Route path="/likedStudy" element={<LikedStudy />} />
             <Route path="/signin" element={<Signin />} />

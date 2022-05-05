@@ -7,9 +7,44 @@ import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
+const CommentDiv = styled.div`
+  /* background-color: yellow; */
+  width: 100%;
+  display: flex;
+  padding: 0rem 0rem 0rem 0.5rem;
+  box-shadow: none;
+  /* border: 1px solid rgba(205, 201, 208, 0.28); */
+`;
+const CommentImageContainer = styled(Content)`
+  /* background-color: yellow; */
+  width: 100px;
+  height: 85px;
+  margin-right: 2%;
+  background-color: rgba(205, 201, 208, 0.68);
+`;
+const CommentRightPart = styled.div`
+  width: 50%;
+  box-shadow: none;
+  /* border: 1px solid rgba(205, 201, 208, 0.28); // border 있으면 박스안에 둥근 테두리 보임 */
+`;
+const CommentAuthorAndDate = styled(Content)`
+  width: 100%;
+  box-shadow: none;
+  font-size: 0.8rem;
+  display: flex;
+  span {
+    margin-right: 40px;
+  }
+`;
+const CommentContent = styled(Content)`
+  width: 100%;
+  box-shadow: none;
+  border: none;
+`;
+
 const Button = styled(Content)`
-  margin-left: 5rem;
-  /* float: right; */
+  margin-right: 2rem;
+  float: right;
   width: 5vw;
   height: 30px;
   color: white;
@@ -22,6 +57,7 @@ const Button = styled(Content)`
     background-color: ${(props) => props.theme.colors.lavender};
   }
 `;
+
 const Comment = ({
   comment,
   replies,
@@ -51,16 +87,16 @@ const Comment = ({
   const createdAt = new Date(comment.createdAt).toLocaleDateString();
 
   return (
-    <div key={comment.id} className="comment">
-      <div className="comment-image-container">
+    <CommentDiv key={comment.id}>
+      <CommentImageContainer>
         <img src="/user-icon.png" />
-      </div>
-      <div className="comment-right-part">
-        <div className="comment-content">
-          <div className="comment-author">{comment.username}</div>
-          <div>{createdAt}</div>
-        </div>
-        {!isEditing && <div className="comment-content">{comment.content}</div>}
+      </CommentImageContainer>
+      <CommentRightPart>
+        <CommentAuthorAndDate>
+          <span className="comment-author">{comment.username}</span>
+          <span>{createdAt}</span>
+        </CommentAuthorAndDate>
+        {!isEditing && <CommentContent>{comment.content}</CommentContent>}
         {isEditing && (
           <CommentForm
             submitLabel="수정"
@@ -82,7 +118,7 @@ const Comment = ({
                 className="comment-action"
                 onClick={() => setActiveComment({ id: comment.id, type: "replying" })}
               >
-                대댓글
+                답글
               </button>
             </Button>
           )}
@@ -135,8 +171,8 @@ const Comment = ({
             ))}
           </div>
         )}
-      </div>
-    </div>
+      </CommentRightPart>
+    </CommentDiv>
   );
 };
 

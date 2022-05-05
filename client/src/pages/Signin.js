@@ -7,6 +7,7 @@ import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
 import Container from "../components/styles/Container.styled";
 import Content from "../components/styles/Content.styled";
+import axios from "axios";
 
 const Background = styled(Container)`
   grid-column: 1/ 15;
@@ -129,6 +130,27 @@ function Login() {
     setUserData({ ...userData, [key]: e.target.value });
   };
 
+  const getAccessToken = async (authorizationCode) => {
+    let resp = await axios.post("http://localhost:4000/users/login/kakao", {
+      authorizationCode: authorizationCode,
+    });
+
+    console.log(resp);
+  };
+
+  const socialLoginHandler = async () => {
+    const kakaoURI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=5928412b923165af1772a78c664c4582&redirect_uri=http://localhost:3000`;
+    await window.location.assign(kakaoURI).then(() => {
+      const url = new URL(window.location.href);
+      console.log(url);
+      const authorizationCode = url.searchParams.get("code");
+      console.log("authorizationCode==========", authorizationCode);
+      if (authorizationCode) {
+        getAccessToken(authorizationCode);
+      }
+    });
+  };
+
   const handleSignin = async (e) => {
     e.preventDefault();
     if (Object.values(userData).includes("")) {
@@ -187,6 +209,7 @@ function Login() {
               <button type="submit">로그인</button>
             </ButtonWrap>
 
+
             <ButtonWrap>
               <button onClick={handleGitSignin}>깃허브 로그인</button>
             </ButtonWrap>
@@ -195,6 +218,7 @@ function Login() {
               <button type="button" onClick={handleKakaoSignin}>
                 카카오
               </button>
+
             </ButtonWrap>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>
