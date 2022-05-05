@@ -28,10 +28,12 @@ const Map = () => {
       title: el.title,
       lat: Number(el.location.latitude),
       lng: Number(el.location.longitude),
-      img: langImg[el.language[0].name],
+      img: langImg[el.language[0]?.name],
       info: el.startDate,
     };
   });
+
+  console.log(markerdata);
 
   const mapscript = () => {
     const options = {

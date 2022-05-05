@@ -14,6 +14,16 @@ export const signinApi = (data) => axios.post("/users/signin", data);
 
 export const signoutApi = () => axios.post("/users/signout");
 
+export const getProfileApi = (id) => axios.get(`/mypage/${id}`);
+
 export const editProfileApi = (id, data) => axios.patch(`/mypage/${id}`, data);
 
 export const deleteUserApi = () => axios.delete("/mypage");
+
+export const editProfileImageApi = (id, data) =>
+  axios.patch(`/mypage/image/${id}`, data, {
+    // headers: {
+    "Content-Type": "multipart/form-data",
+    // ...authHeader(),
+    // },
+  });
