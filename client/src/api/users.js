@@ -25,4 +25,6 @@ export const editProfileApi = (id, data) => axios.patch(`/mypage/${id}`, data);
 
 export const deleteUserApi = () => axios.delete("/mypage");
 
-export const editProfileImageApi = (id, data) => axios.post(`/mypage/image/${id}`, data);
+export const editProfileImageApi = (id, data) =>
+  axios.patch(`/mypage/image/${id}`, data);
+

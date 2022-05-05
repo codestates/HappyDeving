@@ -27,6 +27,10 @@ module.exports = {
       }
       const { user_id, study_id, content, parentId } = req.body;
 
+      if (data.id !== user_id) {
+        return res.status(403).json("wrong user");
+      }
+
       if (!user_id || !study_id || !content || !parentId === null) {
         return res.status(401).json("body required");
       }
@@ -46,9 +50,9 @@ module.exports = {
       if (!data) {
         return res.status(401).json("signin required");
       }
-      const { id: _id, content: _content } = req.body;
+      const { study_commentId, content: _content } = req.body;
 
-      if (!_id || !_content) {
+      if (!study_commentId || !_content) {
         return res.status(401).json("body required");
       }
 
@@ -57,13 +61,17 @@ module.exports = {
           {
             content: _content,
           },
-          { where: { id: _id } }
+          { where: { id: study_commentId } }
         );
       }
 
       const comment = await Study_comment.findOne({
-        where: { id: _id },
+        where: { id: study_commentId },
       });
+
+      if (!comment) {
+        return res.status(404).json("comment not found");
+      }
 
       const { id, user_id, content, parentId, createdAt, updatedAt } = comment;
 
@@ -86,10 +94,14 @@ module.exports = {
   },
   delete: async (req, res) => {
     try {
-      const { id } = req.body;
+      const { study_commentId } = req.body;
+
+      if (!study_commentId) {
+        return res.status(404).json("req body not found");
+      }
 
       let comment = await Study_comment.findOne({
-        where: { id: id },
+        where: { id: study_commentId },
       });
 
       const { content } = comment.dataValues;

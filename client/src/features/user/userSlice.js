@@ -69,7 +69,7 @@ export const editProfile = createAsyncThunk(
   async ({ id, userData }, thunkAPI) => {
     try {
       return await editProfileApi(id, userData).then((res) => {
-        // console.log("axios.patch 후 res.data::", res.data);
+        console.log("axios.patch 후 res.body::", res.data);
         localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
         return res.data;
       });

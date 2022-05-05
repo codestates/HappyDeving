@@ -1,6 +1,7 @@
 const { User, Study, Study_comment, Language, Study_language, Location } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 const { Op } = require("sequelize");
+const user = require("../../models/user");
 
 module.exports = {
   get: async (req, res) => {
@@ -13,6 +14,11 @@ module.exports = {
             model: Study_comment,
             as: "study_comment",
             attributes: ["id", "content", "createdAt", "updatedAt", "parentId"],
+            include: [{ model: User, as: "user", attributes: ["username"] }],
+          },
+          {
+            model: User,
+            as: "user",
           },
         ],
       });
@@ -34,26 +40,22 @@ module.exports = {
         createdAt,
         updatedAt,
         language,
-        user_id,
       } = study;
-
-      const findUsername = await User.findOne({
-        where: { id: user_id },
-        attributes: ["username"],
-      });
 
       const findLocation = await Location.findOne({
         where: { id: location_id },
         attributes: ["latitude", "longitude", "name"],
       });
 
-      study_comment.forEach((el) => (el.dataValues.username = findUsername.username));
+      study_comment.forEach(
+        (el) => ((el.dataValues.username = el.user.username), (el.dataValues.user = undefined))
+      );
 
       res.status(200).json({
         data: {
           study: {
             id,
-            username: findUsername.username,
+            username: study.user.username,
             title,
             content,
             kakaoLink,
