@@ -26,6 +26,7 @@ module.exports = {
         blog,
         bio,
         image,
+        loginMethod,
         createdAt,
         updatedAt,
       } = userInfo.dataValues;
@@ -53,6 +54,7 @@ module.exports = {
             blog,
             bio,
             image,
+            loginMethod,
             createdAt,
             updatedAt,
           },

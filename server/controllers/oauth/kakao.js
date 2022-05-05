@@ -69,11 +69,12 @@ module.exports = {
       if (userInfo) {
         sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
 
-        return res.status(201).send({
+        return res.status(200).send({
           user: userInfo,
           accessToken: kakaoAccessToken,
         });
       }
+
       const newUser = await User.create({
         username: nickname,
         image: thumbnail_image_url,
