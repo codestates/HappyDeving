@@ -7,4 +7,4 @@ export const writeCommentApi = (data) => axios.post("/studies/comment", data);
 export const editCommentApi = (data) => axios.patch("/studies/comment", data);
 
 // body: user_id, study_commentId
-export const deleteCommentApi = (data) => axios.delete("/studies/comment", data);
+export const deleteCommentApi = (data) => axios.delete("/studies/comment", { data: data });

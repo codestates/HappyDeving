@@ -4,8 +4,9 @@ import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 import { useSelector } from "react-redux";
 
-const CommentFormDiv = styled(Content)`
-  width: 84vw;
+const CommentFormDiv = styled.div`
+grid: 4/13
+  /* width: 84vw; */
   height: auto;
   padding: 0.5% 2% 6% 2%;
   border-radius: ${(props) => props.theme.borderRadius};
@@ -15,7 +16,6 @@ const CommentFormDiv = styled(Content)`
       width: 100%;
       margin-bottom: 10px;
       border-radius: 30px;
-
       text-align: center;
       textarea {
         grid-column: 2/14;
@@ -29,7 +29,7 @@ const CommentFormDiv = styled(Content)`
   }
 `;
 
-const Button = styled(Content)`
+const Button = styled.div`
   float: right;
   width: 5vw;
   height: 30px;
@@ -64,12 +64,6 @@ const CommentForm = ({
     parentId: replyId ? replyId : null,
   };
 
-  // const [commentData, setCommentData] = useState({
-  //   content: content,
-  //   user_id: user.id,
-  //   study_id: studyId,
-  //   parentId: replyId ? replyId : null,
-  // });
   const isTextareaDisabled = content.length === 0;
   const onSubmit = (e) => {
     e.preventDefault();
@@ -86,25 +80,24 @@ const CommentForm = ({
             value={content}
             onChange={(e) => setContent(e.target.value)}
           />
-
-          <Button>
-            <button className="comment-form-button" disabled={isTextareaDisabled}>
-              {submitLabel}
-            </button>
-          </Button>
-          {hasCancelButton && (
-            <Button>
-              <button
-                type="button"
-                className="comment-form-button comment-form-cancel-button"
-                onClick={handleCancel}
-              >
-                취소
-              </button>
-            </Button>
-          )}
         </form>
       </div>
+      <Button>
+        <button className="comment-form-button" disabled={isTextareaDisabled}>
+          {submitLabel}
+        </button>
+      </Button>
+      {hasCancelButton && (
+        <Button>
+          <button
+            type="button"
+            className="comment-form-button comment-form-cancel-button"
+            onClick={handleCancel}
+          >
+            취소
+          </button>
+        </Button>
+      )}
     </CommentFormDiv>
   );
 };

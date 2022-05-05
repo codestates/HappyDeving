@@ -121,7 +121,7 @@ export const getLikedStudies = createAsyncThunk(
 export const unLikeStudy = createAsyncThunk(
   "allStudies/unLikeStudy",
   async ({ id, studyData }, thunkAPI) => {
-    console.log("delete studyData", studyData);
+    // console.log("delete studyData", studyData);
     try {
       return await unLikeStudyApi(id, studyData).then((res) => {
         console.log("unlike clicked: ", res.data);
