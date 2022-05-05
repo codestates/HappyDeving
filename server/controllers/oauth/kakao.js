@@ -70,7 +70,7 @@ module.exports = {
 
         return res.status(201).send({
           user: userInfo,
-          accessToken: access_token,
+          accessToken: kakaoAccessToken,
         });
       }
       const newUser = await User.create({
