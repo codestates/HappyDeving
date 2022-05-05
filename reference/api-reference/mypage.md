@@ -126,7 +126,7 @@ err
 {% endswagger-response %}
 {% endswagger %}
 
-{% swagger method="patch" path="/mypage/image" baseUrl="https://happydeving.com" summary="회원 프로필 이미지 수정" %}
+{% swagger method="post" path="/mypage/image" baseUrl="https://happydeving.com" summary="회원 프로필 이미지 수정" %}
 {% swagger-description %}
 
 {% endswagger-description %}
