@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "node-mailer": "^0.1.1"
+  }
+}
