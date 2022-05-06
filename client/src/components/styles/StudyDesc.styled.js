@@ -389,7 +389,7 @@ const StudyDesc = () => {
             <Comments
               commentsInStudyData={backendComments}
               studyId={data.id}
-              currentUserId={user.id}
+              currentUsername={user.username}
             />
           </CommentDiv>
         </>

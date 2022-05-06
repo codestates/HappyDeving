@@ -7,8 +7,8 @@ import {
   deleteUserApi,
   editProfileImageApi,
 } from "../../api/users";
-import axios from "axios";
-import authHeader from "./authHeader";
+// import axios from "axios";
+// import authHeader from "./authHeader";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -39,7 +39,7 @@ export const signin = createAsyncThunk("user/signin", async (signinData, thunkAP
         //   data: {userInfo: {} }}
         localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
         localStorage.setItem("token", JSON.stringify(res.data.newAccessToken));
-        axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
+        // axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
       }
       return res.data;
     });
