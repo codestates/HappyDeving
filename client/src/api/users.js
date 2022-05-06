@@ -5,7 +5,7 @@ import authHeader from "../features/user/authHeader";
 axios.defaults.baseURL = `${REACT_APP_API_URL}`;
 axios.defaults.withCredentials = true;
 axios.defaults.headers = {
-  "Content-Type": "application/json;application/x-www-form-urlencoded",
+  "Content-Type": "application/json",
   ...authHeader(),
 };
 
@@ -23,8 +23,6 @@ export const getProfileApi = (id) => axios.get(`/mypage/${id}`);
 
 export const editProfileApi = (id, data) => axios.patch(`/mypage/${id}`, data);
 
-export const deleteUserApi = () => axios.delete("/mypage");
+export const deleteUserApi = (id, data) => axios.delete(`/users/withdrawal/${id}`, { data: data });
 
-export const editProfileImageApi = (id, data) =>
-  axios.patch(`/mypage/image/${id}`, data);
-
+export const editProfileImageApi = (id, data) => axios.post(`/mypage/image/${id}`, data);
