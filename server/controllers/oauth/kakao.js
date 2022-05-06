@@ -67,13 +67,20 @@ module.exports = {
       });
 
       if (userInfo) {
-        return res.status(403).json("user already existed");
+        sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
+
+        return res.status(200).send({
+          user: userInfo,
+          accessToken: kakaoAccessToken,
+        });
       }
+
       const newUser = await User.create({
         username: nickname,
         image: thumbnail_image_url,
         password: `${id}${nickname}`,
         email: `${id}${nickname}@gmail.com`,
+        loginMethod: 4,
       });
 
       sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);

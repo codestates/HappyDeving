@@ -35,8 +35,6 @@ export const signin = createAsyncThunk("user/signin", async (signinData, thunkAP
     return await signinApi(signinData).then((res) => {
       if (res) {
         console.log("signin res.data: ", res.data);
-        // { newAccessToken,
-        //   data: {userInfo: {} }}
         localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
         localStorage.setItem("token", JSON.stringify(res.data.newAccessToken));
         // axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
@@ -93,16 +91,19 @@ export const editProfileImage = createAsyncThunk(
     }
   }
 );
-
-export const deleteUser = createAsyncThunk("user/deleteUser", async (thunkAPI) => {
-  try {
-    return await deleteUserApi().then((res) => {
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async ({ id, deleteData }, thunkAPI) => {
+    try {
+      return await deleteUserApi(id, deleteData).then(() => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
 export const userSlice = createSlice({
   name: "user",
@@ -208,7 +209,7 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.user = null;
+        // state.user = null;
       });
   },
 });
