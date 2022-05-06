@@ -129,5 +129,3 @@ const EditSideProfile = () => {
 };
 
 export default EditSideProfile;
-
-
