@@ -1,5 +1,6 @@
 const { User, Study_comment, Study, Language, Location } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
+// const uploads = require("../../uploads");
 
 module.exports = {
   post: async (req, res) => {
@@ -15,9 +16,14 @@ module.exports = {
         return res.status(401).json("wrong req params");
       }
 
-      console.log(req.body);
-      const { image } = req.body;
+      console.log("req.body=========", req.body);
 
+      // console.log(
+      //   "file:///Users/hy_mac/codestates/HappyDeving/server/uploads/6c47d75228fa992346e8c175f21a79d8"
+      // );
+      const image = `file:///Users/hy_mac/codestates/HappyDeving/server/uploads/${req.file.filename}`;
+
+      return res.json("ok");
       const userInfo = await User.findOne({ where: { id: paramsId } });
 
       await User.update(
