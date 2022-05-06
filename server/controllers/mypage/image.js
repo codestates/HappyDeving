@@ -15,10 +15,8 @@ module.exports = {
         return res.status(401).json("wrong req params");
       }
 
-      console.log(req);
+      console.log(req.body);
       const { image } = req.body;
-
-      console.log("image=======", image);
 
       const userInfo = await User.findOne({ where: { id: paramsId } });
 
