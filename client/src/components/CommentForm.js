@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
+// import Content from "../components/styles/Content.styled";
 import { useSelector } from "react-redux";
 
 const CommentFormDiv = styled.div`

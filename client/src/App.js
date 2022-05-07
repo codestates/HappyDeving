@@ -44,9 +44,8 @@ function App() {
     font: {},
   };
 
-
   const getAccessToken = async (authorizationCode) => {
-    let resp = await axios.post("http://localhost:4000/users/login/kakao", {
+    let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
       authorizationCode: authorizationCode,
     });
     console.log(resp);
@@ -61,7 +60,6 @@ function App() {
   });
 
   // console.log(localStorage.getItem("user"));
-
 
   return (
     <Router>
