@@ -39,10 +39,10 @@ export const editComment = createAsyncThunk(
 
 export const deleteComment = createAsyncThunk(
   "comment/deleteComment",
-  async (commentData, thunkAPI) => {
+  async (comment, thunkAPI) => {
     try {
       if (window.confirm("댓글을 지우시겠습니까?")) {
-        return await deleteCommentApi(commentData).then((res) => {
+        return await deleteCommentApi({ study_commentId: comment.id }).then((res) => {
           return res.data;
         });
       }

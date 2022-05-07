@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Content from "./styles/Content.styled";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-import { writeComment } from "../features/comment/commentSlice";
+import { editComment, writeComment, deleteComment } from "../features/comment/commentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingIndicator from "../components/LoadingIndicator";
 
@@ -15,7 +15,7 @@ const CommentsContainer = styled(Content)`
   margin-top: 40px;
 `;
 
-const Comments = ({ commentsInStudyData, studyId, currentUserId }) => {
+const Comments = ({ commentsInStudyData, studyId }) => {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.comment);
   const [backendComments, setBackendComments] = useState([]);
@@ -28,10 +28,26 @@ const Comments = ({ commentsInStudyData, studyId, currentUserId }) => {
     backendComments
       .filter((backendComment) => backendComment.parentId === commentId)
       .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  const addComment = (commentData) => {
+    console.log("작성 clicked");
+    dispatch(writeComment(commentData));
+    setActiveComment(null);
+  };
+  const updateComment = (commentData) => {
+    console.log("수정 clicked");
+
+    dispatch(editComment(commentData));
+    setActiveComment(null);
+  };
+  const deletingComment = (commentData) => {
+    console.log("삭제 clicked");
+
+    dispatch(deleteComment(commentData));
+  };
 
   useEffect(() => {
     setBackendComments(commentsInStudyData);
-  }, []);
+  }, [commentsInStudyData, backendComments]);
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -42,7 +58,7 @@ const Comments = ({ commentsInStudyData, studyId, currentUserId }) => {
       <CommentForm
         studyId={studyId}
         submitLabel="작성"
-        handleSubmit={(commentData) => dispatch(writeComment(commentData))}
+        handleSubmit={(commentData) => addComment(commentData)}
       />
       <CommentsContainer>
         {rootComments.map((rootComment) => (
@@ -53,7 +69,9 @@ const Comments = ({ commentsInStudyData, studyId, currentUserId }) => {
             replies={getReplies(rootComment.id)}
             activeComment={activeComment}
             setActiveComment={setActiveComment}
-            currentUserId={currentUserId}
+            addComment={addComment}
+            updateComment={updateComment}
+            deletingComment={deletingComment}
           />
         ))}
       </CommentsContainer>
