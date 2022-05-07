@@ -26,13 +26,21 @@ module.exports = {
         blog,
         bio,
         image,
+        loginMethod,
+        verified,
         createdAt,
         updatedAt,
       } = userInfo.dataValues;
       const check = await bcrypt.compare(password, userInfoPassword);
 
+      // 비밀번호가 틀렸을때
       if (!check) {
         return res.status(403).json({ message: `password not matched` });
+      }
+
+      // 이메일 인증 받지 않았으면
+      if (!verified) {
+        return res.status(403).json({ message: `email verified required` });
       }
 
       // 회원 비밀번호 삭제 후 accessToken 발급
@@ -53,6 +61,8 @@ module.exports = {
             blog,
             bio,
             image,
+            loginMethod,
+            verified,
             createdAt,
             updatedAt,
           },
