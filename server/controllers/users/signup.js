@@ -56,7 +56,7 @@ module.exports = {
 
       console.log(req.params);
 
-      if (!req.params.accessToken) {
+      if (!req.params.token) {
         return res.status(400).send("유효하지 않은 접근입니다.");
       }
 
