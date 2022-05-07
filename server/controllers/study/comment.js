@@ -1,18 +1,45 @@
-const { User, Study_comment } = require("../../models");
+const { User, Study_comment, Study, Language } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 
 module.exports = {
   get: async (req, res) => {
     try {
-      // const { id } = req.params;
+      let { id } = req.params;
       // const data = checkAccessToken(req);
       // if (!data) {
       //   return res.status(401).json("signin required");
       // }
 
-      const comment = await Study_comment.findAll({ include: [{ model: User, as: "user" }] });
+      // const study = await Study.findOne({
+      //   where: { id: id },
+      //   include: [
+      //     { model: Language, as: "language", attributes: ["id", "name"] },
+      //     {
+      //       model: Study_comment,
+      //       as: "study_comment",
+      //       attributes: ["id", "content", "createdAt", "updatedAt", "parentId"],
+      //       include: [{ model: User, as: "user", attributes: ["username"] }],
+      //     },
+      //     {
+      //       model: User,
+      //       as: "user",
+      //     },
+      //   ],
+      // });
 
-      res.json(comment);
+      console.log(typeof id);
+      id = Number(id);
+
+      const comment = await Study_comment.findAll({
+        where: { study_id: id },
+        include: [{ model: User, as: "user" }],
+      });
+
+      comment.forEach(
+        (el) => ((el.dataValues.username = el.user.username), (el.dataValues.user = undefined))
+      );
+
+      res.json({ data: { comments: comment } });
     } catch (err) {
       console.log(err);
       return res.status(500).json();
