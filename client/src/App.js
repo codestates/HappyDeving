@@ -47,7 +47,13 @@ function App() {
   };
 
 
-  const dispatch = useDispatch();
+  const getAccessToken = async (authorizationCode) => {
+    let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
+      authorizationCode: authorizationCode,
+    });
+    console.log(resp);
+  };
+
 
   useEffect(() => {
     const url = new URL(window.location.href);

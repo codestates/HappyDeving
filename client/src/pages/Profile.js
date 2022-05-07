@@ -94,7 +94,10 @@ const Profile = () => {
       <LikedStudyTab onClick={() => navigate("/likedstudy")}>찜한 스터디</LikedStudyTab>
       <ProfileWrap>
         <Title>회원 정보 수정</Title>
-        <ProfileImg>{user?.image}</ProfileImg>
+        <ProfileImg>
+          <img src={user.image}></img>
+        </ProfileImg>
+
         <ProfileInfoWrap>
           <Name>{user?.username}</Name>
           <Biography>{user?.bio}</Biography>
