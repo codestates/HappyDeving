@@ -11,6 +11,7 @@ const { sequelize } = require("./models/index");
 app.use(express.json({ strict: false }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 app.use(
   cors({
     origin: true,

@@ -49,13 +49,15 @@ module.exports = {
       return res.status(500).json();
     }
   },
-  patch: async (req, res) => {
+  get: async (req, res) => {
     try {
       const user = await User.findOne({ where: { id: req.params.id } });
-      if (!user) return res.status(400).send({ message: "Invalid link" });
+      if (!user) return res.status(400).send("유효하지 않은 접근입니다.");
 
-      if (!req.cookies.accessToken) {
-        return res.status(400).send({ message: "Invalid link" });
+      console.log(req.params);
+
+      if (!req.params.token) {
+        return res.status(400).send("유효하지 않은 접근입니다.");
       }
 
       await User.update(
@@ -66,7 +68,7 @@ module.exports = {
           },
         }
       );
-      res.status(200).send({ message: "Email verified successfully" });
+      res.status(200).send("이메일 인증이 성공하였습니다.");
     } catch (error) {
       res.status(500).send({ message: "Internal Server Error" });
     }

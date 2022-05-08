@@ -11,7 +11,7 @@ import axios from "axios";
 import { GoogleLoginApi } from "../api/socialAuth";
 import GoogleLogin from "react-google-login";
 import { GOOGLE_CLIENT_ID } from "../config";
-// import { gapi } from "gapi-script";
+
 
 const Background = styled(Container)`
   grid-column: 1/ 15;
@@ -139,20 +139,13 @@ function Login() {
       authorizationCode: authorizationCode,
     });
 
-    console.log(resp);
-  };
+
+  //   console.log("resp===========", resp);
+  // };
 
   const socialLoginHandler = async () => {
     const kakaoURI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=5928412b923165af1772a78c664c4582&redirect_uri=http://localhost:3000`;
-    await window.location.assign(kakaoURI).then(() => {
-      const url = new URL(window.location.href);
-      console.log(url);
-      const authorizationCode = url.searchParams.get("code");
-      console.log("authorizationCode==========", authorizationCode);
-      if (authorizationCode) {
-        getAccessToken(authorizationCode);
-      }
-    });
+    window.location.assign(kakaoURI);
   };
 
   const handleSignin = async (e) => {
