@@ -7,7 +7,11 @@ import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
 import Container from "../components/styles/Container.styled";
 import Content from "../components/styles/Content.styled";
-// import axios from "axios";
+import axios from "axios";
+import { GoogleLoginApi } from "../api/socialAuth";
+import GoogleLogin from "react-google-login";
+import { GOOGLE_CLIENT_ID } from "../config";
+
 
 const Background = styled(Container)`
   grid-column: 1/ 15;
@@ -130,10 +134,11 @@ function Login() {
     setUserData({ ...userData, [key]: e.target.value });
   };
 
-  // const getAccessToken = async (authorizationCode) => {
-  //   let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
-  //     authorizationCode: authorizationCode,
-  //   });
+  const getAccessToken = async (authorizationCode) => {
+    let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
+      authorizationCode: authorizationCode,
+    });
+
 
   //   console.log("resp===========", resp);
   // };
@@ -153,18 +158,23 @@ function Login() {
     navigate("/");
   };
 
-  const handleGitSignin = async () => {
-    localStorage.setItem("login", "git");
-    const client_id = "66e9a4ba9dc53441a444";
-    const redirect_url = "http://localhost:3000/callback";
-    const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_url=${redirect_url}`;
-    window.location.assign(GITHUB_LOGIN_URL);
+  // useEffect(() => {
+  //   function googleLogin() {
+  //     gapi.client.init({
+  //       clientId: GOOGLE_CLIENT_ID,
+  //       scope: "",
+  //     });
+  //   }
+  //   gapi.load("client:auth2", googleLogin);
+  // });
+  const handleGoogleLoginFailure = (result) => {
+    alert(`${JSON.stringify(result)}`);
   };
 
-  const handleKakaoSignin = async () => {
-    localStorage.setItem("login", "kakao");
-    const kakaoURI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=5928412b923165af1772a78c664c4582&redirect_uri=http://localhost:3000`;
-    window.location.assign(kakaoURI);
+  const handleGoogleLogin = async (e) => {
+    // body: {token: googleData.tokenId}
+    const googleTokenId = e.tokenId;
+    await GoogleLoginApi({ idToken: googleTokenId });
   };
 
   if (isLoading) {
@@ -200,17 +210,21 @@ function Login() {
             <ButtonWrap>
               <button type="submit">로그인</button>
             </ButtonWrap>
-
-
             <ButtonWrap>
-              <button onClick={handleGitSignin}>깃허브 로그인</button>
-            </ButtonWrap>
-
-            <ButtonWrap>
-              <button type="button" onClick={handleKakaoSignin}>
+              <button type="button" onClick={socialLoginHandler}>
                 카카오
               </button>
-
+              <GoogleLogin
+                clientId={GOOGLE_CLIENT_ID}
+                buttonText="Google"
+                responseType={"id_token"}
+                onSuccess={handleGoogleLogin}
+                onFailure={handleGoogleLoginFailure}
+                cookiePolicy={"single_host_origin"}
+              ></GoogleLogin>
+              {/* <a type="button" href="http://localhost:4000/users/login/kakao">
+                카카오
+              </a> */}
             </ButtonWrap>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>
