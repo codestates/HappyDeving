@@ -2,6 +2,7 @@ require("dotenv").config();
 const { User } = require("../../models");
 const axios = require("axios");
 const fetch = require("node-fetch");
+const bcrypt = require("bcrypt");
 const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
 
 module.exports = {
@@ -18,7 +19,7 @@ module.exports = {
   post: async (req, res) => {
     try {
       const { authorizationCode } = req.body;
-      console.log(authorizationCode);
+      // console.log(authorizationCode);
 
       if (!authorizationCode) {
         return res.status(400).json("bad request");
@@ -44,50 +45,53 @@ module.exports = {
         }),
       }).then((res) => res.json());
       // const { access_token } = resp.data;
-      console.log(resp);
+      // console.log(resp);
 
       const kakaoAccessToken = resp.access_token;
-      const kakaoRefreshToken = resp.refresh_token;
+      // const kakaoRefreshToken = resp.refresh_token;
       const kakaoUserInfo = await fetch(`https://kapi.kakao.com/v2/user/me`, {
         headers: {
           Authorization: `Bearer ${kakaoAccessToken}`,
         },
       }).then((res) => res.json());
 
-      console.log(kakaoUserInfo);
-
       let { id } = kakaoUserInfo;
       const { nickname, thumbnail_image_url } = kakaoUserInfo.kakao_account.profile;
-      console.log(nickname);
-      console.log(thumbnail_image_url);
       id = String(id);
+      const password = `${id}${nickname}`;
+      const email = `${id}${nickname}@gmail.com`;
+
+      const salt = await bcrypt.genSalt(12);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
       const userInfo = await User.findOne({
-        where: { password: `${id}${nickname}`, email: `${id}${nickname}@gmail.com` },
+        where: { email: email },
       });
+      const newAccessToken = generateAccessToken({ id, email });
+      const newrefreshToken = generaterefreshToken({ id, email });
 
       if (userInfo) {
-        sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
+        sendTocookie(res, newAccessToken, newrefreshToken);
 
-        return res.status(200).send({
+        return res.status(200).json({
           user: userInfo,
-          accessToken: kakaoAccessToken,
+          accessToken: newAccessToken,
         });
       }
 
       const newUser = await User.create({
         username: nickname,
         image: thumbnail_image_url,
-        password: `${id}${nickname}`,
-        email: `${id}${nickname}@gmail.com`,
+        password: hashedPassword,
+        email: email,
         loginMethod: 4,
       });
 
-      sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
+      sendTocookie(res, newAccessToken, newrefreshToken);
 
-      return res.status(201).send({
+      return res.status(201).json({
         userInfo: newUser,
-        accessToken: kakaoAccessToken,
+        accessToken: newAccessToken,
       });
     } catch (err) {
       console.error(err);

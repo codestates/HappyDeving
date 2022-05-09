@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { gitSignin, kakaoSignin } from "./features/user/userSlice";
 import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
@@ -46,29 +45,32 @@ function App() {
     font: {},
   };
 
-
   const getAccessToken = async (authorizationCode) => {
-    let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
+    let resp = await axios.post("/users/login/kakao", {
       authorizationCode: authorizationCode,
     });
-    console.log(resp);
+    const { user } = resp.data;
+    console.log(user);
+    return user;
   };
-
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    console.log(url);
-
     const authorizationCode = url.searchParams.get("code");
-    if (authorizationCode) {
-      if (localStorage.getItem("login") === "git") {
-        console.log("client auth git", authorizationCode);
-        dispatch(gitSignin(authorizationCode));
-      } else if (localStorage.getItem("login") === "kakao") {
-        console.log("client auth kakao", authorizationCode);
-        dispatch(kakaoSignin(authorizationCode));
-      }
-    }
+
+    getAccessToken(authorizationCode);
+    // result.then((res) => console.log(res));
+    // dispatch(signin(user));
+
+    // if (authorizationCode) {
+    //   if (localStorage.getItem("login") === "git") {
+    //     console.log("client auth git", authorizationCode);
+    //     dispatch(gitSignin(authorizationCode));
+    //   } else if (localStorage.getItem("login") === "kakao") {
+    //     console.log("client auth kakao", authorizationCode);
+    //     dispatch(kakaoSignin(authorizationCode));
+    //   }
+    // }
   });
 
   return (

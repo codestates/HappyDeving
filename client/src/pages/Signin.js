@@ -7,11 +7,10 @@ import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
 import Container from "../components/styles/Container.styled";
 import Content from "../components/styles/Content.styled";
-import axios from "axios";
+// import axios from "axios";
 import { GoogleLoginApi } from "../api/socialAuth";
-import GoogleLogin from "react-google-login";
+import { GoogleLogin } from "react-google-login";
 import { GOOGLE_CLIENT_ID } from "../config";
-
 
 const Background = styled(Container)`
   grid-column: 1/ 15;
@@ -113,7 +112,7 @@ const Resister = styled.div`
   }
 `;
 
-function Login() {
+function Signin() {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -134,11 +133,11 @@ function Login() {
     setUserData({ ...userData, [key]: e.target.value });
   };
 
-  const getAccessToken = async (authorizationCode) => {
-    let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
-      authorizationCode: authorizationCode,
-    });
-
+  // const getAccessToken = async (authorizationCode) => {
+  //   let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
+  //     authorizationCode: authorizationCode,
+  //   });
+  // };
 
   //   console.log("resp===========", resp);
   // };
@@ -218,13 +217,10 @@ function Login() {
                 clientId={GOOGLE_CLIENT_ID}
                 buttonText="Google"
                 responseType={"id_token"}
-                onSuccess={handleGoogleLogin}
+                onSuccess={() => handleGoogleLogin()}
                 onFailure={handleGoogleLoginFailure}
                 cookiePolicy={"single_host_origin"}
               ></GoogleLogin>
-              {/* <a type="button" href="http://localhost:4000/users/login/kakao">
-                카카오
-              </a> */}
             </ButtonWrap>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>
@@ -234,4 +230,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signin;

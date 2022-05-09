@@ -20,7 +20,7 @@ module.exports = {
       // const password = process.env.SOCIAL_LOGIN_PASSWORD;
       const image = payload.picture;
 
-      let userInfo = await User.findOne({ email });
+      let userInfo = await User.findOne({ where: { email } });
       if (!userInfo) {
         userInfo = await User.create({ email, username, password: `${email}${username}`, image });
       }
