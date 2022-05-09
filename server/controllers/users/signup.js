@@ -29,6 +29,8 @@ module.exports = {
         loginMethod: 0,
       });
 
+      console.log(newUser);
+
       // console.log("newUser.verified::", newUser.verified);
       const newAccessToken = generateAccessToken({ username, email });
       const newrefreshToken = generaterefreshToken({ username, email });
@@ -39,7 +41,7 @@ module.exports = {
         await sendEmail(newUser, "해피데빙 인증메일", url);
       }
 
-      return res.status(201).send({
+      return res.status(201).json({
         newUser,
         accessToken: newAccessToken,
         message: "An Email sent to your account please verify",
