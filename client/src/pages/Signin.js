@@ -7,7 +7,7 @@ import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
 import Container from "../components/styles/Container.styled";
 import Content from "../components/styles/Content.styled";
-// import axios from "axios";
+import axios from "axios";
 import { GoogleLoginApi } from "../api/socialAuth";
 import { GoogleLogin } from "react-google-login";
 import { GOOGLE_CLIENT_ID } from "../config";
@@ -129,21 +129,36 @@ function Signin() {
     // dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const authorizationCode = url.searchParams.get("code");
+    if (authorizationCode) {
+      getAccessToken(authorizationCode);
+    }
+  }, []);
+
   const handleInputValue = (key) => (e) => {
     setUserData({ ...userData, [key]: e.target.value });
   };
 
-  // const getAccessToken = async (authorizationCode) => {
-  //   let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
-  //     authorizationCode: authorizationCode,
-  //   });
-  // };
-
-  //   console.log("resp===========", resp);
-  // };
+  const getAccessToken = async (authorizationCode) => {
+    let resp = await axios.post("http://localhost:4000/users/login/kakao", {
+      authorizationCode: authorizationCode,
+    });
+    const { user } = resp.data;
+    const { accessToken } = resp.data;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", JSON.stringify(accessToken));
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    };
+    navigate("/");
+    window.location.reload();
+  };
 
   const socialLoginHandler = async () => {
-    const kakaoURI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=5928412b923165af1772a78c664c4582&redirect_uri=http://localhost:3000`;
+    const kakaoURI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=5928412b923165af1772a78c664c4582&redirect_uri=http://localhost:3000/signin`;
     window.location.assign(kakaoURI);
   };
 
@@ -157,23 +172,24 @@ function Signin() {
     navigate("/");
   };
 
-  // useEffect(() => {
-  //   function googleLogin() {
-  //     gapi.client.init({
-  //       clientId: GOOGLE_CLIENT_ID,
-  //       scope: "",
-  //     });
-  //   }
-  //   gapi.load("client:auth2", googleLogin);
-  // });
   const handleGoogleLoginFailure = (result) => {
-    alert(`${JSON.stringify(result)}`);
+    console.log(`${JSON.stringify(result)}`);
   };
 
-  const handleGoogleLogin = async (e) => {
+  const handleGoogleLogin = async (googleData) => {
     // body: {token: googleData.tokenId}
-    const googleTokenId = e.tokenId;
-    await GoogleLoginApi({ idToken: googleTokenId });
+    console.log("googleData", googleData);
+    await GoogleLoginApi(googleData.tokenId).then((res) => {
+      console.log("google res: ", res);
+      localStorage.setItem("user", JSON.stringify(res.data.userInfo));
+      localStorage.setItem("token", JSON.stringify(res.data.accessToken));
+      axios.defaults.headers = {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + res.data.accessToken,
+      };
+      navigate("/");
+      window.location.reload();
+    });
   };
 
   if (isLoading) {
@@ -216,8 +232,7 @@ function Signin() {
               <GoogleLogin
                 clientId={GOOGLE_CLIENT_ID}
                 buttonText="Google"
-                responseType={"id_token"}
-                onSuccess={() => handleGoogleLogin()}
+                onSuccess={handleGoogleLogin}
                 onFailure={handleGoogleLoginFailure}
                 cookiePolicy={"single_host_origin"}
               ></GoogleLogin>

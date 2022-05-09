@@ -19,7 +19,7 @@ module.exports = {
   post: async (req, res) => {
     try {
       const { authorizationCode } = req.body;
-      // console.log(authorizationCode);
+      console.log(authorizationCode);
 
       if (!authorizationCode) {
         return res.status(400).json("bad request");
@@ -45,7 +45,7 @@ module.exports = {
         }),
       }).then((res) => res.json());
       // const { access_token } = resp.data;
-      // console.log(resp);
+      console.log(resp);
 
       const kakaoAccessToken = resp.access_token;
       // const kakaoRefreshToken = resp.refresh_token;
@@ -69,12 +69,13 @@ module.exports = {
       });
       const newAccessToken = generateAccessToken({ id, email });
       const newrefreshToken = generaterefreshToken({ id, email });
+      console.log(userInfo.dataValues);
 
       if (userInfo) {
         sendTocookie(res, newAccessToken, newrefreshToken);
 
         return res.status(200).json({
-          user: userInfo,
+          user: userInfo.dataValues,
           accessToken: newAccessToken,
         });
       }

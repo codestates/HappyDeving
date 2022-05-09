@@ -1,36 +1,47 @@
 const dotenv = require("dotenv");
 dotenv.config();
 const { User } = require("../../models");
-const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
+const { sendTocookie, generateAccessToken, generaterefreshToken } = require("../tokenFunctions");
 const { OAuth2Client } = require("google-auth-library");
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const bcrypt = require("bcrypt");
 
 module.exports = {
   post: async (req, res) => {
     try {
-      const { idToken } = req.body;
+      // console.log("req.body::", req.body);
+      const id_token = req.body;
+      // console.log("id_token::", id_token); // ok
       const ticket = await client.verifyIdToken({
-        idToken: idToken,
+        idToken: id_token,
         audience: process.env.GOOGLE_CLIENT_ID,
       });
-      const payload = ticket.getPayload();
-      console.log("googleLogin payload", payload);
-      const email = payload.email + "-Google";
-      const username = payload.name + String(Math.random()).slice(2, 8);
-      // const password = process.env.SOCIAL_LOGIN_PASSWORD;
-      const image = payload.picture;
+      const { email, name, picture } = ticket.getPayload();
+      console.log(email);
 
       let userInfo = await User.findOne({ where: { email } });
+
       if (!userInfo) {
-        userInfo = await User.create({ email, username, password: `${email}${username}`, image });
+        const password = `${email}gsecret`;
+        const salt = await bcrypt.genSalt(12);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        userInfo = await User.create({
+          email,
+          username: name,
+          password: hashedPassword,
+          image: picture,
+          loginMethod: 2,
+        });
+        console.log("created userInfo::", userInfo);
       }
-      const accessToken = generateAccessToken(userInfo, "accessToken");
-      const refreshToken = generaterefreshToken(userInfo, "refreshToken");
+      const accessToken = generateAccessToken(userInfo.dataValues);
+      const refreshToken = generaterefreshToken(userInfo.dataValues);
       sendTocookie(res, accessToken, refreshToken);
 
-      return res.json({
-        userInfo: userInfo,
-        accessToken: accessToken,
+      return res.send({
+        userInfo: userInfo.dataValues,
+        accessToken,
       });
     } catch (err) {
       console.error(err);
