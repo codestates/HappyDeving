@@ -113,7 +113,7 @@ const Resister = styled.div`
   }
 `;
 
-function Login() {
+function Signin() {
   const [userData, setUserData] = useState({
     email: "",
     password: "",
@@ -165,23 +165,24 @@ function Login() {
     navigate("/");
   };
 
-  // useEffect(() => {
-  //   function googleLogin() {
-  //     gapi.client.init({
-  //       clientId: GOOGLE_CLIENT_ID,
-  //       scope: "",
-  //     });
-  //   }
-  //   gapi.load("client:auth2", googleLogin);
-  // });
   const handleGoogleLoginFailure = (result) => {
-    alert(`${JSON.stringify(result)}`);
+    console.log(`${JSON.stringify(result)}`);
   };
 
-  const handleGoogleLogin = async (e) => {
+  const handleGoogleLogin = async (googleData) => {
     // body: {token: googleData.tokenId}
-    const googleTokenId = e.tokenId;
-    await GoogleLoginApi({ idToken: googleTokenId });
+    console.log("googleData", googleData);
+    await GoogleLoginApi(googleData.tokenId).then((res) => {
+      console.log("google res: ", res);
+      localStorage.setItem("user", JSON.stringify(res.data.userInfo));
+      localStorage.setItem("token", JSON.stringify(res.data.accessToken));
+      axios.defaults.headers = {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + res.data.accessToken,
+      };
+      navigate("/");
+      window.location.reload();
+    });
   };
 
   if (isLoading) {
@@ -224,7 +225,6 @@ function Login() {
               <GoogleLogin
                 clientId={GOOGLE_CLIENT_ID}
                 buttonText="Google"
-                responseType={"id_token"}
                 onSuccess={handleGoogleLogin}
                 onFailure={handleGoogleLoginFailure}
                 cookiePolicy={"single_host_origin"}
@@ -241,4 +241,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signin;
