@@ -19,4 +19,8 @@ export const store = configureStore({
     allStudies: allStudiesReducer,
     comment: commentReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 });
