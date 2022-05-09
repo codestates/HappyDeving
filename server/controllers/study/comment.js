@@ -5,29 +5,7 @@ module.exports = {
   get: async (req, res) => {
     try {
       let { id } = req.params;
-      // const data = checkAccessToken(req);
-      // if (!data) {
-      //   return res.status(401).json("signin required");
-      // }
 
-      // const study = await Study.findOne({
-      //   where: { id: id },
-      //   include: [
-      //     { model: Language, as: "language", attributes: ["id", "name"] },
-      //     {
-      //       model: Study_comment,
-      //       as: "study_comment",
-      //       attributes: ["id", "content", "createdAt", "updatedAt", "parentId"],
-      //       include: [{ model: User, as: "user", attributes: ["username"] }],
-      //     },
-      //     {
-      //       model: User,
-      //       as: "user",
-      //     },
-      //   ],
-      // });
-
-      console.log(typeof id);
       id = Number(id);
 
       const comment = await Study_comment.findAll({
