@@ -5,19 +5,20 @@ const fetch = require("node-fetch");
 const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
 
 module.exports = {
-  // get: async (req, res) => {
-  //   try {
-  //     res.redirect(
-  //       `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.CLIENT_ORIGIN}`
-  //     );
-  //   } catch (err) {
-  //     console.error("err", err);
-  //     return res.status(500).json();
-  //   }
-  // },
+  get: async (req, res) => {
+    try {
+      res.redirect(
+        `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${process.env.KAKAO_CLIENT_ID}&redirect_uri=${process.env.CLIENT_ORIGIN}`
+      );
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json();
+    }
+  },
   post: async (req, res) => {
     try {
       const { authorizationCode } = req.body;
+      console.log(authorizationCode);
 
       if (!authorizationCode) {
         return res.status(400).json("bad request");
@@ -43,7 +44,7 @@ module.exports = {
         }),
       }).then((res) => res.json());
       // const { access_token } = resp.data;
-      console.log("resp", resp);
+      console.log(resp);
 
       const kakaoAccessToken = resp.access_token;
       const kakaoRefreshToken = resp.refresh_token;
@@ -53,7 +54,7 @@ module.exports = {
         },
       }).then((res) => res.json());
 
-      console.log("kakao", kakaoUserInfo);
+      console.log(kakaoUserInfo);
 
       let { id } = kakaoUserInfo;
       const { nickname, thumbnail_image_url } = kakaoUserInfo.kakao_account.profile;
@@ -68,18 +69,19 @@ module.exports = {
       if (userInfo) {
         sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
 
-        return res.status(201).send({
+        return res.status(200).send({
           user: userInfo,
-          accessToken: access_token,
+          accessToken: kakaoAccessToken,
         });
       }
+
       const newUser = await User.create({
         username: nickname,
         image: thumbnail_image_url,
         password: `${id}${nickname}`,
         email: `${id}${nickname}@gmail.com`,
         loginMethod: 4,
-
+      });
 
       sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
 
@@ -88,7 +90,7 @@ module.exports = {
         accessToken: kakaoAccessToken,
       });
     } catch (err) {
-      console.error("err", err);
+      console.error(err);
       return res.status(500).json();
     }
   },

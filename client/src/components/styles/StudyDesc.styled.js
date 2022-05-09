@@ -6,14 +6,13 @@ import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 import { studyApi, deleteStudyApi } from "../../api/study";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 {
   /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
   // 입력칸들 5-14 
   //(언어 input, modal(정사각형) :5-9, 
   시작일 input, modal(정사각형) : 10-14 )
    - 내용 input은 scroll
-// 글 저장 바 : height - 1row (40px), wㅌㅌㅌㅌidth는 위의 글이랑 같게*/
+// 글 저장 바 : height - 1row (40px), width는 위의 글이랑 같게*/
 }
 
 const Title = styled(Content)`
@@ -35,11 +34,11 @@ const Title = styled(Content)`
 
   .titleInput {
     flex: 3;
-    background-color: beige;
     border-radius: inherit;
-    box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
+    font-size: 3vw;
     text-align: center;
     height: 40px;
+    line-height: 40px;
     &:focus {
       outline: none;
     }
@@ -48,18 +47,9 @@ const Title = styled(Content)`
 
 const ContentDiv = styled.div`
   grid-column: 2/14;
-  display: flex;
-
-  > .container {
-    flex: 3;
-  }
+  width: 100%;
 `;
 
-const Profile = styled(Content)`
-  flex: 1;
-  margin-right: 20px;
-  height: 550px;
-`;
 const CommentDiv = styled(Content)`
   /* background: pink; */
   grid-column: 2/14;
@@ -79,40 +69,18 @@ const Desc = styled(Content)`
   border-radius: ${(props) => props.theme.borderRadius};
 
   div {
-    span {
+    .titles {
       display: block;
       position: relative;
       z-index: 0;
+      margin-bottom: 5px;
+      font-family: Bold;
     }
-    input {
+    .descs {
+      display: block;
+      position: relative;
       z-index: 0;
-      background-color: beige;
-      width: 100%;
-      margin-bottom: 10px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      &:focus {
-        outline: none;
-      }
-    }
-
-    textarea {
-      z-index: 0;
-      resize: none;
-      background-color: beige;
-      width: 100%;
-      height: 120px;
-      overflow: scroll;
-      padding: 10px;
-      margin-bottom: 10px;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-      &:focus {
-        outline: none;
-      }
+      margin-bottom: 5px;
     }
   }
 
@@ -135,7 +103,8 @@ const Desc = styled(Content)`
       }
     }
     label {
-      color: ${(props) => (props.checked ? props.theme.colors.purple : "black")};
+      color: ${(props) =>
+        props.checked ? props.theme.colors.purple : "black"};
     }
   }
 
@@ -145,64 +114,29 @@ const Desc = styled(Content)`
     .lang {
       flex: 1;
       margin-right: 5%;
-      .langContainer {
-        display: flex;
-        align-items: center;
 
-        .langInput {
-          width: 20px;
-          height: 30px;
-          background-color: beige;
-          flex: 3;
-          text-align: center;
-          line-height: 30px;
-          border-radius: 30px;
-          box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        button {
-          flex: 1;
-          width: 15vw;
-          height: 30px;
-          color: white;
-          text-align: center;
-          line-height: 30px;
-          background-color: ${(props) => props.theme.colors.purple};
-          border-radius: 30px;
-          box-shadow: 3px 2px 1px 1px #c593fe;
-          &:hover {
-            background-color: ${(props) => props.theme.colors.lavender};
-          }
-        }
+      .langDiv {
+        display: flex;
+      }
+
+      .langInput {
+        width: 20px;
+        height: 30px;
+        background-color: beige;
+        flex: 3;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 30px;
+        box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
+      }
+      .langSpan {
+        display: inline-block;
       }
     }
     .date {
       flex: 1;
       .dateContainer {
         display: flex;
-        .dateInput {
-          width: 20px;
-          height: 30px;
-          background-color: beige;
-          flex: 3;
-          text-align: center;
-          line-height: 30px;
-          border-radius: 30px;
-          box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        button {
-          flex: 1;
-          width: 15vw;
-          height: 30px;
-          color: white;
-          text-align: center;
-          line-height: 30px;
-          background-color: ${(props) => props.theme.colors.purple};
-          border-radius: 30px;
-          box-shadow: 3px 2px 1px 1px #c593fe;
-          &:hover {
-            background-color: ${(props) => props.theme.colors.lavender};
-          }
-        }
       }
     }
   }
@@ -284,7 +218,9 @@ const StudyDesc = () => {
   });
   const [data, setData] = useState();
   const [backendComments, setBackendComments] = useState([]);
-  const { user } = useSelector((state) => state.user);
+  // const { user } = useSelector((state) => state.user);
+  // console.log(user);
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const mapscript = () => {
     const options = {
@@ -334,7 +270,6 @@ const StudyDesc = () => {
     });
   }, []);
 
-  console.log(data);
   //checked의 상태 변화 기다리기 위해
 
   return (
@@ -343,10 +278,9 @@ const StudyDesc = () => {
         <>
           <Title>
             <div className="titleText">제목</div>
-            <div>{data.title}</div>
+            <div className="titleInput">{data.title}</div>
           </Title>
           <ContentDiv>
-            <Profile />
             <div className="container">
               <Desc>
                 <div className="closed">
@@ -354,34 +288,52 @@ const StudyDesc = () => {
                 </div>
                 <div className="langanddate">
                   <div className="lang">
-                    <span>언어</span>
-                    {data.language.map((el, idx) => (
-                      <span key={idx}>{el.name}</span>
-                    ))}
+                    <span className="titles">언어</span>
+                    <div className="langDiv">
+                      {data.language.map((el, idx) => (
+                        <span key={idx} className="langSpan">
+                          {el.name + ","}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                   <div className="date">
-                    <span>시작일</span>
-                    <span>{data.startDate}</span>
+                    <span className="titles">시작일</span>
+                    <span className="descs">{data.startDate}</span>
                   </div>
                 </div>
 
                 <div className="link">
-                  <span>오픈 톡방 링크</span>
-                  <span>{data.kakaoLink}</span>
+                  <span className="titles">오픈 톡방 링크</span>
+                  <span className="descs">{data.kakaoLink}</span>
                 </div>
                 <div className="location">
-                  <span>장소</span>
-                  <span>{data.location.name}</span>
+                  <span className="titles">장소</span>
+                  <span className="descs">{data.location.name}</span>
                 </div>
                 <MapView id="map" ref={container} />
                 <div className="content">
-                  <span>내용</span>
-                  <div>{data.content}</div>
+                  <span className="titles">내용</span>
+                  <div className="descs">{data.content}</div>
                 </div>
               </Desc>
               <FuncBar>
-                <button onClick={() => navigate(`/study/edit/${data.id}`)}>수정</button>
-                <button onClick={() => deleteStudyApi(data.id)}>삭제</button>
+                {data.username === user?.username ? (
+                  <>
+                    <button onClick={() => navigate(`/study/edit/${data.id}`)}>
+                      수정
+                    </button>
+                    <button
+                      onClick={() => {
+                        alert("삭제되었습니다");
+                        deleteStudyApi(data.id);
+                        navigate("/");
+                      }}
+                    >
+                      삭제
+                    </button>
+                  </>
+                ) : null}
               </FuncBar>
             </div>
           </ContentDiv>
@@ -389,7 +341,7 @@ const StudyDesc = () => {
             <Comments
               commentsInStudyData={backendComments}
               studyId={data.id}
-              currentUserId={user.id}
+              currentUserId={user?.id}
             />
           </CommentDiv>
         </>

@@ -6,8 +6,12 @@ const DateModal = styled(Content)`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
+  box-shadow: ${(props) => props.theme.contents.boxShadow};
+
   /* align-items: center; */
-  margin: 5% auto;
+  margin: 0 auto;
+  position: absolute;
+  z-index: 10;
   &:after {
     content: "";
     display: block;

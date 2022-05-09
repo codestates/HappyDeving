@@ -121,7 +121,7 @@ export const getLikedStudies = createAsyncThunk(
 export const unLikeStudy = createAsyncThunk(
   "allStudies/unLikeStudy",
   async ({ id, studyData }, thunkAPI) => {
-    // console.log("delete studyData", studyData);
+    console.log("delete studyData", id, studyData);
     try {
       return await unLikeStudyApi(id, studyData).then((res) => {
         console.log("unlike clicked: ", res.data);
@@ -133,16 +133,19 @@ export const unLikeStudy = createAsyncThunk(
   }
 );
 
-export const getMyStudies = createAsyncThunk("allStudies/getMyStudies", async (id, thunkAPI) => {
-  try {
-    return await getMyStudiesApi(id).then((res) => {
-      // console.log("my studies after axios", res);
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const getMyStudies = createAsyncThunk(
+  "allStudies/getMyStudies",
+  async (id, thunkAPI) => {
+    try {
+      return await getMyStudiesApi(id).then((res) => {
+        // console.log("my studies after axios", res);
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
 export const allStudiesSlice = createSlice({
   name: "allStudies",
@@ -207,7 +210,9 @@ export const allStudiesSlice = createSlice({
       .addCase(deleteStudy.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.allStudies = state.allStudies.filter((study) => study.id !== action.payload.id);
+        state.allStudies = state.allStudies.filter(
+          (study) => study.id !== action.payload.id
+        );
       })
       .addCase(deleteStudy.rejected, (state, action) => {
         state.isLoading = false;
@@ -220,7 +225,9 @@ export const allStudiesSlice = createSlice({
       .addCase(editStudy.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.allStudies.map((study) => (study.id === action.payload.id ? action.payload : study));
+        state.allStudies.map((study) =>
+          study.id === action.payload.id ? action.payload : study
+        );
       })
       .addCase(editStudy.rejected, (state, action) => {
         state.isLoading = false;

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
+import Content from "./styles/Content.styled";
 import { useDispatch, useSelector } from "react-redux";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faHeart as like } from "@fortawesome/free-soluser.id-svg-icons";

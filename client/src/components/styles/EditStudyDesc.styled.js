@@ -10,6 +10,7 @@ import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setDateModal } from "../../features/studies/studyModalSlice";
 import { studyApi, editStudyApi } from "../../api/study";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const Title = styled(Content)`
   grid-column: 2/14;
@@ -124,7 +125,8 @@ const Desc = styled(Content)`
       }
     }
     label {
-      color: ${(props) => (props.checked ? props.theme.colors.purple : "black")};
+      color: ${(props) =>
+        props.checked ? props.theme.colors.purple : "black"};
     }
   }
 
@@ -291,6 +293,7 @@ const MapView = styled(Content)`
 
 const EditStudyDesc = () => {
   const container = useRef(null);
+  const navigate = useNavigate();
   const [location, setLocation] = useState({
     name: "광화문",
     latitude: 37.570975,
@@ -432,7 +435,9 @@ const EditStudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -504,8 +509,14 @@ const EditStudyDesc = () => {
                     ) : (
                       <div className="langContainer">
                         {console.log(data)}
-                        <div className="langInput">{data.language?.map((el) => el.name + ",")}</div>
-                        <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
+                        <div className="langInput">
+                          {data.language?.map((el) => el.name + ",")}
+                        </div>
+                        <button
+                          onClick={() => setOpen({ ...open, language: true })}
+                        >
+                          선택
+                        </button>
                       </div>
                     )}
                   </div>
@@ -521,7 +532,9 @@ const EditStudyDesc = () => {
                           {/* 바뀌도록 */}
                           {data.startDate}
                         </div>
-                        <button onClick={() => dispatch(setDateModal(true))}>선택</button>
+                        <button onClick={() => dispatch(setDateModal(true))}>
+                          선택
+                        </button>
                       </div>
                     )}
                   </div>
@@ -531,7 +544,9 @@ const EditStudyDesc = () => {
                   <span>오픈 톡방 링크</span>
                   <input
                     defaultValue={data.kakaoLink}
-                    onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
+                    onChange={(e) =>
+                      handleInputValue("kakaoLink", e.target.value)
+                    }
                   ></input>
                 </div>
                 <div className="location">
@@ -549,7 +564,11 @@ const EditStudyDesc = () => {
                   ) : (
                     <div className="locationContainer">
                       <div className="locationInput">{location.place_name}</div>
-                      <button onClick={() => setOpen({ ...open, location: true })}>검색</button>
+                      <button
+                        onClick={() => setOpen({ ...open, location: true })}
+                      >
+                        검색
+                      </button>
                     </div>
                   )}
                 </div>
@@ -557,7 +576,9 @@ const EditStudyDesc = () => {
                 <div className="content">
                   <span>내용</span>
                   <textarea
-                    onChange={(e) => handleInputValue("content", e.target.value)}
+                    onChange={(e) =>
+                      handleInputValue("content", e.target.value)
+                    }
                     defaultValue={data.content}
                   ></textarea>
                 </div>
@@ -569,6 +590,7 @@ const EditStudyDesc = () => {
                     editStudyApi(id, data).then((res) => {
                       console.log(res);
                       alert("수정되었습니다");
+                      navigate("/");
                     })
                   }
                 >

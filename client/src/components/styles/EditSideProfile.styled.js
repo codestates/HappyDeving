@@ -13,7 +13,7 @@ const Container = styled(Content)`
   display: grid;
   height: 400px;
   position: relative;
-  background-color: pink;
+  /* background-color: pink; */
   grid-template-columns: repeat(5, 1fr);
 `;
 
@@ -60,7 +60,10 @@ const EditSideProfile = () => {
   const fileInput = useRef(null);
 
   const [image, setImage] = useState(null);
-  const [imageData, setImageData] = useState("https://i.ibb.co/nr4FYns/happydevil.png");
+  const [imageData, setImageData] = useState(
+    "https://i.ibb.co/nr4FYns/happydevil.png"
+  );
+
   const onChangePicture = (e) => {
     if (e.target.files[0]) {
       console.log("image: ", e.target.files[0]);
@@ -92,7 +95,7 @@ const EditSideProfile = () => {
       <Container>
         <div>보인다.</div>
         <Profile>
-          <ProfileImage src={imageData} />
+          <ProfileImage src={user?.image} />
           <Button
             onClick={() => {
               fileInput.current.click();

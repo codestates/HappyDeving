@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Content from "../styles/Content.styled";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Content from "./Content.styled";
+import { FaSearch } from "react-icons/fa";
+import { IconContext } from "react-icons";
 import { langImg } from "../../static/images/langImg";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -17,20 +17,27 @@ import {
   dateModal,
   reset,
 } from "../../features/Search/searchModalSlice";
-import { setLocationData, setLanguageData, resetData } from "../../features/Search/searchDataSlice";
+import {
+  setLocationData,
+  setLanguageData,
+  resetData,
+} from "../../features/Search/searchDataSlice";
 import CalenderDate from "../Calendar.js";
 
-const { kakao } = window;
+// size: {
+//   mobile: "520px",
+//   tablet: "768px",
+//   desktop: "1024px",
+// },
 
-const StyledSearch = styled(Content)`
-  grid-column: 3/ 13;
-  border-radius: 50px;
-  height: 80px;
+const StyledSearch = styled.div`
+  background-color: white;
   font-family: "Bold";
+  border-radius: 30px;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
-  margin-bottom: 40px;
-  //grid가 상속이 안됨 왜??
+  margin-bottom: 10px;
+
   div {
     box-shadow: none;
     box-sizing: border-box;
@@ -38,11 +45,11 @@ const StyledSearch = styled(Content)`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    color: black;
     &:hover {
-      background-color: rgba(94, 23, 235, 0.9);
       /* color: white; */
-      color: white;
-      box-shadow: ${(props) => props.theme.colors.lavender};
+      color: rgb(94, 23, 235);
+      box-shadow: ${(props) => props.theme.contents.boxShadow};
       cursor: pointer;
     }
     &:active {
@@ -50,34 +57,67 @@ const StyledSearch = styled(Content)`
     }
 
     .desc {
+      @media screen and (min-width: 1024px) {
+        font-size: 22px;
+      }
+
+      @media screen and (max-width: 768px) {
+        font-size: 16px;
+      }
       font-family: "Bold";
-      font-size: 2.3vw;
+      font-size: 16px;
     }
   }
 `;
 
-const Location = styled(Content)`
+const Modals = styled.div`
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  height: auto;
+
+  .locationModal {
+    grid-column: 1/5;
+  }
+  .dateModal {
+    grid-column: 4/8;
+  }
+`;
+
+const Location = styled.div`
   grid-column: 1/4;
-  height: 80px;
+  border-radius: 30px;
 `;
 
-const Date = styled(Content)`
+const Date = styled.div`
   grid-column: 4/7;
-  height: 80px;
+  border-radius: 30px;
 `;
 
-const Language = styled(Content)`
+const Language = styled.div`
   grid-column: 7/10;
-  height: 80px;
+  border-radius: 30px;
 `;
 
-const SearchIcon = styled.span`
-  height: 50px;
-  width: 50px;
+const SearchIcon = styled.div`
+  position: relative;
+  margin: 10px;
+
+  .icon {
+    color: white;
+    position: absolute;
+    /* margin: 5px; */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+  }
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
-  line-height: 50px;
-  text-align: center;
-  margin: 15px 0px 15px 20px;
+
+  margin: 10px 10px 10px 20px;
   background-color: ${(props) => props.theme.colors.purple};
   &:hover {
     background-color: ${(props) => props.theme.colors.purple};
@@ -86,27 +126,18 @@ const SearchIcon = styled.span`
   }
   &:active {
     box-shadow: ${(props) => props.theme.contents.boxShadow};
+    position: relative;
+    top: 2px;
   }
 `;
 
+const { kakao } = window;
+
 const Search = () => {
   const [locationList, setLocationList] = useState([]);
+  const [icon, setIcon] = useState("1.5em");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const LangIcons = () => {
-    let keyArr = Object.keys(langImg);
-    return keyArr.map((key, idx) => (
-      <img
-        src={langImg[key]}
-        key={idx}
-        onClick={() => {
-          dispatch(setLanguageData(key));
-          dispatch(reset());
-        }}
-      />
-    ));
-  };
 
   var ps = new kakao.maps.services.Places();
 
@@ -134,23 +165,27 @@ const Search = () => {
     }
   }
 
-  const { location, date, language } = useSelector((store) => store.search);
-  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
-  const { calenderDateValue } = useSelector((store) => store.calender);
-
-  const guType = locationData.split(" ")[0];
-  const dongType = locationData.split(" ")[1];
-
   const handleInputValue = (e) => {
     if (e.key === "Enter") {
       searchPlaces(e.target.value);
     } // true
   };
 
+  const { location, date, language } = useSelector((store) => store.search);
+  const { locationData, dateData, languageData } = useSelector(
+    (store) => store.searchData
+  );
+  const { calenderDateValue } = useSelector((store) => store.calender);
+
+  const guType = locationData.split(" ")[0];
+  const dongType = locationData.split(" ")[1];
+
   const locationListHandler = (locationList) => {
     const list = locationList.map(
       (location) =>
-        location["address_name"].split(" ")[1] + " " + location["address_name"].split(" ")[2]
+        location["address_name"].split(" ")[1] +
+        " " +
+        location["address_name"].split(" ")[2]
     );
     const filteredList = Array.from(new Set(list));
     return filteredList.map((location, idx) => (
@@ -177,7 +212,6 @@ const Search = () => {
           }}
         >
           <span className="desc">{locationData ? locationData : "위치"}</span>
-          {console.log(locationData)}
         </Location>
         <Date
           id="date"
@@ -186,7 +220,9 @@ const Search = () => {
             console.log(date);
           }}
         >
-          <span className="desc">{dateData ? calenderDateValue : "시작일"}</span>
+          <span className="desc">
+            {dateData ? calenderDateValue : "시작일"}
+          </span>
         </Date>
         <Language id="language" onClick={() => dispatch(languageModal())}>
           <span className="desc">{languageData ? languageData : "언어"} </span>
@@ -194,36 +230,45 @@ const Search = () => {
         <SearchIcon
           id="search"
           onClick={() => {
-            getStudiesMapApi({ guType, dongType, languageData, dateData }).then((res) => {
-              console.log(res.data);
-              dispatch(setStudiesData(res.data));
-            });
+            getStudiesMapApi({ guType, dongType, languageData, dateData }).then(
+              (res) => {
+                console.log(res.data);
+                dispatch(setStudiesData(res.data));
+              }
+            );
             //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
             navigate("/map");
             dispatch(resetData());
             dispatch(reset());
           }}
         >
-          <FontAwesomeIcon icon={faSearch} size="1x" color="white" />
+          <IconContext.Provider value={{ className: "icon" }}>
+            <div>
+              <FaSearch />
+            </div>
+          </IconContext.Provider>
         </SearchIcon>
       </StyledSearch>
-      {location ? (
-        <LocationModal>
-          <input onKeyDown={(e) => handleInputValue(e)} placeholder="ex. 송파구 오륜동"></input>
-          <div></div>
-          {locationListHandler(locationList)}
-        </LocationModal>
-      ) : null}
-      {date ? (
-        <DateModal>
-          <CalenderDate />
-        </DateModal>
-      ) : null}
-      {language ? (
-        <LanguageModal>
-          <div>{LangIcons()}</div>
-        </LanguageModal>
-      ) : null}
+      <Modals>
+        {location ? (
+          <LocationModal className="locationModal">
+            <input
+              onKeyDown={(e) => handleInputValue(e)}
+              placeholder="ex. 송파구 오륜동"
+            ></input>
+            <div></div>
+            {locationListHandler(locationList)}
+          </LocationModal>
+        ) : null}
+        {date ? (
+          <DateModal className="dateModal">
+            <CalenderDate />
+          </DateModal>
+        ) : null}
+        {language ? (
+          <LanguageModal className="languageModal"></LanguageModal>
+        ) : null}
+      </Modals>
     </>
   );
 };

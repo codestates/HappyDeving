@@ -6,43 +6,22 @@ import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 import { signout } from "../features/user/userSlice";
-
-const StyledProfileContainer = styled(Content)`
-  grid-column: 3 / 13;
-  height: 400px;
-  text-align: center;
-  /* x, y, blur-radius, spread */
-`;
+import EditSideProfile from "../components/styles/EditSideProfile.styled";
 
 const MyStudyTab = styled(Content)``;
 const LikedStudyTab = styled(Content)``;
 
-const Title = styled(Content)`
-  /* background-color: green; */
-  margin-top: 10px;
-  margin-left: 30px;
-  margin-bottom: 30px;
-  font-size: 20px;
-`;
-
 const ProfileWrap = styled(Content)`
-  background-color: red;
-  /* grid-column: 3 / 13; */
-  width: 70vw;
-  display: inline-flexbox;
+  /* background-color: red; */
+  width: 62vw;
 `;
 
-const ProfileImg = styled.div`
-  width: 100px;
-  height: 100px;
-  margin-left: 30px;
-  margin-bottom: 20px;
-  background-color: gray;
-  border-radius: 100px;
-  font-size: 12px;
+const ProfileInfoWrap = styled.div`
+  box-shadow: none;
+  width: 62vw;
+  height: auto;
+  padding: 0.5% 2% 1% 2%;
 `;
-
-const ProfileInfoWrap = styled.div``;
 const Name = styled.div``;
 const Biography = styled.div``;
 const GitHub = styled.div``;
@@ -53,11 +32,48 @@ const ButtonWrap = styled.div`
   justify-content: right;
 `;
 
+const StyledEditProfile = styled(Content)`
+  grid-column: 5 / 14;
+  text-align: left;
+  /* x, y, blur-radius, spread */
+`;
+
+const Title = styled(Content)`
+  grid-column: 2/14;
+  height: 80px;
+  padding: 20px 3%;
+  font-family: "Bold";
+  display: flex;
+  border-radius: ${(props) => props.theme.borderRadius};
+
+  .titleText {
+    flex: 1;
+    font-size: 3vw;
+    text-align: center;
+    line-height: 40px;
+    margin-left: -3%;
+    margin-right: 6%;
+  }
+`;
+
+const Text = styled.div`
+  width: 120px;
+  font-family: "Medium";
+`;
+
 const Button = styled.button`
-  font-size: 14px;
-  margin: 10px;
-  padding: 5px;
-  cursor: pointer;
+  margin-right: 1rem;
+  width: 10vw;
+  height: 30px;
+  color: white;
+  text-align: center;
+  line-height: 30px;
+  background-color: ${(props) => props.theme.colors.purple};
+  border-radius: 30px;
+  box-shadow: 3px 2px 1px 1px #c593fe;
+  &:hover {
+    background-color: ${(props) => props.theme.colors.lavender};
+  }
 `;
 
 const Profile = () => {
@@ -66,21 +82,14 @@ const Profile = () => {
   const { user, isLoading } = useSelector((state) => state.user);
   // console.log("profile user: ", user);
 
+  // console.log(user.loginMethod);
   const MoveToEditPage = (e) => {
     e.preventDefault();
     navigate("/editprofile");
   };
 
-  const handlePermanentDeletion = (e) => {
-    e.preventDefault();
-    dispatch(deleteUser());
-    dispatch(signout());
-    dispatch(reset());
-    navigate("/");
-  };
-
   useEffect(() => {
-    dispatch(getProfile(user.id));
+    dispatch(getProfile(user?.id));
     dispatch(reset());
   }, []);
 
@@ -89,35 +98,44 @@ const Profile = () => {
   }
 
   return (
-    <StyledProfileContainer>
-      <MyStudyTab onClick={() => navigate("/mystudy")}>나의 스터디</MyStudyTab>
-      <LikedStudyTab onClick={() => navigate("/likedstudy")}>찜한 스터디</LikedStudyTab>
-      <ProfileWrap>
-        <Title>회원 정보 수정</Title>
-        <ProfileImg>{user?.image}</ProfileImg>
-        <ProfileInfoWrap>
-          <Name>{user?.username}</Name>
-          <Biography>{user?.bio}</Biography>
-          <GitHub>{user?.github}</GitHub>
-          <Blog>{user?.blog}</Blog>
-        </ProfileInfoWrap>
-      </ProfileWrap>
-      <ButtonWrap>
-        <Button
-          className="cursor-pointer px-3 py-2 text-sm text-blue-100 bg-purple-500 rounded hover:bg-purple-400"
-          onClick={MoveToEditPage}
-        >
-          수정하기
-        </Button>
-
-        <Button
-          className="cursor-pointer px-3 py-2 text-sm text-blue-100 bg-purple-500 rounded hover:bg-purple-400"
-          onClick={handlePermanentDeletion}
-        >
-          회원 탈퇴
-        </Button>
-      </ButtonWrap>
-    </StyledProfileContainer>
+    <>
+      <EditSideProfile />
+      <StyledEditProfile>
+        <MyStudyTab onClick={() => navigate("/mystudy")}>
+          나의 스터디
+        </MyStudyTab>
+        <LikedStudyTab onClick={() => navigate("/likedstudy")}>
+          찜한 스터디
+        </LikedStudyTab>
+        <Title>내 정보 수정</Title>
+        <ProfileWrap>
+          <ProfileInfoWrap>
+            <Text>닉네임</Text>
+            <Name>{user?.username}</Name>
+          </ProfileInfoWrap>
+          <ProfileInfoWrap>
+            <Text>자기 소개</Text>
+            <Biography>{user?.bio}</Biography>
+          </ProfileInfoWrap>
+          <ProfileInfoWrap>
+            <Text>깃허브 주소</Text>
+            <GitHub>{user?.github}</GitHub>
+          </ProfileInfoWrap>
+          <ProfileInfoWrap>
+            <Text>블로그 주소</Text>
+            <Blog>{user?.blog}</Blog>
+          </ProfileInfoWrap>
+          <ButtonWrap>
+            <Button
+              className="cursor-pointer px-3 py-2 text-sm text-blue-100 bg-purple-500 rounded hover:bg-purple-400"
+              onClick={MoveToEditPage}
+            >
+              수정하기
+            </Button>
+          </ButtonWrap>
+        </ProfileWrap>
+      </StyledEditProfile>
+    </>
   );
 };
 

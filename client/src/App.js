@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
-import { gitSignin, kakaoSignin } from "./features/user/userSlice";
-import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import Container from "../src/components/styles/Container.styled";
-import Header from "../src/components/styles/Header.styled";
-import { Search } from "../src/components/styles/Search.styled";
-import Footer from "../src/components/styles/Footer.styled";
+import Container from "./components/styles/Container.styled";
+import Header from "./components/styles/Header.styled";
+import { Search } from "./components/styles/Search.styled";
+import Footer from "./components/styles/Footer.styled";
 import Landing from "./pages/Landing";
-import Write from "././components/styles/WriteStudyDesc.styled";
-import Map from "././components/styles/Map.styled";
+import Write from "./components/styles/WriteStudyDesc.styled";
+import Map from "./components/styles/Map.styled";
 import Study from "./components/styles/StudyDesc.styled";
 import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
@@ -17,9 +15,8 @@ import ProfileEdit from "./pages/ProfileEdit";
 import LikedStudy from "./pages/LikedStudy";
 import EditStudyDesc from "./components/styles/EditStudyDesc.styled";
 import EditSideProfile from "./components/styles/EditSideProfile.styled";
-import "./static/fonts/font.css";
+import "../src/static/fonts/font.css";
 import "./App.css";
-import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import axios from "axios";
@@ -33,37 +30,45 @@ function App() {
     },
     icons: {
       logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-      write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
-      login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
-      mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+      write:
+        "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+      login:
+        "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+      mypage:
+        "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
     },
     contents: {
       marginBottom: "20px",
       bg: "white",
-      borderRadius: "30px",
+      borderRadius: "20px",
       boxShadow: "10px 5px 15px 0.1px rgba(0, 0, 0, 0.1)",
     },
-    font: {},
+    size: {
+      mobile: "520px",
+      tablet: "768px",
+      desktop: "1024px",
+    },
   };
 
-
-  const dispatch = useDispatch();
+  const getAccessToken = async (authorizationCode) => {
+    let resp = await axios.post(
+      "https://server.happydeving.com/users/login/kakao",
+      {
+        authorizationCode: authorizationCode,
+      }
+    );
+    console.log(resp);
+  };
 
   useEffect(() => {
     const url = new URL(window.location.href);
-    console.log(url);
-
     const authorizationCode = url.searchParams.get("code");
     if (authorizationCode) {
-      if (localStorage.getItem("login") === "git") {
-        console.log("client auth git", authorizationCode);
-        dispatch(gitSignin(authorizationCode));
-      } else if (localStorage.getItem("login") === "kakao") {
-        console.log("client auth kakao", authorizationCode);
-        dispatch(kakaoSignin(authorizationCode));
-      }
+      getAccessToken(authorizationCode);
     }
   });
+
+  // console.log(localStorage.getItem("user"));
 
   return (
     <Router>
@@ -80,7 +85,6 @@ function App() {
               exact
               element={
                 <>
-                  <Search />
                   <Landing />
                 </>
               }
@@ -91,7 +95,6 @@ function App() {
               exact
               element={
                 <>
-                  <Search />
                   <Map />
                 </>
               }
@@ -103,7 +106,7 @@ function App() {
               path="/editprofile"
               element={
                 <>
-                  <EditSideProfile />
+                  {/* <EditSideProfile /> */}
                   <ProfileEdit />
                 </>
               }

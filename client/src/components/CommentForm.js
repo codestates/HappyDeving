@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
+// import Content from "../components/styles/Content.styled";
 import { useSelector } from "react-redux";
 
 const CommentFormDiv = styled.div`
-grid: 4/13
+  grid-column: 4/13;
   /* width: 84vw; */
   height: auto;
   padding: 0.5% 2% 6% 2%;
@@ -13,7 +13,7 @@ grid: 4/13
 
   div {
     form {
-      width: 100%;
+      width: 60vw;
       margin-bottom: 10px;
       border-radius: 30px;
       text-align: center;
@@ -45,6 +45,7 @@ const Button = styled.div`
 `;
 
 const CommentForm = ({
+  commentId,
   studyId,
   replyId,
   handleSubmit,
@@ -59,9 +60,10 @@ const CommentForm = ({
 
   const commentData = {
     content: content,
-    user_id: user.id,
+    user_id: user?.id,
     study_id: studyId,
     parentId: replyId ? replyId : null,
+    study_commentId: commentId,
   };
 
   const isTextareaDisabled = content.length === 0;
@@ -78,26 +80,32 @@ const CommentForm = ({
           <textarea
             className="comment-form-textarea"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
+            onChange={(e) => {
+              setContent(e.target.value);
+            }}
           />
+          {/* 버튼 태그 form 바깥으로 빼면 작동 안 함 */}
+          <Button>
+            <button
+              className="comment-form-button"
+              disabled={isTextareaDisabled}
+            >
+              {submitLabel}
+            </button>
+          </Button>
+          {hasCancelButton && (
+            <Button>
+              <button
+                type="button"
+                className="comment-form-button comment-form-cancel-button"
+                onClick={handleCancel}
+              >
+                취소
+              </button>
+            </Button>
+          )}
         </form>
       </div>
-      <Button>
-        <button className="comment-form-button" disabled={isTextareaDisabled}>
-          {submitLabel}
-        </button>
-      </Button>
-      {hasCancelButton && (
-        <Button>
-          <button
-            type="button"
-            className="comment-form-button comment-form-cancel-button"
-            onClick={handleCancel}
-          >
-            취소
-          </button>
-        </Button>
-      )}
     </CommentFormDiv>
   );
 };

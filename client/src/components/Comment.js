@@ -1,11 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { editComment, writeComment, deleteComment } from "../features/comment/commentSlice";
+import { useSelector } from "react-redux";
 import CommentForm from "./CommentForm";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const CommentDiv = styled.div`
   /* background-color: yellow; */
@@ -63,11 +62,13 @@ const Comment = ({
   replies,
   setActiveComment,
   activeComment,
+  addComment,
+  updateComment,
+  deletingComment,
   parentId = null,
   studyId,
-  currentUserId,
 }) => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
   const isEditing =
@@ -76,12 +77,9 @@ const Comment = ({
   const isReplying =
     activeComment && activeComment.id === comment.id && activeComment.type === "replying";
 
-  const fiveMinutes = 300000;
-  const timePassed = new Date() - new Date(comment.createdAt) > fiveMinutes;
-
-  const canDelete = currentUserId === comment.id && replies.length === 0 && !timePassed;
-  const canReply = Boolean(currentUserId);
-  const canEdit = currentUserId === comment.id && !timePassed;
+  const canDelete = user.username === comment.username && replies.length === 0;
+  const canReply = Boolean(user.id);
+  const canEdit = user.username === comment.username;
 
   const replyId = parentId ? parentId : comment.id;
   const createdAt = new Date(comment.createdAt).toLocaleDateString();
@@ -89,7 +87,7 @@ const Comment = ({
   return (
     <CommentDiv key={comment.id}>
       <CommentImageContainer>
-        <img src="/user-icon.png" />
+        <img src="https://i.ibb.co/nr4FYns/happydevil.png" />
       </CommentImageContainer>
       <CommentRightPart>
         <CommentAuthorAndDate>
@@ -100,12 +98,11 @@ const Comment = ({
         {isEditing && (
           <CommentForm
             submitLabel="수정"
+            studyId
+            commentId={comment.id}
             hasCancelButton
             initialContent={comment.content}
-            handleSubmit={(commentData) => {
-              dispatch(editComment(commentData));
-              setActiveComment(null);
-            }}
+            handleSubmit={updateComment}
             handleCancel={() => {
               setActiveComment(null);
             }}
@@ -128,45 +125,42 @@ const Comment = ({
                 className="comment-action"
                 onClick={() => setActiveComment({ id: comment.id, type: "editing" })}
               >
-                <FontAwesomeIcon icon="fas fa-edit" size="1x" />
+                {/* <FontAwesomeIcon icon="fas fa-edit" size="1x" /> */}수정
               </button>
             </Button>
           )}
           {canDelete && (
             <Button>
-              <button
-                className="comment-action"
-                onClick={() =>
-                  dispatch(deleteComment({ user_id: user.id, study_commentId: comment.id }))
-                }
-              >
-                <FontAwesomeIcon icon="fas fa-trash" size="1x" />
+              <button className="comment-action" onClick={() => deletingComment(comment)}>
+                {/* <FontAwesomeIcon icon="fas fa-trash" size="1x" /> */}삭제
               </button>
             </Button>
           )}
         </div>
         {isReplying && (
           <CommentForm
+            commentId={comment.id}
             studyId={studyId}
             replyId={replyId}
             submitLabel="작성"
-            handleSubmit={(commentData) => {
-              dispatch(writeComment(commentData));
-              setActiveComment(null);
-            }}
+            handleSubmit={addComment}
           />
         )}
         {replies.length > 0 && (
           <div className="replies">
             {replies.map((reply) => (
               <Comment
+                commentId={comment.id}
                 comment={reply}
                 key={reply.id}
                 activeComment={activeComment}
                 setActiveComment={setActiveComment}
+                updateComment={updateComment}
+                deletingComment={deletingComment}
+                addComment={addComment}
                 parentId={comment.id}
                 replies={[]} // 대댓글은 nested reply가 있으면 안 됨
-                currentUserId={currentUserId}
+                currentUsername={user.name}
               />
             ))}
           </div>

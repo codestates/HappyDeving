@@ -1,37 +1,56 @@
 import styled from "styled-components";
 import Content from "../Content.styled";
+import { langImg } from "../../../static/images/langImg";
+import { setLanguageData } from "../../../features/Search/searchDataSlice";
+import { reset } from "../../../features/Search/searchModalSlice";
+import { useDispatch } from "react-redux";
 
-const LanguageModal = styled(Content)`
-  grid-column: 8/14;
-  position: relative;
+const StyledLanguageModal = styled(Content)`
+  grid-column: 7/11;
+  width: 350px;
+  height: 200px;
+  overflow: scroll;
+  position: absolute;
   z-index: 10;
+  background-color: white;
+  padding: 5px 10px;
+  box-shadow: ${(props) => props.theme.contents.boxShadow};
 
-  > div {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
-    width: 90%;
-    height: 90%;
-    margin: 5% auto;
-    border: none;
-
-    > img {
-      display: block;
-      border-radius: 50%;
-      padding: 1%;
-      width: 25%;
-      height: 25%;
-      margin: 4%;
-
-      &:hover {
-        box-shadow: ${(props) => props.theme.contents.boxShadow};
-        cursor: pointer;
-      }
-      &:active {
-        box-shadow: 10px 5px 15px 0.1px rgba(0, 0, 0, 0.5);
-      }
+  > .elements {
+    color: black;
+    text-align: center;
+    padding: 5%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    font-family: "Medium";
+    &:hover {
+      box-shadow: ${(props) => props.theme.contents.boxShadow};
+      cursor: pointer;
+      color: ${(props) => props.theme.colors.purple};
+    }
+    &:active {
+      box-shadow: 10px 5px 10px 0.1px rgba(0, 0, 0, 0.1);
     }
   }
 `;
+
+const LanguageModal = () => {
+  const dispatch = useDispatch();
+  return (
+    <StyledLanguageModal>
+      {Object.keys(langImg).map((el, idx) => (
+        <div
+          key={idx}
+          className="elements"
+          onClick={() => {
+            dispatch(setLanguageData(el));
+            dispatch(reset());
+          }}
+        >
+          {el}
+        </div>
+      ))}
+    </StyledLanguageModal>
+  );
+};
 
 export default LanguageModal;

@@ -5,7 +5,7 @@ import { signout, reset, editProfile, deleteUser } from "../features/user/userSl
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
-
+import EditSideProfile from "../components/styles/EditSideProfile.styled";
 const StyledEditProfile = styled(Content)`
   grid-column: 5 / 14;
   text-align: left;
@@ -116,11 +116,17 @@ const MyPage = () => {
     dispatch(reset());
     navigate("/profile");
   };
+  // 임시
+  const handleSignout = (e) => {
+    e.preventDefault();
+    dispatch(signout());
+    dispatch(reset());
+    navigate("/");
+  };
 
   const handlePermanentDeletion = (e) => {
     e.preventDefault();
-    dispatch(deleteUser());
-    dispatch(signout());
+    dispatch(deleteUser({ id: user.id, deleteData: { loginMethod: user.loginMethod } }));
     dispatch(reset());
     navigate("/");
   };
@@ -130,45 +136,51 @@ const MyPage = () => {
   }
 
   return (
-    <StyledEditProfile>
-      <Title>내 정보 수정</Title>
-      <ProfileWrap>
-        <form>
-          <InputWrap>
-            <Text>닉네임</Text>
-            <input
-              type="username"
-              defaultValue={user?.username}
-              onChange={handleInputValue("username")}
-            />
-          </InputWrap>
-          <InputWrap>
-            <Text>자기 소개</Text>
-            <input type="bio" defaultValue={user?.bio} onChange={handleInputValue("bio")} />
-          </InputWrap>
-          <InputWrap>
-            <Text>깃허브 주소</Text>
-            <input
-              type="github"
-              defaultValue={user?.github}
-              onChange={handleInputValue("github")}
-            />
-          </InputWrap>
-          <InputWrap>
-            <Text>블로그 주소</Text>
-            <input type="blog" defaultValue={user?.blog} onChange={handleInputValue("blog")} />
-          </InputWrap>
-          <ButtonWrap>
-            <Link to="/profile">
-              <Button onClick={handleEditing}>수정 완료</Button>
-            </Link>
-            <Link to="/">
-              <Button onClick={handlePermanentDeletion}>회원 탈퇴</Button>
-            </Link>
-          </ButtonWrap>
-        </form>
-      </ProfileWrap>
-    </StyledEditProfile>
+    <>
+      <EditSideProfile />
+      <StyledEditProfile>
+        <Title>내 정보 수정</Title>
+        <ProfileWrap>
+          <form>
+            <InputWrap>
+              <Text>닉네임</Text>
+              <input
+                type="username"
+                defaultValue={user?.username}
+                onChange={handleInputValue("username")}
+              />
+            </InputWrap>
+            <InputWrap>
+              <Text>자기 소개</Text>
+              <input type="bio" defaultValue={user?.bio} onChange={handleInputValue("bio")} />
+            </InputWrap>
+            <InputWrap>
+              <Text>깃허브 주소</Text>
+              <input
+                type="github"
+                defaultValue={user?.github}
+                onChange={handleInputValue("github")}
+              />
+            </InputWrap>
+            <InputWrap>
+              <Text>블로그 주소</Text>
+              <input type="blog" defaultValue={user?.blog} onChange={handleInputValue("blog")} />
+            </InputWrap>
+            <ButtonWrap>
+              <Link to="/profile">
+                <Button onClick={handleEditing}>수정 완료</Button>
+              </Link>
+              <Link to="/">
+                <Button onClick={handleSignout}>로그아웃</Button>
+              </Link>
+              <Link to="/">
+                <Button onClick={handlePermanentDeletion}>회원 탈퇴</Button>
+              </Link>
+            </ButtonWrap>
+          </form>
+        </ProfileWrap>
+      </StyledEditProfile>
+    </>
   );
 };
 
