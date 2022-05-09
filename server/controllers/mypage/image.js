@@ -17,12 +17,11 @@ module.exports = {
       }
 
       const file = req.file;
-      console.log("file=============", file);
       const uploadImg = await uploadFile(file);
 
       const image = uploadImg.Location;
 
-      console.log(typeof image)
+      console.log(typeof image);
 
       // const image = await getFileStream(result.Key);
       // console.log("image=========", image);

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Container from "../src/components/styles/Container.styled";
@@ -21,9 +21,10 @@ import "./App.css";
 import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
-import axios from "axios";
+// import axios from "axios";
 
 function App() {
+  // const navigate = useNavigate();
   const theme = {
     colors: {
       purple: "#5E17EB",
@@ -45,23 +46,48 @@ function App() {
     font: {},
   };
 
-  const getAccessToken = async (authorizationCode) => {
-    let resp = await axios.post("/users/login/kakao", {
-      authorizationCode: authorizationCode,
-    });
-    const { user } = resp.data;
-    console.log(user);
-    return user;
-  };
+  // const getAccessToken = async (authorizationCode) => {
+  //   let resp = await axios.post("/users/login/kakao", {
+  //     authorizationCode: authorizationCode,
+  //   });
+  //   console.log(resp);
+  //   const { user } = resp.data;
+  //   const { accessToken } = resp.data;
+  //   localStorage.setItem("user", JSON.stringify(user));
+  //   localStorage.setItem("token", JSON.stringify(accessToken));
+  //   axios.defaults.headers = {
+  //     "Content-Type": "application/json",
+  //     Authorization: "Bearer " + accessToken,
+  //   };
+  // navigate("/");
+  // window.location.reload();
+  // };
+
+  // const handleKakaoLogin = async (googleData) => {
+  //   // body: {token: googleData.tokenId}
+  //   console.log("googleData", googleData);
+  //   await GoogleLoginApi(googleData.tokenId).then((res) => {
+  //     console.log("google res: ", res);
+  //     localStorage.setItem("user", JSON.stringify(res.data.userInfo));
+  //     localStorage.setItem("token", JSON.stringify(res.data.accessToken));
+  //     axios.defaults.headers = {
+  //       "Content-Type": "application/json",
+  //       Authorization: "Bearer " + res.data.accessToken,
+  //     };
+  //     navigate("/");
+  //     window.location.reload();
+  //   });
+  // };
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    const authorizationCode = url.searchParams.get("code");
-
-    getAccessToken(authorizationCode);
+    // const url = new URL(window.location.href);
+    // const authorizationCode = url.searchParams.get("code");
+    // if (authorizationCode) {
+    //   getAccessToken(authorizationCode);
+    //   // console.log(result);
+    // }
     // result.then((res) => console.log(res));
     // dispatch(signin(user));
-
     // if (authorizationCode) {
     //   if (localStorage.getItem("login") === "git") {
     //     console.log("client auth git", authorizationCode);
@@ -71,7 +97,8 @@ function App() {
     //     dispatch(kakaoSignin(authorizationCode));
     //   }
     // }
-  });
+    // }
+  }, []);
 
   return (
     <Router>

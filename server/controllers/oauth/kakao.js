@@ -67,30 +67,31 @@ module.exports = {
       const userInfo = await User.findOne({
         where: { email: email },
       });
-      const newAccessToken = generateAccessToken({ id, email });
-      const newrefreshToken = generaterefreshToken({ id, email });
 
-      if (userInfo) {
+      if (!userInfo) {
+        const newUser = await User.create({
+          username: nickname,
+          image: thumbnail_image_url,
+          password: hashedPassword,
+          email: email,
+          loginMethod: 4,
+        });
+
+        const newAccessToken = generateAccessToken(newUser.dataValues);
+        const newrefreshToken = generaterefreshToken(newUser.dataValues);
         sendTocookie(res, newAccessToken, newrefreshToken);
-
-        return res.status(200).json({
-          user: userInfo,
+        return res.status(201).json({
+          user: newUser,
           accessToken: newAccessToken,
         });
       }
 
-      const newUser = await User.create({
-        username: nickname,
-        image: thumbnail_image_url,
-        password: hashedPassword,
-        email: email,
-        loginMethod: 4,
-      });
-
+      const newAccessToken = generateAccessToken(userInfo.dataValues);
+      const newrefreshToken = generaterefreshToken(userInfo.dataValues);
       sendTocookie(res, newAccessToken, newrefreshToken);
 
-      return res.status(201).json({
-        userInfo: newUser,
+      return res.status(200).json({
+        user: userInfo,
         accessToken: newAccessToken,
       });
     } catch (err) {
