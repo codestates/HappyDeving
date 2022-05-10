@@ -75,7 +75,7 @@ module.exports = {
           password: hashedPassword,
           email: email,
           verified: true,
-          loginMethod: 4,
+          loginMethod: 3,
         });
 
         const newAccessToken = generateAccessToken(newUser.dataValues);
