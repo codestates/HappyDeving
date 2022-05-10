@@ -21,10 +21,9 @@ import "./App.css";
 import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
-// import axios from "axios";
+import axios from "axios";
 
 function App() {
-  // const navigate = useNavigate();
   const theme = {
     colors: {
       purple: "#5E17EB",
@@ -46,58 +45,33 @@ function App() {
     font: {},
   };
 
-  // const getAccessToken = async (authorizationCode) => {
-  //   let resp = await axios.post("/users/login/kakao", {
-  //     authorizationCode: authorizationCode,
-  //   });
-  //   console.log(resp);
-  //   const { user } = resp.data;
-  //   const { accessToken } = resp.data;
-  //   localStorage.setItem("user", JSON.stringify(user));
-  //   localStorage.setItem("token", JSON.stringify(accessToken));
-  //   axios.defaults.headers = {
-  //     "Content-Type": "application/json",
-  //     Authorization: "Bearer " + accessToken,
-  //   };
-  // navigate("/");
-  // window.location.reload();
-  // };
-
-  // const handleKakaoLogin = async (googleData) => {
-  //   // body: {token: googleData.tokenId}
-  //   console.log("googleData", googleData);
-  //   await GoogleLoginApi(googleData.tokenId).then((res) => {
-  //     console.log("google res: ", res);
-  //     localStorage.setItem("user", JSON.stringify(res.data.userInfo));
-  //     localStorage.setItem("token", JSON.stringify(res.data.accessToken));
-  //     axios.defaults.headers = {
-  //       "Content-Type": "application/json",
-  //       Authorization: "Bearer " + res.data.accessToken,
-  //     };
-  //     navigate("/");
-  //     window.location.reload();
-  //   });
-  // };
+  let login = localStorage.getItem("login");
+  const getGithubAccessToken = async (authorizationCode) => {
+    localStorage.setItem("reload", true);
+    const gitUri = "http://localhost:4000/users/login/github";
+    let resp = await axios.post(gitUri, {
+      authorizationCode: authorizationCode,
+    });
+    const { user } = resp.data;
+    const { accessToken } = resp.data;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", JSON.stringify(accessToken));
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    };
+    // navigate("/");
+    window.location.reload();
+  };
 
   useEffect(() => {
-    // const url = new URL(window.location.href);
-    // const authorizationCode = url.searchParams.get("code");
-    // if (authorizationCode) {
-    //   getAccessToken(authorizationCode);
-    //   // console.log(result);
-    // }
-    // result.then((res) => console.log(res));
-    // dispatch(signin(user));
-    // if (authorizationCode) {
-    //   if (localStorage.getItem("login") === "git") {
-    //     console.log("client auth git", authorizationCode);
-    //     dispatch(gitSignin(authorizationCode));
-    //   } else if (localStorage.getItem("login") === "kakao") {
-    //     console.log("client auth kakao", authorizationCode);
-    //     dispatch(kakaoSignin(authorizationCode));
-    //   }
-    // }
-    // }
+    if (login === "github" && localStorage.getItem("reload") !== "true") {
+      const url = new URL(window.location.href);
+      const authorizationCode = url.searchParams.get("code");
+      if (authorizationCode) {
+        getGithubAccessToken(authorizationCode);
+      }
+    }
   }, []);
 
   return (

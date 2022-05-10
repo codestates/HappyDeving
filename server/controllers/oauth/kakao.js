@@ -65,7 +65,7 @@ module.exports = {
       const hashedPassword = await bcrypt.hash(password, salt);
 
       const userInfo = await User.findOne({
-        where: { email: email },
+        where: { email },
       });
 
       if (!userInfo) {
@@ -74,6 +74,7 @@ module.exports = {
           image: thumbnail_image_url,
           password: hashedPassword,
           email: email,
+          verified: true,
           loginMethod: 4,
         });
 

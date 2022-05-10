@@ -1,14 +1,13 @@
 require("dotenv").config();
 const { User } = require("../../models");
 const axios = require("axios");
-const fetch = require("node-fetch");
+const bcrypt = require("bcrypt");
 const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
 
 module.exports = {
   post: async (req, res) => {
     try {
       const { authorizationCode } = req.body;
-      console.log("server auth", authorizationCode);
 
       if (!authorizationCode) {
         return res.status(400).json("bad request");
@@ -16,7 +15,6 @@ module.exports = {
 
       const clientID = process.env.GIT_CLIENT_ID;
       const clientSecret = "1a8136a24d7a2f9c517704ac7f108d76dae37c4b";
-      console.log(clientID, clientSecret);
       const resp = await axios({
         method: "POST",
         url: `https://github.com/login/oauth/access_token?client_id=${clientID}&client_secret=${clientSecret}&code=${authorizationCode}`,
@@ -29,42 +27,50 @@ module.exports = {
 
       let response = await axios.get("https://api.github.com/user", {
         headers: {
-          authorization: `token ${access_token}`,
+          authorization: `bearer ${access_token}`,
           "content-type": "application/json",
         },
       });
-      console.log(response);
 
-      const { id, login, html_url, email, blog } = response.data;
-      console.log(id, login, html_url, email, blog);
+      const { id, login: nickname, html_url, blog, avatar_url: image } = response.data;
+      let { email } = response.data;
+      const password = `${id}${nickname}`;
+      if (email === null) {
+        email = `${id}${nickname}@gmail.com`;
+      }
+      const salt = await bcrypt.genSalt(12);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
       const userInfo = await User.findOne({
-        where: { password: `${id}${login}`, email: `${id}${login}@gmail.com` },
+        where: { email },
       });
+      if (!userInfo) {
+        const newUser = await User.create({
+          username: nickname,
+          email,
+          verified: true,
+          password: hashedPassword,
+          github: html_url,
+          blog,
+          image,
+          loginMethod: 1,
+        });
 
-      if (userInfo) {
-        sendTocookie(res, access_token);
-
-        return res.status(201).send({
-          userInfo: userInfo,
-          newAccessToken: access_token,
+        const newAccessToken = generateAccessToken(newUser.dataValues);
+        const newrefreshToken = generaterefreshToken(newUser.dataValues);
+        sendTocookie(res, newAccessToken, newrefreshToken);
+        return res.status(201).json({
+          user: newUser,
+          accessToken: newAccessToken,
         });
       }
+      const newAccessToken = generateAccessToken(userInfo.dataValues);
+      const newrefreshToken = generaterefreshToken(userInfo.dataValues);
+      sendTocookie(res, newAccessToken, newrefreshToken);
 
-      const newUser = await User.create({
-        username: login,
-        // image: thumbnail_image_url,
-        password: `${id}${login}`,
-        email: email ? email : `${id}${login}@gmail.com`,
-        blog: blog ? blog : null,
-        loginMethod: 1,
-      });
-
-      sendTocookie(res, access_token);
-
-      return res.status(201).send({
-        newUser,
-        accessToken: access_token,
+      return res.status(200).json({
+        user: userInfo,
+        accessToken: newAccessToken,
       });
     } catch (err) {
       console.error("err", err);
