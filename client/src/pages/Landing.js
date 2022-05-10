@@ -14,6 +14,7 @@ const StyledSearch = styled.div`
   display: ${(props) => (props.drop ? "none" : "display")};
   margin-top: 40px;
 `;
+
 const Main = styled(Content)`
   grid-row: 6/13;
   height: 1000px;
@@ -21,17 +22,7 @@ const Main = styled(Content)`
   grid-column: 1/15;
 `;
 
-const Landing = () => {
-  const [drop, setDrop] = useState(false);
-
-  window.onscroll = function () {
-    let windowTop = window.scrollY;
-    if (windowTop >= 20) {
-      setDrop(true);
-    } else {
-      setDrop(false);
-    }
-  };
+const Landing = ({ drop }) => {
   return (
     <>
       <StyledSearch drop={drop}>

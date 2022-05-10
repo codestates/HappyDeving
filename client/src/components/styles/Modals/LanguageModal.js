@@ -34,23 +34,7 @@ const StyledLanguageModal = styled(Content)`
 `;
 
 const LanguageModal = () => {
-  const dispatch = useDispatch();
-  return (
-    <StyledLanguageModal>
-      {Object.keys(langImg).map((el, idx) => (
-        <div
-          key={idx}
-          className="elements"
-          onClick={() => {
-            dispatch(setLanguageData(el));
-            dispatch(reset());
-          }}
-        >
-          {el}
-        </div>
-      ))}
-    </StyledLanguageModal>
-  );
+  return <StyledLanguageModal></StyledLanguageModal>;
 };
 
 export default LanguageModal;

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Container from "./components/styles/Container.styled";
@@ -68,24 +68,47 @@ function App() {
     }
   });
 
+  useEffect(() => {
+    console.log(drop);
+
+    if (
+      window.location.href.split("/")[1] === "map" ||
+      window.location.href === "http://localhost:3000"
+    ) {
+      setDrop(false);
+    } else {
+      setDrop(true);
+    }
+  }, []);
+
   // console.log(localStorage.getItem("user"));
+
+  const [drop, setDrop] = useState(false);
+  window.onscroll = function () {
+    let windowTop = window.scrollY;
+    if (windowTop >= 20) {
+      setDrop(true);
+    } else if (
+      (window.location.href.split("/")[1] === "map" ||
+        window.location.href === "http://localhost:3000") &&
+      windowTop < 20
+    ) {
+      setDrop(false);
+    }
+  };
 
   return (
     <Router>
       <ThemeProvider theme={theme}>
+        <Header img={theme.icons} drop={drop} />
         <Container>
-          <Header img={theme.icons} />
-
-          <div className="App">
-            <header className="App-header"></header>
-          </div>
           <Routes>
             <Route
               path="/"
               exact
               element={
                 <>
-                  <Landing />
+                  <Landing drop={drop} />
                 </>
               }
             />
@@ -116,7 +139,7 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
-          <Footer />
+          {/* <Footer /> */}
         </Container>
       </ThemeProvider>
     </Router>

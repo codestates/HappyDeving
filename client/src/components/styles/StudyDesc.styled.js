@@ -3,6 +3,14 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import Comments from "../Comments";
 import "./Map.styled.css";
+import {
+  BsFillDoorOpenFill,
+  BsFillDoorClosedFill,
+  BsFileEarmarkCodeFill,
+  BsFillCalendarDateFill,
+  BsFillFileEarmarkTextFill,
+} from "react-icons/bs";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { langImg } from "../../static/images/langImg";
 import { studyApi, deleteStudyApi } from "../../api/study";
 import { useNavigate } from "react-router-dom";
@@ -15,44 +23,58 @@ import { useNavigate } from "react-router-dom";
 // 글 저장 바 : height - 1row (40px), width는 위의 글이랑 같게*/
 }
 
-const Title = styled(Content)`
+const StyleStudyDesc = styled.div`
+  grid-row: 1/10;
   grid-column: 2/14;
+  padding: 3% 5% 3% 5%;
+
+  @media screen and (max-width: 768px) {
+    grid-column: 1/15;
+  }
+
+  @media screen and (min-width: 1024px) {
+    grid-column: 3/13;
+  }
+`;
+
+const TitleBar = styled.div`
+  grid-row: 1/2;
   height: 80px;
-  padding: 20px 3%;
-  font-family: "Bold";
   display: flex;
   border-radius: ${(props) => props.theme.borderRadius};
 
-  .titleText {
-    flex: 1;
+  .title {
+    flex: 8;
+    font-family: "Bold";
     font-size: 3vw;
-    text-align: center;
-    line-height: 40px;
-    margin-left: -3%;
-    margin-right: 6%;
-  }
-
-  .titleInput {
-    flex: 3;
-    border-radius: inherit;
-    font-size: 3vw;
-    text-align: center;
     height: 40px;
     line-height: 40px;
-    &:focus {
-      outline: none;
+  }
+
+  .alter {
+    flex: 2;
+    font-family: "Medium";
+    display: flex;
+    color: gray;
+    justify-content: space-around;
+    font-size: 2vw;
+    height: 40px;
+    line-height: 40px;
+    float: right;
+    &:hover {
+      cursor: pointer;
     }
   }
 `;
 
 const ContentDiv = styled.div`
-  grid-column: 2/14;
+  grid-column: 1/14;
   width: 100%;
 `;
 
 const CommentDiv = styled(Content)`
   /* background: pink; */
-  grid-column: 2/14;
+  grid-column: 1/14;
   display: flex;
   height: 100px;
 `;
@@ -178,23 +200,38 @@ const Desc = styled(Content)`
   }
 `;
 
-const FuncBar = styled(Content)`
-  grid-column: 2/14;
-  height: 40px;
-  padding: 3px 10px;
-  button {
-    float: right;
-    width: 15vw;
-    height: 30px;
-    color: white;
-    text-align: center;
-    line-height: 30px;
-    background-color: ${(props) => props.theme.colors.purple};
-    border-radius: 30px;
-    box-shadow: 3px 2px 1px 1px #c593fe;
-    &:hover {
-      background-color: ${(props) => props.theme.colors.lavender};
-    }
+const Wrap = styled.div`
+  display: flex;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  margin-bottom: 20px;
+`;
+
+const Icon = styled.div`
+  align-items: center;
+  margin-right: 20px;
+`;
+
+const Text = styled.div`
+  width: 120px;
+  flex: 1;
+`;
+
+const Button = styled.div`
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  background-color: ${(props) => props.theme.colors.purple};
+  color: white;
+  border-radius: 10px;
+  float: right;
+  text-align: center;
+  font-family: "Medium";
+  box-shadow: 5px 1px 1px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.lavender};
   }
 `;
 
@@ -203,6 +240,8 @@ const { kakao } = window;
 const MapView = styled(Content)`
   grid-column: 2/14;
   height: 200px;
+  margin-bottom: 20px;
+  border-radius: 0px;
 `;
 
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
@@ -275,68 +314,80 @@ const StudyDesc = () => {
   return (
     <>
       {data ? (
-        <>
-          <Title>
-            <div className="titleText">제목</div>
-            <div className="titleInput">{data.title}</div>
-          </Title>
-          <ContentDiv>
-            <div className="container">
-              <Desc>
-                <div className="closed">
-                  <div>{data.closed ? "모집마감" : "모집중"}</div>
-                </div>
-                <div className="langanddate">
-                  <div className="lang">
-                    <span className="titles">언어</span>
-                    <div className="langDiv">
-                      {data.language.map((el, idx) => (
-                        <span key={idx} className="langSpan">
-                          {el.name + ","}
-                        </span>
-                      ))}
-                    </div>
+        <StyleStudyDesc>
+          <TitleBar>
+            <div className="title">{data.title}</div>
+            <div className="alter">
+              {data.username === user?.username ? (
+                <>
+                  <div
+                    className="update"
+                    onClick={() => navigate(`/study/edit/${data.id}`)}
+                  >
+                    수정
                   </div>
-                  <div className="date">
-                    <span className="titles">시작일</span>
-                    <span className="descs">{data.startDate}</span>
+                  <div
+                    className="delete"
+                    onClick={() => {
+                      alert("삭제되었습니다");
+                      deleteStudyApi(data.id);
+                      navigate("/");
+                    }}
+                  >
+                    삭제
                   </div>
-                </div>
-
-                <div className="link">
-                  <span className="titles">오픈 톡방 링크</span>
-                  <span className="descs">{data.kakaoLink}</span>
-                </div>
-                <div className="location">
-                  <span className="titles">장소</span>
-                  <span className="descs">{data.location.name}</span>
-                </div>
-                <MapView id="map" ref={container} />
-                <div className="content">
-                  <span className="titles">내용</span>
-                  <div className="descs">{data.content}</div>
-                </div>
-              </Desc>
-              <FuncBar>
-                {data.username === user?.username ? (
-                  <>
-                    <button onClick={() => navigate(`/study/edit/${data.id}`)}>
-                      수정
-                    </button>
-                    <button
-                      onClick={() => {
-                        alert("삭제되었습니다");
-                        deleteStudyApi(data.id);
-                        navigate("/");
-                      }}
-                    >
-                      삭제
-                    </button>
-                  </>
-                ) : null}
-              </FuncBar>
+                </>
+              ) : null}
             </div>
-          </ContentDiv>
+          </TitleBar>
+
+          <Wrap>
+            <Icon>
+              {data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
+            </Icon>
+            <Text>{data.closed ? "모집마감" : "모집중"}</Text>
+          </Wrap>
+
+          <Wrap>
+            <Icon>
+              <BsFileEarmarkCodeFill />
+            </Icon>
+            <Text>
+              {data.language.map((el, idx) => (
+                <span key={idx} className="langSpan">
+                  {el.name + ","}
+                </span>
+              ))}
+            </Text>
+          </Wrap>
+
+          <Wrap>
+            <Icon>
+              <BsFillCalendarDateFill />
+            </Icon>
+            <Text>{data.startDate}</Text>
+          </Wrap>
+
+          <Wrap>
+            <Icon>
+              <FaMapMarkerAlt />
+            </Icon>
+            <Text>{data.location.name}</Text>
+          </Wrap>
+
+          <div>
+            <MapView id="map" ref={container} />
+          </div>
+
+          <Wrap>
+            <Icon>
+              <BsFillFileEarmarkTextFill />
+            </Icon>
+            <Text>{data.content}</Text>
+          </Wrap>
+
+          <Button src={data.kakaoLink}>참여하기</Button>
+
           <CommentDiv>
             <Comments
               commentsInStudyData={backendComments}
@@ -344,7 +395,7 @@ const StudyDesc = () => {
               currentUserId={user?.id}
             />
           </CommentDiv>
-        </>
+        </StyleStudyDesc>
       ) : (
         "data가 없습니다"
       )}

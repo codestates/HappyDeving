@@ -8,9 +8,118 @@ import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
+import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 import { setDateModal } from "../../features/studies/studyModalSlice";
 import { studyApi, editStudyApi } from "../../api/study";
 import { Navigate, useNavigate } from "react-router-dom";
+
+const WriteStudyDesc = styled.div`
+  grid-row: 2/12;
+  grid-column: 2/14;
+
+  @media screen and (max-width: 768px) {
+    grid-column: 1/15;
+  }
+
+  @media screen and (min-width: 1024px) {
+    grid-column: 3/13;
+  }
+`;
+
+const Desc = styled(Content)`
+  font-family: "Medium";
+  padding: 3% 5% 3% 5%;
+
+  div {
+    span {
+      display: block;
+      position: relative;
+      z-index: 0;
+    }
+  }
+
+  .closed {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    input {
+      margin-right: 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    label {
+      color: ${(props) =>
+        props.checked ? props.theme.colors.purple : "black"};
+    }
+  }
+`;
+
+const Wrapper = styled.div`
+  margin-bottom: 20px;
+
+  .div {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    height: 30px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .dropdown {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    height: 30px;
+  }
+  .result {
+    margin: 0 auto;
+  }
+
+  .icon {
+    height: 30px;
+    font-size: 30px;
+  }
+  .searchicon {
+    height: 20px;
+    font-size: 20px;
+  }
+`;
+const Text = styled.div`
+  font-size: 22px;
+  @media screen and (min-width: 1024px) {
+    font-size: 26px;
+  }
+  margin-bottom: 10px;
+`;
+const Input = styled.input`
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  height: 30px;
+  width: 100%;
+  text-align: center;
+  &:focus {
+    outline: none;
+  }
+`;
+const Button = styled.button`
+  float: right;
+  margin: 30px 0px 30px 0px;
+`;
+
+const Textarea = styled.textarea`
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 200px;
+  resize: none;
+  overflow: scroll;
+  &:focus {
+    outline: none;
+  }
+`;
 
 const Title = styled(Content)`
   grid-column: 2/14;
@@ -42,207 +151,201 @@ const Title = styled(Content)`
   }
 `;
 
-const ContentDiv = styled.div`
-  grid-column: 2/14;
-  display: flex;
-
-  > .container {
-    flex: 3;
-  }
-`;
-
-const Profile = styled(Content)`
-  flex: 1;
-  margin-right: 20px;
-  height: 550px;
-`;
-
 //(언어 input, modal(정사각형) :5-9,
 // 시작일 input, modal(정사각형) : 10-14 )
 // - 내용 input은 scroll
 
-const Desc = styled(Content)`
-  width: auto;
-  height: 490px;
-  font-family: "Medium";
-  padding: 3% 5% 3% 5%;
-  border-radius: ${(props) => props.theme.borderRadius};
+// const Desc = styled(Content)`;
+//   width: auto;
+//   height: 490px;
+//   font-family: "Medium";
+//   padding: 3% 5% 3% 5%;
+//   border-radius: ${(props) => props.theme.borderRadius};
 
-  div {
-    span {
-      display: block;
-      position: relative;
-      z-index: 0;
-    }
-    input {
-      z-index: 0;
-      background-color: beige;
-      width: 100%;
-      margin-bottom: 10px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      &:focus {
-        outline: none;
-      }
-    }
+//   div {
+//     span {
+//       display: block;
+//       position: relative;
+//       z-index: 0;
+//     }
+//     input {
+//       z-index: 0;
+//       background-color: beige;
+//       width: 100%;
+//       margin-bottom: 10px;
+//       border-radius: 30px;
+//       box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
+//       text-align: center;
+//       &:focus {
+//         outline: none;
+//       }
+//     }
 
-    textarea {
-      z-index: 0;
-      resize: none;
-      background-color: beige;
-      width: 100%;
-      height: 120px;
-      overflow: scroll;
-      padding: 10px;
-      margin-bottom: 10px;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-      &:focus {
-        outline: none;
-      }
-    }
-  }
+//     textarea {
+//       z-index: 0;
+//       resize: none;
+//       background-color: beige;
+//       width: 100%;
+//       height: 120px;
+//       overflow: scroll;
+//       padding: 10px;
+//       margin-bottom: 10px;
+//       text-align: center;
+//       line-height: 30px;
+//       border-radius: 30px;
+//       box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
+//       &:focus {
+//         outline: none;
+//       }
+//     }
+//   }
 
-  .closed {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    input {
-      position: relative;
-      top: 7px;
-      margin-right: 1%;
-      display: inline-block;
-      position: relative;
-      align-self: center;
-      width: 15px;
-      height: 15px;
+//   .closed {
+//     display: flex;
+//     justify-content: flex-end;
+//     align-items: center;
+//     input {
+//       position: relative;
+//       top: 7px;
+//       margin-right: 1%;
+//       display: inline-block;
+//       position: relative;
+//       align-self: center;
+//       width: 15px;
+//       height: 15px;
 
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    label {
-      color: ${(props) =>
-        props.checked ? props.theme.colors.purple : "black"};
-    }
-  }
+//       &:hover {
+//         cursor: pointer;
+//       }
+//     }
+//     label {
+//       color: ${(props) =>
+//         props.checked ? props.theme.colors.purple : "black"};
+//     }
+//   }
 
-  .langanddate {
-    display: flex;
-    position: relative;
-    .lang {
-      flex: 1;
-      margin-right: 5%;
-      .langContainer {
-        display: flex;
-        align-items: center;
+//   .langanddate {
+//     display: flex;
+//     position: relative;
+//     .lang {
+//       flex: 1;
+//       margin-right: 5%;
+//       .langContainer {
+//         display: flex;
+//         align-items: center;
 
-        .langInput {
-          width: 20px;
-          height: 30px;
-          background-color: beige;
-          flex: 3;
-          text-align: center;
-          line-height: 30px;
-          border-radius: 30px;
-          box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        button {
-          flex: 1;
-          width: 15vw;
-          height: 30px;
-          color: white;
-          text-align: center;
-          line-height: 30px;
-          background-color: ${(props) => props.theme.colors.purple};
-          border-radius: 30px;
-          box-shadow: 3px 2px 1px 1px #c593fe;
-          &:hover {
-            background-color: ${(props) => props.theme.colors.lavender};
-          }
-        }
-      }
-    }
-    .date {
-      flex: 1;
-      .dateContainer {
-        display: flex;
-        .dateInput {
-          width: 20px;
-          height: 30px;
-          background-color: beige;
-          flex: 3;
-          text-align: center;
-          line-height: 30px;
-          border-radius: 30px;
-          box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        button {
-          flex: 1;
-          width: 15vw;
-          height: 30px;
-          color: white;
-          text-align: center;
-          line-height: 30px;
-          background-color: ${(props) => props.theme.colors.purple};
-          border-radius: 30px;
-          box-shadow: 3px 2px 1px 1px #c593fe;
-          &:hover {
-            background-color: ${(props) => props.theme.colors.lavender};
-          }
-        }
-      }
-    }
-  }
+//         .langInput {
+//           width: 20px;
+//           height: 30px;
+//           background-color: beige;
+//           flex: 3;
+//           text-align: center;
+//           line-height: 30px;
+//           border-radius: 30px;
+//           box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
+//         }
+//         button {
+//           flex: 1;
+//           width: 15vw;
+//           height: 30px;
+//           color: white;
+//           text-align: center;
+//           line-height: 30px;
+//           background-color: ${(props) => props.theme.colors.purple};
+//           border-radius: 30px;
+//           box-shadow: 3px 2px 1px 1px #c593fe;
+//           &:hover {
+//             background-color: ${(props) => props.theme.colors.lavender};
+//           }
+//         }
+//       }
+//     }
+//     .date {
+//       flex: 1;
+//       .dateContainer {
+//         display: flex;
+//         .dateInput {
+//           width: 20px;
+//           height: 30px;
+//           background-color: beige;
+//           flex: 3;
+//           text-align: center;
+//           line-height: 30px;
+//           border-radius: 30px;
+//           box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
+//         }
+//         button {
+//           flex: 1;
+//           width: 15vw;
+//           height: 30px;
+//           color: white;
+//           text-align: center;
+//           line-height: 30px;
+//           background-color: ${(props) => props.theme.colors.purple};
+//           border-radius: 30px;
+//           box-shadow: 3px 2px 1px 1px #c593fe;
+//           &:hover {
+//             background-color: ${(props) => props.theme.colors.lavender};
+//           }
+//         }
+//       }
+//     }
+//   }
 
-  .locationContainer {
-    display: flex;
-    margin-bottom: 10px;
-    .locationInput {
-      width: 20px;
-      height: 30px;
-      background-color: beige;
-      flex: 3;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-    }
-    button {
-      flex: 1;
-      width: 15vw;
-      height: 30px;
-      color: white;
-      text-align: center;
-      line-height: 30px;
-      background-color: ${(props) => props.theme.colors.purple};
-      border-radius: 30px;
-      box-shadow: 3px 2px 1px 1px #c593fe;
-      &:hover {
-        background-color: ${(props) => props.theme.colors.lavender};
-      }
-    }
-  }
+//   .locationContainer {
+//     display: flex;
+//     margin-bottom: 10px;
+//     .locationInput {
+//       width: 20px;
+//       height: 30px;
+//       background-color: beige;
+//       flex: 3;
+//       text-align: center;
+//       line-height: 30px;
+//       border-radius: 30px;
+//       box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
+//     }
+//     button {
+//       flex: 1;
+//       width: 15vw;
+//       height: 30px;
+//       color: white;
+//       text-align: center;
+//       line-height: 30px;
+//       background-color: ${(props) => props.theme.colors.purple};
+//       border-radius: 30px;
+//       box-shadow: 3px 2px 1px 1px #c593fe;
+//       &:hover {
+//         background-color: ${(props) => props.theme.colors.lavender};
+//       }
+//     }
+//   }
 
-  .content {
-    input {
-      height: 100px;
-      border-radius: 15px;
-    }
-  }
-`;
+//   .content {
+//     input {
+//       height: 100px;
+//       border-radius: 15px;
+//     }
+//   }
+// `;
 
-const DescLanguageModal = styled(LanguageModal)`
-  position: relative;
+const DescLanguageModal = styled.div`
+  width: 90%;
+  height: auto;
   z-index: 10;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: white;
+  margin: 0 auto;
+  position: absolute;
+  z-index: 1000;
 `;
 
 const DescDateModal = styled(DateModal)`
   position: relative;
   z-index: 10;
+  box-shadow: none;
+  padding: 0px 40%;
 
   &:after {
     content: "";
@@ -252,47 +355,27 @@ const DescDateModal = styled(DateModal)`
 `;
 
 const DescLocationModal = styled(LocationModal)`
-  position: relative;
-  padding: 10px;
-  margin: 0 auto;
+  border-radius: 0px;
+  box-shadow: none;
+  height: auto;
+  box-sizing: content-box;
   z-index: 10;
-  input {
-    position: relative;
-    width: 50%;
-  }
+  position: absolute;
+  width: 90%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
 `;
-
-const FuncBar = styled(Content)`
-  grid-column: 2/14;
-  height: 40px;
-  padding: 3px 10px;
-  button {
-    float: right;
-    width: 15vw;
-    height: 30px;
-    color: white;
-    text-align: center;
-    line-height: 30px;
-    background-color: ${(props) => props.theme.colors.purple};
-    border-radius: 30px;
-    box-shadow: 3px 2px 1px 1px #c593fe;
-    &:hover {
-      background-color: ${(props) => props.theme.colors.lavender};
-    }
-  }
-`;
-
-const keyArr = Object.keys(langImg);
 
 const { kakao } = window;
 
-const MapView = styled(Content)`
+const MapView = styled.div`
   grid-column: 2/14;
-  height: 200px;
+  height: 400px;
 `;
 
 const EditStudyDesc = () => {
   const container = useRef(null);
+  const locationInput = useRef(null);
   const navigate = useNavigate();
   const [location, setLocation] = useState({
     name: "광화문",
@@ -462,15 +545,115 @@ const EditStudyDesc = () => {
     <>
       {data ? (
         <>
-          <Title>
+          <WriteStudyDesc>
+            <Desc>
+              <Wrapper>
+                <Text>제목</Text>
+                <Input
+                  defaultValue={data.title}
+                  onChange={(e) => handleInputValue("title", e.target.value)}
+                ></Input>
+              </Wrapper>
+              <Wrapper>
+                <Text>언어</Text>
+                <div className="dropdown">
+                  <div className="result">
+                    {data.language?.map((el) => el.name + ",")}
+                  </div>
+                  <IoMdArrowDropdown
+                    className="icon"
+                    onClick={() => setOpen({ ...open, language: true })}
+                  />
+                </div>
+                {open.language ? (
+                  <DescLanguageModal>
+                    <div>
+                      {Object.keys(langImg).map((el, idx) => (
+                        <div
+                          key={idx}
+                          className="elements"
+                          onClick={() => {
+                            setData({
+                              ...data,
+                              language: [
+                                ...data.language,
+                                {
+                                  id: idx + 1,
+                                  name: el,
+                                },
+                              ],
+                            });
+                            setOpen({ ...open, language: false });
+                          }}
+                        >
+                          {el}
+                        </div>
+                      ))}
+                    </div>
+                  </DescLanguageModal>
+                ) : null}
+              </Wrapper>
+              <Wrapper>
+                <Text>시작일</Text>
+                <DescDateModal>
+                  <CalenderDate />
+                </DescDateModal>
+              </Wrapper>
+              <Wrapper>
+                <Text>링크</Text>
+                <Input
+                  onChange={(e) =>
+                    handleInputValue("kakaoLink", e.target.value)
+                  }
+                ></Input>
+              </Wrapper>
+              <Wrapper>
+                <Text>장소</Text>
+                <div className="dropdown">
+                  <Input
+                    onKeyDown={(e) => handleLocationValue(e)}
+                    defaultValue={location.place_name}
+                    ref={locationInput}
+                  ></Input>
+                  {open.location ? (
+                    <DescLocationModal>
+                      {locationListHandler(locationList)}
+                    </DescLocationModal>
+                  ) : null}
+                  <IoIosSearch
+                    className="icon"
+                    onClick={(e) => {
+                      console.log(locationInput.target.value);
+                      setOpen({ ...open, location: true });
+                    }}
+                  />
+                </div>
+              </Wrapper>
+              <MapView id="map" ref={container} />
+              <Wrapper>
+                <Text>내용</Text>
+                <Textarea
+                  onChange={(e) => handleInputValue("content", e.target.value)}
+                ></Textarea>
+                <Button></Button>
+              </Wrapper>
+              <div className="closed">
+                <input type="checkbox" id="closed" className="input"></input>
+                {console.log(data)}
+                <label htmlFor="closed">모집마감</label>
+              </div>
+              <Button>저장</Button>
+            </Desc>
+          </WriteStudyDesc>
+          {/* <Title>
             <div className="titleText">제목</div>
             <input
               className="titleInput"
               defaultValue={data.title}
               onChange={(e) => handleInputValue("title", e.target.value)}
             ></input>
-          </Title>
-          <ContentDiv>
+          </Title> */}
+          {/* <ContentDiv>
             <Profile />
             <div className="container">
               <Desc>
@@ -530,7 +713,7 @@ const EditStudyDesc = () => {
                       <div className="dateContainer">
                         <div className="dateInput">
                           {/* 바뀌도록 */}
-                          {data.startDate}
+          {/* {data.startDate}
                         </div>
                         <button onClick={() => dispatch(setDateModal(true))}>
                           선택
@@ -598,7 +781,7 @@ const EditStudyDesc = () => {
                 </button>
               </FuncBar>
             </div>
-          </ContentDiv>
+          </ContentDiv> */}
         </>
       ) : null}
     </>

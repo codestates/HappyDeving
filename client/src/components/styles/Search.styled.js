@@ -138,6 +138,8 @@ const Search = () => {
   const [icon, setIcon] = useState("1.5em");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const url = window.location.href;
+  console.log(url);
 
   var ps = new kakao.maps.services.Places();
 
@@ -266,7 +268,21 @@ const Search = () => {
           </DateModal>
         ) : null}
         {language ? (
-          <LanguageModal className="languageModal"></LanguageModal>
+          <LanguageModal className="languageModal">
+            {Object.keys(langImg).map((el, idx) => (
+              <div
+                key={idx}
+                className="elements"
+                onClick={() => {
+                  console.log(el);
+                  dispatch(setLanguageData(el));
+                  dispatch(reset());
+                }}
+              >
+                {el}
+              </div>
+            ))}
+          </LanguageModal>
         ) : null}
       </Modals>
     </>

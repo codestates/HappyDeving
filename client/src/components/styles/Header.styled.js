@@ -14,15 +14,31 @@ const icons = {
     "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
 };
 
+const StyleSearch = styled.div`
+  display: ${(props) => (props.drop ? "block" : "none")};
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+    grid-column: 3/14;
+    margin: 0px 10px;
+  }
+`;
+
 const StyledHeader = styled.header`
-  grid-column: 3/13;
-  grid-row: 2/3;
+  position: fixed;
+  top: 0;
+  /* width: 100% */
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: black;
+  grid-row: 1/3;
+  height: 80px;
+  padding: 10px 0px 0px 15px;
   font-family: "Bold";
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: ${(props) => (props.drop ? "fixed" : "relative")};
-  margin: ${(props) => (props.drop ? "0 15%" : "0 auto")};
   z-index: 10;
 
   @media only screen and (max-width: 768px) {
@@ -44,15 +60,6 @@ const StyledHeader = styled.header`
     }
   }
 
-  > .search {
-    @media only screen and (max-width: 768px) {
-      display: block;
-      grid-column: 3/14;
-      margin: 0px 10px;
-    }
-    display: ${(props) => (props.drop ? "block" : "none")};
-  }
-
   > .links {
     color: #5e17eb;
     text-align: center;
@@ -60,7 +67,7 @@ const StyledHeader = styled.header`
     display: flex;
     align-items: center;
 
-    span {
+    .link {
       display: ${(props) => (props.drop ? "none" : "block")};
 
       @media screen and (min-width: 1024px) {
@@ -79,43 +86,36 @@ const StyledHeader = styled.header`
   }
 `;
 
-const Header = () => {
+const Header = ({ drop }) => {
   const { user } = useSelector((state) => state.user);
-  const [drop, setDrop] = useState(false);
   const navigate = useNavigate();
+  console.log(drop);
 
   const goToHome = () => {
     navigate("/");
   };
 
-  window.onscroll = function () {
-    let windowTop = window.scrollY;
-    if (windowTop >= 20) {
-      setDrop(true);
-    } else {
-      setDrop(false);
-    }
-  };
+  console.log(drop);
 
   return (
     <StyledHeader drop={drop}>
       <img onClick={goToHome} className="logo" src={icons.logo} />
-      <div className="search">
+      <StyleSearch drop={drop}>
         <Search />
-      </div>
+      </StyleSearch>
       <div className="links">
         <Link to="/write">
-          <span>write</span>
+          <span className="link">write</span>
           {/* <img className="write" src={icons.write} /> */}
         </Link>
         {user ? (
           <Link to="/profile">
-            <span> mypage</span>
+            <span className="link"> mypage</span>
             {/* <img className="mypage" src={icons.mypage} /> */}
           </Link>
         ) : (
           <Link to="/signin">
-            <span>signin</span>
+            <span className="link">signin</span>
             {/* <img className="login" src={icons.login} /> */}
           </Link>
         )}

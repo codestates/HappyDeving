@@ -4,7 +4,7 @@ import ShareSocialButton from "./ShareSocial.styled";
 
 const StyledFooter = styled.div`
   grid-column: 2/14;
-  grid-row: 12/14;
+  grid-row: 13/14;
   height: 120px;
   color: white;
   position: relative;
