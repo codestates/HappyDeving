@@ -9,15 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import LoadingIndicator from "../components/LoadingIndicator";
 
 const StyledComments = styled(Content)`
+  /* grid-column: 4 / 12; */
   margin-bottom: 20px;
 `;
-const CommentsContainer = styled(Content)`
+const CommentsContainer = styled.div`
   margin-top: 40px;
 `;
 
-const Comments = ({ commentsInStudyData, studyId }) => {
+const Comments = ({ comments, studyId }) => {
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.comment);
+
   const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
   const rootComments = backendComments.filter((backendComment) => backendComment.parentId === null);
@@ -25,9 +27,8 @@ const Comments = ({ commentsInStudyData, studyId }) => {
 
   // 대댓글 순서는 댓글 순서와 반대
   const getReplies = (commentId) =>
-    backendComments
-      .filter((backendComment) => backendComment.parentId === commentId)
-      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    backendComments.filter((backendComment) => backendComment.parentId === commentId);
+
   const addComment = (commentData) => {
     console.log("작성 clicked");
     dispatch(writeComment(commentData));
@@ -35,47 +36,42 @@ const Comments = ({ commentsInStudyData, studyId }) => {
   };
   const updateComment = (commentData) => {
     console.log("수정 clicked");
-
     dispatch(editComment(commentData));
     setActiveComment(null);
   };
   const deletingComment = (commentData) => {
     console.log("삭제 clicked");
-
     dispatch(deleteComment(commentData));
   };
 
   useEffect(() => {
-    setBackendComments(commentsInStudyData);
-  }, [commentsInStudyData, backendComments]);
+    setBackendComments(comments);
+  }, [comments, backendComments]);
 
   if (isLoading) {
     return <LoadingIndicator />;
   }
 
   return (
-    <StyledComments>
-      <CommentForm
-        studyId={studyId}
-        submitLabel="작성"
-        handleSubmit={(commentData) => addComment(commentData)}
-      />
-      <CommentsContainer>
-        {rootComments.map((rootComment) => (
-          <Comment
-            studyId={studyId}
-            key={rootComment.id}
-            comment={rootComment}
-            replies={getReplies(rootComment.id)}
-            activeComment={activeComment}
-            setActiveComment={setActiveComment}
-            addComment={addComment}
-            updateComment={updateComment}
-            deletingComment={deletingComment}
-          />
-        ))}
-      </CommentsContainer>
-    </StyledComments>
+    <>
+      <StyledComments>
+        <CommentForm studyId={studyId} submitLabel="작성" handleSubmit={addComment} />
+        <CommentsContainer>
+          {rootComments.map((rootComment) => (
+            <Comment
+              key={rootComment.id}
+              comment={rootComment}
+              replies={getReplies(rootComment.id)}
+              activeComment={activeComment}
+              setActiveComment={setActiveComment}
+              addComment={addComment}
+              updateComment={updateComment}
+              deletingComment={deletingComment}
+            />
+          ))}
+        </CommentsContainer>
+      </StyledComments>
+    </>
   );
 };
 

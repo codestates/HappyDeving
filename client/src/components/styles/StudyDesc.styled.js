@@ -5,8 +5,9 @@ import Comments from "../Comments";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 import { studyApi, deleteStudyApi } from "../../api/study";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { getComments } from "../../features/comment/commentSlice";
 {
   /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
   // 입력칸들 5-14 
@@ -16,16 +17,18 @@ import { useSelector } from "react-redux";
 // 글 저장 바 : height - 1row (40px), wㅌㅌㅌㅌidth는 위의 글이랑 같게*/
 }
 
+const StudyDescDiv = styled(Content)`
+  grid-column: 2/14;
+`;
 const Title = styled(Content)`
   grid-column: 2/14;
+
   height: 80px;
   padding: 20px 3%;
   font-family: "Bold";
-  display: flex;
   border-radius: ${(props) => props.theme.borderRadius};
 
   .titleText {
-    flex: 1;
     font-size: 3vw;
     text-align: center;
     line-height: 40px;
@@ -34,7 +37,6 @@ const Title = styled(Content)`
   }
 
   .titleInput {
-    flex: 3;
     background-color: beige;
     border-radius: inherit;
     box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
@@ -47,24 +49,11 @@ const Title = styled(Content)`
 `;
 
 const ContentDiv = styled.div`
-  grid-column: 2/14;
-  display: flex;
-
-  > .container {
-    flex: 3;
-  }
+  width: 100%;
 `;
 
-const Profile = styled(Content)`
-  flex: 1;
-  margin-right: 20px;
-  height: 550px;
-`;
-const CommentDiv = styled(Content)`
-  /* background: pink; */
-  grid-column: 2/14;
-  display: flex;
-  height: 100px;
+const CommentsDiv = styled.div`
+  background: pink;
 `;
 
 //(언어 input, modal(정사각형) :5-9,
@@ -72,7 +61,7 @@ const CommentDiv = styled(Content)`
 // - 내용 input은 scroll
 
 const Desc = styled(Content)`
-  width: auto;
+  grid-column: 2/14;
   height: 490px;
   font-family: "Medium";
   padding: 3% 5% 3% 5%;
@@ -276,6 +265,8 @@ const MapView = styled(Content)`
 const StudyDesc = () => {
   const container = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { id } = useParams();
 
   const [location, setLocation] = useState({
     place_name: "광화문",
@@ -283,8 +274,7 @@ const StudyDesc = () => {
     logitude: 126.977759,
   });
   const [data, setData] = useState();
-  const [backendComments, setBackendComments] = useState([]);
-  const { user } = useSelector((state) => state.user);
+  const { comments } = useSelector((state) => state.comment);
 
   const mapscript = () => {
     const options = {
@@ -324,74 +314,73 @@ const StudyDesc = () => {
   }, [data]);
 
   useEffect(() => {
+    dispatch(getComments(id));
+  }, []);
+
+  useEffect(() => {
     const href = document.location.href.split("/");
     const id = href[href.length - 1];
     studyApi(id).then((res) => {
       setData(res.data.data.study);
-      setBackendComments(res.data.data.comment);
-      console.log("상세페이지 get comments: ", res.data.data.comment);
       setLocation(res.data.data.study.location);
     });
   }, []);
 
-  console.log(data);
+  // console.log(data);
   //checked의 상태 변화 기다리기 위해
 
   return (
     <>
       {data ? (
         <>
-          <Title>
-            <div className="titleText">제목</div>
-            <div>{data.title}</div>
-          </Title>
-          <ContentDiv>
-            <Profile />
-            <div className="container">
-              <Desc>
-                <div className="closed">
-                  <div>{data.closed ? "모집마감" : "모집중"}</div>
-                </div>
-                <div className="langanddate">
-                  <div className="lang">
-                    <span>언어</span>
-                    {data.language.map((el, idx) => (
-                      <span key={idx}>{el.name}</span>
-                    ))}
+          <StudyDescDiv>
+            <Title>
+              <div className="titleText">제목</div>
+              <div>{data.title}</div>
+            </Title>
+            <ContentDiv>
+              <div className="container">
+                <Desc>
+                  <div className="closed">
+                    <div>{data.closed ? "모집마감" : "모집중"}</div>
                   </div>
-                  <div className="date">
-                    <span>시작일</span>
-                    <span>{data.startDate}</span>
+                  <div className="langanddate">
+                    <div className="lang">
+                      <span>언어</span>
+                      {data.language.map((el, idx) => (
+                        <span key={idx}>{el.name}</span>
+                      ))}
+                    </div>
+                    <div className="date">
+                      <span>시작일</span>
+                      <span>{data.startDate}</span>
+                    </div>
                   </div>
-                </div>
 
-                <div className="link">
-                  <span>오픈 톡방 링크</span>
-                  <span>{data.kakaoLink}</span>
-                </div>
-                <div className="location">
-                  <span>장소</span>
-                  <span>{data.location.name}</span>
-                </div>
-                <MapView id="map" ref={container} />
-                <div className="content">
-                  <span>내용</span>
-                  <div>{data.content}</div>
-                </div>
-              </Desc>
-              <FuncBar>
-                <button onClick={() => navigate(`/study/edit/${data.id}`)}>수정</button>
-                <button onClick={() => deleteStudyApi(data.id)}>삭제</button>
-              </FuncBar>
-            </div>
-          </ContentDiv>
-          <CommentDiv>
-            <Comments
-              commentsInStudyData={backendComments}
-              studyId={data.id}
-              currentUsername={user.username}
-            />
-          </CommentDiv>
+                  <div className="link">
+                    <span>오픈 톡방 링크</span>
+                    <span>{data.kakaoLink}</span>
+                  </div>
+                  <div className="location">
+                    <span>장소</span>
+                    <span>{data.location.name}</span>
+                  </div>
+                  <MapView id="map" ref={container} />
+                  <div className="content">
+                    <span>내용</span>
+                    <div>{data.content}</div>
+                  </div>
+                </Desc>
+                <FuncBar>
+                  <button onClick={() => navigate(`/study/edit/${data.id}`)}>수정</button>
+                  <button onClick={() => deleteStudyApi(data.id)}>삭제</button>
+                </FuncBar>
+              </div>
+            </ContentDiv>
+            <CommentsDiv>
+              <Comments comments={comments} studyId={id} />
+            </CommentsDiv>
+          </StudyDescDiv>
         </>
       ) : (
         "data가 없습니다"
