@@ -30,9 +30,9 @@ const LandingTitle = styled.h1`
   position: absolute;
   background-color: rgb(236, 236, 236);
   border: 5px solid rgb(236, 236, 236);
-  top: 20%;
+  top: 22%;
   color: black;
-  font-size: 2.5rem;
+  font-size: 3rem;
   padding: 15px;
   // 태블릿
   @media screen and (min-width: 768px) and (max-width: 1023px) {
