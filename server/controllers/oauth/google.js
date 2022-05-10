@@ -17,7 +17,6 @@ module.exports = {
         audience: process.env.GOOGLE_CLIENT_ID,
       });
       const { email, name, picture } = ticket.getPayload();
-      console.log(email);
 
       let userInfo = await User.findOne({ where: { email } });
 
@@ -31,9 +30,9 @@ module.exports = {
           username: name,
           password: hashedPassword,
           image: picture,
+          verified: true,
           loginMethod: 2,
         });
-        console.log("created userInfo::", userInfo);
       }
       const accessToken = generateAccessToken(userInfo.dataValues, "accessToken");
       const refreshToken = generaterefreshToken(userInfo.dataValues);

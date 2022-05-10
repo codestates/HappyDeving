@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
-import { gitSignin, kakaoSignin } from "./features/user/userSlice";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Container from "../src/components/styles/Container.styled";
@@ -23,6 +22,7 @@ import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import axios from "axios";
+import { Github_url } from "./config";
 
 function App() {
   const theme = {
@@ -46,30 +46,33 @@ function App() {
     font: {},
   };
 
-
-  const getAccessToken = async (authorizationCode) => {
-    let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
+  let login = localStorage.getItem("login");
+  const getGithubAccessToken = async (authorizationCode) => {
+    localStorage.setItem("reload", true);
+    let resp = await axios.post(Github_url, {
       authorizationCode: authorizationCode,
     });
-    console.log(resp);
+    const { user } = resp.data;
+    const { accessToken } = resp.data;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", JSON.stringify(accessToken));
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    };
+    // navigate("/");
+    window.location.reload();
   };
 
-
   useEffect(() => {
-    const url = new URL(window.location.href);
-    console.log(url);
-
-    const authorizationCode = url.searchParams.get("code");
-    if (authorizationCode) {
-      if (localStorage.getItem("login") === "git") {
-        console.log("client auth git", authorizationCode);
-        dispatch(gitSignin(authorizationCode));
-      } else if (localStorage.getItem("login") === "kakao") {
-        console.log("client auth kakao", authorizationCode);
-        dispatch(kakaoSignin(authorizationCode));
+    if (login === "github" && localStorage.getItem("reload") !== "true") {
+      const url = new URL(window.location.href);
+      const authorizationCode = url.searchParams.get("code");
+      if (authorizationCode) {
+        getGithubAccessToken(authorizationCode);
       }
     }
-  });
+  }, []);
 
   return (
     <Router>
