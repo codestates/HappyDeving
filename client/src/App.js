@@ -22,6 +22,7 @@ import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import axios from "axios";
+import { Github_url } from "./config";
 
 function App() {
   const theme = {
@@ -48,8 +49,7 @@ function App() {
   let login = localStorage.getItem("login");
   const getGithubAccessToken = async (authorizationCode) => {
     localStorage.setItem("reload", true);
-    const gitUri = "http://localhost:4000/users/login/github";
-    let resp = await axios.post(gitUri, {
+    let resp = await axios.post(Github_url, {
       authorizationCode: authorizationCode,
     });
     const { user } = resp.data;
