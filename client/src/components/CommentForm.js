@@ -1,13 +1,11 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
 import { useSelector } from "react-redux";
 
-const CommentFormDiv = styled(Content)`
-  /* grid: 4/12;
-  position: relative; */
-  width: 75vw;
+const CommentFormDiv = styled.div`
+  grid-column: 4/12;
+  /* position: relative; */
   height: auto;
   padding: 0.5% 2% 6% 2%;
 
@@ -36,6 +34,15 @@ const CommentFormDiv = styled(Content)`
         }
       }
     }
+  }
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    grid-column: 3 / 13;
+    transition: 2s;
+  }
+  @media screen and (max-width: 767px) {
+    grid-column: 1 / 15;
+    transition: 2s;
+    flex-direction: column;
   }
 `;
 

@@ -6,9 +6,9 @@ import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const CommentDiv = styled(Content)`
-  grid-column: 4 / 12;
   display: flex;
   flex-wrap: wrap;
+  flex-direction: column;
 `;
 const CommentUpperPart = styled.div`
   width: 100%;
@@ -42,17 +42,12 @@ const CommentText = styled.div`
   /* background-color: yellow; */
   width: 100%;
   height: auto;
-  display: flex;
 `;
 const CommentAuthor = styled.div`
-  margin-top: 3px;
-  font-size: 14px;
-  display: flex;
+  font-size: 16px;
 `;
 const CommentDate = styled.div`
-  margin-top: 3px;
   font-size: 14px;
-  display: flex;
 `;
 
 const CommentActions = styled.div`
@@ -61,7 +56,7 @@ const CommentActions = styled.div`
   color: rgb(51, 51, 51);
   cursor: pointer;
   margin-top: 8px;
-  margin-right: 50px;
+  margin-right: 10%;
 `;
 const CommentAction = styled.div`
   /* background-color: orange; */
@@ -111,86 +106,84 @@ const Comment = ({
   const createdAt = new Date(comment.createdAt).toLocaleDateString();
 
   return (
-    <>
-      <CommentDiv>
-        <CommentUpperPart key={comment.id}>
-          <CommentImageContainer>
-            <img src={comment.image} />
-          </CommentImageContainer>
-          <CommentRightPart>
-            <CommentAuthor>{comment.username}</CommentAuthor>
-            <CommentDate>{createdAt}</CommentDate>
-          </CommentRightPart>
-        </CommentUpperPart>
-        {!isEditing && <CommentText>{comment.content}</CommentText>}
-        <CommentDownPart>
-          {isEditing && (
-            <CommentForm
-              submitLabel="수정"
-              studyId
-              commentId={comment.id}
-              hasCancelButton
-              initialContent={comment.content}
-              handleSubmit={updateComment}
-              handleCancel={() => {
-                setActiveComment(null);
-              }}
-            />
+    <CommentDiv>
+      <CommentUpperPart key={comment.id}>
+        <CommentImageContainer>
+          <img src={comment.image} />
+        </CommentImageContainer>
+        <CommentRightPart>
+          <CommentAuthor>{comment.username}</CommentAuthor>
+          <CommentDate>{createdAt}</CommentDate>
+        </CommentRightPart>
+      </CommentUpperPart>
+      {!isEditing && <CommentText>{comment.content}</CommentText>}
+      <CommentDownPart>
+        {isEditing && (
+          <CommentForm
+            submitLabel="수정"
+            studyId
+            commentId={comment.id}
+            hasCancelButton
+            initialContent={comment.content}
+            handleSubmit={updateComment}
+            handleCancel={() => {
+              setActiveComment(null);
+            }}
+          />
+        )}
+        <CommentActions>
+          {canReply && (
+            <CommentAction
+              type="button"
+              onClick={() => setActiveComment({ id: comment.id, type: "replying" })}
+            >
+              답글
+            </CommentAction>
           )}
-          <CommentActions>
-            {canReply && (
-              <CommentAction
-                type="button"
-                onClick={() => setActiveComment({ id: comment.id, type: "replying" })}
-              >
-                답글
-              </CommentAction>
-            )}
-            {canEdit && (
-              <CommentAction
-                type="button"
-                onClick={() => setActiveComment({ id: comment.id, type: "editing" })}
-              >
-                {/* <FontAwesomeIcon icon="fas fa-edit" size="1x" /> */}수정
-              </CommentAction>
-            )}
-            {canDelete && (
-              <CommentAction type="button" onClick={() => deletingComment(comment)}>
-                {/* <FontAwesomeIcon icon="fas fa-trash" size="1x" /> */}삭제
-              </CommentAction>
-            )}
-          </CommentActions>
-          {isReplying && (
-            <CommentForm
-              commentId={comment.id}
-              studyId={comment.study_id}
-              replyId={replyId}
-              submitLabel="작성"
-              handleSubmit={addComment}
-            />
+          {canEdit && (
+            <CommentAction
+              type="button"
+              onClick={() => setActiveComment({ id: comment.id, type: "editing" })}
+            >
+              {/* <FontAwesomeIcon icon="fas fa-edit" size="1x" /> */}수정
+            </CommentAction>
           )}
-          {replies.length > 0 && (
-            <Replies>
-              {replies.map((reply) => (
-                <Comment
-                  studyId={comment.study_id}
-                  commentId={comment.id}
-                  comment={reply}
-                  key={reply.id}
-                  activeComment={activeComment}
-                  setActiveComment={setActiveComment}
-                  updateComment={updateComment}
-                  deletingComment={deletingComment}
-                  addComment={addComment}
-                  parentId={comment.id}
-                  replies={[]} // 대댓글은 nested reply가 있으면 안 됨
-                />
-              ))}
-            </Replies>
+          {canDelete && (
+            <CommentAction type="button" onClick={() => deletingComment(comment)}>
+              {/* <FontAwesomeIcon icon="fas fa-trash" size="1x" /> */}삭제
+            </CommentAction>
           )}
-        </CommentDownPart>
-      </CommentDiv>
-    </>
+        </CommentActions>
+        {isReplying && (
+          <CommentForm
+            commentId={comment.id}
+            studyId={comment.study_id}
+            replyId={replyId}
+            submitLabel="작성"
+            handleSubmit={addComment}
+          />
+        )}
+        {replies.length > 0 && (
+          <Replies>
+            {replies.map((reply) => (
+              <Comment
+                studyId={comment.study_id}
+                commentId={comment.id}
+                comment={reply}
+                key={reply.id}
+                activeComment={activeComment}
+                setActiveComment={setActiveComment}
+                updateComment={updateComment}
+                deletingComment={deletingComment}
+                addComment={addComment}
+                parentId={comment.id}
+                replies={[]} // 대댓글은 nested reply가 있으면 안 됨
+              />
+            ))}
+          </Replies>
+        )}
+      </CommentDownPart>
+    </CommentDiv>
   );
 };
 

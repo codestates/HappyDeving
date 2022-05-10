@@ -8,6 +8,8 @@ import { studyApi, deleteStudyApi } from "../../api/study";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getComments } from "../../features/comment/commentSlice";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 {
   /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
   // 입력칸들 5-14 
@@ -18,10 +20,20 @@ import { getComments } from "../../features/comment/commentSlice";
 }
 
 const StudyDescDiv = styled(Content)`
-  grid-column: 2/14;
+  grid-column: 4/12;
+  // 태블릿
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    grid-column: 3 / 13;
+    transition: 2s;
+  }
+  // 모바일
+  @media screen and (max-width: 767px) {
+    grid-column: 2 / 14;
+    transition: 2s;
+  }
 `;
 const Title = styled(Content)`
-  grid-column: 2/14;
+  /* grid-column: 2/14; */
 
   height: 80px;
   padding: 20px 3%;
@@ -53,7 +65,7 @@ const ContentDiv = styled.div`
 `;
 
 const CommentsDiv = styled.div`
-  background: pink;
+  /* background: pink; */
 `;
 
 //(언어 input, modal(정사각형) :5-9,
@@ -267,6 +279,7 @@ const StudyDesc = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const [location, setLocation] = useState({
     place_name: "광화문",
@@ -378,7 +391,11 @@ const StudyDesc = () => {
               </div>
             </ContentDiv>
             <CommentsDiv>
-              <Comments comments={comments} studyId={id} />
+              <button onClick={() => setShowConfirmModal(!showConfirmModal)}>
+                댓글보기
+                <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
+              </button>
+              {showConfirmModal ? <Comments comments={comments} studyId={id} /> : null}
             </CommentsDiv>
           </StudyDescDiv>
         </>
