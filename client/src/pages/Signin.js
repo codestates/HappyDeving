@@ -9,9 +9,8 @@ import Container from "../components/styles/Container.styled";
 import Content from "../components/styles/Content.styled";
 import axios from "axios";
 import { GoogleLoginApi } from "../api/socialAuth";
-import GoogleLogin from "react-google-login";
-import { GOOGLE_CLIENT_ID } from "../config";
-
+import { GoogleLogin } from "react-google-login";
+import { GOOGLE_CLIENT_ID, KAKAO_CLIENT_ID, GITHUB_CLIENT_ID } from "../config";
 
 const Background = styled(Container)`
   grid-column: 1/ 15;
@@ -118,7 +117,7 @@ function Signin() {
     email: "",
     password: "",
   });
-
+  // const [gitOrKakao, setSocial] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const dispatch = useDispatch();
@@ -130,22 +129,45 @@ function Signin() {
     // dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
+  useEffect(() => {
+    const url = new URL(window.location.href);
+    const authorizationCode = url.searchParams.get("code");
+    if (authorizationCode) {
+      getKakaoAccessToken(authorizationCode);
+    }
+  }, []);
+
   const handleInputValue = (key) => (e) => {
     setUserData({ ...userData, [key]: e.target.value });
   };
 
-  const getAccessToken = async (authorizationCode) => {
-    let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
+  const getKakaoAccessToken = async (authorizationCode) => {
+    let resp = await axios.post("/users/login/kakao", {
       authorizationCode: authorizationCode,
     });
+    const { user } = resp.data;
+    const { accessToken } = resp.data;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", JSON.stringify(accessToken));
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    };
+    navigate("/");
+    window.location.reload();
+  };
 
-
-  //   console.log("resp===========", resp);
-  // };
-
-  const socialLoginHandler = async () => {
-    const kakaoURI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=5928412b923165af1772a78c664c4582&redirect_uri=http://localhost:3000`;
-    window.location.assign(kakaoURI);
+  const socialLoginHandler = async (social) => {
+    if (social === "kakao") {
+      const kakaoURI = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${KAKAO_CLIENT_ID}&redirect_uri=http://localhost:3000/signin`;
+      window.location.assign(kakaoURI);
+    }
+    if (social === "github") {
+      localStorage.setItem("login", "github");
+      const redirect_url = "http://localhost:3000";
+      const GITHUB_LOGIN_URL = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_url=${redirect_url}`;
+      window.location.assign(GITHUB_LOGIN_URL);
+    }
   };
 
   const handleSignin = async (e) => {
@@ -212,8 +234,11 @@ function Signin() {
               <button type="submit">로그인</button>
             </ButtonWrap>
             <ButtonWrap>
-              <button type="button" onClick={socialLoginHandler}>
+              <button type="button" onClick={() => socialLoginHandler("kakao")}>
                 카카오
+              </button>
+              <button type="button" onClick={() => socialLoginHandler("github")}>
+                Github
               </button>
               <GoogleLogin
                 clientId={GOOGLE_CLIENT_ID}
@@ -222,9 +247,6 @@ function Signin() {
                 onFailure={handleGoogleLoginFailure}
                 cookiePolicy={"single_host_origin"}
               ></GoogleLogin>
-              {/* <a type="button" href="http://localhost:4000/users/login/kakao">
-                카카오
-              </a> */}
             </ButtonWrap>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>
