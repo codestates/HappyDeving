@@ -21,6 +21,12 @@ import "./App.css";
 import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import Slider from "./components/Slider";
+// import axios from "axios";
+import landing_01 from "../src/assets/AdobeStock_434132331.jpeg";
+import landing_02 from "../src/assets/AdobeStock_340974671.jpeg";
+import landing_03 from "../src/assets/AdobeStock_347708874.jpeg";
+import "./App.css";
 import axios from "axios";
 import { Github_url } from "./config";
 
@@ -89,8 +95,19 @@ function App() {
               exact
               element={
                 <>
-                  <Search />
-                  <Landing />
+                  {/* <Search /> */}
+                  <Landing imageSrc={landing_01} />
+                  <Slider
+                    imageSrc={landing_02}
+                    title={`" 위치 기반 검색 "`}
+                    subtitle={"당신의 주변에서 일어나고 있는 놀라운 프로젝트를 찾아보세요."}
+                  />
+                  <Slider
+                    imageSrc={landing_03}
+                    title={`" 같이의 가치 "`}
+                    subtitle={"당신의 드림 프로젝트, 함께 하면 현실이 됩니다."}
+                    flipped={true}
+                  />
                 </>
               }
             />
