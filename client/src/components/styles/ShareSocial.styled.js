@@ -1,7 +1,6 @@
 import React from "react";
 import { FacebookShareButton, FacebookIcon, TwitterIcon, TwitterShareButton } from "react-share";
 import KakaoShareButton from "../kakao";
-// import { CopyToClipboard } from "react-copy-to-clipboard";
 import styled from "styled-components";
 function ShareSocialButton(title) {
   const currentUrl = window.location.href;

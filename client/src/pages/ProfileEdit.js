@@ -1,17 +1,24 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { signout, reset, deleteUser } from "../features/user/userSlice.js";
+import { signout, reset, editProfile, deleteUser } from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 import EditSideProfile from "../components/styles/EditSideProfile.styled";
-import { openModal } from "../features/modal/modalSlice.js";
-
 const StyledEditProfile = styled(Content)`
   grid-column: 4 / 12;
+  grid-row: 5/12;
   min-height: 80vh;
   text-align: left;
+  min-width: 520px;
+
+  @media screen and (max-width: 1024px) {
+    grid-column: 3 / 13;
+  }
+  @media screen and (max-width: 764px) {
+    grid-column: 2 / 14;
+  }
 `;
 
 const UserTitle = styled.div`
@@ -21,6 +28,10 @@ const UserTitle = styled.div`
     font-weight: 500;
     border-bottom: 5px solid #dfc1ff;
   }
+  @media screen and (max-width: 1024px) {
+    font-size: 30px;
+    grid-column: 3 / 13;
+  }
 `;
 
 const Tab = styled.div`
@@ -29,13 +40,18 @@ const Tab = styled.div`
   border-bottom: 2px solid darkgray;
   margin-bottom: 20px;
   color: gray;
+  font-size: 18px;
   cursor: pointer;
   .tap {
     padding: 10px 3%;
     border-radius: 10px 10px 0 0;
+    transition: 0.3s;
     &:hover {
       color: black;
-      border-bottom: 2px solid #dfc1ff;
+      border-bottom: 3px solid #dfc1ff;
+    }
+    @media screen and (max-width: 764px) {
+      font-size: 14px;
     }
   }
 `;
@@ -44,29 +60,60 @@ const MyStudyTab = styled.div``;
 const LikedStudyTab = styled.div``;
 const MyprofileTab = styled.div``;
 
-const ProfileContainer = styled.div`
-  display: flex;
+const ProfileContainer = styled(Content)`
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
   margin-top: 50px;
   @media screen and (max-width: 1024px) {
+    display: flex;
     flex-direction: column;
-    align-items: center;
   }
 `;
 
 const Side = styled.div`
   padding: 0px 20px;
+  grid-column: 1 / 3;
 `;
 
 const ProfileWrap = styled.form`
   display: flex;
+  grid-column: 3 / 8;
   flex-direction: column;
-  margin-left: 50px;
+  margin: 0px 30px;
 `;
 
+const Text = styled.div`
+  width: 150px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid gray;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  @media screen and (max-width: 764px) {
+    font-size: 18px;
+  }
+`;
+
+const Input = styled.input`
+  display: flex;
+  border: 1px solid gray;
+  padding: 10px 10px;
+  margin-right: 20px;
+  border-radius: 5px;
+  width: 100%;
+`;
+const InputBio = styled.textarea`
+  display: flex;
+  border: 1px solid gray;
+  padding: 10px 10px;
+  margin-right: 20px;
+  width: 100%;
+`;
 const ButtonWrap = styled.div`
   display: flex;
   margin-top: 30px;
-
+  font-size: 18px;
   p {
     border-bottom: 1px solid gray;
     margin-right: 10px;
@@ -79,51 +126,6 @@ const ButtonWrap = styled.div`
     }
   }
 `;
-
-const Text = styled.div`
-  width: 150px;
-  padding-bottom: 2px;
-  border-bottom: 1px solid gray;
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 10px;
-  margin-top: 10px;
-`;
-
-const Input = styled.input`
-  display: flex;
-  border: 1px solid gray;
-  padding: 10px 10px;
-  /* border-radius: 5px; */
-  width: 800px;
-
-  @media screen and (max-width: 1200px) {
-    width: 300px;
-  }
-
-  @media screen and (max-width: 1600px) {
-    width: 500px;
-  }
-  @media screen and (max-width: 1980px) {
-    width: 800px;
-  }
-`;
-const InputBio = styled.textarea`
-  display: flex;
-  border: 1px solid gray;
-  padding: 10px 10px;
-  width: 1000px;
-  @media screen and (max-width: 1200px) {
-    width: 300px;
-  }
-  @media screen and (max-width: 1600px) {
-    width: 500px;
-  }
-  @media screen and (max-width: 1980px) {
-    width: 800px;
-  }
-`;
-
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -146,10 +148,9 @@ const MyPage = () => {
     if (isError) {
       console.log("editProfile.rejected :", message);
     }
-    dispatch(openModal({ name: "UpdateUser", childrenProps: { id: user.id, userData: userData } }));
-    // dispatch(editProfile({ id: user.id, userData: userData }));
-    // dispatch(reset());
-    // navigate("/profile");
+    dispatch(editProfile({ id: user.id, userData: userData }));
+    dispatch(reset());
+    navigate("/profile");
   };
   // 임시
   const handleSignout = (e) => {
@@ -230,7 +231,7 @@ const MyPage = () => {
 
             <ButtonWrap>
               <Link to="/profile">
-                <p onClick={handleEditing}>수정하기</p>
+                <p onClick={handleEditing}>수정 완료</p>
               </Link>
               <Link to="/">
                 <p onClick={handleSignout}>로그아웃</p>
@@ -248,5 +249,3 @@ const MyPage = () => {
 };
 
 export default MyPage;
-
-

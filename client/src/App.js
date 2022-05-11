@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 // import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import Container from "../src/components/styles/Container.styled";
-import Header from "../src/components/styles/Header.styled";
-import { Search } from "../src/components/styles/Search.styled";
-import Footer from "../src/components/styles/Footer.styled";
+import Container from "./components/styles/Container.styled";
+import Header from "./components/styles/Header.styled";
+import { Search } from "./components/styles/Search.styled";
+// import Footer from "./components/styles/Footer.styled";
 import Landing from "./pages/Landing";
-import Write from "././components/styles/WriteStudyDesc.styled";
-import Map from "././components/styles/Map.styled";
+import Write from "./components/styles/WriteStudyDesc.styled";
+import Map from "./components/styles/Map.styled";
 import Study from "./components/styles/StudyDesc.styled";
 import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
@@ -17,17 +17,20 @@ import LikedStudy from "./pages/LikedStudy";
 import EditStudyDesc from "./components/styles/EditStudyDesc.styled";
 import "./static/fonts/font.css";
 import "./App.css";
-import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import Slider from "./components/Slider";
-// import axios from "axios";
+
 import landing_01 from "../src/assets/AdobeStock_434132331.jpeg";
 import landing_02 from "../src/assets/AdobeStock_340974671.jpeg";
 import landing_03 from "../src/assets/AdobeStock_347708874.jpeg";
 import "./App.css";
 import axios from "axios";
 import { Github_url } from "./config";
+import WriteButtonModal from "./WriteButtonModal.styled";
+import BottomMenu from "./components/styles/bottommenu.styled";
+// import Content from "./components/styles/Content.styled";
+import ConfirmModal from "./components/styles/Modals/ConfirmModal";
 
 function App() {
   const theme = {
@@ -84,7 +87,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <Container>
           <Header img={theme.icons} />
-
+          <ConfirmModal />
           <div className="App">
             <header className="App-header"></header>
           </div>
@@ -107,6 +110,7 @@ function App() {
                     subtitle={"당신의 드림 프로젝트, 함께 하면 현실이 됩니다."}
                     flipped={true}
                   />
+                  <WriteButtonModal />
                 </>
               }
             />
@@ -137,7 +141,8 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
-          <Footer />
+          <BottomMenu />
+          {/* <Footer /> */}
         </Container>
       </ThemeProvider>
     </Router>
