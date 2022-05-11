@@ -15,7 +15,6 @@ const {
 module.exports = {
   kakaoWithdrawal: async (kakaoId) => {
     const kakaoAdmin = process.env.KAKAO_ADMIN_KEY;
-    console.log(kakaoId);
 
     await axios(
       `https://kapi.kakao.com/v1/user/unlink?target_id_type=user_id&target_id=${kakaoId}`,

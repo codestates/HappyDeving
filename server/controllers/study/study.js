@@ -36,6 +36,7 @@ module.exports = {
         closed,
         study_comment,
         location_id,
+        user_id,
         startDate,
         createdAt,
         updatedAt,
@@ -56,6 +57,7 @@ module.exports = {
           study: {
             id,
             username: study.user.username,
+            user_id,
             title,
             content,
             kakaoLink,
@@ -177,6 +179,7 @@ module.exports = {
       const data = checkAccessToken(req);
 
       const {
+        id: userId,
         study_id,
         username,
         content,
@@ -206,6 +209,7 @@ module.exports = {
       if (data.id !== studyInfo.dataValues.user_id) {
         return res.status(401).json("wrong user");
       }
+      // return res.json("ok");
 
       let studylangueId = [];
       for (let i = 0; i < studyInfo.language.length; i++) {
