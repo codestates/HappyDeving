@@ -5,57 +5,79 @@ import CommentForm from "./CommentForm";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-const CommentDiv = styled.div`
-  /* background-color: yellow; */
+const CommentDiv = styled(Content)`
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+`;
+const CommentUpperPart = styled.div`
   width: 100%;
   display: flex;
-  padding: 0rem 0rem 0rem 0.5rem;
-  box-shadow: none;
-  /* border: 1px solid rgba(205, 201, 208, 0.28); */
-`;
-const CommentImageContainer = styled(Content)`
-  /* background-color: yellow; */
-  width: 100px;
-  height: 85px;
-  margin-right: 2%;
-  background-color: rgba(205, 201, 208, 0.68);
+  margin-bottom: 20px;
+  font-size: 16px;
 `;
 const CommentRightPart = styled.div`
-  width: 50%;
-  box-shadow: none;
-  /* border: 1px solid rgba(205, 201, 208, 0.28); // border 있으면 박스안에 둥근 테두리 보임 */
-`;
-const CommentAuthorAndDate = styled(Content)`
   width: 100%;
-  box-shadow: none;
-  font-size: 0.8rem;
+`;
+const CommentDownPart = styled.div`
+  /* background-color: yellow; */
+  width: 100%;
   display: flex;
-  span {
-    margin-right: 40px;
+  margin-bottom: 10px;
+  font-size: 16px;
+`;
+const CommentImageContainer = styled.div`
+  /* background-color: yellow; */
+  width: 60px;
+  height: 40px;
+  border-radius: 10px;
+  margin-right: 2%;
+  img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
   }
 `;
-const CommentContent = styled(Content)`
+const CommentText = styled.div`
+  /* background-color: yellow; */
   width: 100%;
-  box-shadow: none;
-  border: none;
+  height: auto;
+`;
+const CommentAuthor = styled.div`
+  font-size: 16px;
+`;
+const CommentDate = styled.div`
+  font-size: 14px;
 `;
 
-const Button = styled(Content)`
-  margin-right: 2rem;
-  float: right;
-  width: 5vw;
-  height: 30px;
-  color: white;
-  text-align: center;
-  line-height: 30px;
-  background-color: ${(props) => props.theme.colors.purple};
-  border-radius: 12px;
-  box-shadow: 3px 2px 1px 1px #c593fe;
-  &:hover {
-    background-color: ${(props) => props.theme.colors.lavender};
-  }
+const CommentActions = styled.div`
+  display: flex;
+  font-size: 12px;
+  color: rgb(51, 51, 51);
+  cursor: pointer;
+  margin-top: 8px;
+  margin-right: 10%;
 `;
+const CommentAction = styled.div`
+  /* background-color: orange; */
+  margin-right: 8px;
+`;
+const Replies = styled.div`
+  margin-top: 10px;
+`;
+
+// const Button = styled.div`
+//   font-size: 14px;
+//   margin-right: 2rem;
+//   float: right;
+//   width: 5vw;
+//   height: 30px;
+//   text-align: center;
+//   line-height: 30px;
+//   &:hover {
+//     color: ${(props) => props.theme.colors.lavender};
+//   }
+// `;
 
 const Comment = ({
   comment,
@@ -66,7 +88,6 @@ const Comment = ({
   updateComment,
   deletingComment,
   parentId = null,
-  studyId,
 }) => {
   // const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
@@ -77,24 +98,26 @@ const Comment = ({
   const isReplying =
     activeComment && activeComment.id === comment.id && activeComment.type === "replying";
 
-  const canDelete = user.username === comment.username && replies.length === 0;
-  const canReply = Boolean(user.id);
-  const canEdit = user.username === comment.username;
+  const canDelete = user.id === comment.user_id && replies.length === 0;
+  const canReply = Boolean(user.id) && !comment.parentId;
+  const canEdit = user.id === comment.user_id;
 
   const replyId = parentId ? parentId : comment.id;
   const createdAt = new Date(comment.createdAt).toLocaleDateString();
 
   return (
-    <CommentDiv key={comment.id}>
-      <CommentImageContainer>
-        <img src="https://i.ibb.co/nr4FYns/happydevil.png" />
-      </CommentImageContainer>
-      <CommentRightPart>
-        <CommentAuthorAndDate>
-          <span className="comment-author">{comment.username}</span>
-          <span>{createdAt}</span>
-        </CommentAuthorAndDate>
-        {!isEditing && <CommentContent>{comment.content}</CommentContent>}
+    <CommentDiv>
+      <CommentUpperPart key={comment.id}>
+        <CommentImageContainer>
+          <img src={comment.image} />
+        </CommentImageContainer>
+        <CommentRightPart>
+          <CommentAuthor>{comment.username}</CommentAuthor>
+          <CommentDate>{createdAt}</CommentDate>
+        </CommentRightPart>
+      </CommentUpperPart>
+      {!isEditing && <CommentText>{comment.content}</CommentText>}
+      <CommentDownPart>
         {isEditing && (
           <CommentForm
             submitLabel="수정"
@@ -108,48 +131,43 @@ const Comment = ({
             }}
           />
         )}
-        <div className="comment-actions">
+        <CommentActions>
           {canReply && (
-            <Button>
-              <button
-                className="comment-action"
-                onClick={() => setActiveComment({ id: comment.id, type: "replying" })}
-              >
-                답글
-              </button>
-            </Button>
+            <CommentAction
+              type="button"
+              onClick={() => setActiveComment({ id: comment.id, type: "replying" })}
+            >
+              답글
+            </CommentAction>
           )}
           {canEdit && (
-            <Button>
-              <button
-                className="comment-action"
-                onClick={() => setActiveComment({ id: comment.id, type: "editing" })}
-              >
-                {/* <FontAwesomeIcon icon="fas fa-edit" size="1x" /> */}수정
-              </button>
-            </Button>
+            <CommentAction
+              type="button"
+              onClick={() => setActiveComment({ id: comment.id, type: "editing" })}
+            >
+              {/* <FontAwesomeIcon icon="fas fa-edit" size="1x" /> */}수정
+            </CommentAction>
           )}
           {canDelete && (
-            <Button>
-              <button className="comment-action" onClick={() => deletingComment(comment)}>
-                {/* <FontAwesomeIcon icon="fas fa-trash" size="1x" /> */}삭제
-              </button>
-            </Button>
+            <CommentAction type="button" onClick={() => deletingComment(comment)}>
+              {/* <FontAwesomeIcon icon="fas fa-trash" size="1x" /> */}삭제
+            </CommentAction>
           )}
-        </div>
+        </CommentActions>
         {isReplying && (
           <CommentForm
             commentId={comment.id}
-            studyId={studyId}
+            studyId={comment.study_id}
             replyId={replyId}
             submitLabel="작성"
             handleSubmit={addComment}
           />
         )}
         {replies.length > 0 && (
-          <div className="replies">
+          <Replies>
             {replies.map((reply) => (
               <Comment
+                studyId={comment.study_id}
                 commentId={comment.id}
                 comment={reply}
                 key={reply.id}
@@ -160,12 +178,11 @@ const Comment = ({
                 addComment={addComment}
                 parentId={comment.id}
                 replies={[]} // 대댓글은 nested reply가 있으면 안 됨
-                currentUsername={user.name}
               />
             ))}
-          </div>
+          </Replies>
         )}
-      </CommentRightPart>
+      </CommentDownPart>
     </CommentDiv>
   );
 };

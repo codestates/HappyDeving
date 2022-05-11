@@ -23,9 +23,6 @@ export const getProfileApi = (id) => axios.get(`/mypage/${id}`);
 
 export const editProfileApi = (id, data) => axios.patch(`/mypage/${id}`, data);
 
-export const deleteUserApi = () => axios.delete("/mypage");
+export const deleteUserApi = (id, data) => axios.delete(`/users/withdrawal/${id}`, { data: data });
 
-export const editProfileImageApi = (id, data) =>
-  axios.post(`/mypage/image/${id}`, data, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+export const editProfileImageApi = (id, data) => axios.post(`/mypage/image/${id}`, data);

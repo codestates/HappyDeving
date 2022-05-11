@@ -13,9 +13,11 @@ const icons = {
 const StyledHeader = styled.header`
   font-family: "Bold";
   display: flex;
+  height: 100px;
   justify-content: space-between;
   align-items: center;
-  grid-column: 2/14;
+  grid-column: 3/13;
+  grid-row: 1/2;
   position: relative;
   margin-bottom: 40px;
   margin-top: 40px;

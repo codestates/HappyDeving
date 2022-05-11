@@ -28,7 +28,6 @@ module.exports = {
       const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID;
       const KAKAO_CLIENT_SECRET = process.env.KAKAO_CLIENT_SECRET;
       const redirectUri = process.env.CLIENT_ORIGIN;
-      // const grantType = "authorization_code";
 
       // authorizationCode로 kakao token 을 받아온다.
       const resp = await fetch("https://kauth.kakao.com/oauth/token", {
@@ -59,7 +58,7 @@ module.exports = {
       const { nickname, thumbnail_image_url } = kakaoUserInfo.kakao_account.profile;
       id = String(id);
       const password = `${id}${nickname}`;
-      const email = `${id}${nickname}@gmail.com`;
+      const email = `${id}${nickname}@kakao.com`;
 
       const salt = await bcrypt.genSalt(12);
       const hashedPassword = await bcrypt.hash(password, salt);

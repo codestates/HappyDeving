@@ -22,16 +22,17 @@ YYYY-MM-DD
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
+
 ```javascript
 {
 data: {
             studies : [
                     {
-                    "id": 1, 
+                    "id": 1,
                     "content": "airbnb 클론 코딩 하신 분"
                     "title": "스터디 구함",
-                    "kakaoLink": "https://kakao.com", 
-                    "closed": false, 
+                    "kakaoLink": "https://kakao.com",
+                    "closed": false,
                     "location":  { lat: 33.450705, lng: 126.570677 },
                     "language": [
                             {
@@ -39,7 +40,7 @@ data: {
                             "name": "javascript"
                             },
                             ...
-                            ], 
+                            ],
                     "startdate": "2019-03-11",
                     "createdAt": "2019-02-24T16:17:47.000Z",
                     "updatedAt": "2019-02-24T16:17:47.000Z"
@@ -49,19 +50,25 @@ data: {
     }
 }
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="404: Not Found" description="" %}
+
 ```javascript
 {
-    // Response
+  // Response
 }
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="500: Internal Server Error" description="" %}
+
 ```javascript
+
 ```
+
 {% endswagger-response %}
 {% endswagger %}
 
@@ -77,6 +84,7 @@ data: {
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
+
 ```javascript
 {
     data: {
@@ -86,12 +94,12 @@ data: {
                     "username": "somi",
                     "content": "airbnb 클론 코딩 하신 분",
                     "title": "스터디 구함",
-                    "kakaoLink": "https://kakao.com", 
+                    "kakaoLink": "https://kakao.com",
                     "closed": false,
-                    "location":  
-                            { 
-                            lat: 33.450705, 
-                            lng: 126.570677, 
+                    "location":
+                            {
+                            lat: 33.450705,
+                            lng: 126.570677,
                             place_name: "롯데월드"
                             },
                     "language": [
@@ -104,7 +112,7 @@ data: {
                     "createdAt": "2019-02-24T16:17:47.000Z",
                     "updatedAt": "2019-02-24T16:17:47.000Z"
                     },
-            comments:[ 
+            comments:[
                     {
                     "id": 1,
                     "content": "참여하고싶어요",
@@ -114,16 +122,20 @@ data: {
                     "parentId": null
                     }
                     ...
-                    ]  
+                    ]
     }
 
 }
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="500: Internal Server Error" description="" %}
+
 ```javascript
+
 ```
+
 {% endswagger-response %}
 {% endswagger %}
 
@@ -181,21 +193,29 @@ latitude, longitude, guType, dongType, name
 {% endswagger-parameter %}
 
 {% swagger-response status="201: Created" description="" %}
+
 ```javascript
+
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="401: Unauthorized" description="" %}
+
 ```javascript
 {
-    // Response
+  // Response
 }
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="500: Internal Server Error" description="" %}
+
 ```javascript
+
 ```
+
 {% endswagger-response %}
 {% endswagger %}
 
@@ -255,6 +275,7 @@ name(장소이름)
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
+
 ```javascript
 {
     data: {
@@ -264,11 +285,11 @@ name(장소이름)
                     "username": "somi",
                     "content": "airbnb 클론 코딩 하신 분",
                     "title": "스터디 구함",
-                    "kakaoLink": "https://kakao.com", 
-                    "closed": false, 
-                    "location": { 
-                            lat: 33.450705, 
-                            lng: 126.570677 
+                    "kakaoLink": "https://kakao.com",
+                    "closed": false,
+                    "location": {
+                            lat: 33.450705,
+                            lng: 126.570677
                             },
                     "language": [
                             {
@@ -284,19 +305,25 @@ name(장소이름)
     }
 }
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="401: Unauthorized" description="" %}
+
 ```javascript
 {
-    // Response
+  // Response
 }
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="500: Internal Server Error" description="" %}
+
 ```javascript
+
 ```
+
 {% endswagger-response %}
 {% endswagger %}
 
@@ -318,22 +345,30 @@ access token
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
+
 ```javascript
-{}
+{
+}
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="401: Unauthorized" description="" %}
+
 ```javascript
 {
-    // Response
+  // Response
 }
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="500: Internal Server Error" description="" %}
+
 ```javascript
+
 ```
+
 {% endswagger-response %}
 {% endswagger %}
 
@@ -365,10 +400,11 @@ access token
 {% endswagger-parameter %}
 
 {% swagger-response status="201: Created" description="" %}
+
 ```javascript
 {
     data: {
-            comments:[ 
+            comments:[
                     {
                     "id": 2,
                     "username": "somi",
@@ -382,22 +418,28 @@ access token
             userInfo:{
                     "id": 1,
                     "username": "somi"
-                    }  
+                    }
     }
 }
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="401: Unauthorized" description="" %}
+
 ```javascript
-{}
+{
+}
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="500: Internal Server Error" description="" %}
+
 ```javascript
-err
+err;
 ```
+
 {% endswagger-response %}
 {% endswagger %}
 
@@ -419,10 +461,11 @@ access token
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
+
 ```javascript
 {
     data: {
-            comments:[ 
+            comments:[
                     {
                     "id": 3,
                     "username": "somi",
@@ -436,22 +479,28 @@ access token
             userInfo:{
                     "id": 1,
                     "username": "somi"
-                    }  
+                    }
     }
 }
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="401: Unauthorized" description="" %}
+
 ```javascript
-{}
+{
+}
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="500: Internal Server Error" description="" %}
+
 ```javascript
-err
+err;
 ```
+
 {% endswagger-response %}
 {% endswagger %}
 
@@ -473,18 +522,26 @@ access token
 {% endswagger-parameter %}
 
 {% swagger-response status="200: OK" description="" %}
+
 ```javascript
+
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="401: Unauthorized" description="" %}
+
 ```javascript
+
 ```
+
 {% endswagger-response %}
 
 {% swagger-response status="500: Internal Server Error" description="" %}
+
 ```javascript
+
 ```
+
 {% endswagger-response %}
 {% endswagger %}
-

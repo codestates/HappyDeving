@@ -1,5 +1,6 @@
 import axios from "axios";
 
+export const getCommentsApi = (id) => axios.get(`/study/${id}/comments`);
 // body: user_id, study_id, content, parentId=null, 대댓글일때만 parentId=study_commentId
 export const writeCommentApi = (data) => axios.post("/studies/comment", data);
 

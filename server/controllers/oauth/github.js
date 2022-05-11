@@ -36,7 +36,7 @@ module.exports = {
       let { email } = response.data;
       const password = `${id}${nickname}`;
       if (email === null) {
-        email = `${id}${nickname}@gmail.com`;
+        email = `${id}${nickname}@github.com`;
       }
       const salt = await bcrypt.genSalt(12);
       const hashedPassword = await bcrypt.hash(password, salt);
