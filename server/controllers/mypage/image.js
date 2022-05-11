@@ -1,5 +1,6 @@
 const { User, Study_comment, Study, Language, Location } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
+const { uploadFile, getFileStream } = require("../../middleware/s3");
 
 module.exports = {
   post: async (req, res) => {
@@ -15,10 +16,17 @@ module.exports = {
         return res.status(401).json("wrong req params");
       }
 
-      console.log(req);
-      const { image } = req.body;
+      const file = req.file;
+      const uploadImg = await uploadFile(file);
 
-      console.log("image=======", image);
+      const image = uploadImg.Location;
+
+      console.log(typeof image);
+
+      // const image = await getFileStream(result.Key);
+      // console.log("image=========", image);
+
+      // return res.json({ image: result.Location });
 
       const userInfo = await User.findOne({ where: { id: paramsId } });
 

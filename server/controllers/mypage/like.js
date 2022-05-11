@@ -84,8 +84,6 @@ module.exports = {
       let { id } = req.params;
       id = Number(id);
 
-      console.log(study_id);
-
       // 유저 정보가 없을때
       if (id !== data.id) {
         return res.status(401).json("wrong user");

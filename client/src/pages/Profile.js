@@ -1,78 +1,122 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { reset, deleteUser, getProfile } from "../features/user/userSlice";
+import { reset, getProfile } from "../features/user/userSlice";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
-import { signout } from "../features/user/userSlice";
-import EditSideProfile from "../components/styles/EditSideProfile.styled";
+// import { signout } from "../features/user/userSlice";
 
-const MyStudyTab = styled(Content)``;
-const LikedStudyTab = styled(Content)``;
-
-const ProfileWrap = styled(Content)`
-  /* background-color: red; */
-  width: 62vw;
-`;
-
-const ProfileInfoWrap = styled.div`
-  box-shadow: none;
-  width: 62vw;
-  height: auto;
-  padding: 0.5% 2% 1% 2%;
-`;
-const Name = styled.div``;
-const Biography = styled.div``;
-const GitHub = styled.div``;
-const Blog = styled.div``;
-
-const ButtonWrap = styled.div`
-  display: flex;
-  justify-content: right;
-`;
+import SideProfile from "../components/styles/SideProfile.styled";
 
 const StyledEditProfile = styled(Content)`
-  grid-column: 5 / 14;
+  grid-row: 5/12;
+  grid-column: 4 / 12;
+  min-height: 80vh;
   text-align: left;
-  /* x, y, blur-radius, spread */
-`;
-
-const Title = styled(Content)`
-  grid-column: 2/14;
-  height: 80px;
-  padding: 20px 3%;
-  font-family: "Bold";
-  display: flex;
-  border-radius: ${(props) => props.theme.borderRadius};
-
-  .titleText {
-    flex: 1;
-    font-size: 3vw;
-    text-align: center;
-    line-height: 40px;
-    margin-left: -3%;
-    margin-right: 6%;
+  min-width: 520px;
+  @media screen and (max-width: 1024px) {
+    grid-column: 3 / 13;
+  }
+  @media screen and (max-width: 764px) {
+    grid-column: 2 / 14;
   }
 `;
 
-const Text = styled.div`
-  width: 120px;
-  font-family: "Medium";
+const UserTitle = styled.div`
+  font-size: 50px;
+  margin-bottom: 50px;
+  span {
+    font-weight: 500;
+    border-bottom: 5px solid #dfc1ff;
+  }
+  @media screen and (max-width: 1024px) {
+    font-size: 30px;
+    grid-column: 3 / 13;
+  }
 `;
 
-const Button = styled.button`
-  margin-right: 1rem;
-  width: 10vw;
-  height: 30px;
-  color: white;
-  text-align: center;
-  line-height: 30px;
-  background-color: ${(props) => props.theme.colors.purple};
-  border-radius: 30px;
-  box-shadow: 3px 2px 1px 1px #c593fe;
-  &:hover {
-    background-color: ${(props) => props.theme.colors.lavender};
+const Tab = styled.div`
+  display: flex;
+  font-weight: 800;
+  border-bottom: 2px solid darkgray;
+  margin-bottom: 20px;
+  color: gray;
+  font-size: 18px;
+
+  cursor: pointer;
+  .tap {
+    padding: 10px 3%;
+    border-radius: 10px 10px 0 0;
+    transition: 0.3s;
+    &:hover {
+      color: black;
+      border-bottom: 3px solid #dfc1ff;
+    }
+  }
+  @media screen and (max-width: 764px) {
+    font-size: 14px;
+  }
+`;
+const MyStudyTab = styled.div``;
+const LikedStudyTab = styled.div``;
+const MyprofileTab = styled.div``;
+
+const ProfileContainer = styled(Content)`
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  margin-top: 50px;
+  @media screen and (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+  }
+`;
+
+const Side = styled.div`
+  padding: 0px 20px;
+  grid-column: 1 / 3;
+`;
+
+const ProfileWrap = styled.div`
+  display: flex;
+  grid-column: 3 / 8;
+  flex-direction: column;
+  margin: 0px 30px;
+`;
+
+const Text = styled.div`
+  width: 150px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid gray;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  @media screen and (max-width: 764px) {
+    font-size: 18px;
+  }
+`;
+
+const Info = styled.div`
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 18px;
+`;
+
+const ButtonWrap = styled.div`
+  display: flex;
+  font-size: 18px;
+  margin-top: 30px;
+  p {
+    border-bottom: 1px solid gray;
+    margin-right: 10px;
+    color: gray;
+    font-weight: 500;
+    cursor: pointer;
+    &:hover {
+      color: black;
+      border-bottom: 3px solid #dfc1ff;
+    }
   }
 `;
 
@@ -99,41 +143,42 @@ const Profile = () => {
 
   return (
     <>
-      <EditSideProfile />
       <StyledEditProfile>
-        <MyStudyTab onClick={() => navigate("/mystudy")}>
-          나의 스터디
-        </MyStudyTab>
-        <LikedStudyTab onClick={() => navigate("/likedstudy")}>
-          찜한 스터디
-        </LikedStudyTab>
-        <Title>내 정보 수정</Title>
-        <ProfileWrap>
-          <ProfileInfoWrap>
+        <UserTitle>
+          <h1>
+            <span>{user.username}</span> 님 안녕하세요
+          </h1>
+        </UserTitle>
+        <Tab>
+          <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
+            나의 스터디
+          </MyStudyTab>
+          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
+            찜한 스터디
+          </LikedStudyTab>
+          <MyprofileTab className="tap" onClick={() => navigate("/profile")}>
+            프로필
+          </MyprofileTab>
+        </Tab>
+
+        <ProfileContainer>
+          <Side>
+            <SideProfile />
+          </Side>
+          <ProfileWrap>
             <Text>닉네임</Text>
-            <Name>{user?.username}</Name>
-          </ProfileInfoWrap>
-          <ProfileInfoWrap>
+            <Info>{user?.username}</Info>
             <Text>자기 소개</Text>
-            <Biography>{user?.bio}</Biography>
-          </ProfileInfoWrap>
-          <ProfileInfoWrap>
-            <Text>깃허브 주소</Text>
-            <GitHub>{user?.github}</GitHub>
-          </ProfileInfoWrap>
-          <ProfileInfoWrap>
-            <Text>블로그 주소</Text>
-            <Blog>{user?.blog}</Blog>
-          </ProfileInfoWrap>
-          <ButtonWrap>
-            <Button
-              className="cursor-pointer px-3 py-2 text-sm text-blue-100 bg-purple-500 rounded hover:bg-purple-400"
-              onClick={MoveToEditPage}
-            >
-              수정하기
-            </Button>
-          </ButtonWrap>
-        </ProfileWrap>
+            <Info>{user?.bio}</Info>
+            <Text></Text>
+            <Info>{user?.github}</Info>
+            <Text> </Text>
+            <Info>{user?.blog}</Info>
+            <ButtonWrap>
+              <p onClick={MoveToEditPage}>프로필 수정하기</p>
+            </ButtonWrap>
+          </ProfileWrap>
+        </ProfileContainer>
       </StyledEditProfile>
     </>
   );

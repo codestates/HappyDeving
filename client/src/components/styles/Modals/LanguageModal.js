@@ -6,14 +6,18 @@ import { reset } from "../../../features/Search/searchModalSlice";
 import { useDispatch } from "react-redux";
 
 const StyledLanguageModal = styled(Content)`
-  grid-column: 7/11;
+  @media screen and (min-width: 768px) {
+    grid-column: 7/11;
+  }
   width: 350px;
-  height: 200px;
-  overflow: scroll;
+  height: auto;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 10px;
   position: absolute;
   z-index: 10;
   background-color: white;
-  padding: 5px 10px;
   box-shadow: ${(props) => props.theme.contents.boxShadow};
 
   > .elements {
@@ -34,7 +38,24 @@ const StyledLanguageModal = styled(Content)`
 `;
 
 const LanguageModal = () => {
-  return <StyledLanguageModal></StyledLanguageModal>;
+  const dispatch = useDispatch();
+  return (
+    <StyledLanguageModal>
+      {Object.keys(langImg).map((el, idx) => (
+        <div
+          key={idx}
+          className="elements"
+          onClick={() => {
+            console.log(el);
+            dispatch(setLanguageData(el));
+            dispatch(reset());
+          }}
+        >
+          {el}
+        </div>
+      ))}
+    </StyledLanguageModal>
+  );
 };
 
 export default LanguageModal;

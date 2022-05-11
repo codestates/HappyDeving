@@ -20,7 +20,7 @@ const WriteStudyDesc = styled.div`
   }
 
   @media screen and (min-width: 1024px) {
-    grid-column: 3/13;
+    grid-column: 4/12;
   }
 `;
 
@@ -89,6 +89,7 @@ const DescLocationModal = styled(LocationModal)`
   width: 90%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   margin: 0 auto;
+  font-size: 16px;
 
   input {
     box-shadow: none;
@@ -106,6 +107,7 @@ const Wrapper = styled.div`
     border: 1px solid rgba(0, 0, 0, 0.1);
     height: 30px;
     width: 100%;
+
     text-align: center;
   }
 
@@ -114,6 +116,10 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: flex-end;
     height: 30px;
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
   }
   .result {
     margin: 0 auto;
@@ -132,9 +138,9 @@ const Wrapper = styled.div`
   }
 `;
 const Text = styled.div`
-  font-size: 22px;
+  font-size: 16px;
   @media screen and (min-width: 1024px) {
-    font-size: 26px;
+    font-size: 20px;
   }
   margin-bottom: 10px;
 `;
@@ -142,7 +148,14 @@ const Input = styled.input`
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.1);
   height: 30px;
-  width: 100%;
+  width: 70%;
+  font-size: 16px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;
+    width: 100%;
+  }
+
   text-align: center;
   &:focus {
     outline: none;

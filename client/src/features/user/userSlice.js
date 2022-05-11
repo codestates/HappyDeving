@@ -21,6 +21,7 @@ const initialState = {
 };
 
 export const signup = createAsyncThunk("user/signup", async (signupData, thunkAPI) => {
+  console.log(signupData);
   try {
     return await signupApi(signupData).then((res) => {
       return res.data;

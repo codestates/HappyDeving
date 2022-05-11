@@ -31,12 +31,14 @@ import CalenderDate from "../Calendar.js";
 // },
 
 export const StyledSearch = styled.div`
-  background-color: white;
-  font-family: "Bold";
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-family: "Medium";
   border-radius: 30px;
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   margin-bottom: 10px;
+
+  //mobile일 때 줄이고 로고 키우기
 
   div {
     box-shadow: none;
@@ -57,15 +59,17 @@ export const StyledSearch = styled.div`
     }
 
     .desc {
-      @media screen and (min-width: 1024px) {
-        font-size: 22px;
+      font-family: "Medium";
+      font-size: 22px;
+
+      @media screen and (max-width: 1024px) {
+        font-size: 20px;
       }
 
       @media screen and (max-width: 768px) {
         font-size: 16px;
+        display: none;
       }
-      font-family: "Bold";
-      font-size: 16px;
     }
   }
 `;

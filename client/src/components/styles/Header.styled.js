@@ -13,6 +13,7 @@ import {
   reset,
 } from "../../features/Search/searchModalSlice";
 import CalenderDate from "../Calendar.js";
+import LanguageModal from "./Modals/LanguageModal";
 
 const icons = {
   logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
@@ -48,6 +49,7 @@ const StyledHeader = styled.header`
   padding: 10px 0px 0px 15px;
   font-family: "Bold";
   display: flex;
+  height: 100px;
   justify-content: space-between;
   align-items: center;
   z-index: 10;
@@ -154,6 +156,10 @@ const Language = styled.div`
   width: 100vw;
   height: 100vh;
   background-color: red;
+  .language {
+    width: 50%;
+    margin: 0 auto;
+  }
 `;
 
 const Info = styled.div`
@@ -244,7 +250,13 @@ const Header = ({ drop }) => {
             </Info>
           </Date>
         ) : null}
-        {language ? <Language></Language> : null}
+        {language ? (
+          <Language>
+            <div className="language">
+              <LanguageModal />
+            </div>
+          </Language>
+        ) : null}
       </Modal>
     </>
   );

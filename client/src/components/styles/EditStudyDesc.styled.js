@@ -88,9 +88,9 @@ const Wrapper = styled.div`
   }
 `;
 const Text = styled.div`
-  font-size: 22px;
+  font-size: 16px;
   @media screen and (min-width: 1024px) {
-    font-size: 26px;
+    font-size: 20px;
   }
   margin-bottom: 10px;
 `;
@@ -131,7 +131,7 @@ const Title = styled(Content)`
 
   .titleText {
     flex: 1;
-    font-size: 3vw;
+    font-size: 20px;
     text-align: center;
     line-height: 40px;
     margin-left: -3%;

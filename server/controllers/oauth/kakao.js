@@ -2,6 +2,7 @@ require("dotenv").config();
 const { User } = require("../../models");
 const axios = require("axios");
 const fetch = require("node-fetch");
+const bcrypt = require("bcrypt");
 const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
 
 module.exports = {
@@ -18,7 +19,11 @@ module.exports = {
   post: async (req, res) => {
     try {
       const { authorizationCode } = req.body;
+<<<<<<< HEAD
       console.log(authorizationCode);
+=======
+      // console.log(authorizationCode);
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
 
       if (!authorizationCode) {
         return res.status(400).json("bad request");
@@ -27,7 +32,6 @@ module.exports = {
       const KAKAO_CLIENT_ID = process.env.KAKAO_CLIENT_ID;
       const KAKAO_CLIENT_SECRET = process.env.KAKAO_CLIENT_SECRET;
       const redirectUri = process.env.CLIENT_ORIGIN;
-      // const grantType = "authorization_code";
 
       // authorizationCode로 kakao token 을 받아온다.
       const resp = await fetch("https://kauth.kakao.com/oauth/token", {
@@ -44,31 +48,49 @@ module.exports = {
         }),
       }).then((res) => res.json());
       // const { access_token } = resp.data;
+<<<<<<< HEAD
       console.log(resp);
+=======
+      // console.log(resp);
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
 
       const kakaoAccessToken = resp.access_token;
-      const kakaoRefreshToken = resp.refresh_token;
+      // const kakaoRefreshToken = resp.refresh_token;
       const kakaoUserInfo = await fetch(`https://kapi.kakao.com/v2/user/me`, {
         headers: {
           Authorization: `Bearer ${kakaoAccessToken}`,
         },
       }).then((res) => res.json());
 
+<<<<<<< HEAD
       console.log(kakaoUserInfo);
 
+=======
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
       let { id } = kakaoUserInfo;
       const { nickname, thumbnail_image_url } = kakaoUserInfo.kakao_account.profile;
-      console.log(nickname);
-      console.log(thumbnail_image_url);
       id = String(id);
+      const password = `${id}${nickname}`;
+      const email = `${id}${nickname}@kakao.com`;
+
+      const salt = await bcrypt.genSalt(12);
+      const hashedPassword = await bcrypt.hash(password, salt);
 
       const userInfo = await User.findOne({
-        where: { password: `${id}${nickname}`, email: `${id}${nickname}@gmail.com` },
+        where: { email },
       });
 
-      if (userInfo) {
-        sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
+      if (!userInfo) {
+        const newUser = await User.create({
+          username: nickname,
+          image: thumbnail_image_url,
+          password: hashedPassword,
+          email: email,
+          verified: true,
+          loginMethod: 3,
+        });
 
+<<<<<<< HEAD
         return res.status(200).send({
           user: userInfo,
           accessToken: kakaoAccessToken,
@@ -82,12 +104,24 @@ module.exports = {
         email: `${id}${nickname}@gmail.com`,
         loginMethod: 4,
       });
+=======
+        const newAccessToken = generateAccessToken(newUser.dataValues);
+        const newrefreshToken = generaterefreshToken(newUser.dataValues);
+        sendTocookie(res, newAccessToken, newrefreshToken);
+        return res.status(201).json({
+          user: newUser,
+          accessToken: newAccessToken,
+        });
+      }
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
 
-      sendTocookie(res, kakaoAccessToken, kakaoRefreshToken);
+      const newAccessToken = generateAccessToken(userInfo.dataValues);
+      const newrefreshToken = generaterefreshToken(userInfo.dataValues);
+      sendTocookie(res, newAccessToken, newrefreshToken);
 
-      return res.status(201).send({
-        userInfo: newUser,
-        accessToken: kakaoAccessToken,
+      return res.status(200).json({
+        user: userInfo,
+        accessToken: newAccessToken,
       });
     } catch (err) {
       console.error(err);

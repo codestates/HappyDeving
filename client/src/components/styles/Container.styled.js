@@ -9,9 +9,7 @@ const Container = styled.div`
   padding-top: 80px;
   margin: 0 auto;
   /* background-color: #d8e4f4; */
-
-  position: relative;
-  z-index: 0;
+  /* min-height: 100%; */
 `;
 
 export default Container;

@@ -14,12 +14,22 @@ import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import LikedStudy from "./pages/LikedStudy";
 import EditStudyDesc from "./components/styles/EditStudyDesc.styled";
-import EditSideProfile from "./components/styles/EditSideProfile.styled";
-import "../src/static/fonts/font.css";
+import "./static/fonts/font.css";
 import "./App.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import Slider from "./components/Slider";
+
+import landing_01 from "../src/assets/AdobeStock_434132331.jpeg";
+import landing_02 from "../src/assets/AdobeStock_340974671.jpeg";
+import landing_03 from "../src/assets/AdobeStock_347708874.jpeg";
+import "./App.css";
 import axios from "axios";
+import { Github_url } from "./config";
+import WriteButtonModal from "./WriteButtonModal.styled";
+import BottomMenu from "./components/styles/bottommenu.styled";
+// import Content from "./components/styles/Content.styled";
+import ConfirmModal from "./components/styles/Modals/ConfirmModal";
 
 function App() {
   const theme = {
@@ -50,23 +60,33 @@ function App() {
     },
   };
 
-  const getAccessToken = async (authorizationCode) => {
-    let resp = await axios.post(
-      "https://server.happydeving.com/users/login/kakao",
-      {
-        authorizationCode: authorizationCode,
-      }
-    );
-    console.log(resp);
+  let login = localStorage.getItem("login");
+  const getGithubAccessToken = async (authorizationCode) => {
+    localStorage.setItem("reload", true);
+    let resp = await axios.post(Github_url, {
+      authorizationCode: authorizationCode,
+    });
+    const { user } = resp.data;
+    const { accessToken } = resp.data;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", JSON.stringify(accessToken));
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    };
+    // navigate("/");
+    window.location.reload();
   };
 
   useEffect(() => {
-    const url = new URL(window.location.href);
-    const authorizationCode = url.searchParams.get("code");
-    if (authorizationCode) {
-      getAccessToken(authorizationCode);
+    if (login === "github" && localStorage.getItem("reload") !== "true") {
+      const url = new URL(window.location.href);
+      const authorizationCode = url.searchParams.get("code");
+      if (authorizationCode) {
+        getGithubAccessToken(authorizationCode);
+      }
     }
-  });
+  }, []);
 
   useEffect(() => {
     console.log(drop);
@@ -102,13 +122,33 @@ function App() {
       <ThemeProvider theme={theme}>
         <Header img={theme.icons} drop={drop} />
         <Container>
+          <Header img={theme.icons} />
+          <ConfirmModal />
+          <div className="App">
+            <header className="App-header"></header>
+          </div>
           <Routes>
             <Route
               path="/"
               exact
               element={
                 <>
-                  <Landing drop={drop} />
+                  {/* <Search /> */}
+                  <Landing imageSrc={landing_01} drop={drop} />
+                  <Slider
+                    imageSrc={landing_02}
+                    title={`" 위치 기반 검색 "`}
+                    subtitle={
+                      "당신의 주변에서 일어나고 있는 놀라운 프로젝트를 찾아보세요."
+                    }
+                  />
+                  <Slider
+                    imageSrc={landing_03}
+                    title={`" 같이의 가치 "`}
+                    subtitle={"당신의 드림 프로젝트, 함께 하면 현실이 됩니다."}
+                    flipped={true}
+                  />
+                  <WriteButtonModal />
                 </>
               }
             />
@@ -129,7 +169,6 @@ function App() {
               path="/editprofile"
               element={
                 <>
-                  {/* <EditSideProfile /> */}
                   <ProfileEdit />
                 </>
               }
@@ -139,6 +178,7 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
+          <BottomMenu />
           {/* <Footer /> */}
         </Container>
       </ThemeProvider>

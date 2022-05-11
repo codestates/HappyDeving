@@ -13,7 +13,9 @@ import {
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { langImg } from "../../static/images/langImg";
 import { studyApi, deleteStudyApi } from "../../api/study";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 {
   /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
   // 입력칸들 5-14 
@@ -74,138 +76,26 @@ const TitleBar = styled.div`
   }
 `;
 
-const ContentDiv = styled.div`
-  grid-column: 1/14;
-  width: 100%;
-`;
+// const ContentDiv = styled.div`
+//   grid-column: 1/14;
+//   width: 100%;
+// `
 
-const CommentDiv = styled(Content)`
+// const CommentDiv = styled(Content)`
+//   /* background: pink; */
+//   grid-column: 1/14;
+//   display: flex;
+//   height: 100px;
+//   width: 100%;
+// `
+
+const CommentsDiv = styled.div`
   /* background: pink; */
-  grid-column: 1/14;
-  display: flex;
-  height: 100px;
 `;
 
 //(언어 input, modal(정사각형) :5-9,
 // 시작일 input, modal(정사각형) : 10-14 )
 // - 내용 input은 scroll
-
-const Desc = styled(Content)`
-  width: auto;
-  height: 490px;
-  font-family: "Medium";
-  padding: 3% 5% 3% 5%;
-  border-radius: ${(props) => props.theme.borderRadius};
-
-  div {
-    .titles {
-      display: block;
-      position: relative;
-      z-index: 0;
-      margin-bottom: 5px;
-      font-family: Bold;
-    }
-    .descs {
-      display: block;
-      position: relative;
-      z-index: 0;
-      margin-bottom: 5px;
-    }
-  }
-
-  .closed {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    input {
-      position: relative;
-      top: 7px;
-      margin-right: 1%;
-      display: inline-block;
-      position: relative;
-      align-self: center;
-      width: 15px;
-      height: 15px;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    label {
-      color: ${(props) =>
-        props.checked ? props.theme.colors.purple : "black"};
-    }
-  }
-
-  .langanddate {
-    display: flex;
-    position: relative;
-    .lang {
-      flex: 1;
-      margin-right: 5%;
-
-      .langDiv {
-        display: flex;
-      }
-
-      .langInput {
-        width: 20px;
-        height: 30px;
-        background-color: beige;
-        flex: 3;
-        text-align: center;
-        line-height: 30px;
-        border-radius: 30px;
-        box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-      }
-      .langSpan {
-        display: inline-block;
-      }
-    }
-    .date {
-      flex: 1;
-      .dateContainer {
-        display: flex;
-      }
-    }
-  }
-
-  .locationContainer {
-    display: flex;
-    margin-bottom: 10px;
-    .locationInput {
-      width: 20px;
-      height: 30px;
-      background-color: beige;
-      flex: 3;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-    }
-    button {
-      flex: 1;
-      width: 15vw;
-      height: 30px;
-      color: white;
-      text-align: center;
-      line-height: 30px;
-      background-color: ${(props) => props.theme.colors.purple};
-      border-radius: 30px;
-      box-shadow: 3px 2px 1px 1px #c593fe;
-      &:hover {
-        background-color: ${(props) => props.theme.colors.lavender};
-      }
-    }
-  }
-
-  .content {
-    input {
-      height: 100px;
-      border-radius: 15px;
-    }
-  }
-`;
 
 const Wrap = styled.div`
   display: flex;
@@ -268,6 +158,9 @@ const MapView = styled(Content)`
 const StudyDesc = () => {
   const container = useRef(null);
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const user = localStorage.getItem("user");
 
   const [location, setLocation] = useState({
     place_name: "광화문",
@@ -275,10 +168,6 @@ const StudyDesc = () => {
     logitude: 126.977759,
   });
   const [data, setData] = useState();
-  const [backendComments, setBackendComments] = useState([]);
-  // const { user } = useSelector((state) => state.user);
-  // console.log(user);
-  const user = JSON.parse(localStorage.getItem("user"));
 
   const mapscript = () => {
     const options = {
@@ -322,15 +211,9 @@ const StudyDesc = () => {
     const id = href[href.length - 1];
     studyApi(id).then((res) => {
       setData(res.data.data.study);
-      setBackendComments(res.data.data.comment);
-      console.log("상세페이지 get comments: ", res.data.data.comment);
       setLocation(res.data.data.study.location);
     });
   }, []);
-
-  console.log(data);
-
-  //checked의 상태 변화 기다리기 위해
 
   return (
     <>
@@ -416,13 +299,13 @@ const StudyDesc = () => {
 
           <Button src={data.kakaoLink}>참여하기</Button>
 
-          <CommentDiv>
-            <Comments
-              commentsInStudyData={backendComments}
-              studyId={data.id}
-              currentUserId={user?.id}
-            />
-          </CommentDiv>
+          <CommentsDiv>
+            <button onClick={() => setShowConfirmModal(!showConfirmModal)}>
+              댓글보기
+              <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
+            </button>
+            {showConfirmModal ? <Comments studyId={id} /> : null}
+          </CommentsDiv>
         </StyleStudyDesc>
       ) : (
         "data가 없습니다"

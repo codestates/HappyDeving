@@ -1,18 +1,27 @@
-const { User, Study_comment } = require("../../models");
+const { User, Study_comment, Study, Language } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 
 module.exports = {
   get: async (req, res) => {
     try {
-      // const { id } = req.params;
-      // const data = checkAccessToken(req);
-      // if (!data) {
-      //   return res.status(401).json("signin required");
-      // }
+      let { id } = req.params;
 
-      const comment = await Study_comment.findAll({ include: [{ model: User, as: "user" }] });
+      id = Number(id);
 
-      res.json(comment);
+      const comment = await Study_comment.findAll({
+        where: { study_id: id },
+        include: [{ model: User, as: "user" }],
+      });
+
+      comment.forEach(
+        (el) => (
+          (el.dataValues.username = el.user.username),
+          (el.dataValues.user = undefined),
+          (el.dataValues.image = el.user.image)
+        )
+      );
+
+      return res.status(200).json({ data: { comments: comment } });
     } catch (err) {
       console.log(err);
       return res.status(500).json();
@@ -73,18 +82,19 @@ module.exports = {
         return res.status(404).json("comment not found");
       }
 
-      const { id, user_id, content, parentId, createdAt, updatedAt } = comment;
+      const { id, user_id, study_id, content, parentId, createdAt, updatedAt } = comment.dataValues;
 
       const userInfo = await User.findOne({
         where: { id: user_id },
       });
 
-      const { username } = userInfo;
+      const { username, image } = userInfo.dataValues;
 
       return res.status(200).json({
         data: {
-          comments: [{ id, content, username, parentId, createdAt, updatedAt }],
-          userInfo: { id, username },
+          comments: [
+            { id, content, user_id, study_id, username, parentId, createdAt, updatedAt, image },
+          ],
         },
       });
     } catch (err) {
