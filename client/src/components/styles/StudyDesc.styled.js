@@ -28,6 +28,11 @@ const StyleStudyDesc = styled.div`
   grid-column: 2/14;
   padding: 3% 5% 3% 5%;
 
+  .mapview {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
   @media screen and (max-width: 768px) {
     grid-column: 1/15;
   }
@@ -39,14 +44,16 @@ const StyleStudyDesc = styled.div`
 
 const TitleBar = styled.div`
   grid-row: 1/2;
-  height: 80px;
+  height: 50px;
   display: flex;
   border-radius: ${(props) => props.theme.borderRadius};
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
 
   .title {
     flex: 8;
     font-family: "Bold";
-    font-size: 3vw;
+    font-size: 26px;
     height: 40px;
     line-height: 40px;
   }
@@ -57,7 +64,7 @@ const TitleBar = styled.div`
     display: flex;
     color: gray;
     justify-content: space-around;
-    font-size: 2vw;
+    font-size: 16px;
     height: 40px;
     line-height: 40px;
     float: right;
@@ -205,7 +212,14 @@ const Wrap = styled.div`
   align-items: center;
   height: auto;
   width: 100%;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+
+  .profile {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
 `;
 
 const Icon = styled.div`
@@ -216,6 +230,11 @@ const Icon = styled.div`
 const Text = styled.div`
   width: 120px;
   flex: 1;
+`;
+
+const Host = styled.div`
+  float: right;
+  height: 30px;
 `;
 
 const Button = styled.div`
@@ -309,6 +328,8 @@ const StudyDesc = () => {
     });
   }, []);
 
+  console.log(data);
+
   //checked의 상태 변화 기다리기 위해
 
   return (
@@ -340,6 +361,13 @@ const StudyDesc = () => {
               ) : null}
             </div>
           </TitleBar>
+
+          <Host>
+            <Wrap>
+              <img className="profile" src={user.image} />
+              <Text>{user.username}</Text>
+            </Wrap>
+          </Host>
 
           <Wrap>
             <Icon>
@@ -375,7 +403,7 @@ const StudyDesc = () => {
             <Text>{data.location.name}</Text>
           </Wrap>
 
-          <div>
+          <div className="mapview">
             <MapView id="map" ref={container} />
           </div>
 

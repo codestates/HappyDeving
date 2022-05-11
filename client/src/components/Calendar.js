@@ -22,7 +22,7 @@ function CalenderDate() {
 
     dispatch(setDateData(moment(value).format("YYYY-MM-DD")));
     dispatch(ClickCalenderDate(moment(value).format("M월 D일")));
-    // dispatch(languageModal());
+    dispatch(languageModal());
     dispatch(setDateModal(false));
   };
 

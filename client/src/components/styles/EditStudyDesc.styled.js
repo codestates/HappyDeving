@@ -450,6 +450,7 @@ const EditStudyDesc = () => {
   };
 
   const [data, setData] = useState();
+  const [checked, setChecked] = useState(false);
 
   const href = document.location.href.split("/");
   const id = href[href.length - 1];
@@ -459,6 +460,7 @@ const EditStudyDesc = () => {
       console.log(res);
 
       const {
+        id,
         title,
         content,
         kakaoLink,
@@ -470,6 +472,7 @@ const EditStudyDesc = () => {
       } = res.data.data.study;
 
       setData({
+        id,
         title,
         content,
         kakaoLink,
@@ -554,6 +557,7 @@ const EditStudyDesc = () => {
                   onChange={(e) => handleInputValue("title", e.target.value)}
                 ></Input>
               </Wrapper>
+
               <Wrapper>
                 <Text>언어</Text>
                 <div className="dropdown">
@@ -605,6 +609,7 @@ const EditStudyDesc = () => {
                   onChange={(e) =>
                     handleInputValue("kakaoLink", e.target.value)
                   }
+                  defaultValue={data.kakaoLink}
                 ></Input>
               </Wrapper>
               <Wrapper>
@@ -634,154 +639,37 @@ const EditStudyDesc = () => {
                 <Text>내용</Text>
                 <Textarea
                   onChange={(e) => handleInputValue("content", e.target.value)}
+                  defaultValue={data.content}
                 ></Textarea>
                 <Button></Button>
               </Wrapper>
               <div className="closed">
-                <input type="checkbox" id="closed" className="input"></input>
-                {console.log(data)}
+                <input
+                  type="checkbox"
+                  id="closed"
+                  className="input"
+                  checked={data.closed ? "checked" : null}
+                  onClick={() => {
+                    setChecked(!checked);
+                    setData({ ...data, closed: checked });
+                  }}
+                ></input>
                 <label htmlFor="closed">모집마감</label>
               </div>
-              <Button>저장</Button>
+              {console.log(data)}
+              <Button
+                onClick={() => {
+                  editStudyApi(id, data).then((res) => {
+                    console.log(res);
+                    alert("수정되었습니다");
+                    navigate(`/study/${data.id}`);
+                  });
+                }}
+              >
+                저장
+              </Button>
             </Desc>
           </WriteStudyDesc>
-          {/* <Title>
-            <div className="titleText">제목</div>
-            <input
-              className="titleInput"
-              defaultValue={data.title}
-              onChange={(e) => handleInputValue("title", e.target.value)}
-            ></input>
-          </Title> */}
-          {/* <ContentDiv>
-            <Profile />
-            <div className="container">
-              <Desc>
-                <div className="closed">
-                  <input
-                    type="checkbox"
-                    id="closed"
-                    defaultChecked={data.closed}
-                    onClick={() => {
-                      setData({ ...data, closed: !data.closed });
-                    }}
-                  ></input>
-                  <label htmlFor="closed">모집마감</label>
-                </div>
-                <div className="langanddate">
-                  <div className="lang">
-                    <span>언어</span>
-                    {open.language ? (
-                      <DescLanguageModal>
-                        <div>
-                          {keyArr.map((key, idx) => (
-                            <img
-                              src={langImg[key]}
-                              key={idx}
-                              onClick={() => {
-                                handleInputValue("language", [
-                                  ...data.language,
-                                  { id: idx + 1, name: key },
-                                ]);
-                                setOpen({ ...open, language: false });
-                              }}
-                            />
-                          ))}
-                        </div>
-                      </DescLanguageModal>
-                    ) : (
-                      <div className="langContainer">
-                        {console.log(data)}
-                        <div className="langInput">
-                          {data.language?.map((el) => el.name + ",")}
-                        </div>
-                        <button
-                          onClick={() => setOpen({ ...open, language: true })}
-                        >
-                          선택
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  <div className="date">
-                    <span>시작일</span>
-                    {dateModal ? (
-                      <DescDateModal>
-                        <CalenderDate />
-                      </DescDateModal>
-                    ) : (
-                      <div className="dateContainer">
-                        <div className="dateInput">
-                          {/* 바뀌도록 */}
-          {/* {data.startDate}
-                        </div>
-                        <button onClick={() => dispatch(setDateModal(true))}>
-                          선택
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="link">
-                  <span>오픈 톡방 링크</span>
-                  <input
-                    defaultValue={data.kakaoLink}
-                    onChange={(e) =>
-                      handleInputValue("kakaoLink", e.target.value)
-                    }
-                  ></input>
-                </div>
-                <div className="location">
-                  <span>장소</span>
-                  {open.location ? (
-                    <>
-                      <DescLocationModal>
-                        <input
-                          onKeyDown={(e) => handleLocationValue(e)}
-                          placeholder="ex. 송파구 오륜동"
-                        ></input>
-                        {locationListHandler(locationList)}
-                      </DescLocationModal>
-                    </>
-                  ) : (
-                    <div className="locationContainer">
-                      <div className="locationInput">{location.place_name}</div>
-                      <button
-                        onClick={() => setOpen({ ...open, location: true })}
-                      >
-                        검색
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <MapView id="map" ref={container} />
-                <div className="content">
-                  <span>내용</span>
-                  <textarea
-                    onChange={(e) =>
-                      handleInputValue("content", e.target.value)
-                    }
-                    defaultValue={data.content}
-                  ></textarea>
-                </div>
-              </Desc>
-              <FuncBar>
-                {console.log(data)}
-                <button
-                  onClick={() =>
-                    editStudyApi(id, data).then((res) => {
-                      console.log(res);
-                      alert("수정되었습니다");
-                      navigate("/");
-                    })
-                  }
-                >
-                  저장
-                </button>
-              </FuncBar>
-            </div>
-          </ContentDiv> */}
         </>
       ) : null}
     </>

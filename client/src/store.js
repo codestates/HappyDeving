@@ -7,6 +7,7 @@ import calenderReducer from "./features/calendarDate/calendarDate";
 import searchDataReducer from "./features/Search/searchDataSlice";
 import setStudiesReducer from "./features/studies/studiesSlice";
 import setStudyModal from "./features/studies/studyModalSlice";
+import modalReducer from "./features/modal/modalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     studyModal: setStudyModal,
     allStudies: allStudiesReducer,
     comment: commentReducer,
+    modal: modalReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

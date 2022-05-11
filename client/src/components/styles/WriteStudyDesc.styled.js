@@ -3,15 +3,13 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import LanguageModal from "./Modals/LanguageModal";
-import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
+import { IoMdArrowDropdown, IoIosSearch, IoMdNavigate } from "react-icons/io";
 import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
-import { setDateModal } from "../../features/studies/studyModalSlice";
 import { writeStudyApi } from "../../api/study";
-import { element } from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   grid-row: 2/12;
@@ -124,6 +122,9 @@ const Wrapper = styled.div`
   .icon {
     height: 30px;
     font-size: 30px;
+    &:hover {
+      cursor: pointer;
+    }
   }
   .searchicon {
     height: 20px;
@@ -176,6 +177,7 @@ const MapView = styled(Content)`
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
 
 const StudyDesc = () => {
+  const navigate = useNavigate();
   const container = useRef(null);
   const [location, setLocation] = useState({
     place_name: "광화문",
@@ -339,7 +341,7 @@ const StudyDesc = () => {
           <Text>언어</Text>
           <div className="dropdown">
             <div className="result">
-              {data.language.map((el) => el.name + ",")}
+              <span>{data.language.map((el) => el.name + ",")}</span>
             </div>
             <IoMdArrowDropdown
               className="icon"
@@ -424,7 +426,6 @@ const StudyDesc = () => {
               setChecked(!checked);
             }}
           ></input>
-          {console.log(data)}
           <label htmlFor="closed">모집마감</label>
         </div>
         <Button
@@ -432,6 +433,7 @@ const StudyDesc = () => {
             writeStudyApi(user.id, data).then((res) => {
               console.log(res);
               alert("저장되었습니다");
+              navigate(`/study/${res.data.id}`);
             })
           }
         >

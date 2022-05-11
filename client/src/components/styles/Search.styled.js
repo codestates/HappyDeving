@@ -30,7 +30,7 @@ import CalenderDate from "../Calendar.js";
 //   desktop: "1024px",
 // },
 
-const StyledSearch = styled.div`
+export const StyledSearch = styled.div`
   background-color: white;
   font-family: "Bold";
   border-radius: 30px;
@@ -75,11 +75,29 @@ const Modals = styled.div`
   grid-template-columns: repeat(10, 1fr);
   height: auto;
 
+  div {
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+
   .locationModal {
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+
     grid-column: 1/5;
   }
   .dateModal {
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
     grid-column: 4/8;
+  }
+  .languageModal {
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
   }
 `;
 
