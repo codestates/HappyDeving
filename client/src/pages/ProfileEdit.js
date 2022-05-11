@@ -6,12 +6,6 @@ import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 import EditSideProfile from "../components/styles/EditSideProfile.styled";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
-
-{
-  /* <FontAwesomeIcon icon="fa-brands fa-blogger" /> */
-}
 const StyledEditProfile = styled(Content)`
   grid-column: 4 / 12;
   grid-row: 5/12;
