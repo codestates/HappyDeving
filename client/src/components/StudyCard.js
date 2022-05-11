@@ -1,105 +1,41 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-// import Content from "../components/styles/Content.styled";
+import Content from "./styles/Content.styled";
 import { useDispatch, useSelector } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faHeart as like } from "@fortawesome/free-soluser.id-svg-icons";
+// import { faHeart as unlike } from "@fortawesome/free-regular-svg-icons";
+// import { langImg } from "../../static/images/langImg";
 import { likeStudy, unLikeStudy } from "../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
-// import { langImg } from "../../static/images/langImg";
-import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
 
-const CardContainer = styled.div`
-  box-shadow: 7px 7px 10px grey;
+const CardContainer = styled(Content)`
+  width: 20vh;
+  height: 20vh;
   display: flex;
-  border-radius: 20px;
-  background-color: white;
-  height: 200px;
-  width: 420px;
-  margin-top: 10%;
-  text-align: flex-start;
-  cursor: pointer;
-  &:hover {
-    position: relative;
-    top: -2px;
-  }
-  @media screen and (max-width: 2300px) {
-    height: 200px;
-    width: 400px;
-  }
-
-  @media screen and (max-width: 1800px) {
-    height: 180px;
-    width: 350px;
-  }
-  @media screen and (max-width: 1310px) {
-    height: 180px;
-    width: 300px;
-  }
-  @media screen and (max-width: 1024px) {
-    height: 200px;
-    width: 300px;
-  }
-  @media screen and (max-width: 764px) {
-    height: 200px;
-    width: 300px;
-  }
-`;
-
-const LanguageImg = styled.div`
-  margin-left: 3rem;
-  width: 100px;
-  flex-direction: column;
-  display: flex;
+  margin: 20px auto;
+  align-items: center;
   justify-content: space-evenly;
-
-  img {
-    border-radius: 10px;
-    width: 80px;
-    border: 3px solid #5e17eb;
-  }
 `;
-const CardForm = styled.div`
-  width: 300px;
-  margin: 1rem;
 
+const CardForm = styled.div`
+  width: 15vh;
+  height: 15vh;
+  background-color: pink;
   display: flex;
   flex-direction: column;
-  h1 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-top: 20px;
-    font-size: 22px;
-    font-weight: 800;
-    width: 80%;
-  }
-  hr {
-    margin-bottom: 20px;
-    height: 3px;
-    width: 80%;
-    background: #dfc1ff;
-  }
-  p {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    margin-bottom: 20px;
-    font-size: 18px;
-    color: gray;
-  }
-  justify-content: space-between;
+  justify-content: center;
 `;
 
 const LikeButton = styled.button`
   display: flex;
+  margin-left: 70%;
 `;
 
 const HeartIcon = styled.span`
-  font-size: 30px;
-  margin-left: 80%;
-  margin-bottom: 10px;
+  position: absolute;
+  font-size: 25px;
   .like {
     color: #d32f2f;
   }
@@ -133,7 +69,6 @@ const StudyCard = ({ myStudy, likedStudy }) => {
       dispatch(likeStudy({ id: user.id, studyData: { study_id: study.id } }));
       setIsLike(true);
     }
-    location;
   };
 
   const moveToStudyPage = () => {
@@ -142,34 +77,21 @@ const StudyCard = ({ myStudy, likedStudy }) => {
 
   return (
     <>
-      {/* <Container> */}
-      <CardContainer onClick={moveToStudyPage}>
-        <LanguageImg>
-          <img src="https://blog.kakaocdn.net/dn/bNp5o1/btrgkT58S71/77YTYugRulRCb4jvo1HwlK/img.png"></img>
-          <img src="https://blog.kakaocdn.net/dn/bNp5o1/btrgkT58S71/77YTYugRulRCb4jvo1HwlK/img.png"></img>
-        </LanguageImg>
+      <CardContainer>
         <CardForm>
-          <div>
-            <h1 onClick={moveToStudyPage}>{study.title}</h1>
-            <hr />
-            {/* <p>- 위치</p> */}
-            <p>- {study.startDate}</p>
-          </div>
-
+          <h1 onClick={moveToStudyPage}>{study.title}</h1>
+          <div>{study.startDate}</div>
           <LikeButton>
             <HeartIcon onClick={handleHeart} className="heart-icon">
-              {isLike ? (
-                <FontAwesomeIcon icon={like} size="1x" color="red" />
-              ) : (
-                <FontAwesomeIcon icon={unLike} size="1x" />
-              )}
+              {isLike ? "♥" : "♡"}
             </HeartIcon>
           </LikeButton>
         </CardForm>
       </CardContainer>
-      {/* </Container> */}
     </>
   );
 };
 
 export default StudyCard;
+
+// like 테이블 => get 요청시 내 유저아이디만 보내도, 유저 아이디랑 스터디를 연결하는 테이블

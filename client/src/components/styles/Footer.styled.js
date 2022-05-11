@@ -4,6 +4,8 @@ import { faGithubAlt } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const StyledFooter = styled.div`
   grid-column: 4/12;
+  position: absolute;
+  bottom: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;

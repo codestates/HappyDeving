@@ -6,10 +6,10 @@ const config = {
   NAVER_CLIENT_ID: "ypvQlXuRfx8ozkKMinIi",
   NAVER_STATE: 1,
   github_redirect_url: "http://localhost:3000/",
-  kakaoNaver_redirect_url: "http://localhost:3000/signin",
-  Kakao_url: "https://server.happydeving.com/users/login/kakao",
-  Naver_url: "https://server.happydeving.com/users/login/naver",
-  Github_url: "https://server.happydeving.com/users/login/github",
+  // kakaoNaver_redirect_url: "http://localhost:3000/signin",
+  // Kakao_url: "https://server.happydeving.com/users/login/kakao",
+  // Naver_url: "https://server.happydeving.com/users/login/naver",
+  // Github_url: "https://server.happydeving.com/users/login/github",
 };
 
 export const {

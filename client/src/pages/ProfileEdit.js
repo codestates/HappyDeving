@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { signout, reset, editProfile, deleteUser } from "../features/user/userSlice.js";
+import {
+  signout,
+  reset,
+  editProfile,
+  deleteUser,
+} from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
@@ -129,7 +134,9 @@ const ButtonWrap = styled.div`
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isLoading, isError, message } = useSelector((state) => state.user);
+  const { user, isLoading, isError, message } = useSelector(
+    (state) => state.user
+  );
   console.log("userSlice user: ", user); // 들어오다가 undefined 바뀜
 
   const [userData, setUserData] = useState({
@@ -162,7 +169,9 @@ const MyPage = () => {
 
   const handlePermanentDeletion = (e) => {
     e.preventDefault();
-    dispatch(deleteUser({ id: user.id, deleteData: { loginMethod: user.loginMethod } }));
+    dispatch(
+      deleteUser({ id: user.id, deleteData: { loginMethod: user.loginMethod } })
+    );
     dispatch(reset());
     navigate("/");
   };
@@ -183,7 +192,10 @@ const MyPage = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
+          <LikedStudyTab
+            className="tap"
+            onClick={() => navigate("/likedstudy")}
+          >
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>

@@ -16,8 +16,19 @@ module.exports = {
         {
           model: Study,
           as: "study",
-          attributes: ["id", "content", "title", "startDate", "createdAt", "updatedAt"],
-          include: { model: Language, as: "language", attributes: ["id", "name"] },
+          attributes: [
+            "id",
+            "content",
+            "title",
+            "startDate",
+            "createdAt",
+            "updatedAt",
+          ],
+          include: {
+            model: Language,
+            as: "language",
+            attributes: ["id", "name"],
+          },
         },
       ],
     });

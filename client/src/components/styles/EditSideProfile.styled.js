@@ -5,7 +5,7 @@ import { editProfileImage } from "../../features/user/userSlice";
 
 const Container = styled.div`
   margin-bottom: 20px;
-`;
+`
 
 const Profile = styled.div`
   position: relative;
@@ -13,7 +13,7 @@ const Profile = styled.div`
   flex-direction: column;
   align-items: center;
   text-align: center;
-`;
+`
 const ProfileImage = styled.div`
   border-radius: 100px;
   width: 150px;
@@ -26,7 +26,7 @@ const ProfileImage = styled.div`
     width: 100%;
     height: 100%;
   }
-`;
+`
 
 const ProfilePrieview = styled.div`
   position: absolute;
@@ -50,7 +50,7 @@ const ProfilePrieview = styled.div`
     top: 15px;
     left: 100px;
   }
-`;
+`
 const ProfileButton = styled.div`
   margin-top: 20px;
   border-bottom: 1px solid gray;
@@ -61,7 +61,7 @@ const ProfileButton = styled.div`
     color: black;
     border-bottom: 3px solid #dfc1ff;
   }
-`;
+`
 
 const EditSideProfile = () => {
   // user.image
@@ -126,4 +126,4 @@ const EditSideProfile = () => {
   );
 };
 
-export default EditSideProfile;
+export default EditSideProfile

@@ -19,7 +19,11 @@ module.exports = {
   post: async (req, res) => {
     try {
       const { authorizationCode } = req.body;
+<<<<<<< HEAD
+      console.log(authorizationCode);
+=======
       // console.log(authorizationCode);
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
 
       if (!authorizationCode) {
         return res.status(400).json("bad request");
@@ -44,7 +48,11 @@ module.exports = {
         }),
       }).then((res) => res.json());
       // const { access_token } = resp.data;
+<<<<<<< HEAD
+      console.log(resp);
+=======
       // console.log(resp);
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
 
       const kakaoAccessToken = resp.access_token;
       // const kakaoRefreshToken = resp.refresh_token;
@@ -54,6 +62,11 @@ module.exports = {
         },
       }).then((res) => res.json());
 
+<<<<<<< HEAD
+      console.log(kakaoUserInfo);
+
+=======
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
       let { id } = kakaoUserInfo;
       const { nickname, thumbnail_image_url } = kakaoUserInfo.kakao_account.profile;
       id = String(id);
@@ -77,6 +90,21 @@ module.exports = {
           loginMethod: 3,
         });
 
+<<<<<<< HEAD
+        return res.status(200).send({
+          user: userInfo,
+          accessToken: kakaoAccessToken,
+        });
+      }
+
+      const newUser = await User.create({
+        username: nickname,
+        image: thumbnail_image_url,
+        password: `${id}${nickname}`,
+        email: `${id}${nickname}@gmail.com`,
+        loginMethod: 4,
+      });
+=======
         const newAccessToken = generateAccessToken(newUser.dataValues);
         const newrefreshToken = generaterefreshToken(newUser.dataValues);
         sendTocookie(res, newAccessToken, newrefreshToken);
@@ -85,6 +113,7 @@ module.exports = {
           accessToken: newAccessToken,
         });
       }
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
 
       const newAccessToken = generateAccessToken(userInfo.dataValues);
       const newrefreshToken = generaterefreshToken(userInfo.dataValues);

@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
-// import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Container from "./components/styles/Container.styled";
 import Header from "./components/styles/Header.styled";
 import { Search } from "./components/styles/Search.styled";
-// import Footer from "./components/styles/Footer.styled";
+import Footer from "./components/styles/Footer.styled";
 import Landing from "./pages/Landing";
 import Write from "./components/styles/WriteStudyDesc.styled";
 import Map from "./components/styles/Map.styled";
@@ -41,17 +40,24 @@ function App() {
     },
     icons: {
       logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-      write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
-      login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
-      mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+      write:
+        "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+      login:
+        "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+      mypage:
+        "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
     },
     contents: {
       marginBottom: "20px",
       bg: "white",
-      borderRadius: "30px",
+      borderRadius: "20px",
       boxShadow: "10px 5px 15px 0.1px rgba(0, 0, 0, 0.1)",
     },
-    font: {},
+    size: {
+      mobile: "520px",
+      tablet: "768px",
+      desktop: "1024px",
+    },
   };
 
   let login = localStorage.getItem("login");
@@ -82,9 +88,39 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(drop);
+
+    if (
+      window.location.href.split("/")[1] === "map" ||
+      window.location.href === "http://localhost:3000"
+    ) {
+      setDrop(false);
+    } else {
+      setDrop(true);
+    }
+  }, []);
+
+  // console.log(localStorage.getItem("user"));
+
+  const [drop, setDrop] = useState(false);
+  window.onscroll = function () {
+    let windowTop = window.scrollY;
+    if (windowTop >= 20) {
+      setDrop(true);
+    } else if (
+      (window.location.href.split("/")[1] === "map" ||
+        window.location.href === "http://localhost:3000") &&
+      windowTop < 20
+    ) {
+      setDrop(false);
+    }
+  };
+
   return (
     <Router>
       <ThemeProvider theme={theme}>
+        <Header img={theme.icons} drop={drop} />
         <Container>
           <Header img={theme.icons} />
           <ConfirmModal />
@@ -98,11 +134,13 @@ function App() {
               element={
                 <>
                   {/* <Search /> */}
-                  <Landing imageSrc={landing_01} />
+                  <Landing imageSrc={landing_01} drop={drop} />
                   <Slider
                     imageSrc={landing_02}
                     title={`" 위치 기반 검색 "`}
-                    subtitle={"당신의 주변에서 일어나고 있는 놀라운 프로젝트를 찾아보세요."}
+                    subtitle={
+                      "당신의 주변에서 일어나고 있는 놀라운 프로젝트를 찾아보세요."
+                    }
                   />
                   <Slider
                     imageSrc={landing_03}
@@ -120,7 +158,6 @@ function App() {
               exact
               element={
                 <>
-                  <Search />
                   <Map />
                 </>
               }

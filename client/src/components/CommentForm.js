@@ -62,7 +62,7 @@ const CommentForm = ({
 
   const commentData = {
     content: content,
-    user_id: user.id,
+    user_id: user?.id,
     study_id: studyId,
     parentId: replyId ? replyId : null,
     study_commentId: commentId,

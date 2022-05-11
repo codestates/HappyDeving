@@ -133,7 +133,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    dispatch(getProfile(user.id));
+    dispatch(getProfile(user?.id));
     dispatch(reset());
   }, []);
 

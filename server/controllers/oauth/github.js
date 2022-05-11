@@ -1,12 +1,18 @@
+<<<<<<< HEAD
+=======
 require("dotenv").config();
 const { User } = require("../../models");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
 const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
 
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
 module.exports = {
-  post: async (req, res) => {
+  post: (req, res) => {
     try {
+<<<<<<< HEAD
+      res.send("users github post ok");
+=======
       const { authorizationCode } = req.body;
 
       if (!authorizationCode) {
@@ -72,8 +78,9 @@ module.exports = {
         user: userInfo,
         accessToken: newAccessToken,
       });
+>>>>>>> 02d44a158126ccc96b0bb5d4877c34ef37603817
     } catch (err) {
-      console.error("err", err);
+      console.error(err);
       return res.status(500).json();
     }
   },

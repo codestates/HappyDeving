@@ -1,13 +1,13 @@
 export const langImg = {
   javascript:
-    "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1",
-  java: "https://i.esdrop.com/d/f/DFdHaJ85jn/dZsMFl4KsT.png",
+    "https://grepp-cloudfront.s3.ap-northeast-2.amazonaws.com/programmers_imgs/learn/course10195/target_01.png",
+  java: "https://miro.medium.com/max/518/1*xDQkGGucCJuaodZMfxmJwQ.png",
   python: "https://i.esdrop.com/d/f/DFdHaJ85jn/7unMrTFEFO.png",
-  c: "https://i.esdrop.com/d/f/DFdHaJ85jn/7unMrTFEFO.png",
-  typescript:
+  c: "https://e7.pngegg.com/pngimages/520/669/png-clipart-c-logo-c-programming-language-computer-icons-computer-programming-programming-miscellaneous-blue.png",
+  typescript: "https://cdn-icons-png.flaticon.com/512/919/919832.png",
+  react:
     "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1",
-  react: "https://i.esdrop.com/d/f/DFdHaJ85jn/7unMrTFEFO.png",
-  swift: "https://i.esdrop.com/d/f/DFdHaJ85jn/dZsMFl4KsT.png",
-  go: "https://i.esdrop.com/d/f/DFdHaJ85jn/7unMrTFEFO.png",
+  swift: "https://cdn-icons-png.flaticon.com/512/919/919833.png",
+  go: "https://cdn3.iconfinder.com/data/icons/popular-services-brands/512/php-512.png",
   nodejs: "https://i.esdrop.com/d/f/DFdHaJ85jn/dZsMFl4KsT.png",
 };

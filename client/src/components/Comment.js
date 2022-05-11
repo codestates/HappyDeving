@@ -9,7 +9,7 @@ const CommentDiv = styled(Content)`
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
-`;
+`
 const CommentUpperPart = styled.div`
   width: 100%;
   display: flex;

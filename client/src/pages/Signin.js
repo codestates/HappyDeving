@@ -178,7 +178,9 @@ function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     // dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
@@ -266,6 +268,7 @@ function Signin() {
       setErrorMessage("모든 항목을 입력해 주세요.");
       return;
     }
+
     dispatch(signin(userData));
     navigate("/");
   };
@@ -324,7 +327,10 @@ function Signin() {
               <button type="submit">로그인</button>
             </ButtonWrap>
             <SocialLoginButton>
-              <KakaoButton type="button" onClick={() => socialLoginHandler("kakao")}>
+              <KakaoButton
+                type="button"
+                onClick={() => socialLoginHandler("kakao")}
+              >
                 <img src={kakao} alt="kakao" />
               </KakaoButton>
               <GoogleButton>
@@ -340,10 +346,17 @@ function Signin() {
                 </GoogleLogin>
               </GoogleButton>
               <NaverButton>
-                <img src={naver} alt="naver" onClick={() => socialLoginHandler("naver")} />
+                <img
+                  src={naver}
+                  alt="naver"
+                  onClick={() => socialLoginHandler("naver")}
+                />
               </NaverButton>
               <GitButton>
-                <img src={github} onClick={() => socialLoginHandler("github")} />
+                <img
+                  src={github}
+                  onClick={() => socialLoginHandler("github")}
+                />
               </GitButton>
             </SocialLoginButton>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
