@@ -9,7 +9,8 @@ import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setDateModal } from "../../features/studies/studyModalSlice";
-import { studyApi, editStudyApi } from "../../api/study";
+import { studyApi } from "../../api/study";
+import { openModal } from "../../features/modal/modalSlice";
 
 const Title = styled(Content)`
   grid-column: 2/14;
@@ -416,6 +417,7 @@ const EditStudyDesc = () => {
   const dispatch = useDispatch();
   const { dateModal } = useSelector((store) => store.studyModal);
   const { dateData } = useSelector((store) => store.searchData);
+  const { isError, message } = useSelector((state) => state.allStudies);
 
   useEffect(() => {
     setData({ ...data, startDate: dateData });
@@ -451,6 +453,14 @@ const EditStudyDesc = () => {
 
   const handleInputValue = (id, e) => {
     setData({ ...data, [id]: e });
+  };
+
+  const handleUpdateStudy = async (e) => {
+    e.preventDefault();
+    if (isError) {
+      console.log("editStudy.rejected :", message);
+    }
+    dispatch(openModal({ name: "UpdateStudy", childrenProps: { id, ...data } }));
   };
 
   return (
@@ -503,7 +513,7 @@ const EditStudyDesc = () => {
                       </DescLanguageModal>
                     ) : (
                       <div className="langContainer">
-                        {console.log(data)}
+                        {/* {console.log(data)} */}
                         <div className="langInput">{data.language?.map((el) => el.name + ",")}</div>
                         <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
                       </div>
@@ -563,14 +573,15 @@ const EditStudyDesc = () => {
                 </div>
               </Desc>
               <FuncBar>
-                {console.log(data)}
+                {/* {console.log(data)} */}
                 <button
-                  onClick={() =>
-                    editStudyApi(id, data).then((res) => {
-                      console.log(res);
-                      alert("수정되었습니다");
-                    })
-                  }
+                  onClick={handleUpdateStudy}
+                  // onClick={() =>
+                  //   editStudyApi(id, data).then((res) => {
+                  //     console.log(res);
+                  //     alert("수정되었습니다");
+                  //   })
+                  // }
                 >
                   저장
                 </button>

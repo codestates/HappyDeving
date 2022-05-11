@@ -60,19 +60,16 @@ export const writeStudy = createAsyncThunk(
   }
 );
 
-export const editStudy = createAsyncThunk(
-  "allStudies/editStudy",
-  async ({ id, studyInfo }, thunkAPI) => {
-    try {
-      return await editStudyApi(id, studyInfo).then((res) => {
-        // console.log("edited study: ", res);
-        return res.data;
-      });
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+export const editStudy = createAsyncThunk("allStudies/editStudy", async (data, thunkAPI) => {
+  try {
+    return await editStudyApi(data).then((res) => {
+      console.log("edited study: ", res);
+      return res.data;
+    });
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
 
 export const deleteStudy = createAsyncThunk(
   "allStudies/deleteStudy",
@@ -90,10 +87,10 @@ export const deleteStudy = createAsyncThunk(
 export const likeStudy = createAsyncThunk(
   "allStudies/likeStudy",
   async ({ id, studyData }, thunkAPI) => {
-    console.log("studyData: ", studyData);
+    // console.log("studyData: ", studyData);
     try {
       return await likeStudyApi(id, studyData).then((res) => {
-        console.log("like clicked: ", res.data);
+        // console.log("like clicked: ", res.data);
 
         return res.data;
       });
@@ -220,13 +217,15 @@ export const allStudiesSlice = createSlice({
       .addCase(editStudy.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.allStudies.map((study) => (study.id === action.payload.id ? action.payload : study));
+        console.log("edit study action.payload: ", action.payload);
+        state.allStudies = state.allStudies.map((study) =>
+          study.id === action.payload.id ? action.payload : study
+        );
       })
       .addCase(editStudy.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.allStudies = null;
       })
       .addCase(likeStudy.pending, (state) => {
         state.isLoading = true;
