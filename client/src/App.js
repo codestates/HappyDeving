@@ -15,7 +15,6 @@ import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import LikedStudy from "./pages/LikedStudy";
 import EditStudyDesc from "./components/styles/EditStudyDesc.styled";
-import EditSideProfile from "./components/styles/EditSideProfile.styled";
 import "./static/fonts/font.css";
 import "./App.css";
 import "./static/fonts/font.css";
@@ -129,7 +128,6 @@ function App() {
               path="/editprofile"
               element={
                 <>
-                  <EditSideProfile />
                   <ProfileEdit />
                 </>
               }
