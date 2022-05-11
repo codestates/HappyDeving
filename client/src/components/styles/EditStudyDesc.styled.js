@@ -10,8 +10,13 @@ import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 import { setDateModal } from "../../features/studies/studyModalSlice";
+
+import { studyApi } from "../../api/study";
+import { openModal } from "../../features/modal/modalSlice";
+
 import { studyApi, editStudyApi } from "../../api/study";
 import { Navigate, useNavigate } from "react-router-dom";
+
 
 const WriteStudyDesc = styled.div`
   grid-row: 2/12;
@@ -151,183 +156,6 @@ const Title = styled(Content)`
   }
 `;
 
-//(언어 input, modal(정사각형) :5-9,
-// 시작일 input, modal(정사각형) : 10-14 )
-// - 내용 input은 scroll
-
-// const Desc = styled(Content)`;
-//   width: auto;
-//   height: 490px;
-//   font-family: "Medium";
-//   padding: 3% 5% 3% 5%;
-//   border-radius: ${(props) => props.theme.borderRadius};
-
-//   div {
-//     span {
-//       display: block;
-//       position: relative;
-//       z-index: 0;
-//     }
-//     input {
-//       z-index: 0;
-//       background-color: beige;
-//       width: 100%;
-//       margin-bottom: 10px;
-//       border-radius: 30px;
-//       box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-//       text-align: center;
-//       &:focus {
-//         outline: none;
-//       }
-//     }
-
-//     textarea {
-//       z-index: 0;
-//       resize: none;
-//       background-color: beige;
-//       width: 100%;
-//       height: 120px;
-//       overflow: scroll;
-//       padding: 10px;
-//       margin-bottom: 10px;
-//       text-align: center;
-//       line-height: 30px;
-//       border-radius: 30px;
-//       box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-//       &:focus {
-//         outline: none;
-//       }
-//     }
-//   }
-
-//   .closed {
-//     display: flex;
-//     justify-content: flex-end;
-//     align-items: center;
-//     input {
-//       position: relative;
-//       top: 7px;
-//       margin-right: 1%;
-//       display: inline-block;
-//       position: relative;
-//       align-self: center;
-//       width: 15px;
-//       height: 15px;
-
-//       &:hover {
-//         cursor: pointer;
-//       }
-//     }
-//     label {
-//       color: ${(props) =>
-//         props.checked ? props.theme.colors.purple : "black"};
-//     }
-//   }
-
-//   .langanddate {
-//     display: flex;
-//     position: relative;
-//     .lang {
-//       flex: 1;
-//       margin-right: 5%;
-//       .langContainer {
-//         display: flex;
-//         align-items: center;
-
-//         .langInput {
-//           width: 20px;
-//           height: 30px;
-//           background-color: beige;
-//           flex: 3;
-//           text-align: center;
-//           line-height: 30px;
-//           border-radius: 30px;
-//           box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-//         }
-//         button {
-//           flex: 1;
-//           width: 15vw;
-//           height: 30px;
-//           color: white;
-//           text-align: center;
-//           line-height: 30px;
-//           background-color: ${(props) => props.theme.colors.purple};
-//           border-radius: 30px;
-//           box-shadow: 3px 2px 1px 1px #c593fe;
-//           &:hover {
-//             background-color: ${(props) => props.theme.colors.lavender};
-//           }
-//         }
-//       }
-//     }
-//     .date {
-//       flex: 1;
-//       .dateContainer {
-//         display: flex;
-//         .dateInput {
-//           width: 20px;
-//           height: 30px;
-//           background-color: beige;
-//           flex: 3;
-//           text-align: center;
-//           line-height: 30px;
-//           border-radius: 30px;
-//           box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-//         }
-//         button {
-//           flex: 1;
-//           width: 15vw;
-//           height: 30px;
-//           color: white;
-//           text-align: center;
-//           line-height: 30px;
-//           background-color: ${(props) => props.theme.colors.purple};
-//           border-radius: 30px;
-//           box-shadow: 3px 2px 1px 1px #c593fe;
-//           &:hover {
-//             background-color: ${(props) => props.theme.colors.lavender};
-//           }
-//         }
-//       }
-//     }
-//   }
-
-//   .locationContainer {
-//     display: flex;
-//     margin-bottom: 10px;
-//     .locationInput {
-//       width: 20px;
-//       height: 30px;
-//       background-color: beige;
-//       flex: 3;
-//       text-align: center;
-//       line-height: 30px;
-//       border-radius: 30px;
-//       box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-//     }
-//     button {
-//       flex: 1;
-//       width: 15vw;
-//       height: 30px;
-//       color: white;
-//       text-align: center;
-//       line-height: 30px;
-//       background-color: ${(props) => props.theme.colors.purple};
-//       border-radius: 30px;
-//       box-shadow: 3px 2px 1px 1px #c593fe;
-//       &:hover {
-//         background-color: ${(props) => props.theme.colors.lavender};
-//       }
-//     }
-//   }
-
-//   .content {
-//     input {
-//       height: 100px;
-//       border-radius: 15px;
-//     }
-//   }
-// `;
 
 const DescLanguageModal = styled.div`
   width: 90%;
@@ -505,6 +333,7 @@ const EditStudyDesc = () => {
   const dispatch = useDispatch();
   const { dateModal } = useSelector((store) => store.studyModal);
   const { dateData } = useSelector((store) => store.searchData);
+  const { isError, message } = useSelector((state) => state.allStudies);
 
   useEffect(() => {
     setData({ ...data, startDate: dateData });
@@ -544,10 +373,19 @@ const EditStudyDesc = () => {
     setData({ ...data, [id]: e });
   };
 
+  const handleUpdateStudy = async (e) => {
+    e.preventDefault();
+    if (isError) {
+      console.log("editStudy.rejected :", message);
+    }
+    dispatch(openModal({ name: "UpdateStudy", childrenProps: { id, ...data } }));
+  };
+
   return (
     <>
       {data ? (
         <>
+
           <WriteStudyDesc>
             <Desc>
               <Wrapper>
@@ -563,6 +401,7 @@ const EditStudyDesc = () => {
                 <div className="dropdown">
                   <div className="result">
                     {data.language?.map((el) => el.name + ",")}
+
                   </div>
                   <IoMdArrowDropdown
                     className="icon"
@@ -594,6 +433,7 @@ const EditStudyDesc = () => {
                         </div>
                       ))}
                     </div>
+
                   </DescLanguageModal>
                 ) : null}
               </Wrapper>
@@ -670,6 +510,7 @@ const EditStudyDesc = () => {
               </Button>
             </Desc>
           </WriteStudyDesc>
+
         </>
       ) : null}
     </>

@@ -119,8 +119,8 @@ export const commentSlice = createSlice({
       .addCase(editComment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        console.log("edit comment data: ", action.payload.data.comments[0]);
-        console.log("edit comment data: ", action.meta.arg.study_commentId);
+        // console.log("edit comment data: ", action.payload.data.comments[0]);
+        // console.log("edit comment data: ", action.meta.arg.study_commentId);
         state.comments = state.comments.map((comment) =>
           comment.id === action.meta.arg.study_commentId ? action.payload.data.comments[0] : comment
         );
@@ -137,7 +137,7 @@ export const commentSlice = createSlice({
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        console.log("deleting comment data: ", action.payload);
+        // console.log("deleting comment data: ", action.payload);
         // console.log("deleting comment data: ", action);
         state.comments = state.comments.filter((comment) => comment.id !== action.meta.arg.id);
       })
