@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const { sequelize } = require("./models/index");
 
 app.use(express.json({ strict: false }));
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(

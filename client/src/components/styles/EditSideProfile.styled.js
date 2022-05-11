@@ -5,7 +5,7 @@ import Content from "./Content.styled";
 // import githubIcon from "../../static/images/githubIcon.png";
 // import blogIcon from "../../static/images/blogIcon.png";
 import { editProfileImage } from "../../features/user/userSlice";
-import axios from "axios";
+// import axios from "axios";
 // import { useEffect } from "react";
 // import { editProfile } from "../../features/user/userSlice";
 

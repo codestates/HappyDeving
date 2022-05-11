@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +24,7 @@ const MyStudy = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { myStudies, isLoading, isError, message } = useSelector((state) => state.allStudies);
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   // console.log(`my studies: ${JSON.stringify(myStudies)}`);
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const MyStudy = () => {
       console.log(message);
     }
     dispatch(getMyStudies(user.id));
-    setData(myStudies);
+    // setData(myStudies);
     dispatch(reset());
   }, []);
 
