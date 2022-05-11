@@ -1,92 +1,126 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { signout, reset, editProfile, deleteUser } from "../features/user/userSlice.js";
+import { signout, reset, deleteUser } from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
+import EditSideProfile from "../components/styles/EditSideProfile.styled";
+import { openModal } from "../features/modal/modalSlice.js";
 
 const StyledEditProfile = styled(Content)`
-  grid-column: 5 / 14;
+  grid-column: 4 / 12;
+  min-height: 80vh;
   text-align: left;
-  /* x, y, blur-radius, spread */
 `;
 
-const Title = styled(Content)`
-  grid-column: 2/14;
-  height: 80px;
-  padding: 20px 3%;
-  font-family: "Bold";
-  display: flex;
-  border-radius: ${(props) => props.theme.borderRadius};
-
-  .titleText {
-    flex: 1;
-    font-size: 3vw;
-    text-align: center;
-    line-height: 40px;
-    margin-left: -3%;
-    margin-right: 6%;
+const UserTitle = styled.div`
+  font-size: 50px;
+  margin-bottom: 50px;
+  span {
+    font-weight: 500;
+    border-bottom: 5px solid #dfc1ff;
   }
+`;
 
-  .titleInput {
-    flex: 3;
-    background-color: beige;
-    border-radius: inherit;
-    box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    height: 40px;
-    &:focus {
-      outline: none;
+const Tab = styled.div`
+  display: flex;
+  font-weight: 800;
+  border-bottom: 2px solid darkgray;
+  margin-bottom: 20px;
+  color: gray;
+  cursor: pointer;
+  .tap {
+    padding: 10px 3%;
+    border-radius: 10px 10px 0 0;
+    &:hover {
+      color: black;
+      border-bottom: 2px solid #dfc1ff;
     }
   }
 `;
-const ProfileWrap = styled(Content)`
-  /* background-color: red; */
-  width: 62vw;
-`;
 
-const InputWrap = styled(Content)`
-  /* background-color: pink; */
-  box-shadow: none;
-  width: 62vw;
-  height: auto;
-  padding: 0.5% 2% 1% 2%;
-  border-radius: ${(props) => props.theme.borderRadius};
+const MyStudyTab = styled.div``;
+const LikedStudyTab = styled.div``;
+const MyprofileTab = styled.div``;
 
-  input {
-    /* background-color: yellow; */
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
+const ProfileContainer = styled.div`
+  display: flex;
+  margin-top: 50px;
+  @media screen and (max-width: 1024px) {
+    flex-direction: column;
     align-items: center;
-    margin-bottom: 20px;
-    border: 1px solid rgba(205, 201, 208, 0.8);
   }
 `;
 
-const Text = styled.div`
-  width: 120px;
-  font-family: "Medium";
+const Side = styled.div`
+  padding: 0px 20px;
+`;
+
+const ProfileWrap = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-left: 50px;
 `;
 
 const ButtonWrap = styled.div`
   display: flex;
-  justify-content: right;
+  margin-top: 30px;
+
+  p {
+    border-bottom: 1px solid gray;
+    margin-right: 10px;
+    color: gray;
+    font-weight: 500;
+    cursor: pointer;
+    &:hover {
+      color: black;
+      border-bottom: 3px solid #dfc1ff;
+    }
+  }
 `;
 
-const Button = styled.button`
-  margin-right: 1rem;
-  width: 10vw;
-  height: 30px;
-  color: white;
-  text-align: center;
-  line-height: 30px;
-  background-color: ${(props) => props.theme.colors.purple};
-  border-radius: 30px;
-  box-shadow: 3px 2px 1px 1px #c593fe;
-  &:hover {
-    background-color: ${(props) => props.theme.colors.lavender};
+const Text = styled.div`
+  width: 150px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid gray;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  margin-top: 10px;
+`;
+
+const Input = styled.input`
+  display: flex;
+  border: 1px solid gray;
+  padding: 10px 10px;
+  /* border-radius: 5px; */
+  width: 800px;
+
+  @media screen and (max-width: 1200px) {
+    width: 300px;
+  }
+
+  @media screen and (max-width: 1600px) {
+    width: 500px;
+  }
+  @media screen and (max-width: 1980px) {
+    width: 800px;
+  }
+`;
+const InputBio = styled.textarea`
+  display: flex;
+  border: 1px solid gray;
+  padding: 10px 10px;
+  width: 1000px;
+  @media screen and (max-width: 1200px) {
+    width: 300px;
+  }
+  @media screen and (max-width: 1600px) {
+    width: 500px;
+  }
+  @media screen and (max-width: 1980px) {
+    width: 800px;
   }
 `;
 
@@ -112,15 +146,22 @@ const MyPage = () => {
     if (isError) {
       console.log("editProfile.rejected :", message);
     }
-    dispatch(editProfile({ id: user.id, userData: userData }));
+    dispatch(openModal({ name: "UpdateUser", childrenProps: { id: user.id, userData: userData } }));
+    // dispatch(editProfile({ id: user.id, userData: userData }));
+    // dispatch(reset());
+    // navigate("/profile");
+  };
+  // 임시
+  const handleSignout = (e) => {
+    e.preventDefault();
+    dispatch(signout());
     dispatch(reset());
-    navigate("/profile");
+    navigate("/");
   };
 
   const handlePermanentDeletion = (e) => {
     e.preventDefault();
-    dispatch(deleteUser());
-    dispatch(signout());
+    dispatch(deleteUser({ id: user.id, deleteData: { loginMethod: user.loginMethod } }));
     dispatch(reset());
     navigate("/");
   };
@@ -130,46 +171,82 @@ const MyPage = () => {
   }
 
   return (
-    <StyledEditProfile>
-      <Title>내 정보 수정</Title>
-      <ProfileWrap>
-        <form>
-          <InputWrap>
+    <>
+      <StyledEditProfile>
+        <UserTitle>
+          <h1>
+            <span>{user.username}</span> 님 안녕하세요
+          </h1>
+        </UserTitle>
+        <Tab>
+          <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
+            나의 스터디
+          </MyStudyTab>
+          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
+            찜한 스터디
+          </LikedStudyTab>
+          <MyprofileTab className="tap" onClick={() => navigate("/profile")}>
+            프로필
+          </MyprofileTab>
+        </Tab>
+
+        <ProfileContainer>
+          <Side>
+            <EditSideProfile />
+          </Side>
+          <ProfileWrap>
+            {/* <form> */}
             <Text>닉네임</Text>
-            <input
+            <Input
+              className="username2"
               type="username"
               defaultValue={user?.username}
               onChange={handleInputValue("username")}
             />
-          </InputWrap>
-          <InputWrap>
+
             <Text>자기 소개</Text>
-            <input type="bio" defaultValue={user?.bio} onChange={handleInputValue("bio")} />
-          </InputWrap>
-          <InputWrap>
+            <InputBio
+              className="bio"
+              type="textarea"
+              defaultValue={user?.bio}
+              onChange={handleInputValue("bio")}
+            ></InputBio>
+
             <Text>깃허브 주소</Text>
-            <input
+            <Input
               type="github"
+              className="github"
               defaultValue={user?.github}
               onChange={handleInputValue("github")}
             />
-          </InputWrap>
-          <InputWrap>
+
             <Text>블로그 주소</Text>
-            <input type="blog" defaultValue={user?.blog} onChange={handleInputValue("blog")} />
-          </InputWrap>
-          <ButtonWrap>
-            <Link to="/profile">
-              <Button onClick={handleEditing}>수정 완료</Button>
-            </Link>
-            <Link to="/">
-              <Button onClick={handlePermanentDeletion}>회원 탈퇴</Button>
-            </Link>
-          </ButtonWrap>
-        </form>
-      </ProfileWrap>
-    </StyledEditProfile>
+            <Input
+              className="blog"
+              type="blog"
+              defaultValue={user?.blog}
+              onChange={handleInputValue("blog")}
+            />
+
+            <ButtonWrap>
+              <Link to="/profile">
+                <p onClick={handleEditing}>수정하기</p>
+              </Link>
+              <Link to="/">
+                <p onClick={handleSignout}>로그아웃</p>
+              </Link>
+              <Link to="/">
+                <p onClick={handlePermanentDeletion}>회원 탈퇴</p>
+              </Link>
+            </ButtonWrap>
+            {/* </form> */}
+          </ProfileWrap>
+        </ProfileContainer>
+      </StyledEditProfile>
+    </>
   );
 };
 
 export default MyPage;
+
+
