@@ -1,4 +1,8 @@
 const { checkAccessToken } = require("../tokenFunctions");
+const { withdrawal } = require("../../middleware/withdrawal");
+const { kakaoWithdrawal } = require("../../middleware/kakaoWithdrawal");
+const { googleWithdrawal } = require("../../middleware/googleWithdrawal");
+const { githubWithdrawal } = require("../../middleware/githubWithdrawal");
 const {
   User,
   Study_comment,
@@ -19,14 +23,14 @@ module.exports = {
       }
       const { id: paramsId } = req.params;
 
-      if (data.id !== Number(paramsId)) {
-        return res.status(401).json("wrong req params");
-      }
+      // if (data.id !== Number(paramsId)) {
+      //   return res.status(401).json("wrong req params");
+      // }
 
-      const { loginMethod } = req.body;
+      // const { loginMethod } = req.body;
 
       const userInfo = await User.findOne({
-        attributes: ["id"],
+        // attributes: ["id", "loginMethod"],
         // include: [
         //   {
         //     model: Study,
@@ -42,60 +46,29 @@ module.exports = {
       if (!userInfo) {
         return res.status(404).json("already withdrawal");
       }
+      const { id, loginMethod, email } = userInfo.dataValues;
+      const kakaoId = Number(email.slice(0, 10));
+      // return res.json("ok");
+
+      // const { authorization } = req.cookie;
+      // console.log("cookies", req.cookies.accessToken);
+      // const accessToken = authorization.split(" ")[1];
 
       if (loginMethod === 0) {
-        const studyList = await Study.findAll({
-          where: { user_id: userInfo.id },
-        });
-
-        const study_commentList = await Study_comment.findAll({
-          where: { user_id: userInfo.id },
-        });
-
-        const User_likes_studyList = await User_likes_study.findAll({
-          where: { user_id: userInfo.id },
-        });
-
-        const studyIdList = [];
-        await studyList.map((el) => studyIdList.push(el.id));
-
-        const study_commentIdList = [];
-        await study_commentList.forEach((el) => study_commentIdList.push(el.id));
-
-        const User_likes_studyIdList = [];
-        await User_likes_studyList.map((el) => User_likes_studyIdList.push(el.id));
-
-        await Study_comment.destroy({
-          where: { user_id: userInfo.id },
-        });
-
-        for (let i = 0; i < User_likes_studyIdList.length; i++) {
-          await User_likes_study.destroy({
-            where: { user_id: User_likes_studyIdList[i] },
-          });
-        }
-
-        for (let i = 0; i < studyIdList.length; i++) {
-          await Study_language.destroy({
-            where: { study_id: studyIdList[i] },
-          });
-          await Study_comment.destroy({
-            where: { study_id: studyIdList[i] },
-          });
-          await User_likes_study.destroy({
-            where: { study_id: studyIdList[i] },
-          });
-          await Study.destroy({
-            where: { id: studyIdList[i] },
-          });
-        }
-
-        await User.destroy({
-          where: { id: userInfo.id },
-          include: [{ model: Study_comment, as: "study_comment" }],
-        });
+        withdrawal(id);
+      }
+      if (loginMethod === 1) {
+        githubWithdrawal(id);
+      }
+      if (loginMethod === 2) {
+        googleWithdrawal(id);
+      }
+      if (loginMethod === 3) {
+        kakaoWithdrawal(kakaoId);
+        withdrawal(id);
       }
 
+      // console.log(accessToken);
       res.cookie("accessToken", null, { maxAge: 0 });
       res.cookie("refreshToken", null, { maxAge: 0 });
 

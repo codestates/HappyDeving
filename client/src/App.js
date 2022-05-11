@@ -1,12 +1,11 @@
-import React from "react";
-// import { gitSignin, kakaoSignin } from "./features/user/userSlice";
+import React, { useEffect } from "react";
 // import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Container from "../src/components/styles/Container.styled";
 import Header from "../src/components/styles/Header.styled";
 import { Search } from "../src/components/styles/Search.styled";
-// import Footer from "../src/components/styles/Footer.styled";
+import Footer from "../src/components/styles/Footer.styled";
 import Landing from "./pages/Landing";
 import Write from "././components/styles/WriteStudyDesc.styled";
 import Map from "././components/styles/Map.styled";
@@ -28,6 +27,8 @@ import landing_01 from "../src/assets/AdobeStock_434132331.jpeg";
 import landing_02 from "../src/assets/AdobeStock_340974671.jpeg";
 import landing_03 from "../src/assets/AdobeStock_347708874.jpeg";
 import "./App.css";
+import axios from "axios";
+import { Github_url } from "./config";
 
 function App() {
   const theme = {
@@ -51,28 +52,33 @@ function App() {
     font: {},
   };
 
-  // const getAccessToken = async (authorizationCode) => {
-  //   let resp = await axios.post("https://server.happydeving.com/users/login/kakao", {
-  //     authorizationCode: authorizationCode,
-  //   });
-  //   console.log(resp);
-  // };
+  let login = localStorage.getItem("login");
+  const getGithubAccessToken = async (authorizationCode) => {
+    localStorage.setItem("reload", true);
+    let resp = await axios.post(Github_url, {
+      authorizationCode: authorizationCode,
+    });
+    const { user } = resp.data;
+    const { accessToken } = resp.data;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", JSON.stringify(accessToken));
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    };
+    // navigate("/");
+    window.location.reload();
+  };
 
-  // useEffect(() => {
-  //   const url = new URL(window.location.href);
-  //   console.log(url);
-
-  //   const authorizationCode = url.searchParams.get("code");
-  //   if (authorizationCode) {
-  //     if (localStorage.getItem("login") === "git") {
-  //       console.log("client auth git", authorizationCode);
-  //       dispatch(gitSignin(authorizationCode));
-  //     } else if (localStorage.getItem("login") === "kakao") {
-  //       console.log("client auth kakao", authorizationCode);
-  //       dispatch(kakaoSignin(authorizationCode));
-  //     }
-  //   }
-  // });
+  useEffect(() => {
+    if (login === "github" && localStorage.getItem("reload") !== "true") {
+      const url = new URL(window.location.href);
+      const authorizationCode = url.searchParams.get("code");
+      if (authorizationCode) {
+        getGithubAccessToken(authorizationCode);
+      }
+    }
+  }, []);
 
   return (
     <Router>
@@ -133,7 +139,7 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
-          {/* <Footer /> */}
+          <Footer />
         </Container>
       </ThemeProvider>
     </Router>
