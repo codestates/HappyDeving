@@ -6,8 +6,6 @@ import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 import { studyApi, deleteStudyApi } from "../../api/study";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { getComments } from "../../features/comment/commentSlice";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 {
@@ -277,7 +275,6 @@ const MapView = styled(Content)`
 const StudyDesc = () => {
   const container = useRef(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const { id } = useParams();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -287,7 +284,6 @@ const StudyDesc = () => {
     logitude: 126.977759,
   });
   const [data, setData] = useState();
-  const { comments } = useSelector((state) => state.comment);
 
   const mapscript = () => {
     const options = {
@@ -325,10 +321,6 @@ const StudyDesc = () => {
       mapscript();
     }
   }, [data]);
-
-  useEffect(() => {
-    dispatch(getComments(id));
-  }, []);
 
   useEffect(() => {
     const href = document.location.href.split("/");
@@ -395,7 +387,7 @@ const StudyDesc = () => {
                 댓글보기
                 <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
               </button>
-              {showConfirmModal ? <Comments comments={comments} studyId={id} /> : null}
+              {showConfirmModal ? <Comments studyId={id} /> : null}
             </CommentsDiv>
           </StudyDescDiv>
         </>

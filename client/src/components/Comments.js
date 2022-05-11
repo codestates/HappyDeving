@@ -4,7 +4,12 @@ import styled from "styled-components";
 import Content from "./styles/Content.styled";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-import { editComment, writeComment, deleteComment } from "../features/comment/commentSlice";
+import {
+  editComment,
+  writeComment,
+  deleteComment,
+  getComments,
+} from "../features/comment/commentSlice";
 import { useDispatch, useSelector } from "react-redux";
 import LoadingIndicator from "../components/LoadingIndicator";
 
@@ -16,37 +21,30 @@ const CommentsContainer = styled.div`
   margin-top: 40px;
 `;
 
-const Comments = ({ comments, studyId }) => {
+const Comments = ({ studyId }) => {
   const dispatch = useDispatch();
-  const { isLoading } = useSelector((state) => state.comment);
-
-  const [backendComments, setBackendComments] = useState([]);
   const [activeComment, setActiveComment] = useState(null);
-  const rootComments = backendComments.filter((backendComment) => backendComment.parentId === null);
-  // console.log("rootComments: ", rootComments); // 잘 들어옴
+  const { comments, isLoading } = useSelector((state) => state.comment);
+  const rootComments = comments.filter((backendComment) => backendComment.parentId === null);
 
-  // 대댓글 순서는 댓글 순서와 반대
   const getReplies = (commentId) =>
-    backendComments.filter((backendComment) => backendComment.parentId === commentId);
+    comments.filter((backendComment) => backendComment.parentId === commentId);
 
-  const addComment = (commentData) => {
-    console.log("작성 clicked");
-    dispatch(writeComment(commentData));
+  const addComment = async (commentData) => {
+    await dispatch(writeComment(commentData));
     setActiveComment(null);
   };
-  const updateComment = (commentData) => {
-    console.log("수정 clicked");
-    dispatch(editComment(commentData));
+  const updateComment = async (commentData) => {
+    await dispatch(editComment(commentData));
     setActiveComment(null);
   };
   const deletingComment = (commentData) => {
-    console.log("삭제 clicked");
     dispatch(deleteComment(commentData));
   };
 
   useEffect(() => {
-    setBackendComments(comments);
-  }, [comments, backendComments]);
+    dispatch(getComments(studyId));
+  }, []);
 
   if (isLoading) {
     return <LoadingIndicator />;
