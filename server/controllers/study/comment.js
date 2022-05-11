@@ -82,18 +82,19 @@ module.exports = {
         return res.status(404).json("comment not found");
       }
 
-      const { id, user_id, content, parentId, createdAt, updatedAt } = comment;
+      const { id, user_id, study_id, content, parentId, createdAt, updatedAt } = comment.dataValues;
 
       const userInfo = await User.findOne({
         where: { id: user_id },
       });
 
-      const { username } = userInfo;
+      const { username, image } = userInfo.dataValues;
 
       return res.status(200).json({
         data: {
-          comments: [{ id, content, username, parentId, createdAt, updatedAt }],
-          userInfo: { id, username },
+          comments: [
+            { id, content, user_id, study_id, username, parentId, createdAt, updatedAt, image },
+          ],
         },
       });
     } catch (err) {
