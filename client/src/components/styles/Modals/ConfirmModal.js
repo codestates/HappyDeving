@@ -5,6 +5,8 @@ import { faClose } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import UpdateUser from "./forms/UpdateUser";
+import UpdateStudy from "./forms/UpdateStudy";
+import DeleteUser from "./forms/DeleteUser";
 import { closeModal } from "../../../features/modal/modalSlice";
 const ModalBackdrop = styled.div`
   opacity: 0;
@@ -83,11 +85,10 @@ const ConfirmModal = () => {
   console.log("isOpen? ", Boolean(isOpen));
 
   const closeModalHandler = () => {
-    // console.log("close modal 들어옴");
     dispatch(closeModal());
   };
 
-  const componentsLookUp = { UpdateUser };
+  const componentsLookUp = { UpdateUser, DeleteUser, UpdateStudy };
   let renderComponent;
   if (componentName) {
     const SelectedComponent = componentsLookUp[componentName];
@@ -100,7 +101,6 @@ const ConfirmModal = () => {
       <ModalBackdrop
         onClick={closeModalHandler}
         className={isOpen ? "modal-show" : null}
-        // className="modal-show"
       ></ModalBackdrop>
 
       <ModalContainer className={isOpen ? "modal-show" : null}>
