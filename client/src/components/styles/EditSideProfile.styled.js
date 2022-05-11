@@ -1,128 +1,125 @@
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import Content from "./Content.styled";
-// import githubIcon from "../../static/images/githubIcon.png";
-// import blogIcon from "../../static/images/blogIcon.png";
 import { editProfileImage } from "../../features/user/userSlice";
-// import axios from "axios";
-// import { useEffect } from "react";
-// import { editProfile } from "../../features/user/userSlice";
 
-const Container = styled(Content)`
-  grid-column: 2/ 5;
-  display: grid;
-  height: 400px;
-  position: relative;
-  background-color: pink;
-  grid-template-columns: repeat(5, 1fr);
+const Container = styled.div`
+  margin-bottom: 20px;
 `;
 
-const Profile = styled(Content)`
-  grid-column: 2/ 5;
-  height: 400px;
+const Profile = styled.div`
   position: relative;
-  background-color: white;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
 `;
-const ProfileImage = styled.img`
+const ProfileImage = styled.div`
   border-radius: 100px;
   width: 150px;
   height: 150px;
   margin-top: 15px;
-  border: 5px solid #c593fe;
+  border: 3px solid #c593fe;
+
+  img {
+    border-radius: 100px;
+    width: 100%;
+    height: 100%;
+  }
 `;
 
-const Button = styled.button`
-  margin-top: 15px;
-  border-radius: 10px;
-  padding: 5px 10px;
-  background-color: #c593fe;
+const ProfilePrieview = styled.div`
+  position: absolute;
+  color: rgba(0, 0, 0, 0);
+  width: 150px;
+  height: 150px;
+  border-radius: 100px;
+  top: 15px;
+  left: 60px;
+  /* background: black; */
+  cursor: pointer;
+  &:hover {
+    display: flex;
+    background: white;
+    color: black;
+    opacity: 0.6;
+    align-items: center;
+    justify-content: center;
+  }
+  @media screen and (max-width: 1024px) {
+    top: 15px;
+    left: 100px;
+  }
+`;
+const ProfileButton = styled.div`
+  margin-top: 20px;
+  border-bottom: 1px solid gray;
+  font-weight: 500;
+  font-size: 18px;
+  cursor: pointer;
+  &:hover {
+    color: black;
+    border-bottom: 3px solid #dfc1ff;
+  }
 `;
 
-// const LinkButtons = styled.div`
-//   margin-top: 20px;
-//   display: flex;
-//   img {
-//     width: 3vh;
-//   }
-//   a {
-//     margin-left: 5px;
-//     margin-right: 5px;
-//   }
-// `;
 const EditSideProfile = () => {
   // user.image
   const dispatch = useDispatch();
-  const { user, isError, message } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state.user);
   const fileInput = useRef(null);
 
-  const [image, setImage] = useState(null);
-  const [imageData, setImageData] = useState("https://i.ibb.co/nr4FYns/happydevil.png");
+  const [file, setFile] = useState(null);
+  const [previewImg, setPreviewImg] = useState(null);
+
   const onChangePicture = (e) => {
+    setFile(e.target.files[0]);
+    let reader = new FileReader();
+
     if (e.target.files[0]) {
-      console.log("image: ", e.target.files[0]);
-      setImage(e.target.files[0]);
-      const reader = new FileReader();
-      reader.addEventListener("load", () => {
-        setImageData(reader.result);
-        console.log("reader.result", reader.result);
-      });
       reader.readAsDataURL(e.target.files[0]);
     }
+
+    reader.onloadend = () => {
+      const previewImgUrl = reader.result;
+      if (previewImgUrl) {
+        setPreviewImg(previewImgUrl);
+      }
+    };
   };
 
   const onSave = (e) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("image", image);
-
-    if (isError) {
-      console.log("editProfileImage.rejected :", message);
-    }
-    console.log("{ id: user.id, formData }: ", { id: user.id, formData });
+    formData.append("image", file);
     dispatch(editProfileImage({ id: user.id, formData }));
-    console.log("id? :", user.id);
   };
 
   return (
     <>
       <Container>
-        <div>보인다.</div>
         <Profile>
-          <ProfileImage src={imageData} />
-          <Button
-            onClick={() => {
-              fileInput.current.click();
-            }}
-          >
-            미리보기
-          </Button>
-          {/* <form> */}
+          <ProfileImage>
+            <img src={previewImg ? previewImg : user.image} />
+            <ProfilePrieview
+              onClick={() => {
+                fileInput.current.click();
+              }}
+            >
+              프로필 업로드
+            </ProfilePrieview>
+          </ProfileImage>
+
           <input
             type="file"
             style={{ display: "none" }}
-            //  image 확장자만 선택적
             accept="image/jpg, image/jpeg, image/png"
             name="image"
             onChange={onChangePicture}
             ref={fileInput}
           />
-          {/* <label htmlFor="image">저장하기</label> */}
-          <button onClick={onSave}>저장하기</button>
-          {/* </form> */}
 
-          {/* <LinkButtons>
-            <a href={user.github}>
-              <img src={githubIcon}></img>
-            </a>
-            <a href={user.blog}>
-              <img src={blogIcon}></img>
-            </a>
-          </LinkButtons> */}
+          <ProfileButton onClick={onSave}>프로필 저장하기</ProfileButton>
         </Profile>
       </Container>
     </>
