@@ -7,10 +7,9 @@ import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 // import DateModal from "./Modals/DateModal";
 // import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
-import { useDispatch, useSelector } from "react-redux";
-import { openModal } from "../../features/modal/modalSlice";
-// import { writeStudyApi } from "../../api/study";
-// import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { writeStudyApi } from "../../api/study";
+import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
@@ -271,8 +270,7 @@ const Checkbox = styled.div`
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
 
 const StudyDesc = () => {
-  // const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const container = useRef(null);
   const [location, setLocation] = useState({
     place_name: "광화문",
@@ -417,16 +415,6 @@ const StudyDesc = () => {
     ));
   };
 
-  const handleStudyPosting = (e) => {
-    e.preventDefault();
-    dispatch(
-      openModal({
-        name: "WriteStudy",
-        childrenProps: { userId: user.id, ...data },
-      })
-    );
-  };
-
   const handleInputValue = (id, e) => {
     setData({ ...data, [id]: e });
   };
@@ -520,7 +508,6 @@ const StudyDesc = () => {
             onChange={(e) => handleInputValue("content", e.target.value)}
           ></Textarea>
         </Wrapper>
-<<<<<<< HEAD
 
         <Closed>
           <Checkbox>
@@ -545,31 +532,6 @@ const StudyDesc = () => {
             저장하기
           </Button>
         </Closed>
-=======
-        <div className="closed">
-          <input
-            type="checkbox"
-            id="closed"
-            className="input"
-            onClick={() => {
-              setChecked(!checked);
-            }}
-          ></input>
-          <label htmlFor="closed">모집마감</label>
-        </div>
-        <Button
-          onClick={handleStudyPosting}
-          // onClick={() =>
-          //   writeStudyApi(user.id, data).then((res) => {
-          //     console.log(res);
-          //     alert("저장되었습니다");
-          //     navigate(`/study/${res.data.id}`);
-          //   })
-          // }
-        >
-          저장
-        </Button>
->>>>>>> 239c3a1 (Add WriteStudy modal)
       </Desc>
     </WriteStudyDesc>
   );

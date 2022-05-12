@@ -45,18 +45,15 @@ const initialState = {
 //   }
 // );
 
-export const writeStudy = createAsyncThunk(
-  "allStudies/writeStudy",
-  async ({ id, studyInfo }, thunkAPI) => {
-    try {
-      return await writeStudyApi(id, studyInfo).then((res) => {
-        return res.data;
-      });
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+export const writeStudy = createAsyncThunk("allStudies/writeStudy", async (data, thunkAPI) => {
+  try {
+    return await writeStudyApi(data).then((res) => {
+      return res.data;
+    });
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
 
 export const editStudy = createAsyncThunk("allStudies/editStudy", async (data, thunkAPI) => {
   try {

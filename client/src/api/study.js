@@ -38,7 +38,7 @@ export const getAllStudiesApi = () => axios.get("/search");
 export const studyApi = (id) => axios.get(`/study/${id}`);
 
 // 스터디 글쓰기
-export const writeStudyApi = (id, data) => axios.post(`/study/${id}`, data);
+export const writeStudyApi = (data) => axios.post(`/study/${data.userId}`, data);
 // 스터디 글 수정
 export const editStudyApi = (data) => axios.patch(`/study/${data.id}`, data);
 // 스터디 글 삭제

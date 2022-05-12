@@ -11,7 +11,7 @@ const StyledLoadingIndicator = styled.div`
     }
   }
 `;
-const SpiinerContainer = styled.div`
+const SpinnerContainer = styled.div`
   display: grid;
   justify-content: center;
   align-items: center;
@@ -29,9 +29,9 @@ const Spinner = styled.div`
 function LoadingIndicator() {
   return (
     <StyledLoadingIndicator>
-      <SpiinerContainer>
+      <SpinnerContainer>
         <Spinner></Spinner>
-      </SpiinerContainer>
+      </SpinnerContainer>
     </StyledLoadingIndicator>
   );
 }
