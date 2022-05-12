@@ -19,7 +19,6 @@ module.exports = {
   delete: async (req, res) => {
     try {
       const data = checkAccessToken(req);
-      console.log(req.cookies.accessToken);
 
       if (!data) {
         return res.status(401).json("signin required");
@@ -70,8 +69,7 @@ module.exports = {
       }
       // return res.json("ok");
       if (loginMethod === 3) {
-        const kakaoId = Number(email.slice(0, 10));
-        kakaoWithdrawal(kakaoId);
+        kakaoWithdrawal(accessToken);
         withdrawal(id);
       }
       if (loginMethod === 4) {

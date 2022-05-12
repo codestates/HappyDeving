@@ -45,9 +45,11 @@ module.exports = {
           code: authorizationCode,
         }),
       }).then((res) => res.json());
+
+      // return res.json("ok");
       // const { access_token } = resp.data;
       const kakaoAccessToken = resp.access_token;
-      // const kakaoRefreshToken = resp.refresh_token;
+      const kakaoRefreshToken = resp.refresh_token;
       const kakaoUserInfo = await fetch(`https://kapi.kakao.com/v2/user/me`, {
         headers: {
           Authorization: `Bearer ${kakaoAccessToken}`,
@@ -67,6 +69,8 @@ module.exports = {
       const userInfo = await User.findOne({
         where: { email },
       });
+      // console.log("userInfo=========", userInfo);
+      // return res.json("ok");
 
       if (!userInfo) {
         const newUser = await User.create({
@@ -77,27 +81,20 @@ module.exports = {
           verified: true,
           loginMethod: 3,
         });
-        const newAccessToken = generateAccessToken(userInfo.dataValues);
-        const newrefreshToken = generaterefreshToken(userInfo.dataValues);
+
+        const newAccessToken = generateAccessToken(newUser.dataValues);
+        const newrefreshToken = generaterefreshToken(newUser.dataValues);
         sendTocookie(res, kakaoAccessToken, newrefreshToken);
 
         return res.status(200).send({
-          user: userInfo,
+          user: newUser,
           accessToken: newAccessToken,
         });
       }
 
-      const newUser = await User.create({
-        username: nickname,
-        image: thumbnail_image_url,
-        password: `${id}${nickname}`,
-        email: `${id}${nickname}@gmail.com`,
-        loginMethod: 4,
-      });
-
       const newAccessToken = generateAccessToken(userInfo.dataValues);
       const newrefreshToken = generaterefreshToken(userInfo.dataValues);
-      sendTocookie(res, newAccessToken, newrefreshToken);
+      sendTocookie(res, kakaoAccessToken, newrefreshToken);
 
       return res.status(200).json({
         user: userInfo,
