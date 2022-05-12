@@ -9,13 +9,10 @@ const StyledLanguageModal = styled(Content)`
   @media screen and (min-width: 768px) {
     grid-column: 7/11;
   }
-  width: 350px;
+  width: 100%;
   height: auto;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
   border-radius: 10px;
-  position: absolute;
+  position: relative;
   z-index: 10;
   background-color: white;
   box-shadow: ${(props) => props.theme.contents.boxShadow};
@@ -46,7 +43,6 @@ const LanguageModal = () => {
           key={idx}
           className="elements"
           onClick={() => {
-            console.log(el);
             dispatch(setLanguageData(el));
             dispatch(reset());
           }}

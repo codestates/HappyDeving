@@ -16,17 +16,9 @@ import { studyApi, deleteStudyApi } from "../../api/study";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-{
-  /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
-  // 입력칸들 5-14 
-  //(언어 input, modal(정사각형) :5-9, 
-  시작일 input, modal(정사각형) : 10-14 )
-   - 내용 input은 scroll
-// 글 저장 바 : height - 1row (40px), width는 위의 글이랑 같게*/
-}
 
 const StyleStudyDesc = styled.div`
-  grid-row: 1/10;
+  margin-top: 120px;
   grid-column: 2/14;
   padding: 3% 5% 3% 5%;
 
@@ -160,7 +152,7 @@ const StudyDesc = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const user = localStorage.getItem("user");
+  const user = JSON.parse(localStorage.getItem("user"));
 
   const [location, setLocation] = useState({
     place_name: "광화문",
@@ -219,10 +211,13 @@ const StudyDesc = () => {
     <>
       {data ? (
         <StyleStudyDesc>
+          {console.log(data.user_id)}
+          {console.log(user.id)}
+
           <TitleBar>
             <div className="title">{data.title}</div>
             <div className="alter">
-              {data.username === user?.username ? (
+              {data.user_id === user?.id ? (
                 <>
                   <div
                     className="update"

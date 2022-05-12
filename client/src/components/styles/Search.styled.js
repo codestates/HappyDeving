@@ -7,10 +7,11 @@ import { langImg } from "../../static/images/langImg";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getStudiesMapApi } from "../../api/study";
+import { setStudiesData } from "../../features/studies/studiesSlice";
+
 import LanguageModal from "./Modals/LanguageModal";
 import LocationModal from "./Modals/LocationModal";
 import DateModal from "./Modals/DateModal";
-import { setStudiesData } from "../../features/studies/studiesSlice";
 import {
   languageModal,
   locationModal,
@@ -48,6 +49,7 @@ export const StyledSearch = styled.div`
     align-items: center;
     justify-content: center;
     color: black;
+
     &:hover {
       /* color: white; */
       color: rgb(94, 23, 235);
@@ -61,6 +63,7 @@ export const StyledSearch = styled.div`
     .desc {
       font-family: "Medium";
       font-size: 22px;
+      display: none;
 
       @media screen and (max-width: 1024px) {
         font-size: 20px;
@@ -68,7 +71,6 @@ export const StyledSearch = styled.div`
 
       @media screen and (max-width: 768px) {
         font-size: 16px;
-        display: none;
       }
     }
   }
@@ -78,6 +80,8 @@ const Modals = styled.div`
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   height: auto;
+  position: absolute;
+  z-index: 10;
 
   div {
     @media screen and (max-width: 768px) {
@@ -86,19 +90,20 @@ const Modals = styled.div`
   }
 
   .locationModal {
+    grid-column: 2/5;
+
     @media screen and (max-width: 768px) {
       display: none;
     }
-
-    grid-column: 1/5;
   }
   .dateModal {
+    grid-column: 3/7;
     @media screen and (max-width: 768px) {
       display: none;
     }
-    grid-column: 4/8;
   }
   .languageModal {
+    grid-column: 6/12;
     @media screen and (max-width: 768px) {
       display: none;
     }
@@ -275,22 +280,22 @@ const Search = () => {
       </StyledSearch>
       <Modals>
         {location ? (
-          <LocationModal className="locationModal">
+          <div className="locationModal">
             <input
               onKeyDown={(e) => handleInputValue(e)}
               placeholder="ex. 송파구 오륜동"
             ></input>
             <div></div>
             {locationListHandler(locationList)}
-          </LocationModal>
+          </div>
         ) : null}
         {date ? (
-          <DateModal className="dateModal">
+          <div className="dateModal">
             <CalenderDate />
-          </DateModal>
+          </div>
         ) : null}
         {language ? (
-          <LanguageModal className="languageModal">
+          <div className="languageModal">
             {Object.keys(langImg).map((el, idx) => (
               <div
                 key={idx}
@@ -304,7 +309,7 @@ const Search = () => {
                 {el}
               </div>
             ))}
-          </LanguageModal>
+          </div>
         ) : null}
       </Modals>
     </>

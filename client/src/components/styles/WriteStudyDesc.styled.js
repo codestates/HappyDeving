@@ -12,8 +12,8 @@ import { writeStudyApi } from "../../api/study";
 import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
-  grid-row: 2/12;
   grid-column: 2/14;
+  margin-top: 120px;
 
   @media screen and (max-width: 768px) {
     grid-column: 1/15;

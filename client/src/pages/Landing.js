@@ -5,28 +5,20 @@ import { Search } from "../components/styles/Search.styled";
 
 const StyledSearch = styled.div`
   grid-column: 3/13;
-  grid-row: 3/4;
   width: auto;
+  margin-top: 150px;
+  background-color: red;
+  display: block;
 
-  @media screen and (max-width: 768px) {
+  /* @media screen and (max-width: 768px) {
     display: none;
-  }
-  display: ${(props) => (props.drop ? "none" : "display")};
-  margin-top: 40px;
+  } */
+  display: ${(props) => (props.drop ? "none" : "block")};
 `;
-
-const Main = styled(Content)`
-  grid-row: 6/13;
-  height: 1000px;
-  background-color: white;
-  grid-column: 1/15;
-`;
-
-
-
 
 const StyledLanding = styled.div`
   grid-column: 3 / 13;
+  margin-top: 200px;
   position: relative;
   width: 100%;
   height: 100vh;
@@ -68,19 +60,16 @@ const LandingTitle = styled.h1`
   }
 `;
 
-
-
 const Landing = ({ imageSrc, drop }) => {
   return (
-  <>
-
-    <StyledSearch drop={drop}>
-    <Search />
-  </StyledSearch>
-    <StyledLanding>
-      <LandingImage src={imageSrc} />
-      <LandingTitle>해피데빙으로 협업하자</LandingTitle>
-    </StyledLanding>
+    <>
+      <StyledSearch drop={drop}>
+        <Search />
+      </StyledSearch>
+      <StyledLanding>
+        <LandingImage src={imageSrc} />
+        <LandingTitle>해피데빙으로 협업하자</LandingTitle>
+      </StyledLanding>
     </>
   );
 };

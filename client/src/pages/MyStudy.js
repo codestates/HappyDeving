@@ -5,25 +5,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { getMyStudies, reset } from "../features/studies/allStudiesSlice";
 import StudyCard from "../components/StudyCard";
 import LoadingIndicator from "../components/LoadingIndicator";
-// import Content from "../components/styles/Content.styled";
-// import Container from "../components/styles/Container.styled";
-import Content from "../components/styles/Content.styled";
 import { useNavigate } from "react-router-dom";
 
 const MyStudyTab = styled.div``;
 const LikedStudyTab = styled.div``;
 const MyprofileTab = styled.div``;
 
-const MyStudyContainer = styled(Content)`
+const MyStudyContainer = styled.div`
   min-height: 100%;
   min-width: 500px;
   grid-column: 4/12;
-  grid-row: 5/12;
   background: white;
   justify-content: center;
   gap: 3%;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1400px) {
     grid-column: 3 / 13;
   }
   @media screen and (max-width: 764px) {
@@ -34,29 +30,21 @@ const StyledSection = styled.div`
   min-height: 100%;
   min-width: 500px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(420px, auto));
+  grid-template-columns: repeat(auto-fill, minmax(380px, auto));
   justify-content: space-evenly;
   gap: 1%;
   @media screen and (max-width: 2300px) {
-    grid-template-columns: repeat(auto-fill, minmax(400px, auto));
+    grid-template-columns: repeat(auto-fill, minmax(380px, auto));
+    transition: 1s;
   }
-  @media screen and (max-width: 1800px) {
-    grid-template-columns: repeat(auto-fill, minmax(350px, auto));
-  }
-  @media screen and (max-width: 1674px) {
-    grid-template-columns: repeat(auto-fill, minmax(350px, auto));
-  }
-  @media screen and (max-width: 1310px) {
-    height: 180px;
-    grid-template-columns: repeat(auto-fill, minmax(300px, auto));
-  }
+
   @media screen and (max-width: 1024px) {
     grid-template-columns: repeat(auto-fill, minmax(400px, auto));
-    /* grid-template-columns: repeat(2, 1fr); */
+    transition: 1s;
   }
   @media screen and (max-width: 764px) {
     grid-template-columns: repeat(1, minmax(300px, auto));
-    /* grid-template-columns: repeat(1, 1fr); */
+    transition: 1s;
   }
 `;
 
@@ -86,7 +74,9 @@ const MyStudy = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const { myStudies, isLoading, isError, message } = useSelector((state) => state.allStudies);
+  const { myStudies, isLoading, isError, message } = useSelector(
+    (state) => state.allStudies
+  );
 
   const [data, setData] = useState([]);
   // console.log(`my studies: ${JSON.stringify(myStudies)}`);
@@ -111,7 +101,10 @@ const MyStudy = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
+          <LikedStudyTab
+            className="tap"
+            onClick={() => navigate("/likedstudy")}
+          >
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>

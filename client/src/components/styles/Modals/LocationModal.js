@@ -12,7 +12,6 @@ const Location = styled.div`
   box-sizing: border-box;
   font-family: "Medium";
   border-radius: none;
-  grid-column: 2/8;
 
   @media screen and (max-width: 768px) {
     height: 100vh;

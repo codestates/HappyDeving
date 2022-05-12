@@ -9,22 +9,23 @@ import Content from "../components/styles/Content.styled";
 
 import SideProfile from "../components/styles/SideProfile.styled";
 
-const StyledEditProfile = styled(Content)`
-  grid-row: 5/12;
+const StyledEditProfile = styled.div`
   grid-column: 4 / 12;
-  min-height: 80vh;
+  min-height: 80%;
   text-align: left;
-  min-width: 520px;
+  min-width: 524px;
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
+    transition: 1s;
   }
   @media screen and (max-width: 764px) {
     grid-column: 2 / 14;
+    transition: 1s;
   }
 `;
 
 const UserTitle = styled.div`
-  font-size: 50px;
+  font-size: 40px;
   margin-bottom: 50px;
   span {
     font-weight: 500;
@@ -32,7 +33,7 @@ const UserTitle = styled.div`
   }
   @media screen and (max-width: 1024px) {
     font-size: 30px;
-    grid-column: 3 / 13;
+    transition: 1s;
   }
 `;
 
@@ -42,7 +43,7 @@ const Tab = styled.div`
   border-bottom: 2px solid darkgray;
   margin-bottom: 20px;
   color: gray;
-  font-size: 18px;
+  font-size: 16px;
 
   cursor: pointer;
   .tap {
@@ -79,21 +80,24 @@ const Side = styled.div`
 
 const ProfileWrap = styled.div`
   display: flex;
-  grid-column: 3 / 8;
+  grid-column: 3 / 9;
   flex-direction: column;
+
   margin: 0px 30px;
+  @media screen and (max-width: 764px) {
+  }
 `;
 
 const Text = styled.div`
   width: 150px;
   padding-bottom: 2px;
   border-bottom: 1px solid gray;
-  font-size: 20px;
-  font-weight: 500;
+  color: gray;
+  font-size: 18px;
   margin-bottom: 10px;
-  margin-top: 10px;
+  margin-top: 25px;
   @media screen and (max-width: 764px) {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 
@@ -101,17 +105,20 @@ const Info = styled.div`
   margin-top: 10px;
   margin-bottom: 10px;
   font-size: 18px;
+  @media screen and (max-width: 764px) {
+    font-size: 16px;
+  }
 `;
 
 const ButtonWrap = styled.div`
   display: flex;
-  font-size: 18px;
+  font-size: 16px;
   margin-top: 30px;
   p {
     border-bottom: 1px solid gray;
     margin-right: 10px;
     color: gray;
-    font-weight: 500;
+    font-weight: 700;
     cursor: pointer;
     &:hover {
       color: black;
@@ -133,7 +140,7 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    dispatch(getProfile(user?.id));
+    dispatch(getProfile(user.id));
     dispatch(reset());
   }, []);
 
@@ -153,7 +160,10 @@ const Profile = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
+          <LikedStudyTab
+            className="tap"
+            onClick={() => navigate("/likedstudy")}
+          >
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>
@@ -170,9 +180,9 @@ const Profile = () => {
             <Info>{user?.username}</Info>
             <Text>자기 소개</Text>
             <Info>{user?.bio}</Info>
-            <Text></Text>
+            <Text>깃허브 주소</Text>
             <Info>{user?.github}</Info>
-            <Text> </Text>
+            <Text>블로그 주소</Text>
             <Info>{user?.blog}</Info>
             <ButtonWrap>
               <p onClick={MoveToEditPage}>프로필 수정하기</p>

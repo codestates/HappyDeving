@@ -3,24 +3,21 @@ import styled from "styled-components";
 import { faGithubAlt } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const StyledFooter = styled.div`
+  /* grid-row-start: 2; */
+  /* grid-row-end: 3; */
   grid-column: 4/12;
-  position: absolute;
-  bottom: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: absolute;
-  bottom: 0px;
   width: 100%;
   height: 200px;
   color: black;
-  margin-top: 20px;
-  padding-top: 20px;
+  margin: 100px 0px;
+  padding: 40px;
   border-top: 1px solid #5e17eb;
 
   h1 {
-    font-weight: 500;
-    font-size: 20px;
+    font-size: 16px;
     color: #5e17eb;
   }
 
@@ -42,6 +39,9 @@ const InfoContainer = styled.div`
   margin: 0px;
   @media screen and (max-width: 1024px) {
     flex-direction: column;
+    h1 {
+      font-size: 14px;
+    }
   }
 `;
 const InfoWrap = styled.div`
@@ -53,9 +53,12 @@ const InfoWrap = styled.div`
 
   p {
     margin-top: 5px;
+    font-size: 14px;
   }
-  .name {
-    font-weight: 800;
+  @media screen and (max-width: 1024px) {
+    p {
+      font-size: 12px;
+    }
   }
 `;
 const Icon = styled.a`
@@ -68,8 +71,15 @@ const Icon = styled.a`
     position: relative;
     top: 2px;
   }
+  @media screen and (max-width: 1024px) {
+    flex-direction: column;
+    font-size: 25px;
+  }
 `;
-const Copyright = styled.p``;
+const Copyright = styled.p`
+  padding-bottom: 50px;
+  font-size: 14px;
+`;
 
 const Footer = () => {
   return (
