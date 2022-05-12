@@ -10,13 +10,9 @@ import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 import { setDateModal } from "../../features/studies/studyModalSlice";
-
-import { studyApi } from "../../api/study";
 import { openModal } from "../../features/modal/modalSlice";
-
 import { studyApi, editStudyApi } from "../../api/study";
 import { Navigate, useNavigate } from "react-router-dom";
-
 
 const WriteStudyDesc = styled.div`
   grid-row: 2/12;
@@ -56,8 +52,7 @@ const Desc = styled(Content)`
       }
     }
     label {
-      color: ${(props) =>
-        props.checked ? props.theme.colors.purple : "black"};
+      color: ${(props) => (props.checked ? props.theme.colors.purple : "black")};
     }
   }
 `;
@@ -155,7 +150,6 @@ const Title = styled(Content)`
     }
   }
 `;
-
 
 const DescLanguageModal = styled.div`
   width: 90%;
@@ -350,9 +344,7 @@ const EditStudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name
-            .split(" ")
-            .filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -385,7 +377,6 @@ const EditStudyDesc = () => {
     <>
       {data ? (
         <>
-
           <WriteStudyDesc>
             <Desc>
               <Wrapper>
@@ -399,10 +390,7 @@ const EditStudyDesc = () => {
               <Wrapper>
                 <Text>언어</Text>
                 <div className="dropdown">
-                  <div className="result">
-                    {data.language?.map((el) => el.name + ",")}
-
-                  </div>
+                  <div className="result">{data.language?.map((el) => el.name + ",")}</div>
                   <IoMdArrowDropdown
                     className="icon"
                     onClick={() => setOpen({ ...open, language: true })}
@@ -433,7 +421,6 @@ const EditStudyDesc = () => {
                         </div>
                       ))}
                     </div>
-
                   </DescLanguageModal>
                 ) : null}
               </Wrapper>
@@ -446,9 +433,7 @@ const EditStudyDesc = () => {
               <Wrapper>
                 <Text>링크</Text>
                 <Input
-                  onChange={(e) =>
-                    handleInputValue("kakaoLink", e.target.value)
-                  }
+                  onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
                   defaultValue={data.kakaoLink}
                 ></Input>
               </Wrapper>
@@ -461,9 +446,7 @@ const EditStudyDesc = () => {
                     ref={locationInput}
                   ></Input>
                   {open.location ? (
-                    <DescLocationModal>
-                      {locationListHandler(locationList)}
-                    </DescLocationModal>
+                    <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
                   ) : null}
                   <IoIosSearch
                     className="icon"
@@ -510,7 +493,6 @@ const EditStudyDesc = () => {
               </Button>
             </Desc>
           </WriteStudyDesc>
-
         </>
       ) : null}
     </>

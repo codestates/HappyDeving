@@ -1,35 +1,16 @@
-import React, { useState } from "react";
+/* eslint-disable react/prop-types */
+import React from "react";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
-import { Search } from "../components/styles/Search.styled";
-
-const StyledSearch = styled.div`
-  grid-column: 3/13;
-  grid-row: 3/4;
-  width: auto;
-
-  @media screen and (max-width: 768px) {
-    display: none;
-  }
-  display: ${(props) => (props.drop ? "none" : "display")};
-  margin-top: 40px;
-`;
-
-const Main = styled(Content)`
-  grid-row: 6/13;
-  height: 1000px;
-  background-color: white;
-  grid-column: 1/15;
-`;
-
-
-
+import Slider from "../components/Slider";
+import landing_01 from "../../src/assets/landing1.png";
+import landing_02 from "../../src/assets/landing2.png";
+import landing_03 from "../../src/assets/landing3.png";
 
 const StyledLanding = styled.div`
   grid-column: 3 / 13;
   position: relative;
   width: 100%;
-  height: 100vh;
+  height: 50vh;
   transition: 2s;
   // 태블릿
   @media screen and (min-width: 768px) and (max-width: 1023px) {
@@ -42,12 +23,12 @@ const StyledLanding = styled.div`
     transition: 2s;
   }
 `;
-const LandingImage = styled.img`
-  width: 100%;
-  height: 80%;
-  object-fit: cover;
-  position: absolute;
-`;
+// const LandingImage = styled.img`
+//   width: 100%;
+//   height: 80%;
+//   object-fit: cover;
+//   position: absolute;
+// `;
 const LandingTitle = styled.h1`
   position: absolute;
   background-color: rgb(236, 236, 236);
@@ -65,22 +46,40 @@ const LandingTitle = styled.h1`
   @media screen and (max-width: 767px) {
     font-size: 1.5rem;
     transition: 1.5s;
+    top: 40%;
   }
 `;
 
+const LandingSubtitle = styled.h1``;
 
-
-const Landing = ({ imageSrc, drop }) => {
+const Landing = () => {
   return (
-  <>
+    <>
+      <StyledLanding>
+        {/* <LandingImage src={imageSrc} /> */}
 
-    <StyledSearch drop={drop}>
-    <Search />
-  </StyledSearch>
-    <StyledLanding>
-      <LandingImage src={imageSrc} />
-      <LandingTitle>해피데빙으로 협업하자</LandingTitle>
-    </StyledLanding>
+        <Slider
+          imageSrc={landing_01}
+          // title={`" 위치 기반 검색 "`}
+          // subtitle={"당신의 주변에서 일어나고 있는 놀라운 프로젝트를 찾아보세요."}
+        >
+          <LandingTitle>우리 동네 스터디를 찾고 있나요?</LandingTitle>
+          <LandingSubtitle>
+            해피데빙에서 당신은 더 멋진 개발자로 성장할 수 있습니다.
+          </LandingSubtitle>
+        </Slider>
+        <Slider
+          imageSrc={landing_02}
+          title={`" 위치 기반 검색 "`}
+          subtitle={"당신의 주변에서 일어나고 있는 놀라운 프로젝트를 찾아보세요."}
+        ></Slider>
+        <Slider
+          imageSrc={landing_03}
+          title={`" 같이의 가치 "`}
+          subtitle={"당신의 드림 프로젝트, 함께 하면 현실이 됩니다."}
+          flipped={true}
+        ></Slider>
+      </StyledLanding>
     </>
   );
 };

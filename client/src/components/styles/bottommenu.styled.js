@@ -118,7 +118,7 @@ const BottomMenu = () => {
             <Link to="/likedStudy">
               <Menu3 className="menu">
                 <FontAwesomeIcon className="icon" icon={faHeart} />
-                <p>위시리스트</p>
+                <p>찜목록</p>
               </Menu3>
             </Link>
             <Link to="/mystudy">
