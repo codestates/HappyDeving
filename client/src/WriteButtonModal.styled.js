@@ -23,7 +23,8 @@ const StyledButtonContainer = styled.div`
   border-radius: 20px;
   border: 3px solid #c593fe;
   position: fixed;
-  bottom: 300px;
+  right: 5%;
+  bottom: 30%;
   z-index: 10;
   font-size: 30px;
   box-shadow: 2px 2px 10px grey;
@@ -38,6 +39,9 @@ const StyledButtonContainer = styled.div`
   }
   @media screen and (max-width: 1024px) {
     padding: 0px 10px;
+  }
+  @media screen and (max-width: 768px) {
+    display: none;
   }
 `;
 

@@ -57,11 +57,9 @@ export const deleteComment = createAsyncThunk(
   "comment/deleteComment",
   async (comment, thunkAPI) => {
     try {
-      if (window.confirm("댓글을 지우시겠습니까?")) {
-        return await deleteCommentApi({ study_commentId: comment.id }).then((res) => {
-          return res.data;
-        });
-      }
+      return await deleteCommentApi({ study_commentId: comment.id }).then((res) => {
+        return res.data;
+      });
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
