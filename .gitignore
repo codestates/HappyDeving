@@ -27,3 +27,4 @@ yarn-error.log*
 
 # upload
 /uploads
+/client/src/components/styles/WriteStudyDesc.styled_BACKUP_7508.js

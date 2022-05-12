@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from "react-redux";
 import UpdateUser from "./forms/UpdateUser";
 import UpdateStudy from "./forms/UpdateStudy";
 import DeleteUser from "./forms/DeleteUser";
+import DeleteStudy from "./forms/DeleteStudy";
+import WriteStudy from "./forms/WriteStudy";
 import { closeModal } from "../../../features/modal/modalSlice";
 
 const ModalBackdrop = styled.div`
@@ -87,7 +89,7 @@ const ConfirmModal = () => {
     dispatch(closeModal());
   };
 
-  const componentsLookUp = { UpdateUser, DeleteUser, UpdateStudy };
+  const componentsLookUp = { UpdateUser, DeleteUser, UpdateStudy, DeleteStudy, WriteStudy };
   let renderComponent;
   if (componentName) {
     const SelectedComponent = componentsLookUp[componentName];

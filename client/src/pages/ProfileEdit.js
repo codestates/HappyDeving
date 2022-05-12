@@ -4,13 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { signout, reset } from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
 import { openModal } from "../features/modal/modalSlice.js";
 import EditSideProfile from "../components/styles/EditSideProfile.styled";
 
-const StyledEditProfile = styled(Content)`
+const StyledEditProfile = styled.div`
   grid-column: 4 / 12;
-  min-height: 80vh;
+  min-height: 80%;
   text-align: left;
   min-width: 524px;
 
@@ -116,8 +115,6 @@ const InputBio = styled.textarea`
 const ButtonWrap = styled.div`
   display: flex;
   font-size: 16px;
-  margin-top: 30px;
-  font-size: 18px;
   margin-top: 30px;
   p {
     border-bottom: 1px solid gray;

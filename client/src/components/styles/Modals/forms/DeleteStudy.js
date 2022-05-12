@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { reset, deleteUser } from "../../../../features/user/userSlice";
+import { deleteStudy, reset } from "../../../../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
@@ -31,28 +31,26 @@ const ConfirmButton = styled.button`
   }
 `;
 
-const DeleteUser = (props) => {
-  // console.log("DeleteUser props: ", props); // {id: 130, loginMethod: 0}
-  const { isLoading } = useSelector((state) => state.user);
+const DeleteStudy = (props) => {
+  console.log("DeleteStudy props: ", props); // { study_id: id }
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.allStudies);
+
   if (isLoading) {
     return <LoadingIndicator />;
   }
-
   return (
     <>
       <div>
-        <ConfirmTitle>정말 탈퇴하시겠습니까?</ConfirmTitle>
-        <ConfirmSubtitle>
-          데이터는 모두 삭제되며 재가입을 위해서는 재인증이 필요합니다.
-        </ConfirmSubtitle>
+        <ConfirmTitle>게시글을 삭제하시겠습니까?</ConfirmTitle>
+        <ConfirmSubtitle>삭제한 데이터는 복구할 수 없습니다.</ConfirmSubtitle>
         <ConfirmButton
           onClick={async () => {
-            navigate("/");
-            await dispatch(deleteUser(props));
+            await dispatch(deleteStudy(props));
             dispatch(reset());
             dispatch(closeModal());
+            navigate("/");
           }}
         >
           확인
@@ -61,4 +59,4 @@ const DeleteUser = (props) => {
     </>
   );
 };
-export default DeleteUser;
+export default DeleteStudy;

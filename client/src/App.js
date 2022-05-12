@@ -26,6 +26,7 @@ import BottomMenu from "./components/styles/bottommenu.styled";
 // import Content from "./components/styles/Content.styled";
 import ConfirmModal from "./components/styles/Modals/ConfirmModal";
 import landing_01 from "../src/assets/landing1.png";
+import GlobalFonts from "./fonts/fonts";
 
 function App() {
   const theme = {
@@ -116,6 +117,7 @@ function App() {
   return (
     <Router>
       <ThemeProvider theme={theme}>
+        <GlobalFonts />
         <Header img={theme.icons} drop={drop} />
         <Container>
           <Header img={theme.icons} />
