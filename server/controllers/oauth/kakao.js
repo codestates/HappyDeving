@@ -3,7 +3,11 @@ const { User } = require("../../models");
 const axios = require("axios");
 const fetch = require("node-fetch");
 const bcrypt = require("bcrypt");
-const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
+const {
+  generateAccessToken,
+  sendTocookie,
+  generaterefreshToken,
+} = require("../tokenFunctions");
 
 module.exports = {
   get: async (req, res) => {
@@ -19,8 +23,6 @@ module.exports = {
   post: async (req, res) => {
     try {
       const { authorizationCode } = req.body;
-      // console.log(authorizationCode);
-
       if (!authorizationCode) {
         return res.status(400).json("bad request");
       }
@@ -44,8 +46,6 @@ module.exports = {
         }),
       }).then((res) => res.json());
       // const { access_token } = resp.data;
-      // console.log(resp);
-
       const kakaoAccessToken = resp.access_token;
       // const kakaoRefreshToken = resp.refresh_token;
       const kakaoUserInfo = await fetch(`https://kapi.kakao.com/v2/user/me`, {
@@ -55,7 +55,8 @@ module.exports = {
       }).then((res) => res.json());
 
       let { id } = kakaoUserInfo;
-      const { nickname, thumbnail_image_url } = kakaoUserInfo.kakao_account.profile;
+      const { nickname, thumbnail_image_url } =
+        kakaoUserInfo.kakao_account.profile;
       id = String(id);
       const password = `${id}${nickname}`;
       const email = `${id}${nickname}@kakao.com`;
@@ -76,15 +77,23 @@ module.exports = {
           verified: true,
           loginMethod: 3,
         });
+        const newAccessToken = generateAccessToken(userInfo.dataValues);
+        const newrefreshToken = generaterefreshToken(userInfo.dataValues);
+        sendTocookie(res, kakaoAccessToken, newrefreshToken);
 
-        const newAccessToken = generateAccessToken(newUser.dataValues);
-        const newrefreshToken = generaterefreshToken(newUser.dataValues);
-        sendTocookie(res, newAccessToken, newrefreshToken);
-        return res.status(201).json({
-          user: newUser,
+        return res.status(200).send({
+          user: userInfo,
           accessToken: newAccessToken,
         });
       }
+
+      const newUser = await User.create({
+        username: nickname,
+        image: thumbnail_image_url,
+        password: `${id}${nickname}`,
+        email: `${id}${nickname}@gmail.com`,
+        loginMethod: 4,
+      });
 
       const newAccessToken = generateAccessToken(userInfo.dataValues);
       const newrefreshToken = generaterefreshToken(userInfo.dataValues);

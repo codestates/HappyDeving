@@ -1,30 +1,28 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  signinModal: false,
-  signupModal: false,
-  calenderModal: false,
+  isOpen: false,
+  componentName: null,
+  childrenProps: {},
 };
 
 const modalSlice = createSlice({
   name: "modal",
   initialState,
   reducers: {
-    openSigninModal: (state, action) => {
-      state.signinModal = action.payload;
-      return state;
+    openModal: (state, action) => {
+      state.isOpen = true;
+      state.componentName = action.payload.name;
+      state.childrenProps = action.payload.childrenProps;
     },
-    openSignupModal: (state, action) => {
-      state.signupModal = action.payload;
-      return state;
-    },
-    openCalenderModal: (state, action) => {
-      state.calenderModal = action.payload;
-      return state;
+    closeModal: (state) => {
+      state.isOpen = false;
+      state.componentName = null;
+      state.childrenProps = {};
     },
   },
 });
 
-export const { openSigninModal, openSignupModal, openCalenderModal } = modalSlice.actions;
+export const { openModal, closeModal } = modalSlice.actions;
 
 export default modalSlice.reducer;

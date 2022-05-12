@@ -5,8 +5,8 @@ import { signin } from "../features/user/userSlice";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
-import Container from "../components/styles/Container.styled";
-import Content from "../components/styles/Content.styled";
+// import Container from "../components/styles/Container.styled";
+// import Content from "../components/styles/Content.styled";
 import axios from "axios";
 import { GoogleLoginApi } from "../api/socialAuth";
 import { GoogleLogin } from "react-google-login";
@@ -21,24 +21,31 @@ import {
   Kakao_url,
   Naver_url,
 } from "../config";
+//
+// import google from "../static/images/google.png";
+import github from "../static/images/github.png";
+import naver from "../static/images/naver.png";
+import kakao from "../static/images/kakao.png";
 
-const Background = styled(Container)`
-  grid-column: 1/ 15;
+const Background = styled.div`
+  grid-column: 4/ 12;
+  /* grid-row: 6/12; */
+  /* min-height: 80%; */
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  margin: 0 auto;
+  margin: 20% auto;
   font-size: 18px;
   font-weight: 500;
 `;
 
-const SigninWrap = styled(Content)`
+const SigninWrap = styled.div`
   display: flex;
   min-width: 400px;
   height: 100%;
   padding: 20px;
-  grid-column: 4/12;
+  /* grid-column: 4/12; */
   align-items: center;
   flex-direction: column;
   background-color: white;
@@ -52,7 +59,7 @@ const SigninWrap = styled(Content)`
     display: flex;
     background: transparent;
     margin-top: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 40px;
     padding: 10px 10px;
     width: 100%;
     /* background: white; */
@@ -73,7 +80,7 @@ const Title = styled.div`
   color: #6733e5;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   font-size: 35px;
   font-weight: 900;
   text-shadow: 1px 1px 1px #c593fe;
@@ -105,8 +112,45 @@ const ButtonWrap = styled.div`
   }
   button:active {
     position: relative;
-    top: 3px;
+    top: 2px;
   }
+`;
+const SocialLoginButton = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  /* border-radius: 10px; */
+  /* width: 80px; */
+  /* box-shadow: 3px 3px 10px gray; */
+  cursor: pointer;
+  div {
+    margin: 10px;
+    box-shadow: 3px 3px 10px gray;
+    border-radius: 10px;
+    overflow: hidden;
+    &:active {
+      position: relative;
+      top: 2px;
+    }
+  }
+`;
+const KakaoButton = styled.div`
+  width: 80px;
+  background-color: yellow;
+`;
+const GitButton = styled.div`
+  background-color: black;
+  width: 80px;
+`;
+const GoogleButton = styled.div`
+  border-radius: 10px;
+  background-color: white;
+  width: 80px;
+`;
+const NaverButton = styled.div`
+  background-color: green;
+  border-radius: 10px;
+  width: 80px;
 `;
 const AlertBox = styled.div`
   display: flex;
@@ -116,6 +160,8 @@ const AlertBox = styled.div`
 const Resister = styled.div`
   display: flex;
   justify-content: space-between;
+  border-bottom: 1px solid #c593fe;
+  padding-bottom: 20px;
   span {
     font-weight: 700;
     color: #6733e5;
@@ -221,6 +267,7 @@ function Signin() {
       setErrorMessage("모든 항목을 입력해 주세요.");
       return;
     }
+
     dispatch(signin(userData));
     navigate("/");
   };
@@ -278,24 +325,34 @@ function Signin() {
             <ButtonWrap>
               <button type="submit">로그인</button>
             </ButtonWrap>
-            <ButtonWrap>
-              <button type="button" onClick={() => socialLoginHandler("kakao")}>
-                카카오
-              </button>
-              <button type="button" onClick={() => socialLoginHandler("github")}>
-                Github
-              </button>
-              <button type="button" onClick={() => socialLoginHandler("naver")}>
-                Naver
-              </button>
-              <GoogleLogin
-                clientId={GOOGLE_CLIENT_ID}
-                buttonText="Google"
-                onSuccess={handleGoogleLogin}
-                onFailure={handleGoogleLoginFailure}
-                cookiePolicy={"single_host_origin"}
-              ></GoogleLogin>
-            </ButtonWrap>
+            <SocialLoginButton>
+              <KakaoButton type="button" onClick={() => socialLoginHandler("kakao")}>
+                <img src={kakao} alt="kakao" />
+              </KakaoButton>
+              <GoogleButton>
+                <GoogleLogin
+                  style={{ width: "100px" }}
+                  render={(renderProps) => (
+                    <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                      G
+                    </button>
+                  )}
+                  buttonText=""
+                  clientId={GOOGLE_CLIENT_ID}
+                  onSuccess={handleGoogleLogin}
+                  onFailure={handleGoogleLoginFailure}
+                  cookiePolicy={"single_host_origin"}
+                >
+                  {/* <img src={google} alt="google" /> */}
+                </GoogleLogin>
+              </GoogleButton>
+              <NaverButton>
+                <img src={naver} alt="naver" onClick={() => socialLoginHandler("naver")} />
+              </NaverButton>
+              <GitButton>
+                <img src={github} onClick={() => socialLoginHandler("github")} />
+              </GitButton>
+            </SocialLoginButton>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>
         </SigninWrap>

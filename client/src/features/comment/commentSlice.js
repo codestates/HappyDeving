@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { writeCommentApi, editCommentApi, deleteCommentApi } from "../../api/comment";
+import {
+  getCommentsApi,
+  writeCommentApi,
+  editCommentApi,
+  deleteCommentApi,
+} from "../../api/comment";
 
 const initialState = {
   comments: [],
@@ -9,6 +14,17 @@ const initialState = {
   message: "",
 };
 
+export const getComments = createAsyncThunk("comment/getComments", async (id, thunkAPI) => {
+  try {
+    return await getCommentsApi(id).then((res) => {
+      console.log("getting comments: ", res.data.data.comments);
+
+      return res.data.data.comments;
+    });
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
+  }
+});
 export const writeComment = createAsyncThunk(
   "comment/writeComment",
   async (commentData, thunkAPI) => {
@@ -41,11 +57,9 @@ export const deleteComment = createAsyncThunk(
   "comment/deleteComment",
   async (comment, thunkAPI) => {
     try {
-      if (window.confirm("댓글을 지우시겠습니까?")) {
-        return await deleteCommentApi({ study_commentId: comment.id }).then((res) => {
-          return res.data;
-        });
-      }
+      return await deleteCommentApi({ study_commentId: comment.id }).then((res) => {
+        return res.data;
+      });
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -69,13 +83,28 @@ export const commentSlice = createSlice({
     }),
   extraReducers: (builder) => {
     builder
+      .addCase(getComments.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getComments.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        // console.log("action.payload", action.payload);
+        // console.log(typeof action.payload);
+        state.comments = [...action.payload];
+      })
+      .addCase(getComments.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
       .addCase(writeComment.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(writeComment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.comments = [action.payload, ...state.comments];
+        state.comments = [...state.comments, action.payload];
       })
       .addCase(writeComment.rejected, (state, action) => {
         state.isLoading = false;
@@ -88,8 +117,10 @@ export const commentSlice = createSlice({
       .addCase(editComment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.comments.map((comment) =>
-          comment.id === action.payload.id ? action.payload : comment
+        // console.log("edit comment data: ", action.payload.data.comments[0]);
+        // console.log("edit comment data: ", action.meta.arg.study_commentId);
+        state.comments = state.comments.map((comment) =>
+          comment.id === action.meta.arg.study_commentId ? action.payload.data.comments[0] : comment
         );
       })
       .addCase(editComment.rejected, (state, action) => {
@@ -104,8 +135,9 @@ export const commentSlice = createSlice({
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        console.log("deleting comment data: ", action.payload);
-        state.comments = state.comments.filter((comment) => comment.id !== action.payload.id);
+        // console.log("deleting comment data: ", action.payload);
+        // console.log("deleting comment data: ", action);
+        state.comments = state.comments.filter((comment) => comment.id !== action.meta.arg.id);
       })
       .addCase(deleteComment.rejected, (state, action) => {
         state.isLoading = false;

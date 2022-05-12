@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import shareKakao from "../static/images/shareKakao.png";
+// import shareKakao from "../";
 // import icon-kakao
 function KakaoShareButton() {
   useEffect(() => {
@@ -44,9 +44,7 @@ function KakaoShareButton() {
   };
   return (
     <div className="kakao-share-button" href="#">
-      <button id="kakao-link-btn">
-        <img src={shareKakao} alt="kakao-share-icon" />
-      </button>
+      <button id="kakao-link-btn">{/* <img src={shareKakao} alt="kakao-share-icon" /> */}</button>
     </div>
   );
 }

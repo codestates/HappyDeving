@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import { useDispatch, useSelector } from "react-redux";
-import "../../src/CalendarCoustom.css";
+import "../CalendarCoustom.css";
 import { ClickCalenderDate } from "../features/calendarDate/calendarDate";
 import { setDateData } from "../features/Search/searchDataSlice";
 import { languageModal } from "../features/Search/searchModalSlice";

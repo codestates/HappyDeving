@@ -1,27 +1,45 @@
 import React, { useRef, useEffect } from "react";
-import Content from "./Content.styled";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
-// import { markerdata as dummydata } from "../../data/Marker.data";
+import { useDispatch, useSelector } from "react-redux";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
+import { getLikedStudies } from "../../features/studies/allStudiesSlice";
+
+import { unLikeStudyApi, likeStudyApi } from "../../api/study";
+
+const Title = styled.div`
+  margin-top: 200px;
+  grid-column: 3/13;
+  font-size: 20px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`;
+
+const MapView = styled.div`
+  grid-column: 3/13;
+  margin-top: 100px;
+  height: 500px;
+
+  @media screen and (max-width: 768px) {
+    grid-column: 2/14;
+    margin-top: 40px;
+    height: 500px;
+  }
+  z-index: -10;
+  border-radius: 10px;
+`;
 
 const Map = () => {
   const { kakao } = window;
+  const dispatch = useDispatch();
 
-  const MapView = styled(Content)`
-    grid-column: 2/14;
-    height: 400px;
-    position: relative;
-    z-index: 0;
-  `;
   const container = useRef(null);
 
   //검색한 조건에 맞는 스터디들의 목록
-
   const { studies } = useSelector((store) => store.studies);
   console.log(studies);
-  studies.map((el) => console.log(el.startDate));
+
+  //마커 생성용 데이터 가공
   const markerdata = studies.map((el) => {
     return {
       id: el.id,
@@ -29,11 +47,14 @@ const Map = () => {
       lat: Number(el.location.latitude),
       lng: Number(el.location.longitude),
       img: langImg[el.language[0]?.name],
+      //이름
       info: el.startDate,
     };
   });
 
-  console.log(markerdata);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const { likedStudies } = useSelector((store) => store.allStudies);
+  console.log(likedStudies);
 
   const mapscript = () => {
     const options = {
@@ -64,14 +85,6 @@ const Map = () => {
       marker.getClickable(true);
       // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
 
-      function heartHandler() {
-        // el.id;
-        if (icon.className === "fa-solid fa-heart fa-2x") {
-          icon.className = "fa-regular fa-heart fa-2x";
-        } else {
-          icon.className = "fa-solid fa-heart fa-2x";
-        }
-      }
       //el.id 스터디 아이디가 담겨온다.
       function contentHandler() {
         //모달 창 클릭 시 상세스터디 페이지로 이동
@@ -102,9 +115,24 @@ const Map = () => {
       icon.id = "icon";
       icon.className = `fa-regular fa-heart fa-2x`;
       icon.onclick = heartHandler;
-      //바로 안 바뀌고 창을 끄고 난 다음에 바뀜
-      //즉 overlay를 새로고침해야
-      //state는 원래 전체 창을 렌더링하는 건데 왜 이럴까?
+
+      console.log(icon.className);
+      console.log(user.id);
+
+      function heartHandler() {
+        if (icon.className === "fa-solid fa-heart fa-2x") {
+          icon.className = "fa-regular fa-heart fa-2x";
+
+          // dispatch(
+          // unLikeStudy({ id: user.id, studyData: { study_id: el.id } })
+          unLikeStudyApi(user.id, { study_id: el.id });
+          // );
+        } else {
+          icon.className = "fa-solid fa-heart fa-2x";
+
+          likeStudyApi(user.id, { study_id: el.id }).then((res) => console.log(res));
+        }
+      }
 
       desc.append(info, icon);
       content.append(title, img, desc);
@@ -116,8 +144,18 @@ const Map = () => {
         clickable: true,
       });
 
+      const firstHeartHandler = () => {
+        let heartStudy = likedStudies.filter((study) => study.id === el.id);
+        if (heartStudy.length > 0) {
+          icon.className = "fa-solid fa-heart fa-2x";
+        } else {
+          icon.className = "fa-regular fa-heart fa-2x";
+        }
+      };
+
       //마커를 클릭하면 지도에 모달창 생성
       kakao.maps.event.addListener(marker, "click", function () {
+        firstHeartHandler();
         overlay.setMap(map);
       });
 
@@ -132,8 +170,13 @@ const Map = () => {
     mapscript();
   });
 
+  useEffect(() => {
+    dispatch(getLikedStudies(user.id));
+  }, []);
+
   return (
     <>
+      <Title>{studies.length === 0 ? "검색 결과가 없습니다" : "검색 결과"}</Title>
       <MapView id="map" ref={container} />
     </>
   );

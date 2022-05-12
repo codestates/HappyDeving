@@ -48,10 +48,8 @@ const initialState = {
 export const writeStudy = createAsyncThunk(
   "allStudies/writeStudy",
   async ({ id, studyInfo }, thunkAPI) => {
-    // 글 쓰는데 아이디를 왜 받지?
     try {
       return await writeStudyApi(id, studyInfo).then((res) => {
-        // console.log("written study: ", res);
         return res.data;
       });
     } catch (error) {
@@ -60,19 +58,16 @@ export const writeStudy = createAsyncThunk(
   }
 );
 
-export const editStudy = createAsyncThunk(
-  "allStudies/editStudy",
-  async ({ id, studyInfo }, thunkAPI) => {
-    try {
-      return await editStudyApi(id, studyInfo).then((res) => {
-        // console.log("edited study: ", res);
-        return res.data;
-      });
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+export const editStudy = createAsyncThunk("allStudies/editStudy", async (data, thunkAPI) => {
+  try {
+    return await editStudyApi(data).then((res) => {
+      console.log("edited study: ", res);
+      return res.data;
+    });
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
 
 export const deleteStudy = createAsyncThunk(
   "allStudies/deleteStudy",
@@ -90,10 +85,10 @@ export const deleteStudy = createAsyncThunk(
 export const likeStudy = createAsyncThunk(
   "allStudies/likeStudy",
   async ({ id, studyData }, thunkAPI) => {
-    console.log("studyData: ", studyData);
+    // console.log("studyData: ", studyData);
     try {
       return await likeStudyApi(id, studyData).then((res) => {
-        console.log("like clicked: ", res.data);
+        // console.log("like clicked: ", res.data);
 
         return res.data;
       });
@@ -121,7 +116,7 @@ export const getLikedStudies = createAsyncThunk(
 export const unLikeStudy = createAsyncThunk(
   "allStudies/unLikeStudy",
   async ({ id, studyData }, thunkAPI) => {
-    // console.log("delete studyData", studyData);
+    console.log("delete studyData", id, studyData);
     try {
       return await unLikeStudyApi(id, studyData).then((res) => {
         console.log("unlike clicked: ", res.data);
@@ -220,13 +215,13 @@ export const allStudiesSlice = createSlice({
       .addCase(editStudy.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
+
         state.allStudies.map((study) => (study.id === action.payload.id ? action.payload : study));
       })
       .addCase(editStudy.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
-        state.allStudies = null;
       })
       .addCase(likeStudy.pending, (state) => {
         state.isLoading = true;

@@ -7,8 +7,8 @@ import {
   deleteUserApi,
   editProfileImageApi,
 } from "../../api/users";
-// import axios from "axios";
-// import authHeader from "./authHeader";
+import axios from "axios";
+import authHeader from "./authHeader";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
@@ -38,7 +38,7 @@ export const signin = createAsyncThunk("user/signin", async (signinData, thunkAP
         console.log("signin res.data: ", res.data);
         localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
         localStorage.setItem("token", JSON.stringify(res.data.newAccessToken));
-        // axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
+        axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
       }
       return res.data;
     });
@@ -70,7 +70,7 @@ export const editProfile = createAsyncThunk(
   async ({ id, userData }, thunkAPI) => {
     try {
       return await editProfileApi(id, userData).then((res) => {
-        console.log("axios.patch 후 res.body::", res.data);
+        // console.log("axios.patch 후 res.body::", res.data);
         localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
         return res.data;
       });
@@ -94,19 +94,16 @@ export const editProfileImage = createAsyncThunk(
     }
   }
 );
-export const deleteUser = createAsyncThunk(
-  "user/deleteUser",
-  async ({ id, deleteData }, thunkAPI) => {
-    try {
-      return await deleteUserApi(id, deleteData).then(() => {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-      });
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+export const deleteUser = createAsyncThunk("user/deleteUser", async (data, thunkAPI) => {
+  try {
+    return await deleteUserApi(data).then(() => {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+    });
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
 
 export const userSlice = createSlice({
   name: "user",
@@ -131,7 +128,7 @@ export const userSlice = createSlice({
       .addCase(signup.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.user = action.payload;
+        // state.user = action.payload;
       })
       .addCase(signup.rejected, (state, action) => {
         state.isLoading = false;

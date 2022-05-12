@@ -73,7 +73,7 @@ module.exports = {
         accessToken: newAccessToken,
       });
     } catch (err) {
-      console.error("err", err);
+      console.error(err);
       return res.status(500).json();
     }
   },

@@ -62,13 +62,13 @@ module.exports = {
         withdrawal(id);
       }
       if (loginMethod === 1) {
-        githubWithdrawal(id);
+        // githubWithdrawal(id);
       }
       if (loginMethod === 2) {
         googleWithdrawal(accessToken);
         // withdrawal(id);
       }
-      return res.json("ok");
+      // return res.json("ok");
       if (loginMethod === 3) {
         const kakaoId = Number(email.slice(0, 10));
         kakaoWithdrawal(kakaoId);

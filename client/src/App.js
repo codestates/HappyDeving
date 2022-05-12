@@ -1,28 +1,31 @@
-import React, { useEffect } from "react";
-// import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
-import Container from "../src/components/styles/Container.styled";
-import Header from "../src/components/styles/Header.styled";
-import { Search } from "../src/components/styles/Search.styled";
-import Footer from "../src/components/styles/Footer.styled";
+import Container from "./components/styles/Container.styled";
+import Header from "./components/styles/Header.styled";
+import { Search } from "./components/styles/Search.styled";
+import Footer from "./components/styles/Footer.styled";
 import Landing from "./pages/Landing";
-import Write from "././components/styles/WriteStudyDesc.styled";
-import Map from "././components/styles/Map.styled";
+import Write from "./components/styles/WriteStudyDesc.styled";
+import Map from "./components/styles/Map.styled";
 import Study from "./components/styles/StudyDesc.styled";
 import MyStudy from "./pages/MyStudy";
 import Profile from "./pages/Profile";
 import ProfileEdit from "./pages/ProfileEdit";
 import LikedStudy from "./pages/LikedStudy";
 import EditStudyDesc from "./components/styles/EditStudyDesc.styled";
-import EditSideProfile from "./components/styles/EditSideProfile.styled";
 import "./static/fonts/font.css";
 import "./App.css";
-import "./static/fonts/font.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
+import "./App.css";
 import axios from "axios";
 import { Github_url } from "./config";
+import WriteButtonModal from "./WriteButtonModal.styled";
+import BottomMenu from "./components/styles/bottommenu.styled";
+// import Content from "./components/styles/Content.styled";
+import ConfirmModal from "./components/styles/Modals/ConfirmModal";
+import landing_01 from "../src/assets/landing1.png";
 
 function App() {
   const theme = {
@@ -40,10 +43,14 @@ function App() {
     contents: {
       marginBottom: "20px",
       bg: "white",
-      borderRadius: "30px",
+      borderRadius: "20px",
       boxShadow: "10px 5px 15px 0.1px rgba(0, 0, 0, 0.1)",
     },
-    font: {},
+    size: {
+      mobile: "520px",
+      tablet: "768px",
+      desktop: "1024px",
+    },
   };
 
   let login = localStorage.getItem("login");
@@ -74,12 +81,42 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    console.log(drop);
+
+    if (
+      window.location.href.split("/")[1] === "map" ||
+      window.location.href === "http://localhost:3000"
+    ) {
+      setDrop(false);
+    } else {
+      setDrop(true);
+    }
+  }, []);
+
+  // console.log(localStorage.getItem("user"));
+
+  const [drop, setDrop] = useState(false);
+  window.onscroll = function () {
+    let windowTop = window.scrollY;
+    if (windowTop >= 20) {
+      setDrop(true);
+    } else if (
+      (window.location.href.split("/")[1] === "map" ||
+        window.location.href === "http://localhost:3000") &&
+      windowTop < 20
+    ) {
+      setDrop(false);
+    }
+  };
+
   return (
     <Router>
       <ThemeProvider theme={theme}>
+        <Header img={theme.icons} drop={drop} />
         <Container>
           <Header img={theme.icons} />
-
+          <ConfirmModal />
           <div className="App">
             <header className="App-header"></header>
           </div>
@@ -90,7 +127,8 @@ function App() {
               element={
                 <>
                   <Search />
-                  <Landing />
+                  <Landing imageSrc={landing_01} />
+                  <WriteButtonModal />
                 </>
               }
             />
@@ -100,7 +138,6 @@ function App() {
               exact
               element={
                 <>
-                  <Search />
                   <Map />
                 </>
               }
@@ -112,7 +149,6 @@ function App() {
               path="/editprofile"
               element={
                 <>
-                  <EditSideProfile />
                   <ProfileEdit />
                 </>
               }
@@ -122,6 +158,7 @@ function App() {
             <Route path="/signin" element={<Signin />} />
             <Route path="/signup" element={<Signup />} />
           </Routes>
+          <BottomMenu />
           <Footer />
         </Container>
       </ThemeProvider>

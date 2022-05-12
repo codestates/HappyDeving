@@ -1,274 +1,155 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
-import Content from "./Content.styled";
 import Comments from "../Comments";
 import "./Map.styled.css";
+import {
+  BsFillDoorOpenFill,
+  BsFillDoorClosedFill,
+  BsFileEarmarkCodeFill,
+  BsFillCalendarDateFill,
+  BsFillFileEarmarkTextFill,
+} from "react-icons/bs";
+import { FaMapMarkerAlt } from "react-icons/fa";
 import { langImg } from "../../static/images/langImg";
 import { studyApi, deleteStudyApi } from "../../api/study";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 {
   /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
   // 입력칸들 5-14 
   //(언어 input, modal(정사각형) :5-9, 
   시작일 input, modal(정사각형) : 10-14 )
    - 내용 input은 scroll
-// 글 저장 바 : height - 1row (40px), wㅌㅌㅌㅌidth는 위의 글이랑 같게*/
+// 글 저장 바 : height - 1row (40px), width는 위의 글이랑 같게*/
 }
 
-const Title = styled(Content)`
+const StyleStudyDesc = styled.div`
+  grid-row: 1/10;
   grid-column: 2/14;
-  height: 80px;
-  padding: 20px 3%;
-  font-family: "Bold";
-  display: flex;
-  border-radius: ${(props) => props.theme.borderRadius};
+  padding: 3% 5% 3% 5%;
 
-  .titleText {
-    flex: 1;
-    font-size: 3vw;
-    text-align: center;
-    line-height: 40px;
-    margin-left: -3%;
-    margin-right: 6%;
+  .mapview {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
   }
 
-  .titleInput {
-    flex: 3;
-    background-color: beige;
-    border-radius: inherit;
-    box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-    text-align: center;
+  @media screen and (max-width: 768px) {
+    grid-column: 1/15;
+  }
+
+  @media screen and (min-width: 1024px) {
+    grid-column: 3/13;
+  }
+`;
+
+const TitleBar = styled.div`
+  grid-row: 1/2;
+  height: 50px;
+  display: flex;
+  border-radius: ${(props) => props.theme.borderRadius};
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+
+  .title {
+    flex: 8;
+    font-family: "Bold";
+    font-size: 26px;
     height: 40px;
-    &:focus {
-      outline: none;
+    line-height: 40px;
+  }
+
+  .alter {
+    flex: 2;
+    font-family: "Medium";
+    display: flex;
+    color: gray;
+    justify-content: space-around;
+    font-size: 16px;
+    height: 40px;
+    line-height: 40px;
+    float: right;
+    &:hover {
+      cursor: pointer;
     }
   }
 `;
 
-const ContentDiv = styled.div`
-  grid-column: 2/14;
-  display: flex;
+// const ContentDiv = styled.div`
+//   grid-column: 1/14;
+//   width: 100%;
+// `
 
-  > .container {
-    flex: 3;
-  }
-`;
+// const CommentDiv = styled(Content)`
+//   /* background: pink; */
+//   grid-column: 1/14;
+//   display: flex;
+//   height: 100px;
+//   width: 100%;
+// `
 
-const Profile = styled(Content)`
-  flex: 1;
-  margin-right: 20px;
-  height: 550px;
-`;
-const CommentDiv = styled(Content)`
+const CommentsDiv = styled.div`
   /* background: pink; */
-  grid-column: 2/14;
-  display: flex;
-  height: 100px;
 `;
 
 //(언어 input, modal(정사각형) :5-9,
 // 시작일 input, modal(정사각형) : 10-14 )
 // - 내용 input은 scroll
 
-const Desc = styled(Content)`
-  width: auto;
-  height: 490px;
-  font-family: "Medium";
-  padding: 3% 5% 3% 5%;
-  border-radius: ${(props) => props.theme.borderRadius};
+const Wrap = styled.div`
+  display: flex;
+  align-items: center;
+  height: auto;
+  width: 100%;
+  margin-bottom: 30px;
 
-  div {
-    span {
-      display: block;
-      position: relative;
-      z-index: 0;
-    }
-    input {
-      z-index: 0;
-      background-color: beige;
-      width: 100%;
-      margin-bottom: 10px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      &:focus {
-        outline: none;
-      }
-    }
-
-    textarea {
-      z-index: 0;
-      resize: none;
-      background-color: beige;
-      width: 100%;
-      height: 120px;
-      overflow: scroll;
-      padding: 10px;
-      margin-bottom: 10px;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-      &:focus {
-        outline: none;
-      }
-    }
-  }
-
-  .closed {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    input {
-      position: relative;
-      top: 7px;
-      margin-right: 1%;
-      display: inline-block;
-      position: relative;
-      align-self: center;
-      width: 15px;
-      height: 15px;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-    label {
-      color: ${(props) => (props.checked ? props.theme.colors.purple : "black")};
-    }
-  }
-
-  .langanddate {
-    display: flex;
-    position: relative;
-    .lang {
-      flex: 1;
-      margin-right: 5%;
-      .langContainer {
-        display: flex;
-        align-items: center;
-
-        .langInput {
-          width: 20px;
-          height: 30px;
-          background-color: beige;
-          flex: 3;
-          text-align: center;
-          line-height: 30px;
-          border-radius: 30px;
-          box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        button {
-          flex: 1;
-          width: 15vw;
-          height: 30px;
-          color: white;
-          text-align: center;
-          line-height: 30px;
-          background-color: ${(props) => props.theme.colors.purple};
-          border-radius: 30px;
-          box-shadow: 3px 2px 1px 1px #c593fe;
-          &:hover {
-            background-color: ${(props) => props.theme.colors.lavender};
-          }
-        }
-      }
-    }
-    .date {
-      flex: 1;
-      .dateContainer {
-        display: flex;
-        .dateInput {
-          width: 20px;
-          height: 30px;
-          background-color: beige;
-          flex: 3;
-          text-align: center;
-          line-height: 30px;
-          border-radius: 30px;
-          box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        button {
-          flex: 1;
-          width: 15vw;
-          height: 30px;
-          color: white;
-          text-align: center;
-          line-height: 30px;
-          background-color: ${(props) => props.theme.colors.purple};
-          border-radius: 30px;
-          box-shadow: 3px 2px 1px 1px #c593fe;
-          &:hover {
-            background-color: ${(props) => props.theme.colors.lavender};
-          }
-        }
-      }
-    }
-  }
-
-  .locationContainer {
-    display: flex;
-    margin-bottom: 10px;
-    .locationInput {
-      width: 20px;
-      height: 30px;
-      background-color: beige;
-      flex: 3;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-    }
-    button {
-      flex: 1;
-      width: 15vw;
-      height: 30px;
-      color: white;
-      text-align: center;
-      line-height: 30px;
-      background-color: ${(props) => props.theme.colors.purple};
-      border-radius: 30px;
-      box-shadow: 3px 2px 1px 1px #c593fe;
-      &:hover {
-        background-color: ${(props) => props.theme.colors.lavender};
-      }
-    }
-  }
-
-  .content {
-    input {
-      height: 100px;
-      border-radius: 15px;
-    }
+  .profile {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
   }
 `;
 
-const FuncBar = styled(Content)`
-  grid-column: 2/14;
-  height: 40px;
-  padding: 3px 10px;
-  button {
-    float: right;
-    width: 15vw;
-    height: 30px;
-    color: white;
-    text-align: center;
-    line-height: 30px;
-    background-color: ${(props) => props.theme.colors.purple};
-    border-radius: 30px;
-    box-shadow: 3px 2px 1px 1px #c593fe;
-    &:hover {
-      background-color: ${(props) => props.theme.colors.lavender};
-    }
+const Icon = styled.div`
+  align-items: center;
+  margin-right: 20px;
+`;
+
+const Text = styled.div`
+  width: 120px;
+  flex: 1;
+`;
+
+const Host = styled.div`
+  float: right;
+  height: 30px;
+`;
+
+const Button = styled.div`
+  width: 100px;
+  height: 30px;
+  line-height: 30px;
+  background-color: ${(props) => props.theme.colors.purple};
+  color: white;
+  border-radius: 10px;
+  float: right;
+  text-align: center;
+  font-family: "Medium";
+  box-shadow: 5px 1px 1px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.lavender};
   }
 `;
 
 const { kakao } = window;
 
-const MapView = styled(Content)`
+const MapView = styled.div`
   grid-column: 2/14;
   height: 200px;
+  margin-bottom: 20px;
+  border-radius: 0px;
 `;
 
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
@@ -276,6 +157,9 @@ const MapView = styled(Content)`
 const StudyDesc = () => {
   const container = useRef(null);
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const user = localStorage.getItem("user");
 
   const [location, setLocation] = useState({
     place_name: "광화문",
@@ -283,8 +167,6 @@ const StudyDesc = () => {
     logitude: 126.977759,
   });
   const [data, setData] = useState();
-  const [backendComments, setBackendComments] = useState([]);
-  const { user } = useSelector((state) => state.user);
 
   const mapscript = () => {
     const options = {
@@ -328,71 +210,97 @@ const StudyDesc = () => {
     const id = href[href.length - 1];
     studyApi(id).then((res) => {
       setData(res.data.data.study);
-      setBackendComments(res.data.data.comment);
-      console.log("상세페이지 get comments: ", res.data.data.comment);
       setLocation(res.data.data.study.location);
     });
   }, []);
 
-  console.log(data);
-  //checked의 상태 변화 기다리기 위해
-
   return (
     <>
       {data ? (
-        <>
-          <Title>
-            <div className="titleText">제목</div>
-            <div>{data.title}</div>
-          </Title>
-          <ContentDiv>
-            <Profile />
-            <div className="container">
-              <Desc>
-                <div className="closed">
-                  <div>{data.closed ? "모집마감" : "모집중"}</div>
-                </div>
-                <div className="langanddate">
-                  <div className="lang">
-                    <span>언어</span>
-                    {data.language.map((el, idx) => (
-                      <span key={idx}>{el.name}</span>
-                    ))}
+        <StyleStudyDesc>
+          <TitleBar>
+            <div className="title">{data.title}</div>
+            <div className="alter">
+              {data.username === user?.username ? (
+                <>
+                  <div className="update" onClick={() => navigate(`/study/edit/${data.id}`)}>
+                    수정
                   </div>
-                  <div className="date">
-                    <span>시작일</span>
-                    <span>{data.startDate}</span>
+                  <div
+                    className="delete"
+                    onClick={() => {
+                      alert("삭제되었습니다");
+                      deleteStudyApi(data.id);
+                      navigate("/");
+                    }}
+                  >
+                    삭제
                   </div>
-                </div>
-
-                <div className="link">
-                  <span>오픈 톡방 링크</span>
-                  <span>{data.kakaoLink}</span>
-                </div>
-                <div className="location">
-                  <span>장소</span>
-                  <span>{data.location.name}</span>
-                </div>
-                <MapView id="map" ref={container} />
-                <div className="content">
-                  <span>내용</span>
-                  <div>{data.content}</div>
-                </div>
-              </Desc>
-              <FuncBar>
-                <button onClick={() => navigate(`/study/edit/${data.id}`)}>수정</button>
-                <button onClick={() => deleteStudyApi(data.id)}>삭제</button>
-              </FuncBar>
+                </>
+              ) : null}
             </div>
-          </ContentDiv>
-          <CommentDiv>
-            <Comments
-              commentsInStudyData={backendComments}
-              studyId={data.id}
-              currentUsername={user.username}
-            />
-          </CommentDiv>
-        </>
+          </TitleBar>
+
+          <Host>
+            <Wrap>
+              <img className="profile" src={user.image} />
+              <Text>{user.username}</Text>
+            </Wrap>
+          </Host>
+
+          <Wrap>
+            <Icon>{data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
+            <Text>{data.closed ? "모집마감" : "모집중"}</Text>
+          </Wrap>
+
+          <Wrap>
+            <Icon>
+              <BsFileEarmarkCodeFill />
+            </Icon>
+            <Text>
+              {data.language.map((el, idx) => (
+                <span key={idx} className="langSpan">
+                  {el.name + ","}
+                </span>
+              ))}
+            </Text>
+          </Wrap>
+
+          <Wrap>
+            <Icon>
+              <BsFillCalendarDateFill />
+            </Icon>
+            <Text>{data.startDate}</Text>
+          </Wrap>
+
+          <Wrap>
+            <Icon>
+              <FaMapMarkerAlt />
+            </Icon>
+            <Text>{data.location.name}</Text>
+          </Wrap>
+
+          <div className="mapview">
+            <MapView id="map" ref={container} />
+          </div>
+
+          <Wrap>
+            <Icon>
+              <BsFillFileEarmarkTextFill />
+            </Icon>
+            <Text>{data.content}</Text>
+          </Wrap>
+
+          <Button src={data.kakaoLink}>참여하기</Button>
+
+          <CommentsDiv>
+            <button onClick={() => setShowConfirmModal(!showConfirmModal)}>
+              댓글보기
+              <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
+            </button>
+            {showConfirmModal ? <Comments studyId={id} /> : null}
+          </CommentsDiv>
+        </StyleStudyDesc>
       ) : (
         "data가 없습니다"
       )}

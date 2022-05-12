@@ -3,77 +3,30 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import LanguageModal from "./Modals/LanguageModal";
+import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
-import { useDispatch, useSelector } from "react-redux";
-import { setDateModal } from "../../features/studies/studyModalSlice";
+import { useSelector } from "react-redux";
 import { writeStudyApi } from "../../api/study";
-{
-  /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
-  // 입력칸들 5-14 
-  //(언어 input, modal(정사각형) :5-9, 
-  시작일 input, modal(정사각형) : 10-14 )
-   - 내용 input은 scroll
-// 글 저장 바 : height - 1row (40px), wㅌㅌㅌㅌidth는 위의 글이랑 같게*/
-}
+import { useNavigate } from "react-router-dom";
 
-const Title = styled(Content)`
+const WriteStudyDesc = styled.div`
+  grid-row: 2/12;
   grid-column: 2/14;
-  height: 80px;
-  padding: 20px 3%;
-  font-family: "Bold";
-  display: flex;
-  border-radius: ${(props) => props.theme.borderRadius};
 
-  .titleText {
-    flex: 1;
-    font-size: 3vw;
-    text-align: center;
-    line-height: 40px;
-    margin-left: -3%;
-    margin-right: 6%;
+  @media screen and (max-width: 768px) {
+    grid-column: 1/15;
   }
 
-  .titleInput {
-    flex: 3;
-    background-color: beige;
-    border-radius: inherit;
-    box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    height: 40px;
-    &:focus {
-      outline: none;
-    }
+  @media screen and (min-width: 1024px) {
+    grid-column: 4/12;
   }
 `;
-
-const ContentDiv = styled.div`
-  grid-column: 2/14;
-  display: flex;
-
-  > .container {
-    flex: 3;
-  }
-`;
-
-const Profile = styled(Content)`
-  flex: 1;
-  margin-right: 20px;
-  height: 550px;
-`;
-
-//(언어 input, modal(정사각형) :5-9,
-// 시작일 input, modal(정사각형) : 10-14 )
-// - 내용 input은 scroll
 
 const Desc = styled(Content)`
-  width: auto;
-  height: 490px;
   font-family: "Medium";
   padding: 3% 5% 3% 5%;
-  border-radius: ${(props) => props.theme.borderRadius};
 
   div {
     span {
@@ -81,51 +34,15 @@ const Desc = styled(Content)`
       position: relative;
       z-index: 0;
     }
-    input {
-      z-index: 0;
-      background-color: beige;
-      width: 100%;
-      margin-bottom: 10px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      &:focus {
-        outline: none;
-      }
-    }
-
-    textarea {
-      z-index: 0;
-      resize: none;
-      background-color: beige;
-      width: 100%;
-      height: 120px;
-      overflow: scroll;
-      padding: 10px;
-      margin-bottom: 10px;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-      &:focus {
-        outline: none;
-      }
-    }
   }
 
   .closed {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+
     input {
-      position: relative;
-      top: 7px;
-      margin-right: 1%;
-      display: inline-block;
-      position: relative;
-      align-self: center;
-      width: 15px;
-      height: 15px;
+      margin-right: 10px;
 
       &:hover {
         cursor: pointer;
@@ -135,120 +52,24 @@ const Desc = styled(Content)`
       color: ${(props) => (props.checked ? props.theme.colors.purple : "black")};
     }
   }
-
-  .langanddate {
-    display: flex;
-    position: relative;
-    .lang {
-      flex: 1;
-      margin-right: 5%;
-      .langContainer {
-        display: flex;
-        align-items: center;
-
-        .langInput {
-          width: 20px;
-          height: 30px;
-          background-color: beige;
-          flex: 3;
-          text-align: center;
-          line-height: 30px;
-          border-radius: 30px;
-          box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        button {
-          flex: 1;
-          width: 15vw;
-          height: 30px;
-          color: white;
-          text-align: center;
-          line-height: 30px;
-          background-color: ${(props) => props.theme.colors.purple};
-          border-radius: 30px;
-          box-shadow: 3px 2px 1px 1px #c593fe;
-          &:hover {
-            background-color: ${(props) => props.theme.colors.lavender};
-          }
-        }
-      }
-    }
-    .date {
-      flex: 1;
-      .dateContainer {
-        display: flex;
-        .dateInput {
-          width: 20px;
-          height: 30px;
-          background-color: beige;
-          flex: 3;
-          text-align: center;
-          line-height: 30px;
-          border-radius: 30px;
-          box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-        }
-        button {
-          flex: 1;
-          width: 15vw;
-          height: 30px;
-          color: white;
-          text-align: center;
-          line-height: 30px;
-          background-color: ${(props) => props.theme.colors.purple};
-          border-radius: 30px;
-          box-shadow: 3px 2px 1px 1px #c593fe;
-          &:hover {
-            background-color: ${(props) => props.theme.colors.lavender};
-          }
-        }
-      }
-    }
-  }
-
-  .locationContainer {
-    display: flex;
-    margin-bottom: 10px;
-    .locationInput {
-      width: 20px;
-      height: 30px;
-      background-color: beige;
-      flex: 3;
-      text-align: center;
-      line-height: 30px;
-      border-radius: 30px;
-      box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-    }
-    button {
-      flex: 1;
-      width: 15vw;
-      height: 30px;
-      color: white;
-      text-align: center;
-      line-height: 30px;
-      background-color: ${(props) => props.theme.colors.purple};
-      border-radius: 30px;
-      box-shadow: 3px 2px 1px 1px #c593fe;
-      &:hover {
-        background-color: ${(props) => props.theme.colors.lavender};
-      }
-    }
-  }
-
-  .content {
-    input {
-      height: 100px;
-      border-radius: 15px;
-    }
-  }
 `;
 
-const DescLanguageModal = styled(LanguageModal)`
-  position: relative;
+const DescLanguageModal = styled.div`
+  width: 90%;
+  height: auto;
   z-index: 10;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: white;
+  position: absolute;
+  z-index: 1000;
 `;
 
 const DescDateModal = styled(DateModal)`
   position: relative;
   z-index: 10;
+  box-shadow: none;
+  padding: 0 50%;
 
   &:after {
     content: "";
@@ -258,48 +79,117 @@ const DescDateModal = styled(DateModal)`
 `;
 
 const DescLocationModal = styled(LocationModal)`
-  position: relative;
-  padding: 10px;
-  margin: 0 auto;
+  border-radius: 0px;
+  box-shadow: none;
+  height: auto;
+  box-sizing: content-box;
   z-index: 10;
+  position: absolute;
+  width: 90%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
+  font-size: 16px;
+
   input {
-    position: relative;
-    width: 50%;
+    box-shadow: none;
+  }
+  div {
+    text-align: center;
   }
 `;
 
-const FuncBar = styled(Content)`
-  grid-column: 2/14;
-  height: 40px;
-  padding: 3px 10px;
-  button {
-    float: right;
-    width: 15vw;
+const Wrapper = styled.div`
+  margin-bottom: 20px;
+
+  .div {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
     height: 30px;
-    color: white;
+    width: 100%;
+
     text-align: center;
-    line-height: 30px;
-    background-color: ${(props) => props.theme.colors.purple};
-    border-radius: 30px;
-    box-shadow: 3px 2px 1px 1px #c593fe;
-    &:hover {
-      background-color: ${(props) => props.theme.colors.lavender};
+  }
+
+  .dropdown {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    height: 30px;
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
     }
   }
+  .result {
+    margin: 0 auto;
+  }
+
+  .icon {
+    height: 30px;
+    font-size: 30px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .searchicon {
+    height: 20px;
+    font-size: 20px;
+  }
+`;
+const Text = styled.div`
+  font-size: 16px;
+  @media screen and (min-width: 1024px) {
+    font-size: 20px;
+  }
+  margin-bottom: 10px;
+`;
+const Input = styled.input`
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  height: 30px;
+  width: 70%;
+  font-size: 16px;
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;
+    width: 100%;
+  }
+
+  text-align: center;
+  &:focus {
+    outline: none;
+  }
+`;
+const Button = styled.button`
+  float: right;
+  margin: 30px 0px 30px 0px;
 `;
 
-const keyArr = Object.keys(langImg);
+const Textarea = styled.textarea`
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  width: 100%;
+  height: 200px;
+  resize: none;
+  overflow: scroll;
+  &:focus {
+    outline: none;
+  }
+`;
 
 const { kakao } = window;
 
 const MapView = styled(Content)`
+  border-radius: 0px;
   grid-column: 2/14;
   height: 200px;
+  margin-bottom: 20px;
 `;
 
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
 
 const StudyDesc = () => {
+  const navigate = useNavigate();
   const container = useRef(null);
   const [location, setLocation] = useState({
     place_name: "광화문",
@@ -334,7 +224,9 @@ const StudyDesc = () => {
   }
 
   const handleLocationValue = (e) => {
-    if (e.key === "Enter") {
+    console.log("location");
+    if (e === "click" || e.key === "Enter") {
+      console.log("search:", e.target.value);
       searchPlaces(e.target.value);
     } // true
   };
@@ -386,9 +278,9 @@ const StudyDesc = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const dispatch = useDispatch();
-  const { dateModal } = useSelector((store) => store.studyModal);
-  const { calenderDateValue } = useSelector((store) => store.calender);
+  // const dispatch = useDispatch();
+  // const { dateModal } = useSelector((store) => store.studyModal);
+  // const { calenderDateValue } = useSelector((store) => store.calender);
   const { dateData } = useSelector((store) => store.searchData);
 
   const [data, setData] = useState({
@@ -447,117 +339,110 @@ const StudyDesc = () => {
   };
 
   return (
-    <>
-      <Title>
-        <div className="titleText">제목</div>
-        <input
-          className="titleInput"
-          onChange={(e) => handleInputValue("title", e.target.value)}
-        ></input>
-      </Title>
-      <ContentDiv>
-        <Profile />
-        <div className="container">
-          <Desc checked={checked}>
-            <div className="closed">
-              <input
-                type="checkbox"
-                id="closed"
-                onClick={() => {
-                  setChecked(!checked);
-                }}
-              ></input>
-              {console.log(data)}
-              <label htmlFor="closed">모집마감</label>
+    <WriteStudyDesc>
+      <Desc checked={checked}>
+        <Wrapper>
+          <Text>제목</Text>
+          <Input onChange={(e) => handleInputValue("title", e.target.value)}></Input>
+        </Wrapper>
+        <Wrapper>
+          <Text>언어</Text>
+          <div className="dropdown">
+            <div className="result">
+              <span>{data.language.map((el) => el.name + ",")}</span>
             </div>
-            <div className="langanddate">
-              <div className="lang">
-                <span>언어</span>
-                {open.language ? (
-                  <DescLanguageModal>
-                    <div>
-                      {keyArr.map((key, idx) => (
-                        <img
-                          src={langImg[key]}
-                          key={idx}
-                          onClick={() => {
-                            handleInputValue("language", [
-                              ...data.language,
-                              { id: idx + 1, name: key },
-                            ]);
-                            setOpen({ ...open, language: false });
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </DescLanguageModal>
-                ) : (
-                  <div className="langContainer">
-                    <div className="langInput">{data.language.map((el) => el.name + ",")}</div>
-                    <button onClick={() => setOpen({ ...open, language: true })}>선택</button>
+            <IoMdArrowDropdown
+              className="icon"
+              onClick={() => setOpen({ ...open, language: true })}
+            />
+          </div>
+          {open.language ? (
+            <DescLanguageModal>
+              <div>
+                {Object.keys(langImg).map((el, idx) => (
+                  <div
+                    key={idx}
+                    className="elements"
+                    onClick={() => {
+                      setData({
+                        ...data,
+                        language: [
+                          ...data.language,
+                          {
+                            id: idx + 1,
+                            name: el,
+                          },
+                        ],
+                      });
+                      setOpen({ ...open, language: false });
+                    }}
+                  >
+                    {el}
                   </div>
-                )}
+                ))}
               </div>
-              <div className="date">
-                <span>시작일</span>
-                {dateModal ? (
-                  <DescDateModal>
-                    <CalenderDate />
-                  </DescDateModal>
-                ) : (
-                  <div className="dateContainer">
-                    <div className="dateInput">{calenderDateValue}</div>
-                    <button onClick={() => dispatch(setDateModal(true))}>선택</button>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="link">
-              <span>오픈 톡방 링크</span>
-              <input onChange={(e) => handleInputValue("kakaoLink", e.target.value)}></input>
-            </div>
-            <div className="location">
-              <span>장소</span>
-              {open.location ? (
-                <>
-                  <DescLocationModal>
-                    <input
-                      onKeyDown={(e) => handleLocationValue(e)}
-                      placeholder="ex. 송파구 오륜동"
-                    ></input>
-                    {locationListHandler(locationList)}
-                  </DescLocationModal>
-                </>
-              ) : (
-                <div className="locationContainer">
-                  <div className="locationInput">{data.location[4]}</div>
-                  <button onClick={() => setOpen({ ...open, location: true })}>검색</button>
-                </div>
-              )}
-            </div>
-            <MapView id="map" ref={container} />
-            <div className="content">
-              <span>내용</span>
-              <textarea onChange={(e) => handleInputValue("content", e.target.value)}></textarea>
-            </div>
-          </Desc>
-          <FuncBar>
-            {console.log(data)}
-            <button
-              onClick={() =>
-                writeStudyApi(user.id, data).then((res) => {
-                  console.log(res);
-                  alert("저장되었습니다");
-                })
-              }
-            >
-              저장
-            </button>
-          </FuncBar>
+            </DescLanguageModal>
+          ) : null}
+        </Wrapper>
+        <Wrapper>
+          <Text>시작일</Text>
+          <DescDateModal>
+            <CalenderDate />
+          </DescDateModal>
+        </Wrapper>
+        <Wrapper>
+          <Text>링크</Text>
+          <Input onChange={(e) => handleInputValue("kakaoLink", e.target.value)}></Input>
+        </Wrapper>
+        <Wrapper>
+          <Text>장소</Text>
+          <div className="dropdown">
+            <Input
+              onKeyDown={(e) => handleLocationValue(e)}
+              placeholder="ex. 송파구 오륜동"
+              defaultValue={data.location ? data.location[4] : null}
+            ></Input>
+            {open.location ? (
+              <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+            ) : null}
+            <IoIosSearch
+              className="icon"
+              onClick={() => {
+                setOpen({ ...open, location: true });
+              }}
+            />
+          </div>
+        </Wrapper>
+        <MapView id="map" ref={container} />
+        <Wrapper>
+          <Text>내용</Text>
+          <Textarea onChange={(e) => handleInputValue("content", e.target.value)}></Textarea>
+          <Button></Button>
+        </Wrapper>
+        <div className="closed">
+          <input
+            type="checkbox"
+            id="closed"
+            className="input"
+            onClick={() => {
+              setChecked(!checked);
+            }}
+          ></input>
+          <label htmlFor="closed">모집마감</label>
         </div>
-      </ContentDiv>
-    </>
+        <Button
+          onClick={() =>
+            writeStudyApi(user.id, data).then((res) => {
+              console.log(res);
+              alert("저장되었습니다");
+              navigate(`/study/${res.data.id}`);
+            })
+          }
+        >
+          저장
+        </Button>
+      </Desc>
+    </WriteStudyDesc>
   );
 };
 
