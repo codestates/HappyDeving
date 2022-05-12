@@ -2,7 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 import Slider from "../components/Slider";
-import landing_01 from "../../src/assets/landing1.png";
+// import landing_01 from "../../src/assets/landing1.png";
 import landing_02 from "../../src/assets/landing2.png";
 import landing_03 from "../../src/assets/landing3.png";
 
@@ -23,19 +23,25 @@ const StyledLanding = styled.div`
     transition: 2s;
   }
 `;
-// const LandingImage = styled.img`
-//   width: 100%;
-//   height: 80%;
-//   object-fit: cover;
-//   position: absolute;
-// `;
+const LandingImage = styled.img`
+  width: 100%;
+  height: 80%;
+  object-fit: cover;
+  position: absolute;
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    object-fit: scale-down;
+  }
+  @media screen and (max-width: 767px) {
+    object-fit: scale-down;
+  }
+`;
 const LandingTitle = styled.h1`
   position: absolute;
-  background-color: rgb(236, 236, 236);
-  border: 5px solid rgb(236, 236, 236);
-  top: 22%;
+  /* background-color: rgb(236, 236, 236); */
+  /* border: 5px solid rgb(236, 236, 236); */
+  top: 60%;
   color: black;
-  font-size: 3rem;
+  font-size: 2.5rem;
   padding: 15px;
   // 태블릿
   @media screen and (min-width: 768px) and (max-width: 1023px) {
@@ -46,40 +52,44 @@ const LandingTitle = styled.h1`
   @media screen and (max-width: 767px) {
     font-size: 1.5rem;
     transition: 1.5s;
-    top: 40%;
+    display: none;
   }
 `;
 
-const LandingSubtitle = styled.h1``;
+const LandingTitleSecond = styled.h1`
+  opacity: 0;
+  /* visibility: hidden; */
+  display: none;
+  @media screen and (max-width: 767px) {
+    position: relative;
+    opacity: 1;
+    /* visibility: visible; */
+    top: 50%;
+    display: block;
+    font-size: 1.5rem;
+    transition: 1.5s;
+  }
+`;
 
-const Landing = () => {
+const Landing = ({ imageSrc }) => {
   return (
     <>
       <StyledLanding>
-        {/* <LandingImage src={imageSrc} /> */}
-
-        <Slider
-          imageSrc={landing_01}
-          // title={`" 위치 기반 검색 "`}
-          // subtitle={"당신의 주변에서 일어나고 있는 놀라운 프로젝트를 찾아보세요."}
-        >
-          <LandingTitle>우리 동네 스터디를 찾고 있나요?</LandingTitle>
-          <LandingSubtitle>
-            해피데빙에서 당신은 더 멋진 개발자로 성장할 수 있습니다.
-          </LandingSubtitle>
-        </Slider>
-        <Slider
-          imageSrc={landing_02}
-          title={`" 위치 기반 검색 "`}
-          subtitle={"당신의 주변에서 일어나고 있는 놀라운 프로젝트를 찾아보세요."}
-        ></Slider>
-        <Slider
-          imageSrc={landing_03}
-          title={`" 같이의 가치 "`}
-          subtitle={"당신의 드림 프로젝트, 함께 하면 현실이 됩니다."}
-          flipped={true}
-        ></Slider>
+        <LandingImage src={imageSrc} />
+        <LandingTitle>해피데빙으로 협업하자</LandingTitle>
+        <LandingTitleSecond>해피데빙으로 협업하자</LandingTitleSecond>
       </StyledLanding>
+      <Slider
+        imageSrc={landing_02}
+        title={`" 위치 기반 검색 "`}
+        subtitle={"당신의 주변에서 일어나고 있는 놀라운 프로젝트를 찾아보세요."}
+      ></Slider>
+      <Slider
+        imageSrc={landing_03}
+        title={`" 같이의 가치 "`}
+        subtitle={"당신의 드림 프로젝트, 함께 하면 현실이 됩니다."}
+        flipped={true}
+      ></Slider>
     </>
   );
 };

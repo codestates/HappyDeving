@@ -6,8 +6,6 @@ const StyledFooter = styled.div`
   /* grid-row-start: 2; */
   /* grid-row-end: 3; */
   grid-column: 4/12;
-  position: absolute;
-  bottom: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;

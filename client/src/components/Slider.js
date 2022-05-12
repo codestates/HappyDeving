@@ -63,6 +63,22 @@ const SliderContent = styled.div`
   text-align: center;
   h1 {
     text-align: center;
+    font-size: 3rem;
+    @media screen and (min-width: 768px) and (max-width: 1023px) {
+      font-size: 2rem;
+    }
+    @media screen and (max-width: 767px) {
+      font-size: 1.5rem;
+    }
+  }
+  p {
+    font-size: 2rem;
+    @media screen and (min-width: 768px) and (max-width: 1023px) {
+      font-size: 1.5rem;
+    }
+    @media screen and (max-width: 767px) {
+      font-size: 1rem;
+    }
   }
 `;
 

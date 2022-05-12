@@ -8,6 +8,7 @@ import UpdateUser from "./forms/UpdateUser";
 import UpdateStudy from "./forms/UpdateStudy";
 import DeleteUser from "./forms/DeleteUser";
 import { closeModal } from "../../../features/modal/modalSlice";
+
 const ModalBackdrop = styled.div`
   opacity: 0;
   visibility: hidden;
@@ -82,8 +83,6 @@ const ModalContent = styled.div`
 const ConfirmModal = () => {
   const dispatch = useDispatch();
   const { isOpen, componentName, childrenProps } = useSelector((state) => state.modal);
-  console.log("isOpen? ", Boolean(isOpen));
-
   const closeModalHandler = () => {
     dispatch(closeModal());
   };

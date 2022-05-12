@@ -25,6 +25,7 @@ import WriteButtonModal from "./WriteButtonModal.styled";
 import BottomMenu from "./components/styles/bottommenu.styled";
 // import Content from "./components/styles/Content.styled";
 import ConfirmModal from "./components/styles/Modals/ConfirmModal";
+import landing_01 from "../src/assets/landing1.png";
 
 function App() {
   const theme = {
@@ -126,7 +127,7 @@ function App() {
               element={
                 <>
                   <Search />
-                  <Landing />
+                  <Landing imageSrc={landing_01} />
                   <WriteButtonModal />
                 </>
               }

@@ -3,16 +3,16 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import LanguageModal from "./Modals/LanguageModal";
+// import LanguageModal from "./Modals/LanguageModal";
 import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
-import { setDateModal } from "../../features/studies/studyModalSlice";
+// import { setDateModal } from "../../features/studies/studyModalSlice";
 import { openModal } from "../../features/modal/modalSlice";
 import { studyApi, editStudyApi } from "../../api/study";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   grid-row: 2/12;
@@ -480,17 +480,7 @@ const EditStudyDesc = () => {
                 <label htmlFor="closed">모집마감</label>
               </div>
               {console.log(data)}
-              <Button
-                onClick={() => {
-                  editStudyApi(id, data).then((res) => {
-                    console.log(res);
-                    alert("수정되었습니다");
-                    navigate(`/study/${data.id}`);
-                  });
-                }}
-              >
-                저장
-              </Button>
+              <Button onClick={handleUpdateStudy}>저장</Button>
             </Desc>
           </WriteStudyDesc>
         </>
