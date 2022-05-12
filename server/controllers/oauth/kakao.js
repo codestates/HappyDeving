@@ -55,6 +55,7 @@ module.exports = {
           Authorization: `Bearer ${kakaoAccessToken}`,
         },
       }).then((res) => res.json());
+      console.log(kakaoUserInfo);
 
       let { id } = kakaoUserInfo;
       const { nickname, thumbnail_image_url } =
