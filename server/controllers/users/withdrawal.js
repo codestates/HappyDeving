@@ -3,6 +3,8 @@ const { withdrawal } = require("../../middleware/withdrawal");
 const { kakaoWithdrawal } = require("../../middleware/kakaoWithdrawal");
 const { googleWithdrawal } = require("../../middleware/googleWithdrawal");
 const { githubWithdrawal } = require("../../middleware/githubWithdrawal");
+const { naverWithdrawal } = require("../../middleware/naverWithdrawal");
+
 const {
   User,
   Study_comment,
@@ -17,6 +19,7 @@ module.exports = {
   delete: async (req, res) => {
     try {
       const data = checkAccessToken(req);
+      console.log(req.cookies.accessToken);
 
       if (!data) {
         return res.status(401).json("signin required");
@@ -46,13 +49,14 @@ module.exports = {
       if (!userInfo) {
         return res.status(404).json("already withdrawal");
       }
+
       const { id, loginMethod, email } = userInfo.dataValues;
-      const kakaoId = Number(email.slice(0, 10));
       // return res.json("ok");
 
       // const { authorization } = req.cookie;
       // console.log("cookies", req.cookies.accessToken);
       // const accessToken = authorization.split(" ")[1];
+      const { accessToken } = req.cookies;
 
       if (loginMethod === 0) {
         withdrawal(id);
@@ -61,10 +65,17 @@ module.exports = {
         githubWithdrawal(id);
       }
       if (loginMethod === 2) {
-        googleWithdrawal(id);
+        googleWithdrawal(accessToken);
+        // withdrawal(id);
       }
+      return res.json("ok");
       if (loginMethod === 3) {
+        const kakaoId = Number(email.slice(0, 10));
         kakaoWithdrawal(kakaoId);
+        withdrawal(id);
+      }
+      if (loginMethod === 4) {
+        naverWithdrawal(accessToken);
         withdrawal(id);
       }
 
