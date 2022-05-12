@@ -4,8 +4,8 @@ import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
-// import DateModal from "./Modals/DateModal";
-// import LocationModal from "./Modals/LocationModal";
+import DateModal from "./Modals/DateModal";
+import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../features/modal/modalSlice";
@@ -13,16 +13,15 @@ import { openModal } from "../../features/modal/modalSlice";
 // import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
-  grid-column: 4/12;
-  margin-top: 200px;
+  grid-row: 2/12;
+  grid-column: 2/14;
 
-  @media screen and (max-width: 1024px) {
-    grid-column: 3/13;
-    transform: 1s;
-  }
   @media screen and (max-width: 768px) {
-    grid-column: 2/14;
-    transform: 1s;
+    grid-column: 1/15;
+  }
+
+  @media screen and (min-width: 1024px) {
+    grid-column: 4/12;
   }
 `;
 
@@ -30,196 +29,149 @@ const Desc = styled(Content)`
   font-family: "Medium";
   padding: 3% 5% 3% 5%;
 
-  input {
-    background-color: white;
-    border: 1px solid gray;
-    border-radius: 5px;
-    height: 40px;
-    width: 100%;
-    font-size: 16px;
-    padding: 10px;
-
-    @media screen and (max-width: 768px) {
-      font-size: 14px;
-      width: 100%;
-    }
-
-    &:focus {
-      outline: none;
-      border: 1px solid #5e17eb;
-    }
-    &:hover {
-      cursor: pointer;
-      border: 1px solid #5e17eb;
+  div {
+    span {
+      display: block;
+      position: relative;
+      z-index: 0;
     }
   }
-`;
 
-const DescDateModal = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
+  .closed {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
 
-  box-shadow: none;
+    input {
+      margin-right: 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    label {
+      color: ${(props) => (props.checked ? props.theme.colors.purple : "black")};
+    }
+  }
 `;
 
 const DescLanguageModal = styled.div`
-  width: 100%;
+  width: 90%;
   height: auto;
-  text-align: center;
   z-index: 10;
-  background: whitesmoke;
+  text-align: center;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
+  background-color: white;
   position: absolute;
-  top: 85px;
-  padding: 30px 10px;
-  &:focus {
-    border: 1px solid #5e17eb;
-  }
-  &:hover {
-    cursor: pointer;
-    border: 1px solid #5e17eb;
+  z-index: 99;
+`;
+
+const DescDateModal = styled(DateModal)`
+  position: relative;
+  z-index: 10;
+  box-shadow: none;
+  padding: 0 50%;
+
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
   }
 `;
 
-const DescLocationModal = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  border-radius: 5px;
+const DescLocationModal = styled(LocationModal)`
+  border-radius: 0px;
+  box-shadow: none;
   height: auto;
+  box-sizing: content-box;
   z-index: 10;
   position: absolute;
-  top: 85px;
-  width: 100%;
+  width: 90%;
   border: 1px solid rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   font-size: 16px;
-  text-align: center;
-  background: whitesmoke;
-  padding: 20px;
-  cursor: pointer;
 
-  &:focus {
-    outline: none;
-    border: 1px solid #5e17eb;
+  input {
+    box-shadow: none;
   }
-  &:hover {
-    /* cursor: pointer; */
-    border: 1px solid #5e17eb;
-  }
-`;
-
-const HalfInput = styled.div`
-  display: flex;
-  position: relative;
-  background-color: white;
-  width: 100%;
-  border: 1px solid gray;
-  border-radius: 5px;
-  height: 40px;
-  font-size: 16px;
-  padding: 5px 10px;
-
-  &:focus {
-    border: 1px solid #5e17eb;
-  }
-  &:hover {
-    cursor: pointer;
-    border: 1px solid #5e17eb;
-  }
-
-  @media screen and (max-width: 768px) {
-    font-size: 16px;
-    width: 100%;
-  }
-`;
-
-const IconDrop = styled.div`
-  position: absolute;
-  border-left: 1px solid gray;
-  right: 0px;
-  top: 2px;
-  font-size: 34px;
-  color: #5e17eb;
-  padding: 0px 5px;
-  cursor: pointer;
-`;
-const IconSerch = styled.div`
-  position: absolute;
-  right: 0px;
-  top: 50px;
-  border-left: 1px solid gray;
-  font-size: 30px;
-  color: #5e17eb;
-  padding: 0px 10px;
-  cursor: pointer;
-`;
-
-const RowWrap = styled.div`
-  display: flex;
-  width: 100%;
-  padding-bottom: 20px;
-  justify-content: space-between;
-  @media screen and (max-width: 768px) {
-    flex-direction: column;
-    /* justify-content: center; */
-    align-items: center;
-  }
-`;
-const HalfWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 0px;
-  width: 45%;
-  position: relative;
-  @media screen and (max-width: 768px) {
-    width: 100%;
+  div {
+    text-align: center;
   }
 `;
 
 const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 30px;
-  width: 100%;
-  position: relative;
-`;
+  margin-bottom: 20px;
 
+  .div {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    height: 30px;
+    width: 100%;
+
+    text-align: center;
+  }
+
+  .dropdown {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: flex-end;
+    height: 30px;
+
+    @media screen and (max-width: 768px) {
+      width: 100%;
+    }
+  }
+  .result {
+    margin: 0 auto;
+  }
+
+  .icon {
+    height: 30px;
+    font-size: 30px;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .searchicon {
+    height: 20px;
+    font-size: 20px;
+  }
+`;
 const Text = styled.div`
-  font-size: 18px;
-  margin: 10px 0px;
-  @media screen and (max-width: 1024px) {
+  font-size: 16px;
+  @media screen and (min-width: 1024px) {
+    font-size: 20px;
+  }
+  margin-bottom: 10px;
+`;
+const Input = styled.input`
+  background-color: white;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  height: 30px;
+  width: 70%;
+  font-size: 16px;
+
+  @media screen and (max-width: 768px) {
     font-size: 16px;
+    width: 100%;
+  }
+
+  text-align: center;
+  &:focus {
+    outline: none;
   }
 `;
-
 const Button = styled.button`
-  padding: 8px 15px;
-  background: #5e17eb;
-  border-radius: 10px;
-  border: 2px solid #dfc1ff;
-  color: white;
-  transition: 5ms;
-
-  &:hover {
-    background-color: #c593fe;
-    border: 1px solid #6733e5;
-  }
-  &:active {
-    position: relative;
-    top: -2px;
-  }
+  float: right;
+  margin: 30px 0px 30px 0px;
 `;
 
 const Textarea = styled.textarea`
-  padding: 10px;
-  border-radius: 5px;
+  background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.1);
   width: 100%;
   height: 200px;
-  /* resize: none; */
+  resize: none;
   overflow: scroll;
   &:focus {
     outline: none;
@@ -231,25 +183,8 @@ const { kakao } = window;
 const MapView = styled(Content)`
   border-radius: 0px;
   grid-column: 2/14;
-  height: 300px;
-  border-radius: 5px;
+  height: 200px;
   margin-bottom: 20px;
-`;
-const Closed = styled.div`
-  display: flex;
-
-  align-items: center;
-  justify-content: space-between;
-
-  input {
-    margin-right: 10px;
-    width: 15px;
-    background-color: red;
-  }
-`;
-const Checkbox = styled.div`
-  display: flex;
-  align-items: center;
 `;
 
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
@@ -349,7 +284,7 @@ const StudyDesc = () => {
   // const { dateModal } = useSelector((store) => store.studyModal);
   // const { calenderDateValue } = useSelector((store) => store.calender);
   const { dateData } = useSelector((store) => store.searchData);
-  const { calenderDateValue } = useSelector((store) => store.calender);
+
   const [data, setData] = useState({
     username: user.username,
     title: "",
@@ -420,104 +355,105 @@ const StudyDesc = () => {
       <Desc checked={checked}>
         <Wrapper>
           <Text>제목</Text>
-          <input onChange={(e) => handleInputValue("title", e.target.value)}></input>
+          <Input onChange={(e) => handleInputValue("title", e.target.value)}></Input>
         </Wrapper>
-        <RowWrap>
-          <HalfWrapper>
-            <Text>시작일</Text>
-            <HalfInput>{dateData ? calenderDateValue : "ex. 스터디 시작 날짜"}</HalfInput>
-            <DescDateModal>
-              <CalenderDate />
-            </DescDateModal>
-          </HalfWrapper>
-          <HalfWrapper>
-            <Text classNane="lanaguage">언어</Text>
-            {/* <LanguageDrop> */}
-            <HalfInput>
-              {data.language.map((el) => el.name + "," + " ")}
-              <IconDrop>
-                <IoMdArrowDropdown onClick={() => setOpen({ ...open, language: true })} />
-              </IconDrop>
-            </HalfInput>
-
-            {/* </LanguageDrop> */}
-            {open.language ? (
-              <DescLanguageModal>
-                <div>
-                  {Object.keys(langImg).map((el, idx) => (
-                    <div
-                      key={idx}
-                      className="elements"
-                      onClick={() => {
-                        setData({
-                          ...data,
-                          language: [
-                            ...data.language,
-                            {
-                              id: idx + 1,
-                              name: el,
-                            },
-                          ],
-                        });
-                        setOpen({ ...open, language: false });
-                      }}
-                    >
-                      {el}
-                    </div>
-                  ))}
-                </div>
-              </DescLanguageModal>
-            ) : null}
-          </HalfWrapper>
-        </RowWrap>
         <Wrapper>
-          <Text>오픈링크</Text>
-          <input
-            placeholder="ex. 카카오톡 오픈채팅 링크를 입력해주세요"
-            onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
-          ></input>
+          <Text>언어</Text>
+          <div className="dropdown">
+            <div className="result">
+              <span>{data.language.map((el) => el.name + ",")}</span>
+            </div>
+            <IoMdArrowDropdown
+              className="icon"
+              onClick={() => setOpen({ ...open, language: true })}
+            />
+          </div>
+          {open.language ? (
+            <DescLanguageModal>
+              <div>
+                {Object.keys(langImg).map((el, idx) => (
+                  <div
+                    key={idx}
+                    className="elements"
+                    onClick={() => {
+                      setData({
+                        ...data,
+                        language: [
+                          ...data.language,
+                          {
+                            id: idx + 1,
+                            name: el,
+                          },
+                        ],
+                      });
+                      setOpen({ ...open, language: false });
+                    }}
+                  >
+                    {el}
+                  </div>
+                ))}
+              </div>
+            </DescLanguageModal>
+          ) : null}
+        </Wrapper>
+        <Wrapper>
+          <Text>시작일</Text>
+          <DescDateModal>
+            <CalenderDate />
+          </DescDateModal>
+        </Wrapper>
+        <Wrapper>
+          <Text>링크</Text>
+          <Input onChange={(e) => handleInputValue("kakaoLink", e.target.value)}></Input>
         </Wrapper>
         <Wrapper>
           <Text>장소</Text>
-          <input
-            className="locaitionInput"
-            onKeyDown={(e) => handleLocationValue(e)}
-            placeholder="ex. 송파구 오륜동"
-            defaultValue={data.location ? data.location : null}
-          ></input>
-          {open.location ? (
-            <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
-          ) : null}
-          <IconSerch>
+          <div className="dropdown">
+            <Input
+              onKeyDown={(e) => handleLocationValue(e)}
+              placeholder="ex. 송파구 오륜동"
+              defaultValue={data.location ? data.location[4] : null}
+            ></Input>
+            {open.location ? (
+              <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+            ) : null}
             <IoIosSearch
+              className="icon"
               onClick={() => {
                 setOpen({ ...open, location: true });
               }}
-            ></IoIosSearch>
-          </IconSerch>
+            />
+          </div>
         </Wrapper>
         <MapView id="map" ref={container} />
         <Wrapper>
           <Text>내용</Text>
-          <Textarea
-            placeholder="ex. 스터디 모집 글을 자유롭게 작성해주세요 ^^."
-            onChange={(e) => handleInputValue("content", e.target.value)}
-          ></Textarea>
+          <Textarea onChange={(e) => handleInputValue("content", e.target.value)}></Textarea>
+          <Button></Button>
         </Wrapper>
-
-        <Closed>
-          <Checkbox>
-            <input
-              type="checkbox"
-              // className="input"
-              onClick={() => {
-                setChecked(!checked);
-              }}
-            ></input>
-            <label htmlFor="closed">모집마감</label>
-          </Checkbox>
-          <Button onClick={handleStudyPosting}>저장하기</Button>
-        </Closed>
+        <div className="closed">
+          <input
+            type="checkbox"
+            id="closed"
+            className="input"
+            onClick={() => {
+              setChecked(!checked);
+            }}
+          ></input>
+          <label htmlFor="closed">모집마감</label>
+        </div>
+        <Button
+          onClick={handleStudyPosting}
+          // onClick={() =>
+          //   writeStudyApi(user.id, data).then((res) => {
+          //     console.log(res);
+          //     alert("저장되었습니다");
+          //     navigate(`/study/${res.data.id}`);
+          //   })
+          // }
+        >
+          저장
+        </Button>
       </Desc>
     </WriteStudyDesc>
   );

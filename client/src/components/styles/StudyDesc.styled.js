@@ -11,12 +11,15 @@ import {
 } from "react-icons/bs";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { langImg } from "../../static/images/langImg";
-import { studyApi, deleteStudyApi } from "../../api/study";
+import { studyApi } from "../../api/study";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import ShareSocialButton from "../styles/ShareSocial.styled";
 import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
+import { openModal } from "../../features/modal/modalSlice";
+import { useDispatch } from "react-redux";
+
 const StyleStudyDesc = styled.div`
   margin-top: 200px;
   grid-column: 4/12;
@@ -202,6 +205,7 @@ const ShareIcon = styled.div`
 const StudyDesc = () => {
   const container = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { id } = useParams();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
@@ -262,6 +266,16 @@ const StudyDesc = () => {
     });
   }, []);
 
+  const handleStudyDeletion = (e) => {
+    e.preventDefault();
+    dispatch(
+      openModal({
+        name: "DeleteStudy",
+        childrenProps: { study_id: id },
+      })
+    );
+  };
+
   return (
     <>
       {data ? (
@@ -283,11 +297,12 @@ const StudyDesc = () => {
                   </div>
                   <div
                     className="delete"
-                    onClick={() => {
-                      alert("삭제되었습니다");
-                      deleteStudyApi(data.id);
-                      navigate("/");
-                    }}
+                    onClick={handleStudyDeletion}
+                    // onClick={() => {
+                    //   alert("삭제되었습니다");
+                    //   deleteStudyApi(data.id);
+                    //   navigate("/");
+                    // }}
                   >
                     삭제
                   </div>
@@ -297,8 +312,8 @@ const StudyDesc = () => {
           </TitleBar>
           <Host>
             <Wrap>
-              <img className="profile" src={user.image} />
-              <Text>{user.username}</Text>
+              <img className="profile" src={user?.image} />
+              <Text>{user?.username}</Text>
             </Wrap>
           </Host>
           <Wrap>

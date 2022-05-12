@@ -1,9 +1,10 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { reset, editProfile } from "../../../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
+import LoadingIndicator from "../../../LoadingIndicator";
 
 const ConfirmTitle = styled.h2`
   font-size: 16px;
@@ -28,8 +29,13 @@ const ConfirmButton = styled.button`
 
 const UpdateUser = (props) => {
   // console.log("updateuser props: ", props);
+  const { isLoading } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <>

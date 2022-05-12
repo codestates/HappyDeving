@@ -7,10 +7,9 @@ import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 // import DateModal from "./Modals/DateModal";
 // import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
-import { useDispatch, useSelector } from "react-redux";
-import { openModal } from "../../features/modal/modalSlice";
-// import { writeStudyApi } from "../../api/study";
-// import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { writeStudyApi } from "../../api/study";
+import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
@@ -72,6 +71,7 @@ const DescLanguageModal = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   position: absolute;
+<<<<<<< HEAD
   top: 85px;
   padding: 30px 10px;
   &:focus {
@@ -80,6 +80,21 @@ const DescLanguageModal = styled.div`
   &:hover {
     cursor: pointer;
     border: 1px solid #5e17eb;
+=======
+  z-index: 99;
+`;
+
+const DescDateModal = styled(DateModal)`
+  position: relative;
+  z-index: 10;
+  box-shadow: none;
+  padding: 0 50%;
+
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+>>>>>>> a6330d7 (Add confirming modals, global fonts/ Fix landing page)
   }
 `;
 
@@ -255,8 +270,7 @@ const Checkbox = styled.div`
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
 
 const StudyDesc = () => {
-  // const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const container = useRef(null);
   const [location, setLocation] = useState({
     place_name: "광화문",
@@ -401,16 +415,6 @@ const StudyDesc = () => {
     ));
   };
 
-  const handleStudyPosting = (e) => {
-    e.preventDefault();
-    dispatch(
-      openModal({
-        name: "WriteStudy",
-        childrenProps: { userId: user.id, ...data },
-      })
-    );
-  };
-
   const handleInputValue = (id, e) => {
     setData({ ...data, [id]: e });
   };
@@ -516,7 +520,17 @@ const StudyDesc = () => {
             ></input>
             <label htmlFor="closed">모집마감</label>
           </Checkbox>
-          <Button onClick={handleStudyPosting}>저장하기</Button>
+          <Button
+            onClick={() =>
+              writeStudyApi(user.id, data).then((res) => {
+                console.log(res);
+                alert("저장되었습니다");
+                navigate(`/study/${res.data.id}`);
+              })
+            }
+          >
+            저장하기
+          </Button>
         </Closed>
       </Desc>
     </WriteStudyDesc>

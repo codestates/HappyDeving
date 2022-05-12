@@ -1,7 +1,6 @@
-/* eslint-disable react/prop-types */
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { reset, deleteUser } from "../../../../features/user/userSlice";
+import { writeStudy, reset } from "../../../../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
@@ -9,17 +8,14 @@ import LoadingIndicator from "../../../LoadingIndicator";
 
 const ConfirmTitle = styled.h2`
   font-size: 16px;
-  padding: 5%;
 `;
-const ConfirmSubtitle = styled.p`
-  font-size: 14px;
-  padding: 5%;
-
-  /* margin-bottom: 10%; */
-`;
+// const ConfirmSubtitle = styled.p`
+//   font-size: 14px;
+//   /* margin-bottom: 10%; */
+// `;
 const ConfirmButton = styled.button`
-  margin-left: 42%;
-  margin-top: 10%;
+  margin-left: 38%;
+  margin-top: 25%;
   padding: 3px 8px;
   cursor: pointer;
   border-radius: 10px;
@@ -31,11 +27,12 @@ const ConfirmButton = styled.button`
   }
 `;
 
-const DeleteUser = (props) => {
-  // console.log("DeleteUser props: ", props); // {id: 130, loginMethod: 0}
-  const { isLoading } = useSelector((state) => state.user);
+const WriteStudy = (props) => {
+  console.log("WriteStudy props: ", props); // { userId: user.id, ...data }
+  const { isLoading } = useSelector((state) => state.allStudies);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   if (isLoading) {
     return <LoadingIndicator />;
   }
@@ -43,16 +40,16 @@ const DeleteUser = (props) => {
   return (
     <>
       <div>
-        <ConfirmTitle>정말 탈퇴하시겠습니까?</ConfirmTitle>
-        <ConfirmSubtitle>
-          데이터는 모두 삭제되며 재가입을 위해서는 재인증이 필요합니다.
-        </ConfirmSubtitle>
+        <ConfirmTitle>게시글이 등록되었습니다!</ConfirmTitle>
+        {/* <ConfirmSubtitle>수정 후에는 이전 정보로 되돌릴 수 없습니다.</ConfirmSubtitle> */}
         <ConfirmButton
           onClick={async () => {
-            navigate("/");
-            await dispatch(deleteUser(props));
-            dispatch(reset());
-            dispatch(closeModal());
+            await dispatch(writeStudy(props)).then((res) => {
+              console.log("res: ", res);
+              dispatch(reset());
+              dispatch(closeModal());
+              navigate(`/study/${res.id}`);
+            });
           }}
         >
           확인
@@ -61,4 +58,4 @@ const DeleteUser = (props) => {
     </>
   );
 };
-export default DeleteUser;
+export default WriteStudy;
