@@ -72,7 +72,6 @@ const DescLanguageModal = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   position: absolute;
-<<<<<<< HEAD
   top: 85px;
   padding: 30px 10px;
   &:focus {
@@ -81,21 +80,6 @@ const DescLanguageModal = styled.div`
   &:hover {
     cursor: pointer;
     border: 1px solid #5e17eb;
-=======
-  z-index: 99;
-`;
-
-const DescDateModal = styled(DateModal)`
-  position: relative;
-  z-index: 10;
-  box-shadow: none;
-  padding: 0 50%;
-
-  &:after {
-    content: "";
-    display: block;
-    padding-bottom: 100%;
->>>>>>> a6330d7 (Add confirming modals, global fonts/ Fix landing page)
   }
 `;
 
@@ -520,7 +504,6 @@ const StudyDesc = () => {
             onChange={(e) => handleInputValue("content", e.target.value)}
           ></Textarea>
         </Wrapper>
-<<<<<<< HEAD
 
         <Closed>
           <Checkbox>
@@ -533,43 +516,8 @@ const StudyDesc = () => {
             ></input>
             <label htmlFor="closed">모집마감</label>
           </Checkbox>
-          <Button
-            onClick={() =>
-              writeStudyApi(user.id, data).then((res) => {
-                console.log(res);
-                alert("저장되었습니다");
-                navigate(`/study/${res.data.id}`);
-              })
-            }
-          >
-            저장하기
-          </Button>
+          <Button onClick={handleStudyPosting}>저장하기</Button>
         </Closed>
-=======
-        <div className="closed">
-          <input
-            type="checkbox"
-            id="closed"
-            className="input"
-            onClick={() => {
-              setChecked(!checked);
-            }}
-          ></input>
-          <label htmlFor="closed">모집마감</label>
-        </div>
-        <Button
-          onClick={handleStudyPosting}
-          // onClick={() =>
-          //   writeStudyApi(user.id, data).then((res) => {
-          //     console.log(res);
-          //     alert("저장되었습니다");
-          //     navigate(`/study/${res.data.id}`);
-          //   })
-          // }
-        >
-          저장
-        </Button>
->>>>>>> 239c3a1 (Add WriteStudy modal)
       </Desc>
     </WriteStudyDesc>
   );
