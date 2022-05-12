@@ -4,26 +4,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { signout, reset } from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
 import { openModal } from "../features/modal/modalSlice.js";
 import EditSideProfile from "../components/styles/EditSideProfile.styled";
 
-const StyledEditProfile = styled(Content)`
+const StyledEditProfile = styled.div`
   grid-column: 4 / 12;
-  min-height: 80vh;
+  min-height: 80%;
   text-align: left;
-  min-width: 520px;
+  min-width: 524px;
 
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
+    transition: 1s;
   }
   @media screen and (max-width: 764px) {
     grid-column: 2 / 14;
+    transition: 1s;
   }
 `;
 
 const UserTitle = styled.div`
-  font-size: 50px;
+  font-size: 40px;
   margin-bottom: 50px;
   span {
     font-weight: 500;
@@ -31,7 +32,7 @@ const UserTitle = styled.div`
   }
   @media screen and (max-width: 1024px) {
     font-size: 30px;
-    grid-column: 3 / 13;
+    transition: 1s;
   }
 `;
 
@@ -41,7 +42,7 @@ const Tab = styled.div`
   border-bottom: 2px solid darkgray;
   margin-bottom: 20px;
   color: gray;
-  font-size: 18px;
+  font-size: 16px;
   cursor: pointer;
   .tap {
     padding: 10px 3%;
@@ -61,7 +62,7 @@ const MyStudyTab = styled.div``;
 const LikedStudyTab = styled.div``;
 const MyprofileTab = styled.div``;
 
-const ProfileContainer = styled(Content)`
+const ProfileContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   margin-top: 50px;
@@ -78,7 +79,7 @@ const Side = styled.div`
 
 const ProfileWrap = styled.form`
   display: flex;
-  grid-column: 3 / 8;
+  grid-column: 3 / 9;
   flex-direction: column;
   margin: 0px 30px;
 `;
@@ -87,12 +88,12 @@ const Text = styled.div`
   width: 150px;
   padding-bottom: 2px;
   border-bottom: 1px solid gray;
-  font-size: 20px;
-  font-weight: 500;
+  color: gray;
+  font-size: 18px;
   margin-bottom: 10px;
-  margin-top: 10px;
+  margin-top: 25px;
   @media screen and (max-width: 764px) {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 
@@ -113,14 +114,13 @@ const InputBio = styled.textarea`
 `;
 const ButtonWrap = styled.div`
   display: flex;
-  margin-top: 30px;
-  font-size: 18px;
+  font-size: 16px;
   margin-top: 30px;
   p {
     border-bottom: 1px solid gray;
     margin-right: 10px;
     color: gray;
-    font-weight: 500;
+    font-weight: 700;
     cursor: pointer;
     &:hover {
       color: black;

@@ -5,8 +5,6 @@ import { signin } from "../features/user/userSlice";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
-// import Container from "../components/styles/Container.styled";
-// import Content from "../components/styles/Content.styled";
 import axios from "axios";
 import { GoogleLoginApi } from "../api/socialAuth";
 import { GoogleLogin } from "react-google-login";
@@ -22,15 +20,14 @@ import {
   Naver_url,
 } from "../config";
 //
-// import google from "../static/images/google.png";
+import google from "../static/images/google.png";
 import github from "../static/images/github.png";
 import naver from "../static/images/naver.png";
 import kakao from "../static/images/kakao.png";
 
 const Background = styled.div`
   grid-column: 4/ 12;
-  /* grid-row: 6/12; */
-  /* min-height: 80%; */
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -38,17 +35,25 @@ const Background = styled.div`
   margin: 20% auto;
   font-size: 18px;
   font-weight: 500;
+  @media screen and (max-width: 1024px) {
+    grid-column: 3 / 13;
+    width: 80%;
+    transition: 1s;
+  }
+  @media screen and (max-width: 764px) {
+    grid-column: 2 / 14;
+    transition: 1s;
+  }
 `;
 
 const SigninWrap = styled.div`
   display: flex;
   min-width: 400px;
+  width: 600px;
   height: 100%;
   padding: 20px;
-  /* grid-column: 4/12; */
   align-items: center;
   flex-direction: column;
-  background-color: white;
   border-radius: 10px;
   form {
     display: flex;
@@ -59,10 +64,9 @@ const SigninWrap = styled.div`
     display: flex;
     background: transparent;
     margin-top: 10px;
-    margin-bottom: 40px;
-    padding: 10px 10px;
+    margin-bottom: 30px;
+    padding: 5px 5px;
     width: 100%;
-    /* background: white; */
     border: none;
     border-bottom: 3px solid #ccc;
   }
@@ -75,12 +79,12 @@ const SigninWrap = styled.div`
     border-bottom: 3px solid #6733e5;
   }
 `;
-const Title = styled.div`
+const Title = styled.h1`
   display: flex;
   color: #6733e5;
   justify-content: center;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
   font-size: 35px;
   font-weight: 900;
   text-shadow: 1px 1px 1px #c593fe;
@@ -88,6 +92,7 @@ const Title = styled.div`
 const Text = styled.div`
   margin-right: 10px;
   color: #6733e5;
+  opacity: 0.5;
   font-size: 20px;
 `;
 
@@ -96,61 +101,89 @@ const ButtonWrap = styled.div`
   justify-content: center;
   button {
     cursor: pointer;
-    font-size: 25px;
+    padding: 10px 0px;
+    font-size: 22px;
     font-weight: 900;
     border: 3px solid #c593fe;
-    padding: 5px 40px;
     width: 100%;
     color: white;
     background-color: #6733e5;
     border-radius: 10px;
-    margin-top: 20px;
+    margin-top: 30px;
+    margin-border: 30px;
+    transition: 5ms;
   }
   button:hover {
     background-color: #c593fe;
     border: 3px solid #6733e5;
+    position: relative;
+    top: -2px;
   }
   button:active {
     position: relative;
     top: 2px;
+  }
+  margin-bottom: 20px;
+`;
+const SocialTitle = styled.div`
+  display: flex;
+  flex-basis: 100%;
+  align-items: center;
+  color: rgba(0, 0, 0, 0.35);
+  font-size: 12px;
+  margin: 8px 0px;
+  &::before,
+  &::after {
+    content: "";
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.35);
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+    margin: 0px 16px;
   }
 `;
 const SocialLoginButton = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 10px;
-  /* border-radius: 10px; */
-  /* width: 80px; */
-  /* box-shadow: 3px 3px 10px gray; */
   cursor: pointer;
-  div {
+  .sButton {
+    width: 60px;
     margin: 10px;
-    box-shadow: 3px 3px 10px gray;
+    box-shadow: 3px 3px 3px gray;
     border-radius: 10px;
     overflow: hidden;
-    &:active {
+    &:hover {
       position: relative;
       top: 2px;
     }
   }
 `;
 const KakaoButton = styled.div`
-  width: 80px;
+  /* width: 80px; */
   background-color: yellow;
+  image {
+    width: 100%;
+  }
 `;
 const GitButton = styled.div`
   background-color: black;
-  width: 80px;
+  /* width: 80px;
+  background-color: gray; */
 `;
 const GoogleButton = styled.div`
   border-radius: 10px;
-  background-color: white;
-  width: 80px;
+  background-color: #d3d3d3;
+  /* width: 80px; */
+  position: relative;
+  image {
+    width: 100%;
+  }
 `;
 const NaverButton = styled.div`
   background-color: green;
   border-radius: 10px;
-  width: 80px;
 `;
 const AlertBox = styled.div`
   display: flex;
@@ -162,9 +195,11 @@ const Resister = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid #c593fe;
   padding-bottom: 20px;
+  font-size: 14px;
   span {
     font-weight: 700;
     color: #6733e5;
+    border-bottom: 1px solid #c593fe;
   }
 `;
 
@@ -301,9 +336,7 @@ function Signin() {
       <Background>
         <SigninWrap>
           <form onSubmit={handleSignin}>
-            <Title>
-              <h1 className="text-grey-600">로그인</h1>
-            </Title>
+            <Title>로그인</Title>
             <Text>이메일</Text>
             <input
               type="email"
@@ -317,24 +350,30 @@ function Signin() {
               onChange={handleInputValue("password")}
             />
             <Resister>
-              <p>아직 아이디가 없으신가요? </p>
+              <p> 아직 회원이 아니신가요? </p>
               <Link to="/signup">
                 <span>회원가입하기</span>
               </Link>
             </Resister>
             <ButtonWrap>
-              <button type="submit">로그인</button>
+              <button type="submit">로그인 </button>
             </ButtonWrap>
+            <div>
+              <SocialTitle> 소셜 로그인 </SocialTitle>
+            </div>
             <SocialLoginButton>
-              <KakaoButton type="button" onClick={() => socialLoginHandler("kakao")}>
+              <KakaoButton
+                className="sButton"
+                type="button"
+                onClick={() => socialLoginHandler("kakao")}
+              >
                 <img src={kakao} alt="kakao" />
               </KakaoButton>
-              <GoogleButton>
+              <GoogleButton className="sButton">
                 <GoogleLogin
-                  style={{ width: "100px" }}
                   render={(renderProps) => (
                     <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
-                      G
+                      <img src={google} alt="google" />
                     </button>
                   )}
                   buttonText=""
@@ -342,14 +381,12 @@ function Signin() {
                   onSuccess={handleGoogleLogin}
                   onFailure={handleGoogleLoginFailure}
                   cookiePolicy={"single_host_origin"}
-                >
-                  {/* <img src={google} alt="google" /> */}
-                </GoogleLogin>
+                ></GoogleLogin>
               </GoogleButton>
-              <NaverButton>
+              <NaverButton className="sButton">
                 <img src={naver} alt="naver" onClick={() => socialLoginHandler("naver")} />
               </NaverButton>
-              <GitButton>
+              <GitButton className="sButton">
                 <img src={github} onClick={() => socialLoginHandler("github")} />
               </GitButton>
             </SocialLoginButton>
