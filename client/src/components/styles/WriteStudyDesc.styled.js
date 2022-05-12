@@ -3,11 +3,11 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import { IoMdArrowDropdown, IoIosSearch, IoMdNavigate } from "react-icons/io";
+import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { writeStudyApi } from "../../api/study";
 import { useNavigate } from "react-router-dom";
 
@@ -49,8 +49,7 @@ const Desc = styled(Content)`
       }
     }
     label {
-      color: ${(props) =>
-        props.checked ? props.theme.colors.purple : "black"};
+      color: ${(props) => (props.checked ? props.theme.colors.purple : "black")};
     }
   }
 `;
@@ -279,9 +278,9 @@ const StudyDesc = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const dispatch = useDispatch();
-  const { dateModal } = useSelector((store) => store.studyModal);
-  const { calenderDateValue } = useSelector((store) => store.calender);
+  // const dispatch = useDispatch();
+  // const { dateModal } = useSelector((store) => store.studyModal);
+  // const { calenderDateValue } = useSelector((store) => store.calender);
   const { dateData } = useSelector((store) => store.searchData);
 
   const [data, setData] = useState({
@@ -318,9 +317,7 @@ const StudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name
-            .split(" ")
-            .filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -346,9 +343,7 @@ const StudyDesc = () => {
       <Desc checked={checked}>
         <Wrapper>
           <Text>제목</Text>
-          <Input
-            onChange={(e) => handleInputValue("title", e.target.value)}
-          ></Input>
+          <Input onChange={(e) => handleInputValue("title", e.target.value)}></Input>
         </Wrapper>
         <Wrapper>
           <Text>언어</Text>
@@ -397,9 +392,7 @@ const StudyDesc = () => {
         </Wrapper>
         <Wrapper>
           <Text>링크</Text>
-          <Input
-            onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
-          ></Input>
+          <Input onChange={(e) => handleInputValue("kakaoLink", e.target.value)}></Input>
         </Wrapper>
         <Wrapper>
           <Text>장소</Text>
@@ -410,9 +403,7 @@ const StudyDesc = () => {
               defaultValue={data.location ? data.location[4] : null}
             ></Input>
             {open.location ? (
-              <DescLocationModal>
-                {locationListHandler(locationList)}
-              </DescLocationModal>
+              <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
             ) : null}
             <IoIosSearch
               className="icon"
@@ -425,9 +416,7 @@ const StudyDesc = () => {
         <MapView id="map" ref={container} />
         <Wrapper>
           <Text>내용</Text>
-          <Textarea
-            onChange={(e) => handleInputValue("content", e.target.value)}
-          ></Textarea>
+          <Textarea onChange={(e) => handleInputValue("content", e.target.value)}></Textarea>
           <Button></Button>
         </Wrapper>
         <div className="closed">

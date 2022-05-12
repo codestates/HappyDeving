@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Content from "./Content.styled";
 import { FaSearch } from "react-icons/fa";
 import { IconContext } from "react-icons";
 import { langImg } from "../../static/images/langImg";
@@ -17,11 +16,7 @@ import {
   dateModal,
   reset,
 } from "../../features/Search/searchModalSlice";
-import {
-  setLocationData,
-  setLanguageData,
-  resetData,
-} from "../../features/Search/searchDataSlice";
+import { setLocationData, setLanguageData, resetData } from "../../features/Search/searchDataSlice";
 import CalenderDate from "../Calendar.js";
 
 // size: {
@@ -157,7 +152,7 @@ const { kakao } = window;
 
 const Search = () => {
   const [locationList, setLocationList] = useState([]);
-  const [icon, setIcon] = useState("1.5em");
+  // const [icon, setIcon] = useState("1.5em");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const url = window.location.href;
@@ -196,9 +191,7 @@ const Search = () => {
   };
 
   const { location, date, language } = useSelector((store) => store.search);
-  const { locationData, dateData, languageData } = useSelector(
-    (store) => store.searchData
-  );
+  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
   const { calenderDateValue } = useSelector((store) => store.calender);
 
   const guType = locationData.split(" ")[0];
@@ -207,9 +200,7 @@ const Search = () => {
   const locationListHandler = (locationList) => {
     const list = locationList.map(
       (location) =>
-        location["address_name"].split(" ")[1] +
-        " " +
-        location["address_name"].split(" ")[2]
+        location["address_name"].split(" ")[1] + " " + location["address_name"].split(" ")[2]
     );
     const filteredList = Array.from(new Set(list));
     return filteredList.map((location, idx) => (
@@ -244,9 +235,7 @@ const Search = () => {
             console.log(date);
           }}
         >
-          <span className="desc">
-            {dateData ? calenderDateValue : "시작일"}
-          </span>
+          <span className="desc">{dateData ? calenderDateValue : "시작일"}</span>
         </Date>
         <Language id="language" onClick={() => dispatch(languageModal())}>
           <span className="desc">{languageData ? languageData : "언어"} </span>
@@ -254,12 +243,10 @@ const Search = () => {
         <SearchIcon
           id="search"
           onClick={() => {
-            getStudiesMapApi({ guType, dongType, languageData, dateData }).then(
-              (res) => {
-                console.log(res.data);
-                dispatch(setStudiesData(res.data));
-              }
-            );
+            getStudiesMapApi({ guType, dongType, languageData, dateData }).then((res) => {
+              console.log(res.data);
+              dispatch(setStudiesData(res.data));
+            });
             //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
             navigate("/map");
             dispatch(resetData());
@@ -276,10 +263,7 @@ const Search = () => {
       <Modals>
         {location ? (
           <LocationModal className="locationModal">
-            <input
-              onKeyDown={(e) => handleInputValue(e)}
-              placeholder="ex. 송파구 오륜동"
-            ></input>
+            <input onKeyDown={(e) => handleInputValue(e)} placeholder="ex. 송파구 오륜동"></input>
             <div></div>
             {locationListHandler(locationList)}
           </LocationModal>

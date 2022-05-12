@@ -29,7 +29,7 @@ const LandingImage = styled.img`
   object-fit: cover;
   position: absolute;
   @media screen and (min-width: 768px) and (max-width: 1023px) {
-    object-fit: scale-down;
+    object-fit: cover;
   }
   @media screen and (max-width: 767px) {
     object-fit: scale-down;
@@ -39,9 +39,10 @@ const LandingTitle = styled.h1`
   position: absolute;
   /* background-color: rgb(236, 236, 236); */
   /* border: 5px solid rgb(236, 236, 236); */
+  display: contents;
   top: 60%;
   color: black;
-  font-size: 2.5rem;
+  font-size: 3rem;
   padding: 15px;
   // 태블릿
   @media screen and (min-width: 768px) and (max-width: 1023px) {
@@ -59,11 +60,13 @@ const LandingTitle = styled.h1`
 const LandingTitleSecond = styled.h1`
   opacity: 0;
   /* visibility: hidden; */
+  display: contents;
   display: none;
   @media screen and (max-width: 767px) {
     position: relative;
     opacity: 1;
     /* visibility: visible; */
+    display: none;
     top: 50%;
     display: block;
     font-size: 1.5rem;

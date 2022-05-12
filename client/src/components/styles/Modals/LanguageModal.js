@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 import Content from "../Content.styled";
 import { langImg } from "../../../static/images/langImg";

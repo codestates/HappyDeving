@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
-import Content from "./Content.styled";
 import Comments from "../Comments";
 import "./Map.styled.css";
 import {

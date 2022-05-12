@@ -1,5 +1,7 @@
-import styled from "styled-components";
+/* eslint-disable react/prop-types */
+
 import React, { useState } from "react";
+import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Search } from "../styles/Search.styled";
@@ -7,22 +9,19 @@ import { IoIosArrowBack } from "react-icons/io";
 import LocationModal from "./Modals/LocationModal";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import {
-  languageModal,
+  // languageModal,
   locationModal,
-  dateModal,
-  reset,
+  // dateModal,
+  // reset,
 } from "../../features/Search/searchModalSlice";
 import CalenderDate from "../Calendar.js";
 import LanguageModal from "./Modals/LanguageModal";
 
 const icons = {
   logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-  write:
-    "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
-  login:
-    "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
-  mypage:
-    "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+  write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+  login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+  mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
 };
 
 const StyleSearch = styled.div`
@@ -191,9 +190,7 @@ const Header = ({ drop }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { location, date, language } = useSelector((store) => store.search);
-  const { locationData, dateData, languageData } = useSelector(
-    (store) => store.searchData
-  );
+  const { locationData } = useSelector((store) => store.searchData);
 
   const [click, setClick] = useState(false);
   console.log(drop);
