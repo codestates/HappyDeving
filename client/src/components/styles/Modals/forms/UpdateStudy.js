@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { editStudy, reset } from "../../../../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
+import LoadingIndicator from "../../../LoadingIndicator";
 
 const ConfirmTitle = styled.h2`
   font-size: 16px;
@@ -32,7 +33,11 @@ const UpdateStudy = (props) => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.allStudies);
 
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
   return (
     <>
       <div>

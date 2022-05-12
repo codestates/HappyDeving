@@ -71,6 +71,7 @@ const DescLanguageModal = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   position: absolute;
+<<<<<<< HEAD
   top: 85px;
   padding: 30px 10px;
   &:focus {
@@ -79,6 +80,21 @@ const DescLanguageModal = styled.div`
   &:hover {
     cursor: pointer;
     border: 1px solid #5e17eb;
+=======
+  z-index: 99;
+`;
+
+const DescDateModal = styled(DateModal)`
+  position: relative;
+  z-index: 10;
+  box-shadow: none;
+  padding: 0 50%;
+
+  &:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+>>>>>>> a6330d7 (Add confirming modals, global fonts/ Fix landing page)
   }
 `;
 

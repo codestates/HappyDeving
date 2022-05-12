@@ -61,7 +61,6 @@ export const writeStudy = createAsyncThunk(
 export const editStudy = createAsyncThunk("allStudies/editStudy", async (data, thunkAPI) => {
   try {
     return await editStudyApi(data).then((res) => {
-      console.log("edited study: ", res);
       return res.data;
     });
   } catch (error) {
@@ -69,27 +68,21 @@ export const editStudy = createAsyncThunk("allStudies/editStudy", async (data, t
   }
 });
 
-export const deleteStudy = createAsyncThunk(
-  "allStudies/deleteStudy",
-  async ({ id, studyData }, thunkAPI) => {
-    try {
-      return await deleteStudyApi(id, studyData).then((res) => {
-        return res.data;
-      });
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
+export const deleteStudy = createAsyncThunk("allStudies/deleteStudy", async (data, thunkAPI) => {
+  try {
+    return await deleteStudyApi(data).then((res) => {
+      return res.data;
+    });
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error.message);
   }
-);
+});
 
 export const likeStudy = createAsyncThunk(
   "allStudies/likeStudy",
   async ({ id, studyData }, thunkAPI) => {
-    // console.log("studyData: ", studyData);
     try {
       return await likeStudyApi(id, studyData).then((res) => {
-        // console.log("like clicked: ", res.data);
-
         return res.data;
       });
     } catch (error) {
