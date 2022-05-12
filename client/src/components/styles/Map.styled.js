@@ -3,26 +3,36 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import {
-  // likeStudy,
-  // unLikeStudy,
-  getLikedStudies,
-} from "../../features/studies/allStudiesSlice";
+import { getLikedStudies } from "../../features/studies/allStudiesSlice";
 
 import { unLikeStudyApi, likeStudyApi } from "../../api/study";
+
+const Title = styled.div`
+  margin-top: 200px;
+  grid-column: 3/13;
+  font-size: 20px;
+  text-align: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`;
+
+const MapView = styled.div`
+  grid-column: 3/13;
+  margin-top: 100px;
+  height: 500px;
+
+  @media screen and (max-width: 768px) {
+    grid-column: 2/14;
+    margin-top: 40px;
+    height: 500px;
+  }
+  z-index: -10;
+  border-radius: 10px;
+`;
 
 const Map = () => {
   const { kakao } = window;
   const dispatch = useDispatch();
 
-  const MapView = styled.div`
-    grid-column: 3/13;
-    grid-row: 4/12;
-    height: 400px;
-    position: relative;
-    z-index: -10;
-    border-radius: 10px;
-  `;
   const container = useRef(null);
 
   //검색한 조건에 맞는 스터디들의 목록
@@ -166,6 +176,7 @@ const Map = () => {
 
   return (
     <>
+      <Title>{studies.length === 0 ? "검색 결과가 없습니다" : "검색 결과"}</Title>
       <MapView id="map" ref={container} />
     </>
   );

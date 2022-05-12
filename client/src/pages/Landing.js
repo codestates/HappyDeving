@@ -39,11 +39,12 @@ const LandingTitle = styled.h1`
   position: absolute;
   /* background-color: rgb(236, 236, 236); */
   /* border: 5px solid rgb(236, 236, 236); */
-  display: contents;
+  /* display: contents; */
   top: 60%;
   color: black;
   font-size: 3rem;
   padding: 15px;
+  display: contents;
   // 태블릿
   @media screen and (min-width: 768px) and (max-width: 1023px) {
     transition: 1.5s;
@@ -61,14 +62,13 @@ const LandingTitleSecond = styled.h1`
   opacity: 0;
   /* visibility: hidden; */
   display: contents;
-  display: none;
+  /* display: none; */
   @media screen and (max-width: 767px) {
     position: relative;
     opacity: 1;
     /* visibility: visible; */
     display: none;
     top: 50%;
-    display: block;
     font-size: 1.5rem;
     transition: 1.5s;
   }

@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { signup, reset } from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
-import Container from "../components/styles/Container.styled";
+// import Container from "../components/styles/Container.styled";
 import Content from "../components/styles/Content.styled";
 
-const SignupContainer = styled(Container)`
-  grid-column: 1/ 15;
+const SignupContainer = styled.div`
+  grid-column: 4/ 12;
   justify-content: center;
   align-items: center;
   width: 100%;
@@ -16,6 +16,7 @@ const SignupContainer = styled(Container)`
   margin: 0 auto;
   font-size: 18px;
   font-weight: 500;
+  margin: 20% auto;
 `;
 
 const SignupWrap = styled(Content)`
@@ -24,7 +25,7 @@ const SignupWrap = styled(Content)`
   width: 100%;
   height: 100%;
   padding: 20px;
-  grid-column: 4/12;
+  /* grid-column: 4/12; */
   align-items: center;
   flex-direction: column;
   background-color: white;

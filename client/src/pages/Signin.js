@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
 // import Container from "../components/styles/Container.styled";
-import Content from "../components/styles/Content.styled";
+// import Content from "../components/styles/Content.styled";
 import axios from "axios";
 import { GoogleLoginApi } from "../api/socialAuth";
 import { GoogleLogin } from "react-google-login";
@@ -27,14 +27,15 @@ import github from "../static/images/github.png";
 import naver from "../static/images/naver.png";
 import kakao from "../static/images/kakao.png";
 
-const Background = styled(Content)`
+const Background = styled.div`
   grid-column: 4/ 12;
-  grid-row: 6/12;
+  /* grid-row: 6/12; */
+  /* min-height: 80%; */
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  margin: 0 auto;
+  margin: 20% auto;
   font-size: 18px;
   font-weight: 500;
 `;
@@ -331,8 +332,13 @@ function Signin() {
               <GoogleButton>
                 <GoogleLogin
                   style={{ width: "100px" }}
-                  clientId={GOOGLE_CLIENT_ID}
+                  render={(renderProps) => (
+                    <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                      G
+                    </button>
+                  )}
                   buttonText=""
+                  clientId={GOOGLE_CLIENT_ID}
                   onSuccess={handleGoogleLogin}
                   onFailure={handleGoogleLoginFailure}
                   cookiePolicy={"single_host_origin"}

@@ -14,6 +14,14 @@ const StyledLoadingIndicator = styled(Content)`
   align-items: center;
   justify-content: center;
   transition: all 0.4s;
+  @keyframes spinner {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 `;
 const Spinner = styled(Content)`
   z-index: 1500;
@@ -23,14 +31,14 @@ const Spinner = styled(Content)`
   border-color: #000 transparent #555 transparent;
   border-radius: 50%;
   animation: spin 1.2s linear infinite;
-  @keyframes spinner {
+  /* @keyframes spinner {
     0% {
       transform: rotate(0deg);
     }
     100% {
       transform: rotate(360deg);
     }
-  }
+  } */
 `;
 
 function LoadingIndicator() {

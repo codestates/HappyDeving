@@ -1,18 +1,21 @@
-/* eslint-disable react/prop-types */
-
-import React, { useState } from "react";
 import styled from "styled-components";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { Search } from "../styles/Search.styled";
 import { IoIosArrowBack } from "react-icons/io";
 import LocationModal from "./Modals/LocationModal";
 import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
+import { getStudiesMapApi } from "../../api/study";
+import { setStudiesData } from "../../features/studies/studiesSlice";
+import { resetData } from "../../features/Search/searchDataSlice";
+import { BsFillCalendarDateFill, BsFileEarmarkCodeFill } from "react-icons/bs";
 import {
-  // languageModal,
+  languageModal,
   locationModal,
-  // dateModal,
-  // reset,
+  dateModal,
+  reset,
 } from "../../features/Search/searchModalSlice";
 import CalenderDate from "../Calendar.js";
 import LanguageModal from "./Modals/LanguageModal";
@@ -82,9 +85,13 @@ const StyledHeader = styled.header`
     display: flex;
     align-items: center;
 
-    .link {
-      display: ${(props) => (props.drop ? "none" : "block")};
+    .profile {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
 
+    .link {
       @media screen and (min-width: 1024px) {
         font-size: 22px;
       }
@@ -122,67 +129,70 @@ const Location = styled.div`
   display: flex;
   margin-top: 60px;
   display: flex;
-  .icon {
-    position: absolute;
-    top: 75px;
-    left: 10px;
-    cursor: pointer;
-  }
 `;
 
 const Date = styled.div`
-  .icon {
+  .date {
     position: absolute;
-    top: 75px;
-    left: 10px;
-    cursor: pointer;
-  }
-  width: 100%;
-  height: 100%;
-
-  @media screen and (min-width: 500px) {
-    margin: 12% 15%;
-  }
-
-  margin: 12% 20%;
-
-  @media screen and (min-width: 505px) {
-    margin: 12% 25%;
+    top: 55px;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    transform: translateX(-35%);
   }
 `;
 
 const Language = styled.div`
   width: 100vw;
   height: 100vh;
-  background-color: red;
+  position: absolute;
+
   .language {
-    width: 50%;
-    margin: 0 auto;
+    position: absolute;
+    top: 75px;
+    width: 60%;
+    left: 20%;
   }
 `;
 
 const Info = styled.div`
-  width: 60vw;
+  position: absolute;
+  width: 60%;
+  left: 20%;
   height: 90px;
   background-color: white;
-  position: fixed;
   bottom: 100px;
-  left: 50%;
-  transform: translateX(-50%);
   border-radius: 10px;
   box-shadow: ${(props) => props.theme.contents.boxShadow};
   display: flex;
-  align-items: center;
-  span {
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  div {
     font-family: "Medium";
     font-size: 16px;
     margin: 0 auto;
     display: inline-flex;
+    width: 40%;
   }
+
   .marker {
     margin-top: 5px;
-    margin-right: 5px;
+    margin-right: 10px;
   }
+`;
+
+const InfoFinal = styled(Info)`
+  top: 40%;
+  transform: translateY(-50%);
+  height: 30%;
+`;
+
+const Icon = styled.div`
+  position: absolute;
+  top: 75px;
+  left: 20px;
+  cursor: pointer;
 `;
 
 const Header = ({ drop }) => {
@@ -190,7 +200,8 @@ const Header = ({ drop }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const { location, date, language } = useSelector((store) => store.search);
-  const { locationData } = useSelector((store) => store.searchData);
+  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
+  const { calenderDateValue } = useSelector((store) => store.calender);
 
   const [click, setClick] = useState(false);
   console.log(drop);
@@ -200,6 +211,8 @@ const Header = ({ drop }) => {
   };
 
   console.log(drop);
+  const guType = locationData.split(" ")[0];
+  const dongType = locationData.split(" ")[1];
 
   return (
     <>
@@ -209,16 +222,13 @@ const Header = ({ drop }) => {
           <Search className="search" />
         </StyleSearch>
         <div className="links">
-          <Link to="/write">
-            <span className="link">write</span>
-          </Link>
           {user ? (
             <Link to="/profile">
-              <span className="link"> mypage</span>
+              <img src={user.image} className="profile" />
             </Link>
           ) : (
             <Link to="/signin">
-              <span className="link">signin</span>
+              <span className="link">로그인</span>
             </Link>
           )}
         </div>
@@ -226,33 +236,93 @@ const Header = ({ drop }) => {
       <Modal click={click}>
         {location ? (
           <Location>
-            <div className="icon" onClick={() => setClick(false)}>
+            <Icon onClick={() => setClick(false)}>
               <IoIosArrowBack />
-            </div>
+            </Icon>
             <LocationModal />
           </Location>
         ) : null}
 
         {date ? (
           <Date>
-            <div className="icon" onClick={() => dispatch(locationModal())}>
+            <Icon onClick={() => dispatch(locationModal())}>
               <IoIosArrowBack />
+            </Icon>
+            <div className="date">
+              <CalenderDate />
             </div>
-            <CalenderDate />
             <Info>
-              <span>
+              <div className="locationData">
                 <FaMapMarkerAlt className="marker" />
                 {locationData}
-              </span>
+              </div>
             </Info>
           </Date>
         ) : null}
         {language ? (
           <Language>
+            <Icon onClick={() => dispatch(dateModal())}>
+              <IoIosArrowBack />
+            </Icon>
             <div className="language">
               <LanguageModal />
             </div>
+
+            <Info>
+              <div>
+                <FaMapMarkerAlt className="marker" />
+                {locationData}
+              </div>
+              <div>
+                <BsFillCalendarDateFill className="marker" />
+                {calenderDateValue}
+              </div>
+            </Info>
           </Language>
+        ) : null}
+        {languageData ? (
+          <>
+            <Icon onClick={() => dispatch(languageModal())}>
+              <IoIosArrowBack />
+            </Icon>
+            <InfoFinal>
+              <div>
+                <FaMapMarkerAlt className="marker" />
+                {locationData}
+              </div>
+              <div>
+                <BsFillCalendarDateFill className="marker" />
+                {calenderDateValue}
+              </div>
+              <div>
+                <BsFileEarmarkCodeFill className="marker" />
+                {languageData}
+              </div>
+            </InfoFinal>
+            <Info
+              onClick={() => {
+                setClick(false);
+                getStudiesMapApi({
+                  guType,
+                  dongType,
+                  languageData,
+                  dateData,
+                }).then((res) => {
+                  console.log(res.data);
+                  dispatch(setStudiesData(res.data));
+                });
+                //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
+                navigate("/map");
+                dispatch(resetData());
+                dispatch(reset());
+              }}
+            >
+              <div>
+                검색
+                <FaSearch className="marker" />
+              </div>
+            </Info>
+          </>
         ) : null}
       </Modal>
     </>

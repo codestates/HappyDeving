@@ -74,6 +74,10 @@ const Modals = styled.div`
   grid-template-columns: repeat(10, 1fr);
   height: auto;
 
+  /* @media screen and (min-width: 768px) {
+    display: none;
+  } */
+
   div {
     @media screen and (max-width: 768px) {
       display: none;
