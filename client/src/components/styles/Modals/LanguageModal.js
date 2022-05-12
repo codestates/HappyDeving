@@ -11,7 +11,8 @@ const StyledLanguageModal = styled(Content)`
     grid-column: 7/11;
   }
   width: 100%;
-  height: auto;
+  height: 500px;
+  overflow: scroll;
   border-radius: 10px;
   position: relative;
   z-index: 10;

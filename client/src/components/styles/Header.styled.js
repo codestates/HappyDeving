@@ -197,13 +197,14 @@ const Location = styled.div`
 `;
 
 const Date = styled.div`
+  width: 100%;
+  height: 100%;
   .date {
     position: absolute;
     top: 55px;
+    padding: 0 10%;
     left: 50%;
-    width: 100%;
-    height: 100%;
-    transform: translateX(-35%);
+    transform: translateX(-50%);
   }
 `;
 
@@ -227,8 +228,7 @@ const LocationWrapper = styled.div`
 const DateWrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding-top: 10%;
-  padding-left: 10%;
+  padding: 10% 15%;
 `;
 const LanguageWrapper = styled.div`
   width: 100%;
@@ -259,6 +259,17 @@ const Info = styled.div`
   .marker {
     margin-top: 5px;
     margin-right: 10px;
+  }
+
+  .searchIcon {
+    font-family: "Medium";
+    font-size: 16px;
+    margin: 0 auto;
+    display: flex;
+    width: 30%;
+    .marker {
+      margin-left: 30px;
+    }
   }
 `;
 
@@ -378,7 +389,7 @@ const Header = () => {
           <Date>
             <Icon
               onClick={() => {
-                dispatch(languageModal());
+                dispatch(locationModal());
               }}
             >
               <IoIosArrowBack />
@@ -453,7 +464,7 @@ const Header = () => {
                 dispatch(reset());
               }}
             >
-              <div>
+              <div className="searchIcon">
                 검색
                 <FaSearch className="marker" />
               </div>
