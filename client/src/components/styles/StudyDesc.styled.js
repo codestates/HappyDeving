@@ -14,32 +14,23 @@ import { langImg } from "../../static/images/langImg";
 import { studyApi, deleteStudyApi } from "../../api/study";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
-{
-  /* 스터디 상세 글쓰기 페이지 : 제목 입력 칸 - 5-14
-  // 입력칸들 5-14 
-  //(언어 input, modal(정사각형) :5-9, 
-  시작일 input, modal(정사각형) : 10-14 )
-   - 내용 input은 scroll
-// 글 저장 바 : height - 1row (40px), width는 위의 글이랑 같게*/
-}
-
+import { faAngleDown, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import ShareSocialButton from "../styles/ShareSocial.styled";
+import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 const StyleStudyDesc = styled.div`
-  grid-row: 1/10;
-  grid-column: 2/14;
+  margin-top: 200px;
+  grid-column: 4/12;
   padding: 3% 5% 3% 5%;
 
   .mapview {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 2px solid #dfc1ff;
     margin-bottom: 20px;
   }
-
-  @media screen and (max-width: 768px) {
-    grid-column: 1/15;
-  }
-
-  @media screen and (min-width: 1024px) {
+  @media screen and (max-width: 1024px) {
     grid-column: 3/13;
+  }
+  @media screen and (max-width: 768px) {
+    grid-column: 2/14;
   }
 `;
 
@@ -48,7 +39,7 @@ const TitleBar = styled.div`
   height: 50px;
   display: flex;
   border-radius: ${(props) => props.theme.borderRadius};
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid #dfc1ff;
   margin-bottom: 30px;
 
   .title {
@@ -75,19 +66,6 @@ const TitleBar = styled.div`
   }
 `;
 
-// const ContentDiv = styled.div`
-//   grid-column: 1/14;
-//   width: 100%;
-// `
-
-// const CommentDiv = styled(Content)`
-//   /* background: pink; */
-//   grid-column: 1/14;
-//   display: flex;
-//   height: 100px;
-//   width: 100%;
-// `
-
 const CommentsDiv = styled.div`
   /* background: pink; */
 `;
@@ -111,6 +89,37 @@ const Wrap = styled.div`
   }
 `;
 
+const ProfileWrap = styled.div`
+  display: flex;
+  padding: 10px;
+  min-height: 100px;
+  width: 100%;
+
+  h1 {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+`;
+const ProfileImage = styled.div`
+  border-radius: 100px;
+  width: 100px;
+  height: 80px;
+  border: 3px solid #c593fe;
+  margin-right: 10px;
+
+  img {
+    border-radius: 100px;
+    width: 100%;
+    height: 100%;
+  }
+`;
+const ContentWrap = styled.div`
+  display: flex;
+  min-height: 0px;
+  height: auto;
+  width: 100%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`;
+
 const Icon = styled.div`
   align-items: center;
   margin-right: 20px;
@@ -118,31 +127,58 @@ const Icon = styled.div`
 
 const Text = styled.div`
   width: 120px;
-  flex: 1;
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 `;
+const Content = styled.div`
+  width: 100%;
+`;
+const Profile = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+`;
+const Bio = styled.div`
+  background-color: rgba(233, 193, 255, 30%);
+  margin: 5px 0px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
 
+  p {
+    font-size: 14px;
+  }
+`;
 const Host = styled.div`
   float: right;
   height: 30px;
 `;
 
-const Button = styled.div`
-  width: 100px;
-  height: 30px;
-  line-height: 30px;
-  background-color: ${(props) => props.theme.colors.purple};
-  color: white;
+const Button = styled.button`
+  padding: 8px 15px;
+  background: #5e17eb;
   border-radius: 10px;
-  float: right;
-  text-align: center;
-  font-family: "Medium";
-  box-shadow: 5px 1px 1px rgba(0, 0, 0, 0.1);
+  border: 2px solid #dfc1ff;
+  color: white;
+  transition: 5ms;
 
   &:hover {
-    background-color: ${(props) => props.theme.colors.lavender};
+    background-color: #c593fe;
+    border: 2px solid #6733e5;
+  }
+  &:active {
+    position: relative;
+    top: -2px;
   }
 `;
 
+const LinkButtons = styled.div`
+  display: flex;
+  a {
+    color: #6733e5;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+`;
 const { kakao } = window;
 
 const MapView = styled.div`
@@ -151,7 +187,16 @@ const MapView = styled.div`
   margin-bottom: 20px;
   border-radius: 0px;
 `;
-
+const ButtonWrap = styled.div`
+  display: flex;
+  margin: 20px 0px;
+  justify-content: flex-end;
+`;
+const ShareIcon = styled.div`
+  font-size: 20px;
+  cursor: pointer;
+  position: relative;
+`;
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
 
 const StudyDesc = () => {
@@ -159,8 +204,11 @@ const StudyDesc = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const user = localStorage.getItem("user");
-
+  const user = JSON.parse(localStorage.getItem("user"));
+  const [share, setShare] = useState(false);
+  const handleShareButton = () => {
+    setShare(!share);
+  };
   const [location, setLocation] = useState({
     place_name: "광화문",
     latitude: 37.570975,
@@ -218,11 +266,18 @@ const StudyDesc = () => {
     <>
       {data ? (
         <StyleStudyDesc>
+          {/* {console.log(data.user_id)}
+          {console.log(user.id)} */}
           <TitleBar>
             <div className="title">{data.title}</div>
             <div className="alter">
-              {data.username === user?.username ? (
+              {data.user_id === user?.id ? (
                 <>
+                  {" "}
+                  <ShareIcon onClick={handleShareButton}>
+                    {share ? <ShareSocialButton /> : null}
+                    <FontAwesomeIcon icon={faShareNodes} />
+                  </ShareIcon>
                   <div className="update" onClick={() => navigate(`/study/edit/${data.id}`)}>
                     수정
                   </div>
@@ -240,19 +295,16 @@ const StudyDesc = () => {
               ) : null}
             </div>
           </TitleBar>
-
           <Host>
             <Wrap>
               <img className="profile" src={user.image} />
               <Text>{user.username}</Text>
             </Wrap>
           </Host>
-
           <Wrap>
             <Icon>{data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
             <Text>{data.closed ? "모집마감" : "모집중"}</Text>
           </Wrap>
-
           <Wrap>
             <Icon>
               <BsFileEarmarkCodeFill />
@@ -265,34 +317,50 @@ const StudyDesc = () => {
               ))}
             </Text>
           </Wrap>
-
           <Wrap>
             <Icon>
               <BsFillCalendarDateFill />
             </Icon>
             <Text>{data.startDate}</Text>
           </Wrap>
-
           <Wrap>
             <Icon>
               <FaMapMarkerAlt />
             </Icon>
             <Text>{data.location.name}</Text>
           </Wrap>
-
           <div className="mapview">
             <MapView id="map" ref={container} />
           </div>
-
-          <Wrap>
+          <ContentWrap>
             <Icon>
               <BsFillFileEarmarkTextFill />
             </Icon>
-            <Text>{data.content}</Text>
-          </Wrap>
+            <Content>{data.content}</Content>
+          </ContentWrap>{" "}
+          <ProfileWrap>
+            <ProfileImage>
+              <img src={user.image} />
+            </ProfileImage>
 
-          <Button src={data.kakaoLink}>참여하기</Button>
-
+            <Profile>
+              <h1>스터디 장, {user.username}을 소개합니다!</h1>
+              <Bio>{user.bio}</Bio>
+              <LinkButtons>
+                <a href={user.github} target="_blank" rel="noreferrer">
+                  <FontAwesomeIcon icon={faGithubAlt} />
+                  깃허브
+                </a>
+                <a href={user.blog} target="_blank" rel="noreferrer">
+                  <FontAwesomeIcon icon={faBlogger} />
+                  블로그
+                </a>
+              </LinkButtons>
+            </Profile>
+          </ProfileWrap>
+          <ButtonWrap>
+            <Button src={data.kakaoLink}>스터디 참여하기</Button>
+          </ButtonWrap>
           <CommentsDiv>
             <button onClick={() => setShowConfirmModal(!showConfirmModal)}>
               댓글보기

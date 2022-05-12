@@ -5,44 +5,49 @@ import { signup, reset } from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 // import Container from "../components/styles/Container.styled";
-import Content from "../components/styles/Content.styled";
 
 const SignupContainer = styled.div`
   grid-column: 4/ 12;
+  display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  margin: 0 auto;
+  margin: 20% auto;
   font-size: 18px;
   font-weight: 500;
-  margin: 20% auto;
+  @media screen and (max-width: 1024px) {
+    grid-column: 3 / 13;
+    width: 80%;
+    transition: 1s;
+  }
+  @media screen and (max-width: 764px) {
+    grid-column: 2 / 14;
+    transition: 1s;
+  }
 `;
 
-const SignupWrap = styled(Content)`
+const SignupWrap = styled.div`
   display: flex;
   min-width: 400px;
-  width: 100%;
+  width: 600px;
   height: 100%;
   padding: 20px;
-  /* grid-column: 4/12; */
   align-items: center;
   flex-direction: column;
-  background-color: white;
   border-radius: 10px;
   form {
     display: flex;
-    width: 90%;
+    width: 80%;
     flex-direction: column;
   }
   input {
     display: flex;
     background: transparent;
     margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 10px 10px;
+    margin-bottom: 30px;
+    padding: 5px 5px;
     width: 100%;
-    /* background: white; */
     border: none;
     border-bottom: 3px solid #ccc;
   }
@@ -55,12 +60,12 @@ const SignupWrap = styled(Content)`
     border-bottom: 3px solid #6733e5;
   }
 `;
-const Title = styled.div`
+const Title = styled.h1`
   display: flex;
   color: #6733e5;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   font-size: 35px;
   font-weight: 900;
   text-shadow: 1px 1px 1px #c593fe;
@@ -68,6 +73,7 @@ const Title = styled.div`
 const Text = styled.div`
   margin-right: 10px;
   color: #6733e5;
+  opacity: 0.5;
   font-size: 20px;
 `;
 
@@ -76,23 +82,26 @@ const ButtonWrap = styled.div`
   justify-content: center;
   button {
     cursor: pointer;
-    font-size: 25px;
+    padding: 10px 0px;
+    font-size: 22px;
     font-weight: 900;
     border: 3px solid #c593fe;
-    padding: 5px 40px;
     width: 100%;
     color: white;
     background-color: #6733e5;
     border-radius: 10px;
     margin-top: 20px;
+    transition: 5ms;
   }
   button:hover {
     background-color: #c593fe;
     border: 3px solid #6733e5;
+    position: relative;
+    top: -2px;
   }
   button:active {
     position: relative;
-    top: 3px;
+    top: 2px;
   }
 `;
 
