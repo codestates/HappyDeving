@@ -10,6 +10,10 @@ import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 import { setDateModal } from "../../features/studies/studyModalSlice";
+
+import { studyApi } from "../../api/study";
+import { openModal } from "../../features/modal/modalSlice";
+
 import { studyApi, editStudyApi } from "../../api/study";
 import { Navigate, useNavigate } from "react-router-dom";
 
@@ -327,6 +331,7 @@ const EditStudyDesc = () => {
   const dispatch = useDispatch();
   const { dateModal } = useSelector((store) => store.studyModal);
   const { dateData } = useSelector((store) => store.searchData);
+  const { isError, message } = useSelector((state) => state.allStudies);
 
   useEffect(() => {
     setData({ ...data, startDate: dateData });
@@ -364,6 +369,16 @@ const EditStudyDesc = () => {
 
   const handleInputValue = (id, e) => {
     setData({ ...data, [id]: e });
+  };
+
+  const handleUpdateStudy = async (e) => {
+    e.preventDefault();
+    if (isError) {
+      console.log("editStudy.rejected :", message);
+    }
+    dispatch(
+      openModal({ name: "UpdateStudy", childrenProps: { id, ...data } })
+    );
   };
 
   return (

@@ -1,6 +1,7 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { useDispatch } from "react-redux";
-import { reset, editProfile } from "../../../../features/user/userSlice";
+import { editStudy, reset } from "../../../../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
@@ -26,8 +27,9 @@ const ConfirmButton = styled.button`
   }
 `;
 
-const UpdateUser = (props) => {
-  // console.log("updateuser props: ", props);
+const UpdateStudy = (props) => {
+  // console.log("edit study props: ", props); // {id: '2', title: 'asddddfadsf', content: 'would u likedd to join me?', kakaoLink: 'kakao.linddddddk', closed: true}
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -38,10 +40,10 @@ const UpdateUser = (props) => {
         {/* <ConfirmSubtitle>수정 후에는 이전 정보로 되돌릴 수 없습니다.</ConfirmSubtitle> */}
         <ConfirmButton
           onClick={async () => {
-            await dispatch(editProfile(props));
+            await dispatch(editStudy(props));
             dispatch(reset());
             dispatch(closeModal());
-            navigate("/profile");
+            navigate(`/study/${props.id}`);
           }}
         >
           확인
@@ -50,4 +52,4 @@ const UpdateUser = (props) => {
     </>
   );
 };
-export default UpdateUser;
+export default UpdateStudy;
