@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import LoadingIndicator from "../components/LoadingIndicator";
 // import Container from "../components/styles/Container.styled";
-import Content from "../components/styles/Content.styled";
+// import Content from "../components/styles/Content.styled";
 import axios from "axios";
 import { GoogleLoginApi } from "../api/socialAuth";
 import { GoogleLogin } from "react-google-login";
@@ -27,14 +27,15 @@ import github from "../static/images/github.png";
 import naver from "../static/images/naver.png";
 import kakao from "../static/images/kakao.png";
 
-const Background = styled(Content)`
+const Background = styled.div`
   grid-column: 4/ 12;
-  grid-row: 6/12;
+  /* grid-row: 6/12; */
+  /* min-height: 80%; */
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100%;
-  margin: 0 auto;
+  margin: 20% auto;
   font-size: 18px;
   font-weight: 500;
 `;
@@ -178,9 +179,7 @@ function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.user
-  );
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
 
   useEffect(() => {
     // dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
@@ -327,17 +326,19 @@ function Signin() {
               <button type="submit">로그인</button>
             </ButtonWrap>
             <SocialLoginButton>
-              <KakaoButton
-                type="button"
-                onClick={() => socialLoginHandler("kakao")}
-              >
+              <KakaoButton type="button" onClick={() => socialLoginHandler("kakao")}>
                 <img src={kakao} alt="kakao" />
               </KakaoButton>
               <GoogleButton>
                 <GoogleLogin
                   style={{ width: "100px" }}
-                  clientId={GOOGLE_CLIENT_ID}
+                  render={(renderProps) => (
+                    <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                      G
+                    </button>
+                  )}
                   buttonText=""
+                  clientId={GOOGLE_CLIENT_ID}
                   onSuccess={handleGoogleLogin}
                   onFailure={handleGoogleLoginFailure}
                   cookiePolicy={"single_host_origin"}
@@ -346,17 +347,10 @@ function Signin() {
                 </GoogleLogin>
               </GoogleButton>
               <NaverButton>
-                <img
-                  src={naver}
-                  alt="naver"
-                  onClick={() => socialLoginHandler("naver")}
-                />
+                <img src={naver} alt="naver" onClick={() => socialLoginHandler("naver")} />
               </NaverButton>
               <GitButton>
-                <img
-                  src={github}
-                  onClick={() => socialLoginHandler("github")}
-                />
+                <img src={github} onClick={() => socialLoginHandler("github")} />
               </GitButton>
             </SocialLoginButton>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>

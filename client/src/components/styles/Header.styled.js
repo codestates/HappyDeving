@@ -1,10 +1,13 @@
 import styled from "styled-components";
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { IconContext } from "react-icons";
 import { Link, useNavigate } from "react-router-dom";
 import { Search } from "../styles/Search.styled";
 import { IoIosArrowBack } from "react-icons/io";
 import LocationModal from "./Modals/LocationModal";
+import CalenderDate from "../Calendar.js";
+import LanguageModal from "./Modals/LanguageModal";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaSearch } from "react-icons/fa";
 import { getStudiesMapApi } from "../../api/study";
@@ -12,13 +15,14 @@ import { setStudiesData } from "../../features/studies/studiesSlice";
 import { resetData } from "../../features/Search/searchDataSlice";
 import { BsFillCalendarDateFill, BsFileEarmarkCodeFill } from "react-icons/bs";
 import {
-  languageModal,
   locationModal,
   dateModal,
+  languageModal,
   reset,
 } from "../../features/Search/searchModalSlice";
-import CalenderDate from "../Calendar.js";
-import LanguageModal from "./Modals/LanguageModal";
+import HeaderLanguageModal from "./Modals/HeaderLanguageModal";
+import HeaderDateModal from "./Modals/HeaderDateModal";
+import HeaderLocationModal from "./Modals/HeaderLocationModal";
 
 const icons = {
   logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
@@ -30,88 +34,148 @@ const icons = {
     "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
 };
 
-const StyleSearch = styled.div`
-  @media only screen and (max-width: 768px) {
-    display: block;
-    grid-column: 3/14;
-    margin: 0px 10px;
-  }
-`;
-
 const StyledHeader = styled.header`
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
   background-color: white;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   box-shadow: 10px 3px 10px rgba(0, 0, 0, 0.1);
-  grid-row: 1/3;
-  height: 80px;
-  padding: 10px 0px 0px 15px;
   font-family: "Bold";
-  display: flex;
-  height: 100px;
-  justify-content: space-between;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(14, 1fr);
   z-index: 10;
+  height: 100px;
+  width: 100%;
+  line-height: 100px;
 
   @media only screen and (max-width: 768px) {
     grid-column: 2/ 14;
+    height: 100px;
   }
 
-  > .logo {
-    line-height: 100%;
-    align-items: center;
-    margin-bottom: 10px;
-    @media screen and (min-width: 1024px) {
-      width: 200px;
-    }
-    @media screen and (max-width: 768px) {
-      grid-column: 1/2;
-      margin-left: -15px;
-    }
-    width: 20vw;
+  @media screen and (min-width: 768px) {
+    height: ${(props) => (props.header ? "200px" : "100px")};
+  }
+`;
 
-    &:hover {
-      cursor: pointer;
-    }
+const Logo = styled.div`
+  position: absolute;
+  top: 20px;
+  grid-column: 2/ 4;
+  display: flex;
+  align-items: center;
+`;
+
+const Links = styled.div`
+  grid-column: 13/14;
+  position: absolute;
+  top: 30px;
+
+  .profile {
+    /* position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+`;
+
+const SearchDiv = styled.div`
+  grid-column: ${(props) => (props.header ? "4/13" : "5/12")};
+  padding-top: ${(props) => (props.header ? "120px" : "25px")};
+`;
+const StyleSearch = styled.div`
+  position: relative;
+  grid-row: 3/4;
+  grid-column: 5/13;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
   }
 
-  > .links {
-    color: #5e17eb;
+  @media only screen and (min-width: 768px) {
+    position: relative;
+  }
+`;
+
+export const StyledSearch = styled.div`
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-family: "Medium";
+  color: gray;
+  border-radius: 30px;
+  display: flex;
+  height: 50px;
+  line-height: 50px;
+  .searchbar {
+    flex: 15;
     text-align: center;
-    font-size: 25px;
-    display: flex;
-    align-items: center;
+  }
+  &:hover {
+    color: rgb(94, 23, 235);
+    cursor: pointer;
+  }
+`;
 
-    .profile {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-    }
+const SearchIcon = styled.div`
+  position: relative;
+  flex: 1;
 
-    .link {
-      @media screen and (min-width: 1024px) {
-        font-size: 22px;
-      }
+  .icon {
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 20px;
+    width: 20px;
+    line-height: 20px;
+  }
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  margin: 4px 5px 0px 0px;
+  background-color: ${(props) => props.theme.colors.purple};
+  &:hover {
+    background-color: ${(props) => props.theme.colors.lavender};
+    opacity: 0.7;
+    cursor: pointer;
+    top: 2px;
+  }
+  &:active {
+    box-shadow: ${(props) => props.theme.contents.boxShadow};
+    top: 2px;
+  }
+`;
 
-      @media screen and (max-width: 768px) {
-        display: none;
-      }
-      margin-right: 20px;
-      font-size: 16px;
-      &:hover {
-        cursor: pointer;
-      }
-    }
+const Backdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const DesktopModal = styled.div`
+  height: 50%;
+  width: 50%;
+  transform: translateY(90px);
+  border-radius: 10px;
+  background-color: white;
+  overflow: scroll;
+
+  @media screen and (min-width: 1024px) {
+    width: 500px;
   }
 `;
 
 const Modal = styled.div`
   @media screen and (max-width: 768px) {
-    display: ${(props) => (props.click ? "block" : "none")};
+    display: ${(props) => (props.modal ? "block" : "none")};
   }
   display: none;
   width: 100%;
@@ -156,6 +220,21 @@ const Language = styled.div`
   }
 `;
 
+const LocationWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+const DateWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  padding-top: 10%;
+  padding-left: 10%;
+`;
+const LanguageWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
 const Info = styled.div`
   position: absolute;
   width: 60%;
@@ -196,9 +275,10 @@ const Icon = styled.div`
   cursor: pointer;
 `;
 
-const Header = ({ drop }) => {
+const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { user } = useSelector((state) => state.user);
   const { location, date, language } = useSelector((store) => store.search);
   const { locationData, dateData, languageData } = useSelector(
@@ -206,40 +286,88 @@ const Header = ({ drop }) => {
   );
   const { calenderDateValue } = useSelector((store) => store.calender);
 
-  const [click, setClick] = useState(false);
-  console.log(drop);
+  const [modal, setModal] = useState(false);
+  const [header, setHeader] = useState(false);
 
   const goToHome = () => {
     navigate("/");
   };
 
-  console.log(drop);
   const guType = locationData.split(" ")[0];
   const dongType = locationData.split(" ")[1];
 
   return (
     <>
-      <StyledHeader drop={drop}>
-        <img onClick={goToHome} className="logo" src={icons.logo} />
-        <StyleSearch drop={drop} onClick={() => setClick(true)}>
-          <Search className="search" />
-        </StyleSearch>
-        <div className="links">
+      {header ? (
+        <Backdrop>
+          <DesktopModal>
+            {location ? (
+              <LocationWrapper>
+                <HeaderLocationModal />
+              </LocationWrapper>
+            ) : null}
+            {date ? (
+              <DateWrapper>
+                <CalenderDate />
+              </DateWrapper>
+            ) : null}
+            {language ? (
+              <LanguageWrapper onClick={() => setHeader(false)}>
+                <HeaderLanguageModal />
+              </LanguageWrapper>
+            ) : null}
+          </DesktopModal>
+        </Backdrop>
+      ) : null}
+      <StyledHeader header={header}>
+        <Logo onClick={goToHome}>
+          <img src={icons.logo} />
+        </Logo>
+        <SearchDiv header={header}>
+          {header ? (
+            // 헤더 모달창은 Search 안에 있다
+            <Search />
+          ) : (
+            <StyledSearch
+              onClick={() => {
+                setHeader(true);
+                setModal(true);
+                dispatch(locationModal());
+              }}
+            >
+              <div className="searchbar" onClick={() => setHeader(true)}>
+                검색 시작하기
+              </div>
+              <SearchIcon>
+                <IconContext.Provider value={{ className: "icon" }}>
+                  <FaSearch />
+                </IconContext.Provider>
+              </SearchIcon>
+            </StyledSearch>
+          )}
+        </SearchDiv>
+        <Links>
           {user ? (
             <Link to="/profile">
               <img src={user.image} className="profile" />
             </Link>
           ) : (
             <Link to="/signin">
-              <span className="link">로그인</span>
+              <span className="signin">로그인</span>
             </Link>
           )}
-        </div>
+        </Links>
       </StyledHeader>
-      <Modal click={click}>
+
+      {/* 모바일 모달창 */}
+      <Modal modal={modal}>
         {location ? (
           <Location>
-            <Icon onClick={() => setClick(false)}>
+            <Icon
+              onClick={() => {
+                setHeader(false);
+              }}
+            >
               <IoIosArrowBack />
             </Icon>
             <LocationModal />
@@ -248,7 +376,11 @@ const Header = ({ drop }) => {
 
         {date ? (
           <Date>
-            <Icon onClick={() => dispatch(locationModal())}>
+            <Icon
+              onClick={() => {
+                dispatch(languageModal());
+              }}
+            >
               <IoIosArrowBack />
             </Icon>
             <div className="date">
@@ -304,7 +436,8 @@ const Header = ({ drop }) => {
             </InfoFinal>
             <Info
               onClick={() => {
-                setClick(false);
+                setModal(false);
+                setHeader(false);
                 getStudiesMapApi({
                   guType,
                   dongType,

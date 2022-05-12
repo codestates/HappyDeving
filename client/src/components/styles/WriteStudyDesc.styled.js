@@ -3,11 +3,11 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import { IoMdArrowDropdown, IoIosSearch, IoMdNavigate } from "react-icons/io";
+import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { writeStudyApi } from "../../api/study";
 import { useNavigate } from "react-router-dom";
 
@@ -123,6 +123,7 @@ const Wrapper = styled.div`
   }
   .result {
     margin: 0 auto;
+    background-color: white;
   }
 
   .icon {
@@ -279,9 +280,9 @@ const StudyDesc = () => {
 
   const user = JSON.parse(localStorage.getItem("user"));
 
-  const dispatch = useDispatch();
-  const { dateModal } = useSelector((store) => store.studyModal);
-  const { calenderDateValue } = useSelector((store) => store.calender);
+  // const dispatch = useDispatch();
+  // const { dateModal } = useSelector((store) => store.studyModal);
+  // const { calenderDateValue } = useSelector((store) => store.calender);
   const { dateData } = useSelector((store) => store.searchData);
 
   const [data, setData] = useState({

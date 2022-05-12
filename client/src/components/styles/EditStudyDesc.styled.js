@@ -3,19 +3,17 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import LanguageModal from "./Modals/LanguageModal";
+// import LanguageModal from "./Modals/LanguageModal";
 import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
-import { setDateModal } from "../../features/studies/studyModalSlice";
-
-import { studyApi } from "../../api/study";
+// import { setDateModal } from "../../features/studies/studyModalSlice";
 import { openModal } from "../../features/modal/modalSlice";
 
 import { studyApi, editStudyApi } from "../../api/study";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   margin-top: 120px;
@@ -202,7 +200,6 @@ const MapView = styled.div`
 const EditStudyDesc = () => {
   const container = useRef(null);
   const locationInput = useRef(null);
-  const navigate = useNavigate();
   const [location, setLocation] = useState({
     name: "광화문",
     latitude: 37.570975,
@@ -329,7 +326,8 @@ const EditStudyDesc = () => {
   });
 
   const dispatch = useDispatch();
-  const { dateModal } = useSelector((store) => store.studyModal);
+  const navigate = useNavigate();
+  // const { dateModal } = useSelector((store) => store.studyModal);
   const { dateData } = useSelector((store) => store.searchData);
   const { isError, message } = useSelector((state) => state.allStudies);
 
@@ -464,7 +462,7 @@ const EditStudyDesc = () => {
                   ) : null}
                   <IoIosSearch
                     className="icon"
-                    onClick={(e) => {
+                    onClick={(locationInput) => {
                       console.log(locationInput.target.value);
                       setOpen({ ...open, location: true });
                     }}
@@ -493,11 +491,13 @@ const EditStudyDesc = () => {
                 ></input>
                 <label htmlFor="closed">모집마감</label>
               </div>
+
+              {console.log(data)}
               <Button
                 onClick={() => {
                   editStudyApi(id, data).then((res) => {
                     console.log(res);
-                    alert("수정되었습니다");
+                    handleUpdateStudy();
                     navigate(`/study/${data.id}`);
                   });
                 }}

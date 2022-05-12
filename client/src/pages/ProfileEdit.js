@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  signout,
-  reset,
-  editProfile,
-  deleteUser,
-} from "../features/user/userSlice.js";
+import { signout, reset } from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
+import { openModal } from "../features/modal/modalSlice.js";
 import EditSideProfile from "../components/styles/EditSideProfile.styled";
 
 const StyledEditProfile = styled(Content)`
   grid-column: 4 / 12;
-  min-height: 80%;
+  min-height: 80vh;
   text-align: left;
   min-width: 524px;
 
@@ -121,6 +117,8 @@ const ButtonWrap = styled.div`
   display: flex;
   font-size: 16px;
   margin-top: 30px;
+  font-size: 18px;
+  margin-top: 30px;
   p {
     border-bottom: 1px solid gray;
     margin-right: 10px;
@@ -139,7 +137,6 @@ const MyPage = () => {
   const { user, isLoading, isError, message } = useSelector(
     (state) => state.user
   );
-  console.log("userSlice user: ", user); // 들어오다가 undefined 바뀜
 
   const [userData, setUserData] = useState({
     username: "",
@@ -157,9 +154,12 @@ const MyPage = () => {
     if (isError) {
       console.log("editProfile.rejected :", message);
     }
-    dispatch(editProfile({ id: user.id, userData: userData }));
-    dispatch(reset());
-    navigate("/profile");
+    dispatch(
+      openModal({
+        name: "UpdateUser",
+        childrenProps: { id: user.id, userData: userData },
+      })
+    );
   };
   // 임시
   const handleSignout = (e) => {
@@ -172,10 +172,11 @@ const MyPage = () => {
   const handlePermanentDeletion = (e) => {
     e.preventDefault();
     dispatch(
-      deleteUser({ id: user.id, deleteData: { loginMethod: user.loginMethod } })
+      openModal({
+        name: "DeleteUser",
+        childrenProps: { id: user.id, loginMethod: user.loginMethod },
+      })
     );
-    dispatch(reset());
-    navigate("/");
   };
 
   if (isLoading) {
@@ -245,7 +246,7 @@ const MyPage = () => {
 
             <ButtonWrap>
               <Link to="/profile">
-                <p onClick={handleEditing}>수정 완료</p>
+                <p onClick={handleEditing}>수정하기</p>
               </Link>
               <Link to="/">
                 <p onClick={handleSignout}>로그아웃</p>

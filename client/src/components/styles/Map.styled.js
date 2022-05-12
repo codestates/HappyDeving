@@ -1,13 +1,9 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import {
-  likeStudy,
-  unLikeStudy,
-  getLikedStudies,
-} from "../../features/studies/allStudiesSlice";
+import { getLikedStudies } from "../../features/studies/allStudiesSlice";
 
 import { unLikeStudyApi, likeStudyApi } from "../../api/study";
 
@@ -21,7 +17,7 @@ const Title = styled.div`
 
 const MapView = styled.div`
   grid-column: 3/13;
-  margin-top: 40px;
+  margin-top: 100px;
   height: 500px;
 
   @media screen and (max-width: 768px) {
