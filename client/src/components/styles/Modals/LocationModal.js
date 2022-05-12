@@ -1,8 +1,8 @@
+import React from "react";
 import styled from "styled-components";
-import Content from "../Content.styled";
 import { useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { dateModal } from "../../../features/Search/searchModalSlice";
 import { setLocationData } from "../../../features/Search/searchDataSlice";
 
@@ -92,18 +92,16 @@ const LocationModal = () => {
     } // true
   };
 
-  const { location } = useSelector((store) => store.search);
-  const { locationData } = useSelector((store) => store.searchData);
+  // const { location } = useSelector((store) => store.search);
+  // const { locationData } = useSelector((store) => store.searchData);
 
-  const guType = locationData.split(" ")[0];
-  const dongType = locationData.split(" ")[1];
+  // const guType = locationData.split(" ")[0];
+  // const dongType = locationData.split(" ")[1];
 
   const locationListHandler = (locationList) => {
     const list = locationList.map(
       (location) =>
-        location["address_name"].split(" ")[1] +
-        " " +
-        location["address_name"].split(" ")[2]
+        location["address_name"].split(" ")[1] + " " + location["address_name"].split(" ")[2]
     );
     const filteredList = Array.from(new Set(list));
     return filteredList.map((location, idx) => (
@@ -125,10 +123,7 @@ const LocationModal = () => {
 
   return (
     <Location>
-      <input
-        onKeyDown={(e) => handleInputValue(e)}
-        placeholder="ex. 송파구 오륜동"
-      ></input>
+      <input onKeyDown={(e) => handleInputValue(e)} placeholder="ex. 송파구 오륜동"></input>
       <div className="locationList">{locationListHandler(locationList)}</div>
     </Location>
   );

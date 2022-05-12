@@ -3,20 +3,15 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import LanguageModal from "./Modals/LanguageModal";
+// import LanguageModal from "./Modals/LanguageModal";
 import DateModal from "./Modals/DateModal";
 import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
-import { setDateModal } from "../../features/studies/studyModalSlice";
-
-import { studyApi } from "../../api/study";
+// import { setDateModal } from "../../features/studies/studyModalSlice";
 import { openModal } from "../../features/modal/modalSlice";
-
-import { studyApi, editStudyApi } from "../../api/study";
-import { Navigate, useNavigate } from "react-router-dom";
-
+import { studyApi } from "../../api/study";
 
 const WriteStudyDesc = styled.div`
   grid-row: 2/12;
@@ -56,8 +51,7 @@ const Desc = styled(Content)`
       }
     }
     label {
-      color: ${(props) =>
-        props.checked ? props.theme.colors.purple : "black"};
+      color: ${(props) => (props.checked ? props.theme.colors.purple : "black")};
     }
   }
 `;
@@ -126,36 +120,35 @@ const Textarea = styled.textarea`
   }
 `;
 
-const Title = styled(Content)`
-  grid-column: 2/14;
-  height: 80px;
-  padding: 20px 3%;
-  font-family: "Bold";
-  display: flex;
-  border-radius: ${(props) => props.theme.borderRadius};
+// const Title = styled(Content)`
+//   grid-column: 2/14;
+//   height: 80px;
+//   padding: 20px 3%;
+//   font-family: "Bold";
+//   display: flex;
+//   border-radius: ${(props) => props.theme.borderRadius};
 
-  .titleText {
-    flex: 1;
-    font-size: 20px;
-    text-align: center;
-    line-height: 40px;
-    margin-left: -3%;
-    margin-right: 6%;
-  }
+//   .titleText {
+//     flex: 1;
+//     font-size: 20px;
+//     text-align: center;
+//     line-height: 40px;
+//     margin-left: -3%;
+//     margin-right: 6%;
+//   }
 
-  .titleInput {
-    flex: 3;
-    background-color: beige;
-    border-radius: inherit;
-    box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    height: 40px;
-    &:focus {
-      outline: none;
-    }
-  }
-`;
-
+//   .titleInput {
+//     flex: 3;
+//     background-color: beige;
+//     border-radius: inherit;
+//     box-shadow: inset -3px -2px 1px 1px rgba(0, 0, 0, 0.1);
+//     text-align: center;
+//     height: 40px;
+//     &:focus {
+//       outline: none;
+//     }
+//   }
+// `;
 
 const DescLanguageModal = styled.div`
   width: 90%;
@@ -204,7 +197,6 @@ const MapView = styled.div`
 const EditStudyDesc = () => {
   const container = useRef(null);
   const locationInput = useRef(null);
-  const navigate = useNavigate();
   const [location, setLocation] = useState({
     name: "광화문",
     latitude: 37.570975,
@@ -331,7 +323,7 @@ const EditStudyDesc = () => {
   });
 
   const dispatch = useDispatch();
-  const { dateModal } = useSelector((store) => store.studyModal);
+  // const { dateModal } = useSelector((store) => store.studyModal);
   const { dateData } = useSelector((store) => store.searchData);
   const { isError, message } = useSelector((state) => state.allStudies);
 
@@ -350,9 +342,7 @@ const EditStudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name
-            .split(" ")
-            .filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -385,7 +375,6 @@ const EditStudyDesc = () => {
     <>
       {data ? (
         <>
-
           <WriteStudyDesc>
             <Desc>
               <Wrapper>
@@ -399,10 +388,7 @@ const EditStudyDesc = () => {
               <Wrapper>
                 <Text>언어</Text>
                 <div className="dropdown">
-                  <div className="result">
-                    {data.language?.map((el) => el.name + ",")}
-
-                  </div>
+                  <div className="result">{data.language?.map((el) => el.name + ",")}</div>
                   <IoMdArrowDropdown
                     className="icon"
                     onClick={() => setOpen({ ...open, language: true })}
@@ -433,7 +419,6 @@ const EditStudyDesc = () => {
                         </div>
                       ))}
                     </div>
-
                   </DescLanguageModal>
                 ) : null}
               </Wrapper>
@@ -446,9 +431,7 @@ const EditStudyDesc = () => {
               <Wrapper>
                 <Text>링크</Text>
                 <Input
-                  onChange={(e) =>
-                    handleInputValue("kakaoLink", e.target.value)
-                  }
+                  onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
                   defaultValue={data.kakaoLink}
                 ></Input>
               </Wrapper>
@@ -461,13 +444,11 @@ const EditStudyDesc = () => {
                     ref={locationInput}
                   ></Input>
                   {open.location ? (
-                    <DescLocationModal>
-                      {locationListHandler(locationList)}
-                    </DescLocationModal>
+                    <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
                   ) : null}
                   <IoIosSearch
                     className="icon"
-                    onClick={(e) => {
+                    onClick={(locationInput) => {
                       console.log(locationInput.target.value);
                       setOpen({ ...open, location: true });
                     }}
@@ -497,20 +478,9 @@ const EditStudyDesc = () => {
                 <label htmlFor="closed">모집마감</label>
               </div>
               {console.log(data)}
-              <Button
-                onClick={() => {
-                  editStudyApi(id, data).then((res) => {
-                    console.log(res);
-                    alert("수정되었습니다");
-                    navigate(`/study/${data.id}`);
-                  });
-                }}
-              >
-                저장
-              </Button>
+              <Button onClick={handleUpdateStudy}>저장</Button>
             </Desc>
           </WriteStudyDesc>
-
         </>
       ) : null}
     </>

@@ -1,11 +1,11 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 import {
-  likeStudy,
-  unLikeStudy,
+  // likeStudy,
+  // unLikeStudy,
   getLikedStudies,
 } from "../../features/studies/allStudiesSlice";
 
@@ -120,9 +120,7 @@ const Map = () => {
         } else {
           icon.className = "fa-solid fa-heart fa-2x";
 
-          likeStudyApi(user.id, { study_id: el.id }).then((res) =>
-            console.log(res)
-          );
+          likeStudyApi(user.id, { study_id: el.id }).then((res) => console.log(res));
         }
       }
 

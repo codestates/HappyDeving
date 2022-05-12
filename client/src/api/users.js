@@ -9,8 +9,6 @@ axios.defaults.headers = {
   ...authHeader(),
 };
 
-console.log("axios.defaults.headers: ", axios.defaults.headers);
-
 export const signupApi = (data) => axios.post("/users/signup", data);
 
 export const verifyEmailApi = (id, accessToken) => axios.get(`/users/${id}/verify/${accessToken}`);
@@ -23,6 +21,6 @@ export const getProfileApi = (id) => axios.get(`/mypage/${id}`);
 
 export const editProfileApi = (id, data) => axios.patch(`/mypage/${id}`, data);
 
-export const deleteUserApi = (id, data) => axios.delete(`/users/withdrawal/${id}`, { data: data });
+export const deleteUserApi = (data) => axios.delete(`/users/withdrawal/${data.id}`, { data: data });
 
 export const editProfileImageApi = (id, data) => axios.post(`/mypage/image/${id}`, data);

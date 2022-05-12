@@ -5,7 +5,6 @@ import { reset, getProfile } from "../features/user/userSlice";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import Content from "../components/styles/Content.styled";
-// import { signout } from "../features/user/userSlice";
 
 import SideProfile from "../components/styles/SideProfile.styled";
 

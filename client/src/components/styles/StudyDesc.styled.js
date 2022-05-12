@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
-import Content from "./Content.styled";
 import Comments from "../Comments";
 import "./Map.styled.css";
 import {
@@ -146,7 +145,7 @@ const Button = styled.div`
 
 const { kakao } = window;
 
-const MapView = styled(Content)`
+const MapView = styled.div`
   grid-column: 2/14;
   height: 200px;
   margin-bottom: 20px;
@@ -224,10 +223,7 @@ const StudyDesc = () => {
             <div className="alter">
               {data.username === user?.username ? (
                 <>
-                  <div
-                    className="update"
-                    onClick={() => navigate(`/study/edit/${data.id}`)}
-                  >
+                  <div className="update" onClick={() => navigate(`/study/edit/${data.id}`)}>
                     수정
                   </div>
                   <div
@@ -253,9 +249,7 @@ const StudyDesc = () => {
           </Host>
 
           <Wrap>
-            <Icon>
-              {data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
-            </Icon>
+            <Icon>{data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
             <Text>{data.closed ? "모집마감" : "모집중"}</Text>
           </Wrap>
 
