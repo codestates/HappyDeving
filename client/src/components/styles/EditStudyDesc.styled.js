@@ -11,11 +11,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 // import { setDateModal } from "../../features/studies/studyModalSlice";
 import { openModal } from "../../features/modal/modalSlice";
-import { studyApi } from "../../api/study";
+
+import { studyApi, editStudyApi } from "../../api/study";
+import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
+
   grid-column: 4/12;
   margin-top: 200px;
+
 
   @media screen and (max-width: 1024px) {
     grid-column: 2/14;
@@ -49,9 +53,13 @@ const Desc = styled(Content)`
       outline: none;
       border: 1px solid #5e17eb;
     }
+
+
+
     &:hover {
       cursor: pointer;
       border: 1px solid #5e17eb;
+
     }
   }
 `;
@@ -226,7 +234,9 @@ const Textarea = styled.textarea`
   }
 `;
 
+
 const { kakao } = window;
+
 
 const MapView = styled(Content)`
   border-radius: 0px;
@@ -382,6 +392,7 @@ const EditStudyDesc = () => {
   });
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   // const { dateModal } = useSelector((store) => store.studyModal);
   const { dateData } = useSelector((store) => store.searchData);
   const { isError, message } = useSelector((state) => state.allStudies);
@@ -401,7 +412,9 @@ const EditStudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -427,7 +440,9 @@ const EditStudyDesc = () => {
     if (isError) {
       console.log("editStudy.rejected :", message);
     }
-    dispatch(openModal({ name: "UpdateStudy", childrenProps: { id, ...data } }));
+    dispatch(
+      openModal({ name: "UpdateStudy", childrenProps: { id, ...data } })
+    );
   };
 
   return (
@@ -441,7 +456,9 @@ const EditStudyDesc = () => {
                 <input
                   defaultValue={data.title}
                   onChange={(e) => handleInputValue("title", e.target.value)}
+
                 ></input>
+
               </Wrapper>
               <RowWrap>
                 <HalfWrapper>
@@ -495,14 +512,17 @@ const EditStudyDesc = () => {
               </RowWrap>
               <Wrapper>
                 <Text>링크</Text>
+
                 <input
                   placeholder="ex. 카카오톡 오픈채팅 링크를 입력해주세요"
                   onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
+
                   defaultValue={data.kakaoLink}
                 ></input>
               </Wrapper>
               <Wrapper>
                 <Text>장소</Text>
+
 
                 <input
                   className="locaitionInput"
@@ -514,6 +534,7 @@ const EditStudyDesc = () => {
                   <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
                 ) : null}
                 <IconSerch>
+
                   <IoIosSearch
                     className="icon"
                     onClick={(locationInput) => {
@@ -532,6 +553,7 @@ const EditStudyDesc = () => {
                   defaultValue={data.content}
                 ></Textarea>
               </Wrapper>
+
               <Closed>
                 <Checkbox>
                   <input
@@ -547,6 +569,7 @@ const EditStudyDesc = () => {
                 </Checkbox>
                 <Button onClick={handleUpdateStudy}>수정완료</Button>
               </Closed>
+
             </Desc>
           </WriteStudyDesc>
         </>
