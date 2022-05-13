@@ -23,7 +23,6 @@ import { useDispatch, useSelector } from "react-redux";
 const StyleStudyDesc = styled.div`
   margin-top: 200px;
   grid-column: 4/12;
-
   padding: 3% 5% 3% 5%;
 
   .mapview {
@@ -74,6 +73,9 @@ const CommentsDiv = styled.div`
   /* background: pink; */
 `;
 
+//(언어 input, modal(정사각형) :5-9,
+// 시작일 input, modal(정사각형) : 10-14 )
+// - 내용 input은 scroll
 
 const Wrap = styled.div`
   display: flex;
@@ -208,12 +210,10 @@ const StudyDesc = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   // const user = JSON.parse(localStorage.getItem("user"));
   const { user } = useSelector((state) => state.user);
-
   const [share, setShare] = useState(false);
   const handleShareButton = () => {
     setShare(!share);
   };
-
   const [location, setLocation] = useState({
     place_name: "광화문",
     latitude: 37.570975,
@@ -282,6 +282,8 @@ const StudyDesc = () => {
     <>
       {data ? (
         <StyleStudyDesc>
+          {/* {console.log(data.user_id)}
+          {console.log(user?.id)} */}
           <TitleBar>
             <div className="title">{data.title}</div>
             <div className="alter">
@@ -292,7 +294,10 @@ const StudyDesc = () => {
                     {share ? <ShareSocialButton /> : null}
                     <FontAwesomeIcon icon={faShareNodes} />
                   </ShareIcon>
-                  <div className="update" onClick={() => navigate(`/study/edit/${data.id}`)}>
+                  <div
+                    className="update"
+                    onClick={() => navigate(`/study/edit/${data.id}`)}
+                  >
                     수정
                   </div>
                   <div
@@ -317,7 +322,9 @@ const StudyDesc = () => {
             </Wrap>
           </Host>
           <Wrap>
-            <Icon>{data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
+            <Icon>
+              {data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
+            </Icon>
             <Text>{data.closed ? "모집마감" : "모집중"}</Text>
           </Wrap>
           <Wrap>
