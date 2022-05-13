@@ -1,4 +1,12 @@
-const { User, Study, Study_comment, Language, Study_language, Location } = require("../../models");
+const {
+  User,
+  Study,
+  Study_comment,
+  Language,
+  User_likes_study,
+  Study_language,
+  Location,
+} = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 const { Op } = require("sequelize");
 const user = require("../../models/user");
@@ -22,6 +30,7 @@ module.exports = {
           },
         ],
       });
+      console.log(study.user);
 
       // study 없으면
       if (!study) {
@@ -49,7 +58,10 @@ module.exports = {
       });
 
       study_comment.forEach(
-        (el) => ((el.dataValues.username = el.user.username), (el.dataValues.user = undefined))
+        (el) => (
+          (el.dataValues.username = el.user.username),
+          (el.dataValues.user = undefined)
+        )
       );
 
       res.status(200).json({
@@ -57,6 +69,10 @@ module.exports = {
           study: {
             id,
             username: study.user.username,
+            email: study.user.email,
+            github: study.user.github,
+            blog: study.user.blog,
+            image: study.user.image,
             user_id,
             title,
             content,
@@ -327,6 +343,9 @@ module.exports = {
         where: { study_id: id },
       });
 
+      await User_likes_study.destroy({
+        where: { study_id: id },
+      });
       const study = await Study.destroy({ where: { id } });
 
       res.status(200).json(study);
