@@ -4,10 +4,10 @@ import { useInView } from "react-intersection-observer";
 import styled from "styled-components";
 
 const SliderDefault = styled.div`
-  grid-column: 3 / 13;
+  font-family: "Binggrae";
+  grid-column: 4 / 12;
   display: flex;
   align-items: center;
-  margin: 20px;
   opacity: 0;
   transform: scale(85%);
   transition: 2s;
@@ -25,6 +25,7 @@ const SliderDefault = styled.div`
   }
 `;
 const SliderWithZoom = styled.div`
+  font-family: "Binggrae";
   grid-column: 3 / 13;
   display: flex;
   align-items: center;
@@ -62,21 +63,28 @@ const SliderContent = styled.div`
   padding: 20px;
   text-align: center;
   h1 {
-    text-align: center;
-    font-size: 3rem;
-    @media screen and (min-width: 768px) and (max-width: 1023px) {
-      font-size: 2rem;
-    }
-    @media screen and (max-width: 767px) {
-      font-size: 1.5rem;
-    }
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 2rem;
   }
   p {
-    font-size: 2rem;
-    @media screen and (min-width: 768px) and (max-width: 1023px) {
+    font-size: 1.5rem;
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+    h1 {
+      white-space: nowrap;
       font-size: 1.5rem;
     }
-    @media screen and (max-width: 767px) {
+    p {
+      font-size: 1rem;
+    }
+  }
+  @media screen and (max-width: 767px) {
+    h1 {
+      font-size: 1.5rem;
+    }
+    p {
       font-size: 1rem;
     }
   }

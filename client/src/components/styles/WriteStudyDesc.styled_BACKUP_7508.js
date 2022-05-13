@@ -3,30 +3,25 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-// import LanguageModal from "./Modals/LanguageModal";
-import DateModal from "./Modals/DateModal";
-import LocationModal from "./Modals/LocationModal";
+import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
+// import DateModal from "./Modals/DateModal";
+// import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
-import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
-// import { setDateModal } from "../../features/studies/studyModalSlice";
 import { openModal } from "../../features/modal/modalSlice";
-
-import { studyApi, editStudyApi } from "../../api/study";
-import { useNavigate } from "react-router-dom";
+// import { writeStudyApi } from "../../api/study";
+// import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
-
   grid-column: 4/12;
   margin-top: 200px;
 
-
   @media screen and (max-width: 1024px) {
-    grid-column: 2/14;
+    grid-column: 3/13;
     transform: 1s;
   }
   @media screen and (max-width: 768px) {
-    grid-column: 1/15;
+    grid-column: 2/14;
     transform: 1s;
   }
 `;
@@ -53,13 +48,9 @@ const Desc = styled(Content)`
       outline: none;
       border: 1px solid #5e17eb;
     }
-
-
-
     &:hover {
       cursor: pointer;
       border: 1px solid #5e17eb;
-
     }
   }
 `;
@@ -120,6 +111,31 @@ const DescLocationModal = styled.div`
   }
 `;
 
+const HalfInput = styled.div`
+  display: flex;
+  position: relative;
+  background-color: white;
+  width: 100%;
+  border: 1px solid gray;
+  border-radius: 5px;
+  height: 40px;
+  font-size: 16px;
+  padding: 5px 10px;
+
+  &:focus {
+    border: 1px solid #5e17eb;
+  }
+  &:hover {
+    cursor: pointer;
+    border: 1px solid #5e17eb;
+  }
+
+  @media screen and (max-width: 768px) {
+    font-size: 16px;
+    width: 100%;
+  }
+`;
+
 const IconDrop = styled.div`
   position: absolute;
   border-left: 1px solid gray;
@@ -171,30 +187,6 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const HalfInput = styled.div`
-  display: flex;
-  position: relative;
-  background-color: white;
-  width: 100%;
-  border: 1px solid gray;
-  border-radius: 5px;
-  height: 40px;
-  font-size: 16px;
-  padding: 5px 10px;
-
-  &:focus {
-    border: 1px solid #5e17eb;
-  }
-  &:hover {
-    cursor: pointer;
-    border: 1px solid #5e17eb;
-  }
-
-  @media screen and (max-width: 768px) {
-    font-size: 16px;
-    width: 100%;
-  }
-`;
 const Text = styled.div`
   font-size: 18px;
   margin: 10px 0px;
@@ -213,7 +205,7 @@ const Button = styled.button`
 
   &:hover {
     background-color: #c593fe;
-    border: 3px solid #6733e5;
+    border: 1px solid #6733e5;
   }
   &:active {
     position: relative;
@@ -234,9 +226,7 @@ const Textarea = styled.textarea`
   }
 `;
 
-
 const { kakao } = window;
-
 
 const MapView = styled(Content)`
   border-radius: 0px;
@@ -262,17 +252,17 @@ const Checkbox = styled.div`
   align-items: center;
 `;
 
-const EditStudyDesc = () => {
-  const container = useRef(null);
-  const locationInput = useRef(null);
-  const { calenderDateValue } = useSelector((store) => store.calender);
-  const [location, setLocation] = useState({
-    name: "광화문",
-    latitude: 37.570975,
-    longitude: 126.977759,
-  });
+//바뀐 location으로 marker 만들기용으오로 데이터 가공
 
-  console.log(location);
+const StudyDesc = () => {
+  // const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const container = useRef(null);
+  const [location, setLocation] = useState({
+    place_name: "광화문",
+    y: 37.570975,
+    x: 126.977759,
+  });
   const [locationList, setLocationList] = useState([]);
   var ps = new kakao.maps.services.Places();
 
@@ -301,7 +291,9 @@ const EditStudyDesc = () => {
   }
 
   const handleLocationValue = (e) => {
-    if (e.key === "Enter") {
+    console.log("location");
+    if (e === "click" || e.key === "Enter") {
+      console.log("search:", e.target.value);
       searchPlaces(e.target.value);
     } // true
   };
@@ -314,13 +306,14 @@ const EditStudyDesc = () => {
     };
 
     var map = new kakao.maps.Map(container.current, options);
-
+    var img =
+      data.language.length === 0
+        ? "https://i.ibb.co/nr4FYns/happydevil.png"
+        : langImg[data.language[0].name];
     var // 마커이미지의 주소입니다
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img =
-      "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1";
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -338,52 +331,11 @@ const EditStudyDesc = () => {
     //el.id 스터디 아이디가 담겨온다.
   };
 
-  const [data, setData] = useState();
+  useEffect(() => {
+    mapscript();
+  }, [location]);
+
   const [checked, setChecked] = useState(false);
-
-  const href = document.location.href.split("/");
-  const id = href[href.length - 1];
-
-  useEffect(() => {
-    studyApi(id).then((res) => {
-      console.log(res);
-
-      const {
-        id,
-        title,
-        content,
-        kakaoLink,
-        closed,
-        location,
-        language,
-        startDate,
-        //배열이여야 할듯
-      } = res.data.data.study;
-
-      setData({
-        id,
-        title,
-        content,
-        kakaoLink,
-        closed,
-        startDate,
-        language,
-      });
-
-      setLocation({
-        y: location.latitude,
-        x: location.longitude,
-        place_name: location.name,
-      });
-      //location이 된다음에 해야 한다
-    });
-  }, [id]);
-
-  useEffect(() => {
-    if (data) {
-      mapscript();
-    }
-  }, [data]);
 
   const [open, setOpen] = useState({
     language: false,
@@ -391,15 +343,35 @@ const EditStudyDesc = () => {
     location: false,
   });
 
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  // const dispatch = useDispatch();
   // const { dateModal } = useSelector((store) => store.studyModal);
+  // const { calenderDateValue } = useSelector((store) => store.calender);
   const { dateData } = useSelector((store) => store.searchData);
-  const { isError, message } = useSelector((state) => state.allStudies);
+  const { calenderDateValue } = useSelector((store) => store.calender);
+  const [data, setData] = useState({
+    username: user.username,
+    title: "",
+    content: "",
+    kakaoLink: "",
+    closed: false,
+    //checked라는 변수를 넣으면 변경이 안됨
+    //(state변수가 아니라서 렌더링되지 않음. 즉 값을 받아가는 듯)
+    language: [],
+    location: [],
+    loginMethod: user.loginMethod,
+    startDate: "",
+    //배열이여야 할듯
+  });
 
   useEffect(() => {
     setData({ ...data, startDate: dateData });
   }, [dateData]);
+
+  useEffect(() => {
+    setData({ ...data, closed: checked });
+  }, [checked]);
 
   const locationListHandler = (locationList) => {
     //검색한 조건에 맞는 스터디들의 목록을 div로 표현
@@ -412,9 +384,7 @@ const EditStudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name
-            .split(" ")
-            .filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -431,151 +401,126 @@ const EditStudyDesc = () => {
     ));
   };
 
+  const handleStudyPosting = (e) => {
+    e.preventDefault();
+    dispatch(
+      openModal({
+        name: "WriteStudy",
+        childrenProps: { userId: user.id, ...data },
+      })
+    );
+  };
+
   const handleInputValue = (id, e) => {
     setData({ ...data, [id]: e });
   };
 
-  const handleUpdateStudy = async (e) => {
-    e.preventDefault();
-    if (isError) {
-      console.log("editStudy.rejected :", message);
-    }
-    dispatch(
-      openModal({ name: "UpdateStudy", childrenProps: { id, ...data } })
-    );
-  };
-
   return (
-    <>
-      {data ? (
-        <>
-          <WriteStudyDesc>
-            <Desc>
-              <Wrapper>
-                <Text>제목</Text>
-                <input
-                  defaultValue={data.title}
-                  onChange={(e) => handleInputValue("title", e.target.value)}
+    <WriteStudyDesc>
+      <Desc checked={checked}>
+        <Wrapper>
+          <Text>제목</Text>
+          <input onChange={(e) => handleInputValue("title", e.target.value)}></input>
+        </Wrapper>
+        <RowWrap>
+          <HalfWrapper>
+            <Text>시작일</Text>
+            <HalfInput>{dateData ? calenderDateValue : "ex. 스터디 시작 날짜"}</HalfInput>
+            <DescDateModal>
+              <CalenderDate />
+            </DescDateModal>
+          </HalfWrapper>
+          <HalfWrapper>
+            <Text classNane="lanaguage">언어</Text>
+            {/* <LanguageDrop> */}
+            <HalfInput>
+              {data.language.map((el) => el.name + "," + " ")}
+              <IconDrop>
+                <IoMdArrowDropdown onClick={() => setOpen({ ...open, language: true })} />
+              </IconDrop>
+            </HalfInput>
 
-                ></input>
+            {/* </LanguageDrop> */}
+            {open.language ? (
+              <DescLanguageModal>
+                <div>
+                  {Object.keys(langImg).map((el, idx) => (
+                    <div
+                      key={idx}
+                      className="elements"
+                      onClick={() => {
+                        setData({
+                          ...data,
+                          language: [
+                            ...data.language,
+                            {
+                              id: idx + 1,
+                              name: el,
+                            },
+                          ],
+                        });
+                        setOpen({ ...open, language: false });
+                      }}
+                    >
+                      {el}
+                    </div>
+                  ))}
+                </div>
+              </DescLanguageModal>
+            ) : null}
+          </HalfWrapper>
+        </RowWrap>
+        <Wrapper>
+          <Text>오픈링크</Text>
+          <input
+            placeholder="ex. 카카오톡 오픈채팅 링크를 입력해주세요"
+            onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
+          ></input>
+        </Wrapper>
+        <Wrapper>
+          <Text>장소</Text>
+          <input
+            className="locaitionInput"
+            onKeyDown={(e) => handleLocationValue(e)}
+            placeholder="ex. 송파구 오륜동"
+            defaultValue={data.location ? data.location : null}
+          ></input>
+          {open.location ? (
+            <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+          ) : null}
+          <IconSerch>
+            <IoIosSearch
+              onClick={() => {
+                setOpen({ ...open, location: true });
+              }}
+            ></IoIosSearch>
+          </IconSerch>
+        </Wrapper>
+        <MapView id="map" ref={container} />
+        <Wrapper>
+          <Text>내용</Text>
+          <Textarea
+            placeholder="ex. 스터디 모집 글을 자유롭게 작성해주세요 ^^."
+            onChange={(e) => handleInputValue("content", e.target.value)}
+          ></Textarea>
+        </Wrapper>
 
-              </Wrapper>
-              <RowWrap>
-                <HalfWrapper>
-                  <Text>시작일</Text>
-                  <HalfInput defaultValue={data.startDate}>
-                    {dateData ? calenderDateValue : data.startDate}
-                  </HalfInput>
-                  <DescDateModal>
-                    <CalenderDate />
-                  </DescDateModal>
-                </HalfWrapper>
-                <HalfWrapper>
-                  <Text classNane="lanaguage">언어</Text>
-                  <HalfInput>
-                    {data.language?.map((el) => el.name + ",")}
-                    <IconDrop>
-                      <IoMdArrowDropdown
-                        className="icon"
-                        onClick={() => setOpen({ ...open, language: true })}
-                      />
-                    </IconDrop>
-                  </HalfInput>
-                  {open.language ? (
-                    <DescLanguageModal>
-                      <div>
-                        {Object.keys(langImg).map((el, idx) => (
-                          <div
-                            key={idx}
-                            className="elements"
-                            onClick={() => {
-                              setData({
-                                ...data,
-                                language: [
-                                  ...data.language,
-                                  {
-                                    id: idx + 1,
-                                    name: el,
-                                  },
-                                ],
-                              });
-                              setOpen({ ...open, language: false });
-                            }}
-                          >
-                            {el}
-                          </div>
-                        ))}
-                      </div>
-                    </DescLanguageModal>
-                  ) : null}
-                </HalfWrapper>
-              </RowWrap>
-              <Wrapper>
-                <Text>링크</Text>
-
-                <input
-                  placeholder="ex. 카카오톡 오픈채팅 링크를 입력해주세요"
-                  onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
-
-                  defaultValue={data.kakaoLink}
-                ></input>
-              </Wrapper>
-              <Wrapper>
-                <Text>장소</Text>
-
-
-                <input
-                  className="locaitionInput"
-                  onKeyDown={(e) => handleLocationValue(e)}
-                  defaultValue={location.place_name}
-                  ref={locationInput}
-                ></input>
-                {open.location ? (
-                  <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
-                ) : null}
-                <IconSerch>
-
-                  <IoIosSearch
-                    className="icon"
-                    onClick={(locationInput) => {
-                      console.log(locationInput.target.value);
-                      setOpen({ ...open, location: true });
-                    }}
-                  />
-                  {/* </div> */}
-                </IconSerch>
-              </Wrapper>
-              <MapView id="map" ref={container} />
-              <Wrapper>
-                <Text>내용</Text>
-                <Textarea
-                  onChange={(e) => handleInputValue("content", e.target.value)}
-                  defaultValue={data.content}
-                ></Textarea>
-              </Wrapper>
-
-              <Closed>
-                <Checkbox>
-                  <input
-                    type="checkbox"
-                    className="input"
-                    checked={data.closed ? "checked" : null}
-                    onClick={() => {
-                      setChecked(!checked);
-                      setData({ ...data, closed: checked });
-                    }}
-                  ></input>
-                  <label htmlFor="closed">모집마감</label>
-                </Checkbox>
-                <Button onClick={handleUpdateStudy}>수정완료</Button>
-              </Closed>
-
-            </Desc>
-          </WriteStudyDesc>
-        </>
-      ) : null}
-    </>
+        <Closed>
+          <Checkbox>
+            <input
+              type="checkbox"
+              // className="input"
+              onClick={() => {
+                setChecked(!checked);
+              }}
+            ></input>
+            <label htmlFor="closed">모집마감</label>
+          </Checkbox>
+          <Button onClick={handleStudyPosting}>저장하기</Button>
+        </Closed>
+      </Desc>
+    </WriteStudyDesc>
   );
 };
 
-export default EditStudyDesc;
+export default StudyDesc;

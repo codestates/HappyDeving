@@ -1,13 +1,20 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled from "styled-components";
+import Content from "../components/styles/Content.styled";
+import { Search } from "../components/styles/Search.styled";
 import Slider from "../components/Slider";
 // import landing_01 from "../../src/assets/landing1.png";
 import landing_02 from "../../src/assets/landing2.png";
 import landing_03 from "../../src/assets/landing3.png";
 
 const StyledLanding = styled.div`
-  grid-column: 3 / 13;
+  font-family: "Binggrae";
+  grid-column: 4 / 12;
+
+  display: flex;
+  align-items: center;
+
   position: relative;
   width: 100%;
   height: 50vh;
@@ -21,13 +28,16 @@ const StyledLanding = styled.div`
   @media screen and (max-width: 767px) {
     grid-column: 1 / 15;
     transition: 2s;
+    flex-direction: column;
   }
 `;
+
 const LandingImage = styled.img`
   width: 100%;
-  height: 80%;
+  height: 100%;
   object-fit: cover;
   position: absolute;
+  /* top: 5%; */
   @media screen and (min-width: 768px) and (max-width: 1023px) {
     object-fit: cover;
   }
@@ -35,52 +45,41 @@ const LandingImage = styled.img`
     object-fit: scale-down;
   }
 `;
-const LandingTitle = styled.h1`
+
+const TitleTransBox = styled.div`
+  width: 100%;
+  font-size: 2.5rem;
+  margin: 20px;
+  background-color: #ffffff;
+  opacity: 0.8;
   position: absolute;
-  /* background-color: rgb(236, 236, 236); */
-  /* border: 5px solid rgb(236, 236, 236); */
-  /* display: contents; */
-  top: 60%;
-  color: black;
-  font-size: 3rem;
-  padding: 15px;
-  display: contents;
-  // 태블릿
-  @media screen and (min-width: 768px) and (max-width: 1023px) {
-    transition: 1.5s;
-    font-size: 2rem;
-  }
-  // 모바일
-  @media screen and (max-width: 767px) {
-    font-size: 1.5rem;
-    transition: 1.5s;
-    display: none;
+  top: 75%;
+  p {
+    margin: 2%;
+    font-weight: bold;
+    color: #000000;
+    @media screen and (min-width: 768px) and (max-width: 1023px) {
+      font-size: 2rem;
+      width: 80%;
+    }
+    @media screen and (max-width: 767px) {
+      padding: 20px;
+      width: 100%;
+      font-size: 1.5rem;
+      margin-left: 20px;
+      flex-wrap: wrap;
+    }
   }
 `;
 
-const LandingTitleSecond = styled.h1`
-  opacity: 0;
-  /* visibility: hidden; */
-  display: contents;
-  /* display: none; */
-  @media screen and (max-width: 767px) {
-    position: relative;
-    opacity: 1;
-    /* visibility: visible; */
-    display: none;
-    top: 50%;
-    font-size: 1.5rem;
-    transition: 1.5s;
-  }
-`;
-
-const Landing = ({ imageSrc }) => {
+const Landing = ({ drop, imageSrc }) => {
   return (
     <>
       <StyledLanding>
         <LandingImage src={imageSrc} />
-        <LandingTitle>해피데빙으로 협업하자</LandingTitle>
-        <LandingTitleSecond>해피데빙으로 협업하자</LandingTitleSecond>
+        <TitleTransBox>
+          <p>우리동네 스터디 "해피데빙"에서 찾자!</p>
+        </TitleTransBox>
       </StyledLanding>
       <Slider
         imageSrc={landing_02}

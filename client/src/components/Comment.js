@@ -98,9 +98,9 @@ const Comment = ({
   const isReplying =
     activeComment && activeComment.id === comment.id && activeComment.type === "replying";
 
-  const canDelete = user.id === comment.user_id && replies.length === 0;
-  const canReply = Boolean(user.id) && !comment.parentId;
-  const canEdit = user.id === comment.user_id;
+  const canDelete = user?.id === comment.user_id && replies.length === 0;
+  const canReply = Boolean(user?.id) && !comment.parentId;
+  const canEdit = user?.id === comment.user_id;
 
   const replyId = parentId ? parentId : comment.id;
   const createdAt = new Date(comment.createdAt).toLocaleDateString();

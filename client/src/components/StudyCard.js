@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { likeStudy, unLikeStudy } from "../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
-// import { langImg } from "../../static/images/langImg";
+import { langImg } from "../static/images/langImg";
 import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
 
@@ -40,15 +40,15 @@ const CardContainer = styled.div`
 `;
 
 const LanguageImg = styled.div`
-  margin-left: 3rem;
+  margin-left: 15px;
   width: 100px;
   flex-direction: column;
   display: flex;
   justify-content: space-evenly;
 
   img {
-    border-radius: 5px;
-    border: 3px solid #5e17eb;
+    border-radius: 50%;
+    border: 1px solid #5e17eb;
   }
 `;
 const CardForm = styled.div`
@@ -132,14 +132,43 @@ const StudyCard = ({ myStudy, likedStudy }) => {
     navigate(`/study/${study.id}`);
   };
 
+  const imgHandler = () => {
+    if (myStudy) {
+      myStudy.language
+        .slice(0, 2)
+        .map((el) =>
+          el["name"] === "c++" ? (
+            <img src={langImg["c"]}></img>
+          ) : (
+            <img src={langImg[el["name"]]}></img>
+          )
+        );
+    } else {
+      console.log(likedStudy);
+      likedStudy.language
+        .slice(0, 2)
+        .map((el) =>
+          el["name"] === "c++" ? (
+            <img src={langImg["c"]}></img>
+          ) : (
+            <img src={langImg[el["name"]]}></img>
+          )
+        );
+    }
+  };
+
   return (
     <>
       {/* <Container> */}
       <CardContainer onClick={moveToStudyPage}>
-        <LanguageImg>
-          <img src="https://blog.kakaocdn.net/dn/bNp5o1/btrgkT58S71/77YTYugRulRCb4jvo1HwlK/img.png"></img>
-          <img src="https://blog.kakaocdn.net/dn/bNp5o1/btrgkT58S71/77YTYugRulRCb4jvo1HwlK/img.png"></img>
-        </LanguageImg>
+        {myStudy ? (
+          <LanguageImg>{imgHandler()}</LanguageImg>
+        ) : (
+          <LanguageImg>
+            <img src={langImg[likedStudy.language[0]["name"]]}></img>
+            <img src={langImg[likedStudy.language[1]["name"]]}></img>
+          </LanguageImg>
+        )}
         <CardForm>
           <div>
             <h1 onClick={moveToStudyPage}>{study.title}</h1>

@@ -8,13 +8,15 @@ const Container = styled.div`
 `;
 
 const Profile = styled.div`
-  position: relative;
   display: flex;
+  position: relative;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  font-size: 14px;
 `;
 const ProfileImage = styled.div`
+  position: relative;
   border-radius: 100px;
   width: 150px;
   height: 150px;
@@ -31,12 +33,11 @@ const ProfileImage = styled.div`
 const ProfilePrieview = styled.div`
   position: absolute;
   color: rgba(0, 0, 0, 0);
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: 100%;
   border-radius: 100px;
-  top: 15px;
-  left: 60px;
-  /* background: black; */
+  top: 0px;
+  left: 0px;
   cursor: pointer;
   &:hover {
     display: flex;
@@ -46,16 +47,14 @@ const ProfilePrieview = styled.div`
     align-items: center;
     justify-content: center;
   }
-  @media screen and (max-width: 1024px) {
-    top: 15px;
-    left: 100px;
-  }
 `;
 const ProfileButton = styled.div`
   margin-top: 20px;
   border-bottom: 1px solid gray;
   font-weight: 500;
-  font-size: 18px;
+  font-size: 16px;
+  color: gray;
+  font-weight: 700;
   cursor: pointer;
   &:hover {
     color: black;
@@ -64,7 +63,6 @@ const ProfileButton = styled.div`
 `;
 
 const EditSideProfile = () => {
-  // user.image
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
   const fileInput = useRef(null);

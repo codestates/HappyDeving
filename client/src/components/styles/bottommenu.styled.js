@@ -11,7 +11,7 @@ import { faPenToSquare, faUser, faFolder, faHeart } from "@fortawesome/free-regu
 const StyledBottommenu = styled.div`
   grid-column: 1/15;
   /* grid-template-columns: repeat(7, 1fr); */
-
+  min-width: 520px;
   position: fixed;
   display: flex;
   align-items: center;
