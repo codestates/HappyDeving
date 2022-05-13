@@ -343,7 +343,8 @@ const StudyDesc = () => {
     location: false,
   });
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const { user } = useSelector((state) => state.user);
 
   // const dispatch = useDispatch();
   // const { dateModal } = useSelector((store) => store.studyModal);
@@ -406,7 +407,7 @@ const StudyDesc = () => {
     dispatch(
       openModal({
         name: "WriteStudy",
-        childrenProps: { userId: user.id, ...data },
+        childrenProps: { id: user.id, ...data },
       })
     );
   };

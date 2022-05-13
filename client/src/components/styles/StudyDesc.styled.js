@@ -18,7 +18,7 @@ import { faAngleDown, faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import ShareSocialButton from "../styles/ShareSocial.styled";
 import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 import { openModal } from "../../features/modal/modalSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const StyleStudyDesc = styled.div`
   margin-top: 200px;
@@ -208,7 +208,8 @@ const StudyDesc = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const user = JSON.parse(localStorage.getItem("user"));
+  // const user = JSON.parse(localStorage.getItem("user"));
+  const { user } = useSelector((state) => state.user);
   const [share, setShare] = useState(false);
   const handleShareButton = () => {
     setShare(!share);
@@ -258,9 +259,10 @@ const StudyDesc = () => {
   }, [data]);
 
   useEffect(() => {
-    const href = document.location.href.split("/");
-    const id = href[href.length - 1];
+    // const href = document.location.href.split("/");
+    // const id = href[href.length - 1];
     studyApi(id).then((res) => {
+      console.log("id 들어오니?", res);
       setData(res.data.data.study);
       setLocation(res.data.data.study.location);
     });
@@ -281,7 +283,7 @@ const StudyDesc = () => {
       {data ? (
         <StyleStudyDesc>
           {/* {console.log(data.user_id)}
-          {console.log(user.id)} */}
+          {console.log(user?.id)} */}
           <TitleBar>
             <div className="title">{data.title}</div>
             <div className="alter">
@@ -355,18 +357,18 @@ const StudyDesc = () => {
           </ContentWrap>{" "}
           <ProfileWrap>
             <ProfileImage>
-              <img src={user.image} />
+              <img src={user?.image} />
             </ProfileImage>
 
             <Profile>
-              <h1>스터디 장, {user.username}을 소개합니다!</h1>
-              <Bio>{user.bio}</Bio>
+              <h1>스터디 장, {user?.username}을 소개합니다!</h1>
+              <Bio>{user?.bio}</Bio>
               <LinkButtons>
-                <a href={user.github} target="_blank" rel="noreferrer">
+                <a href={user?.github} target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faGithubAlt} />
                   깃허브
                 </a>
-                <a href={user.blog} target="_blank" rel="noreferrer">
+                <a href={user?.blog} target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faBlogger} />
                   블로그
                 </a>

@@ -50,7 +50,7 @@ const DeleteStudy = (props) => {
             await dispatch(deleteStudy(props));
             dispatch(reset());
             dispatch(closeModal());
-            navigate("/");
+            navigate("/mystudy");
           }}
         >
           확인
