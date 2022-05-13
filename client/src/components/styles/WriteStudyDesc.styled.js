@@ -13,10 +13,8 @@ import { openModal } from "../../features/modal/modalSlice";
 // import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
-
   grid-column: 4/12;
   margin-top: 200px;
-
 
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
@@ -54,7 +52,6 @@ const Desc = styled(Content)`
     &:hover {
       cursor: pointer;
       border: 1px solid #5e17eb;
-
     }
   }
 `;
@@ -133,7 +130,6 @@ const HalfInput = styled.div`
   &:hover {
     cursor: pointer;
     border: 1px solid #5e17eb;
-
   }
 
   @media screen and (max-width: 768px) {
@@ -296,11 +292,16 @@ const StudyDesc = () => {
     }
   }
 
-  const handleLocationValue = (e) => {
-    console.log("location");
-    if (e === "click" || e.key === "Enter") {
-      console.log("search:", e.target.value);
-      searchPlaces(e.target.value);
+  const handleLocationValue = (e, value) => {
+    if (e === "click") {
+      console.log("location");
+
+      console.log(value);
+      searchPlaces(value);
+    }
+
+    if (e.key === "Enter") {
+      searchPlaces(value);
     } // true
   };
 
@@ -342,12 +343,11 @@ const StudyDesc = () => {
   }, [location]);
 
   const [checked, setChecked] = useState(false);
+  const locationInput = useRef(null);
 
-  const [open, setOpen] = useState({
-    language: false,
-    date: false,
-    location: false,
-  });
+  const [locationSearch, setLocationSearch] = useState("");
+  const [langOpen, setLangOpen] = useState(false);
+  const [locOpen, setLocOpen] = useState(false);
 
   const user = JSON.parse(localStorage.getItem("user"));
 
@@ -401,7 +401,8 @@ const StudyDesc = () => {
             location: [location.y, location.x, gu, dong, location.place_name],
           });
           //클릭한 장소로 location 새로 세팅
-          setOpen({ ...open, location: false });
+          locationInput.current.value = location.place_name;
+          setLocOpen(!locOpen);
         }}
       >
         {location.place_name}
@@ -429,13 +430,16 @@ const StudyDesc = () => {
         <Wrapper>
           <Text>제목</Text>
 
-          <input onChange={(e) => handleInputValue("title", e.target.value)}></input>
-
+          <input
+            onChange={(e) => handleInputValue("title", e.target.value)}
+          ></input>
         </Wrapper>
         <RowWrap>
           <HalfWrapper>
             <Text>시작일</Text>
-            <HalfInput>{dateData ? calenderDateValue : "ex. 스터디 시작 날짜"}</HalfInput>
+            <HalfInput>
+              {dateData ? calenderDateValue : "ex. 스터디 시작 날짜"}
+            </HalfInput>
             <DescDateModal>
               <CalenderDate />
             </DescDateModal>
@@ -446,12 +450,12 @@ const StudyDesc = () => {
             <HalfInput>
               {data.language.map((el) => el.name + "," + " ")}
               <IconDrop>
-                <IoMdArrowDropdown onClick={() => setOpen({ ...open, language: true })} />
+                <IoMdArrowDropdown onClick={() => setLangOpen(!langOpen)} />
               </IconDrop>
             </HalfInput>
 
             {/* </LanguageDrop> */}
-            {open.language ? (
+            {langOpen ? (
               <DescLanguageModal>
                 <div>
                   {Object.keys(langImg).map((el, idx) => (
@@ -469,7 +473,7 @@ const StudyDesc = () => {
                             },
                           ],
                         });
-                        setOpen({ ...open, language: false });
+                        setLangOpen(!langOpen);
                       }}
                     >
                       {el}
@@ -481,7 +485,6 @@ const StudyDesc = () => {
           </HalfWrapper>
         </RowWrap>
         <Wrapper>
-
           <Text>오픈링크</Text>
           <input
             placeholder="ex. 카카오톡 오픈채팅 링크를 입력해주세요"
@@ -492,18 +495,24 @@ const StudyDesc = () => {
           <Text>장소</Text>
           <input
             className="locaitionInput"
-            onKeyDown={(e) => handleLocationValue(e)}
+            onKeyDown={(e) => {
+              handleLocationValue(e, e.target.value);
+              setLocationSearch(e.target.value);
+            }}
             placeholder="ex. 송파구 오륜동"
-            defaultValue={data.location ? data.location : null}
+            ref={locationInput}
           ></input>
-          {open.location ? (
-            <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+
+          {locOpen ? (
+            <DescLocationModal>
+              {locationListHandler(locationList)}
+            </DescLocationModal>
           ) : null}
           <IconSerch>
-
             <IoIosSearch
-              onClick={() => {
-                setOpen({ ...open, location: true });
+              onClick={(e) => {
+                setLocOpen(!locOpen);
+                handleLocationValue(e, locationSearch);
               }}
             ></IoIosSearch>
           </IconSerch>
@@ -512,11 +521,9 @@ const StudyDesc = () => {
         <Wrapper>
           <Text>내용</Text>
           <Textarea
-
             placeholder="ex. 스터디 모집 글을 자유롭게 작성해주세요 ^^."
             onChange={(e) => handleInputValue("content", e.target.value)}
           ></Textarea>
-
         </Wrapper>
 
         <Closed>

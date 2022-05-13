@@ -78,15 +78,12 @@ const MyStudy = () => {
     (state) => state.allStudies
   );
 
-  const [data, setData] = useState([]);
   // console.log(`my studies: ${JSON.stringify(myStudies)}`);
-  console.log(data);
   useEffect(() => {
     if (isError) {
       console.log(message);
     }
     dispatch(getMyStudies(user.id));
-    setData(myStudies);
     dispatch(reset());
   }, []);
 
