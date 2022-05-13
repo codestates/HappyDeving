@@ -93,10 +93,14 @@ const Comment = ({
   const { user } = useSelector((state) => state.user);
 
   const isEditing =
-    activeComment && activeComment.id === comment.id && activeComment.type === "editing";
+    activeComment &&
+    activeComment.id === comment.id &&
+    activeComment.type === "editing";
 
   const isReplying =
-    activeComment && activeComment.id === comment.id && activeComment.type === "replying";
+    activeComment &&
+    activeComment.id === comment.id &&
+    activeComment.type === "replying";
 
   const canDelete = user?.id === comment.user_id && replies.length === 0;
   const canReply = Boolean(user?.id) && !comment.parentId;
@@ -135,7 +139,9 @@ const Comment = ({
           {canReply && (
             <CommentAction
               type="button"
-              onClick={() => setActiveComment({ id: comment.id, type: "replying" })}
+              onClick={() =>
+                setActiveComment({ id: comment.id, type: "replying" })
+              }
             >
               답글
             </CommentAction>
@@ -143,13 +149,18 @@ const Comment = ({
           {canEdit && (
             <CommentAction
               type="button"
-              onClick={() => setActiveComment({ id: comment.id, type: "editing" })}
+              onClick={() =>
+                setActiveComment({ id: comment.id, type: "editing" })
+              }
             >
               {/* <FontAwesomeIcon icon="fas fa-edit" size="1x" /> */}수정
             </CommentAction>
           )}
           {canDelete && (
-            <CommentAction type="button" onClick={() => deletingComment(comment)}>
+            <CommentAction
+              type="button"
+              onClick={() => deletingComment(comment)}
+            >
               {/* <FontAwesomeIcon icon="fas fa-trash" size="1x" /> */}삭제
             </CommentAction>
           )}

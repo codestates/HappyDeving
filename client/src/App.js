@@ -85,19 +85,6 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(drop);
-
-    if (
-      window.location.href.split("/")[1] === "map" ||
-      window.location.href === "http://localhost:3000"
-    ) {
-      setDrop(false);
-    } else {
-      setDrop(true);
-    }
-  }, []);
-
   // console.log(localStorage.getItem("user"));
 
   const [drop, setDrop] = useState(false);
@@ -120,7 +107,7 @@ function App() {
         <GlobalFonts />
         <Header img={theme.icons} drop={drop} />
         <Container>
-          <Header img={theme.icons} />
+          {/* <Header img={theme.icons} /> */}
           <ConfirmModal />
           <div className="App">
             <header className="App-header"></header>
@@ -163,8 +150,8 @@ function App() {
             <Route path="/signup" element={<Signup />} />
           </Routes>
           <BottomMenu />
-          <Footer />
         </Container>
+        <Footer />
       </ThemeProvider>
     </Router>
   );

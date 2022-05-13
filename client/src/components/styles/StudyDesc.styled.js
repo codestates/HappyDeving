@@ -21,7 +21,6 @@ import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const StyleStudyDesc = styled.div`
-  margin-top: 200px;
   grid-column: 4/12;
   padding: 3% 5% 3% 5%;
 
@@ -156,7 +155,7 @@ const Host = styled.div`
   height: 30px;
 `;
 
-const Button = styled.button`
+const Button = styled.a`
   padding: 8px 15px;
   background: #5e17eb;
   border-radius: 10px;
@@ -234,7 +233,9 @@ const StudyDesc = () => {
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img = langImg.javascript;
+    var imgname =
+      data.language[0]["name"] === "c++" ? "c" : data.language[0]["name"];
+    var img = langImg[imgname];
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -300,15 +301,7 @@ const StudyDesc = () => {
                   >
                     수정
                   </div>
-                  <div
-                    className="delete"
-                    onClick={handleStudyDeletion}
-                    // onClick={() => {
-                    //   alert("삭제되었습니다");
-                    //   deleteStudyApi(data.id);
-                    //   navigate("/");
-                    // }}
-                  >
+                  <div className="delete" onClick={handleStudyDeletion}>
                     삭제
                   </div>
                 </>
@@ -326,17 +319,16 @@ const StudyDesc = () => {
               {data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
             </Icon>
             <Text>{data.closed ? "모집마감" : "모집중"}</Text>
+            {console.log(data.closed)}
           </Wrap>
           <Wrap>
             <Icon>
               <BsFileEarmarkCodeFill />
             </Icon>
             <Text>
-              {data.language.map((el, idx) => (
-                <span key={idx} className="langSpan">
-                  {el.name + ","}
-                </span>
-              ))}
+              <span className="langSpan">
+                {data.language.map((el) => el.name).join()}
+              </span>
             </Text>
           </Wrap>
           <Wrap>
@@ -359,14 +351,14 @@ const StudyDesc = () => {
               <BsFillFileEarmarkTextFill />
             </Icon>
             <Content>{data.content}</Content>
-          </ContentWrap>{" "}
+          </ContentWrap>
           <ProfileWrap>
             <ProfileImage>
               <img src={user?.image} />
             </ProfileImage>
 
             <Profile>
-              <h1>스터디 장, {user?.username}을 소개합니다!</h1>
+              <h1>스터디 장, {data?.username}을 소개합니다!</h1>
               <Bio>{user?.bio}</Bio>
               <LinkButtons>
                 <a href={user?.github} target="_blank" rel="noreferrer">
@@ -381,7 +373,7 @@ const StudyDesc = () => {
             </Profile>
           </ProfileWrap>
           <ButtonWrap>
-            <Button src={data.kakaoLink}>스터디 참여하기</Button>
+            <Button href={data.kakaoLink}>스터디 참여하기</Button>
           </ButtonWrap>
           <CommentsDiv>
             <button onClick={() => setShowConfirmModal(!showConfirmModal)}>

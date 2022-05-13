@@ -134,41 +134,33 @@ const StudyCard = ({ myStudy, likedStudy }) => {
 
   const imgHandler = () => {
     if (myStudy) {
-      myStudy.language
+      return myStudy.language
         .slice(0, 2)
-        .map((el) =>
+        .map((el, idx) =>
           el["name"] === "c++" ? (
-            <img src={langImg["c"]}></img>
+            <img key={idx} src={langImg["c"]}></img>
           ) : (
-            <img src={langImg[el["name"]]}></img>
+            <img key={idx} src={langImg[el["name"]]}></img>
           )
         );
     } else {
       console.log(likedStudy);
-      likedStudy.language
+      return likedStudy.language
         .slice(0, 2)
-        .map((el) =>
+        .map((el, idx) =>
           el["name"] === "c++" ? (
-            <img src={langImg["c"]}></img>
+            <img key={idx} src={langImg["c"]}></img>
           ) : (
-            <img src={langImg[el["name"]]}></img>
+            <img key={idx} src={langImg[el["name"]]}></img>
           )
         );
     }
   };
-
   return (
     <>
       {/* <Container> */}
       <CardContainer onClick={moveToStudyPage}>
-        {myStudy ? (
-          <LanguageImg>{imgHandler()}</LanguageImg>
-        ) : (
-          <LanguageImg>
-            <img src={langImg[likedStudy.language[0]["name"]]}></img>
-            <img src={langImg[likedStudy.language[1]["name"]]}></img>
-          </LanguageImg>
-        )}
+        <LanguageImg>{imgHandler()}</LanguageImg>
         <CardForm>
           <div>
             <h1 onClick={moveToStudyPage}>{study.title}</h1>
