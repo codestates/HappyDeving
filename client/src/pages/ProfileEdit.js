@@ -131,7 +131,9 @@ const ButtonWrap = styled.div`
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isLoading, isError, message } = useSelector((state) => state.user);
+  const { user, isLoading, isError, message } = useSelector(
+    (state) => state.user
+  );
 
   const [userData, setUserData] = useState({
     username: "",
@@ -149,7 +151,12 @@ const MyPage = () => {
     if (isError) {
       console.log("editProfile.rejected :", message);
     }
-    dispatch(openModal({ name: "UpdateUser", childrenProps: { id: user.id, userData: userData } }));
+    dispatch(
+      openModal({
+        name: "UpdateUser",
+        childrenProps: { id: user.id, userData: userData },
+      })
+    );
   };
   // 임시
   const handleSignout = (e) => {
@@ -185,7 +192,10 @@ const MyPage = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
+          <LikedStudyTab
+            className="tap"
+            onClick={() => navigate("/likedstudy")}
+          >
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>

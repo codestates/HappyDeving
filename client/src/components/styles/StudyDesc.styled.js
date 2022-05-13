@@ -23,6 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 const StyleStudyDesc = styled.div`
   margin-top: 200px;
   grid-column: 4/12;
+
   padding: 3% 5% 3% 5%;
 
   .mapview {
@@ -73,9 +74,6 @@ const CommentsDiv = styled.div`
   /* background: pink; */
 `;
 
-//(언어 input, modal(정사각형) :5-9,
-// 시작일 input, modal(정사각형) : 10-14 )
-// - 내용 input은 scroll
 
 const Wrap = styled.div`
   display: flex;
@@ -214,6 +212,7 @@ const StudyDesc = () => {
   const handleShareButton = () => {
     setShare(!share);
   };
+
   const [location, setLocation] = useState({
     place_name: "광화문",
     latitude: 37.570975,
@@ -281,8 +280,6 @@ const StudyDesc = () => {
     <>
       {data ? (
         <StyleStudyDesc>
-          {/* {console.log(data.user_id)}
-          {console.log(user?.id)} */}
           <TitleBar>
             <div className="title">{data.title}</div>
             <div className="alter">

@@ -74,17 +74,16 @@ const MyStudy = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const { myStudies, isLoading, isError, message } = useSelector((state) => state.allStudies);
+  const { myStudies, isLoading, isError, message } = useSelector(
+    (state) => state.allStudies
+  );
 
-  const [data, setData] = useState([]);
   // console.log(`my studies: ${JSON.stringify(myStudies)}`);
-  console.log(data);
   useEffect(() => {
     if (isError) {
       console.log(message);
     }
     dispatch(getMyStudies(user.id));
-    setData(myStudies);
     dispatch(reset());
   }, []);
 
@@ -99,7 +98,10 @@ const MyStudy = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
+          <LikedStudyTab
+            className="tap"
+            onClick={() => navigate("/likedstudy")}
+          >
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>

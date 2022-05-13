@@ -48,6 +48,7 @@ const Desc = styled(Content)`
       outline: none;
       border: 1px solid #5e17eb;
     }
+
     &:hover {
       cursor: pointer;
       border: 1px solid #5e17eb;
@@ -125,6 +126,7 @@ const HalfInput = styled.div`
   &:focus {
     border: 1px solid #5e17eb;
   }
+
   &:hover {
     cursor: pointer;
     border: 1px solid #5e17eb;
@@ -290,11 +292,16 @@ const StudyDesc = () => {
     }
   }
 
-  const handleLocationValue = (e) => {
-    console.log("location");
-    if (e === "click" || e.key === "Enter") {
-      console.log("search:", e.target.value);
-      searchPlaces(e.target.value);
+  const handleLocationValue = (e, value) => {
+    if (e === "click") {
+      console.log("location");
+
+      console.log(value);
+      searchPlaces(value);
+    }
+
+    if (e.key === "Enter") {
+      searchPlaces(value);
     } // true
   };
 
@@ -336,12 +343,11 @@ const StudyDesc = () => {
   }, [location]);
 
   const [checked, setChecked] = useState(false);
+  const locationInput = useRef(null);
 
-  const [open, setOpen] = useState({
-    language: false,
-    date: false,
-    location: false,
-  });
+  const [locationSearch, setLocationSearch] = useState("");
+  const [langOpen, setLangOpen] = useState(false);
+  const [locOpen, setLocOpen] = useState(false);
 
   // const user = JSON.parse(localStorage.getItem("user"));
   const { user } = useSelector((state) => state.user);
@@ -385,7 +391,9 @@ const StudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -394,7 +402,8 @@ const StudyDesc = () => {
             location: [location.y, location.x, gu, dong, location.place_name],
           });
           //클릭한 장소로 location 새로 세팅
-          setOpen({ ...open, location: false });
+          locationInput.current.value = location.place_name;
+          setLocOpen(!locOpen);
         }}
       >
         {location.place_name}
@@ -421,12 +430,17 @@ const StudyDesc = () => {
       <Desc checked={checked}>
         <Wrapper>
           <Text>제목</Text>
-          <input onChange={(e) => handleInputValue("title", e.target.value)}></input>
+
+          <input
+            onChange={(e) => handleInputValue("title", e.target.value)}
+          ></input>
         </Wrapper>
         <RowWrap>
           <HalfWrapper>
             <Text>시작일</Text>
-            <HalfInput>{dateData ? calenderDateValue : "ex. 스터디 시작 날짜"}</HalfInput>
+            <HalfInput>
+              {dateData ? calenderDateValue : "ex. 스터디 시작 날짜"}
+            </HalfInput>
             <DescDateModal>
               <CalenderDate />
             </DescDateModal>
@@ -437,12 +451,12 @@ const StudyDesc = () => {
             <HalfInput>
               {data.language.map((el) => el.name + "," + " ")}
               <IconDrop>
-                <IoMdArrowDropdown onClick={() => setOpen({ ...open, language: true })} />
+                <IoMdArrowDropdown onClick={() => setLangOpen(!langOpen)} />
               </IconDrop>
             </HalfInput>
 
             {/* </LanguageDrop> */}
-            {open.language ? (
+            {langOpen ? (
               <DescLanguageModal>
                 <div>
                   {Object.keys(langImg).map((el, idx) => (
@@ -460,7 +474,7 @@ const StudyDesc = () => {
                             },
                           ],
                         });
-                        setOpen({ ...open, language: false });
+                        setLangOpen(!langOpen);
                       }}
                     >
                       {el}
@@ -482,17 +496,24 @@ const StudyDesc = () => {
           <Text>장소</Text>
           <input
             className="locaitionInput"
-            onKeyDown={(e) => handleLocationValue(e)}
+            onKeyDown={(e) => {
+              handleLocationValue(e, e.target.value);
+              setLocationSearch(e.target.value);
+            }}
             placeholder="ex. 송파구 오륜동"
-            defaultValue={data.location ? data.location : null}
+            ref={locationInput}
           ></input>
-          {open.location ? (
-            <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+
+          {locOpen ? (
+            <DescLocationModal>
+              {locationListHandler(locationList)}
+            </DescLocationModal>
           ) : null}
           <IconSerch>
             <IoIosSearch
-              onClick={() => {
-                setOpen({ ...open, location: true });
+              onClick={(e) => {
+                setLocOpen(!locOpen);
+                handleLocationValue(e, locationSearch);
               }}
             ></IoIosSearch>
           </IconSerch>

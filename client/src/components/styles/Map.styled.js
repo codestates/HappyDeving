@@ -8,7 +8,7 @@ import { unLikeStudyApi, likeStudyApi } from "../../api/study";
 import LoadingIndicator from "../LoadingIndicator";
 
 const Title = styled.div`
-  margin-top: 200px;
+  margin-top: 150px;
   grid-column: 3/13;
   font-size: 20px;
   text-align: center;
@@ -130,7 +130,9 @@ const Map = () => {
         } else {
           icon.className = "fa-solid fa-heart fa-2x";
 
-          likeStudyApi(user.id, { study_id: el.id }).then((res) => console.log(res));
+          likeStudyApi(user.id, { study_id: el.id }).then((res) =>
+            console.log(res)
+          );
         }
       }
 
@@ -180,7 +182,9 @@ const Map = () => {
 
   return (
     <>
-      <Title>{studies.length === 0 ? "검색 결과가 없습니다" : "검색 결과"}</Title>
+      <Title>
+        {studies.length === 0 ? "검색 결과가 없습니다" : "검색 결과"}
+      </Title>
       <MapView id="map" ref={container} />
     </>
   );
