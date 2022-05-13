@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { editProfileImage } from "../../features/user/userSlice";
+import LoadingIndicator from "../LoadingIndicator";
 
 const Container = styled.div`
   margin-bottom: 20px;
@@ -64,7 +65,7 @@ const ProfileButton = styled.div`
 
 const EditSideProfile = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
+  const { user, isLoading } = useSelector((state) => state.user);
   const fileInput = useRef(null);
 
   const [file, setFile] = useState(null);
@@ -92,6 +93,10 @@ const EditSideProfile = () => {
     formData.append("image", file);
     dispatch(editProfileImage({ id: user.id, formData }));
   };
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <>
