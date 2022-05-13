@@ -207,9 +207,9 @@ const StudyDesc = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  // const user = JSON.parse(localStorage.getItem("user"));
   const { user } = useSelector((state) => state.user);
+
+  const [showComments, setShowComments] = useState(false);
   const [share, setShare] = useState(false);
   const handleShareButton = () => {
     setShare(!share);
@@ -259,11 +259,10 @@ const StudyDesc = () => {
   }, [data]);
 
   useEffect(() => {
-    // const href = document.location.href.split("/");
-    // const id = href[href.length - 1];
     studyApi(id).then((res) => {
-      console.log("id 들어오니?", res);
       setData(res.data.data.study);
+      console.log("study get data: ", res.data.data.study);
+
       setLocation(res.data.data.study.location);
     });
   }, []);
@@ -297,15 +296,7 @@ const StudyDesc = () => {
                   <div className="update" onClick={() => navigate(`/study/edit/${data.id}`)}>
                     수정
                   </div>
-                  <div
-                    className="delete"
-                    onClick={handleStudyDeletion}
-                    // onClick={() => {
-                    //   alert("삭제되었습니다");
-                    //   deleteStudyApi(data.id);
-                    //   navigate("/");
-                    // }}
-                  >
+                  <div className="delete" onClick={handleStudyDeletion}>
                     삭제
                   </div>
                 </>
@@ -379,11 +370,11 @@ const StudyDesc = () => {
             <Button src={data.kakaoLink}>스터디 참여하기</Button>
           </ButtonWrap>
           <CommentsDiv>
-            <button onClick={() => setShowConfirmModal(!showConfirmModal)}>
+            <button onClick={() => setShowComments(!showComments)}>
               댓글보기
               <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
             </button>
-            {showConfirmModal ? <Comments studyId={id} /> : null}
+            {showComments ? <Comments studyId={id} /> : null}
           </CommentsDiv>
         </StyleStudyDesc>
       ) : (

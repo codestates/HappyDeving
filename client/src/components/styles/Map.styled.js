@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 import { getLikedStudies } from "../../features/studies/allStudiesSlice";
-
 import { unLikeStudyApi, likeStudyApi } from "../../api/study";
+import LoadingIndicator from "../LoadingIndicator";
 
 const Title = styled.div`
   margin-top: 200px;
@@ -38,6 +38,7 @@ const Map = () => {
   //검색한 조건에 맞는 스터디들의 목록
   const { studies } = useSelector((store) => store.studies);
   console.log(studies);
+  const { user } = useSelector((state) => state.user);
 
   //마커 생성용 데이터 가공
   const markerdata = studies.map((el) => {
@@ -52,8 +53,7 @@ const Map = () => {
     };
   });
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const { likedStudies } = useSelector((store) => store.allStudies);
+  const { likedStudies, isLoading } = useSelector((store) => store.allStudies);
   console.log(likedStudies);
 
   const mapscript = () => {
@@ -173,6 +173,10 @@ const Map = () => {
   useEffect(() => {
     dispatch(getLikedStudies(user.id));
   }, []);
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <>
