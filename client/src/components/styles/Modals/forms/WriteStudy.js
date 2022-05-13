@@ -44,12 +44,10 @@ const WriteStudy = (props) => {
         {/* <ConfirmSubtitle>수정 후에는 이전 정보로 되돌릴 수 없습니다.</ConfirmSubtitle> */}
         <ConfirmButton
           onClick={async () => {
-            await dispatch(writeStudy(props)).then((res) => {
-              console.log("res: ", res);
-              dispatch(reset());
-              dispatch(closeModal());
-              navigate(`/study/${res.id}`);
-            });
+            await dispatch(writeStudy(props));
+            dispatch(reset());
+            dispatch(closeModal());
+            navigate("/mystudy");
           }}
         >
           확인
