@@ -7,24 +7,27 @@ import { dateModal } from "../../../features/Search/searchModalSlice";
 import { setLocationData } from "../../../features/Search/searchDataSlice";
 
 const Location = styled.div`
-  width: 90%;
-  margin: 20px auto;
-  box-sizing: border-box;
+  position: absolute;
+  width: 100%;
+  top: 20px;
   font-family: "Medium";
+  border-radius: none;
 
   @media screen and (max-width: 768px) {
     height: 100vh;
   }
 
   .locationList {
-    padding: 60px 0px 20px 0px;
-    height: auto;
+    position: relative;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-17%);
     text-align: center;
 
     .locationDiv {
-      margin: 20px auto;
+      margin: 20px 0px;
+      width: 200px;
       display: flex;
-      width: 150px;
       align-items: center;
 
       .marker {
@@ -39,7 +42,9 @@ const Location = styled.div`
 
   > input {
     height: 40px;
-    width: 85%;
+    width: 90%;
+    left: 50%;
+    transform: translateX(-55%);
     margin-left: 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     position: absolute;
@@ -52,7 +57,7 @@ const Location = styled.div`
   }
 `;
 
-const LocationModal = () => {
+const HeaderLocationModal = () => {
   const { kakao } = window;
   const [locationList, setLocationList] = useState([]);
 
@@ -132,4 +137,4 @@ const LocationModal = () => {
   );
 };
 
-export default LocationModal;
+export default HeaderLocationModal;

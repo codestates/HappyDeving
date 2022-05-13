@@ -1,15 +1,20 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled from "styled-components";
+import Content from "../components/styles/Content.styled";
+import { Search } from "../components/styles/Search.styled";
 import Slider from "../components/Slider";
 // import landing_01 from "../../src/assets/landing1.png";
 import landing_02 from "../../src/assets/landing2.png";
 import landing_03 from "../../src/assets/landing3.png";
+
 const StyledLanding = styled.div`
   font-family: "Binggrae";
   grid-column: 3 / 13;
+
   display: flex;
   align-items: center;
+
   position: relative;
   width: 100%;
   height: 50vh;
@@ -26,6 +31,7 @@ const StyledLanding = styled.div`
     flex-direction: column;
   }
 `;
+
 const LandingImage = styled.img`
   width: 100%;
   height: 100%;
@@ -66,7 +72,7 @@ const TitleTransBox = styled.div`
   }
 `;
 
-const Landing = ({ imageSrc }) => {
+const Landing = ({ drop, imageSrc }) => {
   return (
     <>
       <StyledLanding>

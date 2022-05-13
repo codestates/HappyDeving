@@ -2,17 +2,22 @@ import React from "react";
 import styled from "styled-components";
 import Content from "../Content.styled";
 import { langImg } from "../../../static/images/langImg";
-import { setLanguageData } from "../../../features/Search/searchDataSlice";
 import { reset } from "../../../features/Search/searchModalSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setLanguageData,
+  resetData,
+} from "../../../features/Search/searchDataSlice";
+import { getStudiesMapApi } from "../../../api/study";
+import { setStudiesData } from "../../../features/studies/studiesSlice";
+import { useNavigate } from "react-router-dom";
 
 const StyledLanguageModal = styled(Content)`
   @media screen and (min-width: 768px) {
     grid-column: 7/11;
   }
   width: 100%;
-  height: 500px;
-  overflow: scroll;
+  height: auto;
   border-radius: 10px;
   position: relative;
   z-index: 10;
@@ -36,8 +41,15 @@ const StyledLanguageModal = styled(Content)`
   }
 `;
 
-const LanguageModal = () => {
+const HeaderLanguageModal = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { locationData, dateData, languageData } = useSelector(
+    (store) => store.searchData
+  );
+
+  const guType = locationData.split(" ")[0];
+  const dongType = locationData.split(" ")[1];
   return (
     <StyledLanguageModal>
       {Object.keys(langImg).map((el, idx) => (
@@ -46,6 +58,15 @@ const LanguageModal = () => {
           className="elements"
           onClick={() => {
             dispatch(setLanguageData(el));
+            getStudiesMapApi({ guType, dongType, languageData, dateData }).then(
+              (res) => {
+                console.log(res.data);
+                dispatch(setStudiesData(res.data));
+              }
+            );
+            //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
+            navigate("/map");
+            dispatch(resetData());
             dispatch(reset());
           }}
         >
@@ -56,4 +77,4 @@ const LanguageModal = () => {
   );
 };
 
-export default LanguageModal;
+export default HeaderLanguageModal;

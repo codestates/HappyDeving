@@ -13,8 +13,10 @@ import { openModal } from "../../features/modal/modalSlice";
 // import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
+
   grid-column: 4/12;
   margin-top: 200px;
+
 
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
@@ -48,9 +50,11 @@ const Desc = styled(Content)`
       outline: none;
       border: 1px solid #5e17eb;
     }
+
     &:hover {
       cursor: pointer;
       border: 1px solid #5e17eb;
+
     }
   }
 `;
@@ -125,9 +129,11 @@ const HalfInput = styled.div`
   &:focus {
     border: 1px solid #5e17eb;
   }
+
   &:hover {
     cursor: pointer;
     border: 1px solid #5e17eb;
+
   }
 
   @media screen and (max-width: 768px) {
@@ -385,7 +391,9 @@ const StudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -421,7 +429,9 @@ const StudyDesc = () => {
       <Desc checked={checked}>
         <Wrapper>
           <Text>제목</Text>
+
           <input onChange={(e) => handleInputValue("title", e.target.value)}></input>
+
         </Wrapper>
         <RowWrap>
           <HalfWrapper>
@@ -472,6 +482,7 @@ const StudyDesc = () => {
           </HalfWrapper>
         </RowWrap>
         <Wrapper>
+
           <Text>오픈링크</Text>
           <input
             placeholder="ex. 카카오톡 오픈채팅 링크를 입력해주세요"
@@ -490,6 +501,7 @@ const StudyDesc = () => {
             <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
           ) : null}
           <IconSerch>
+
             <IoIosSearch
               onClick={() => {
                 setOpen({ ...open, location: true });
@@ -501,9 +513,11 @@ const StudyDesc = () => {
         <Wrapper>
           <Text>내용</Text>
           <Textarea
+
             placeholder="ex. 스터디 모집 글을 자유롭게 작성해주세요 ^^."
             onChange={(e) => handleInputValue("content", e.target.value)}
           ></Textarea>
+
         </Wrapper>
 
         <Closed>

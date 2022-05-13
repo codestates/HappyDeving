@@ -37,9 +37,12 @@ function App() {
     },
     icons: {
       logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-      write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
-      login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
-      mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+      write:
+        "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+      login:
+        "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+      mypage:
+        "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
     },
     contents: {
       marginBottom: "20px",
@@ -128,7 +131,6 @@ function App() {
               exact
               element={
                 <>
-                  <Search />
                   <Landing imageSrc={landing_01} />
                   <WriteButtonModal />
                 </>
