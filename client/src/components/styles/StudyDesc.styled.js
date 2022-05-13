@@ -74,7 +74,6 @@ const CommentsDiv = styled.div`
   /* background: pink; */
 `;
 
-
 const Wrap = styled.div`
   display: flex;
   align-items: center;
@@ -260,8 +259,6 @@ const StudyDesc = () => {
   useEffect(() => {
     studyApi(id).then((res) => {
       setData(res.data.data.study);
-      console.log("study get data: ", res.data.data.study);
-
       setLocation(res.data.data.study.location);
     });
   }, []);

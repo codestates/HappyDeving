@@ -6,8 +6,6 @@ import { signout, reset } from "../../features/user/userSlice.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare, faUser, faFolder, faHeart } from "@fortawesome/free-regular-svg-icons";
-import LoadingIndicator from "../LoadingIndicator.js";
-
 const StyledBottommenu = styled.div`
   grid-column: 1/15;
   /* grid-template-columns: repeat(7, 1fr); */
@@ -84,8 +82,7 @@ const Menu5 = styled.div`
 `;
 
 const BottomMenu = () => {
-  const { user, isLoading } = useSelector((state) => state.user);
-  console.log(user);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
