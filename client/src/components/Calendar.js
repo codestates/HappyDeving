@@ -25,6 +25,9 @@ function CalenderDate() {
     dispatch(setDateModal(false));
   };
 
+  console.log(`서치바:${calenderDateValue}`);
+  console.log(`데이터:${dateData}`);
+
   return (
     <div>
       <Calendar

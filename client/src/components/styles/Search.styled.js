@@ -53,8 +53,6 @@ const Filter = styled.div`
       font-size: 20px;
     }
 
-    font-size: 18px;
-
     @media screen and (max-width: 768px) {
       font-size: 16px;
       display: none;
@@ -110,40 +108,36 @@ const LanguagesModal = styled(Modals)`
 
 const SearchIcon = styled.div`
   position: relative;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  background-color: ${(props) => props.theme.colors.purple};
+  margin-top: 10px;
+  margin-left: 10px;
 
-  div {
-    background-color: ${(props) => props.theme.colors.purple};
-    margin-top: 10px;
-    margin-left: 10px;
-    min-height: 30px;
-    max-width: 30px;
-    border-radius: 50%;
+  .icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 10px;
+    width: 10px;
+    line-height: 10px;
+    color: white;
+  }
+
+  &:hover {
+    background-color: ${(props) => props.theme.colors.lavender};
+    opacity: 0.7;
+    cursor: pointer;
     position: relative;
-
-    .icon {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      height: 15px;
-      width: 15px;
-      line-height: 15px;
-      color: white;
-    }
-
-    &:hover {
-      background-color: ${(props) => props.theme.colors.lavender};
-      opacity: 0.7;
-      cursor: pointer;
-      position: relative;
-      top: 2px;
-    }
+    top: 2px;
   }
 `;
 
 const { kakao } = window;
 
-const Search = ({ setHeader }) => {
+const Search = () => {
   const [locationList, setLocationList] = useState([]);
   // const [icon, setIcon] = useState("1.5em");
   const dispatch = useDispatch();
@@ -251,7 +245,6 @@ const Search = ({ setHeader }) => {
             navigate("/map");
             dispatch(resetData());
             dispatch(reset());
-            setHeader(false);
           }}
         >
           <IconContext.Provider value={{ className: "icon" }}>

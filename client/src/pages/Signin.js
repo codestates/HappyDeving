@@ -17,6 +17,7 @@ import {
   github_redirect_url,
   kakaoNaver_redirect_url,
   Kakao_url,
+  Github_url,
   Naver_url,
 } from "../config";
 //
@@ -209,7 +210,6 @@ const Resister = styled.div`
     border-bottom: 1px solid #c593fe;
   }
 `;
-
 function Signin() {
   const [userData, setUserData] = useState({
     email: "",
@@ -228,19 +228,26 @@ function Signin() {
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   useEffect(() => {
-    const kakaoOrNaver = localStorage.getItem("login");
-    if (kakaoOrNaver === "kakao") {
+    const whichone = localStorage.getItem("login");
+    if (whichone === "kakao") {
       const url = new URL(window.location.href);
       const authorizationCode = url.searchParams.get("code");
       if (authorizationCode) {
         getKakaoAccessToken(authorizationCode);
       }
     }
-    if (kakaoOrNaver === "naver") {
+    if (whichone === "naver") {
       const url = new URL(window.location.href);
       const authorizationCode = url.searchParams.get("code");
       if (authorizationCode) {
         getNaverAccessToken(authorizationCode);
+      }
+    }
+    if (whichone === "github") {
+      const url = new URL(window.location.href);
+      const authorizationCode = url.searchParams.get("code");
+      if (authorizationCode) {
+        getGithubAccessToken(authorizationCode);
       }
     }
   }, []);
@@ -268,6 +275,22 @@ function Signin() {
 
   const getKakaoAccessToken = async (authorizationCode) => {
     let resp = await axios.post(Kakao_url, {
+      authorizationCode: authorizationCode,
+    });
+    const { user } = resp.data;
+    const { accessToken } = resp.data;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", JSON.stringify(accessToken));
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    };
+    navigate("/");
+    window.location.reload();
+  };
+
+  const getGithubAccessToken = async (authorizationCode) => {
+    let resp = await axios.post(Github_url, {
       authorizationCode: authorizationCode,
     });
     const { user } = resp.data;
@@ -337,7 +360,6 @@ function Signin() {
   if (isLoading) {
     return <LoadingIndicator />;
   }
-
   return (
     <>
       <Background>

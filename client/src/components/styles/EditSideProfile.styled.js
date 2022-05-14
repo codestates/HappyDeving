@@ -133,7 +133,7 @@ const EditSideProfile = () => {
             ref={fileInput}
           />
 
-          <ProfileButton onClick={onSave}>프로필 저장하기</ProfileButton>
+          <ProfileButton onClick={onSave}>사진 저장하기</ProfileButton>
         </Profile>
       </Container>
     </>
