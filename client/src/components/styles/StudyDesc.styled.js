@@ -15,10 +15,13 @@ import { studyApi } from "../../api/study";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
 import ShareSocialButton from "../styles/ShareSocial.styled";
 import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
 
 const StyleStudyDesc = styled.div`
   grid-column: 4/12;
@@ -123,6 +126,16 @@ const Icon = styled.div`
   align-items: center;
   margin-right: 20px;
 `;
+const HeartIcon = styled.span`
+  font-size: 30px;
+  margin-left: 80%;
+  .like {
+    color: #d32f2f;
+  }
+  @media screen and (max-width: 1100px) {
+    font-size: 20px;
+  }
+`;
 
 const Text = styled.div`
   width: 120px;
@@ -204,6 +217,8 @@ const StudyDesc = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { user } = useSelector((state) => state.user);
+  const { likedStudies } = useSelector((state) => state.allStudies);
+  const [isLike, setIsLike] = useState(false);
 
 
   const [showComments, setShowComments] = useState(false);
@@ -255,15 +270,32 @@ const StudyDesc = () => {
   useEffect(() => {
     if (data) {
       mapscript();
+      for (let el of likedStudies) {
+        if (el.id === data.id) {
+          setIsLike(true);
+        }
+      }
     }
-  }, [data]);
+  }, [data, likedStudies]);
 
   useEffect(() => {
     studyApi(id).then((res) => {
-      setData(res.data.data.study);
-      setLocation(res.data.data.study.location);
+      setData(res.data?.data?.study);
+      console.log("study get data: ", res.data?.data?.study);
+
+      setLocation(res.data?.data?.study.location);
     });
   }, []);
+
+  const handleUnlike = async () => {
+    await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: data.id } }));
+    setIsLike(!isLike);
+  };
+
+  const handleLike = async () => {
+    await dispatch(likeStudy({ id: user.id, studyData: { study_id: data.id } }));
+    setIsLike(!isLike);
+  };
 
   const handleStudyDeletion = (e) => {
     e.preventDefault();
@@ -282,62 +314,74 @@ const StudyDesc = () => {
           {/* {console.log(data.user_id)}
           {console.log(user?.id)} */}
           <TitleBar>
-            <div className="title">{data.title}</div>
+            <div className="title">{data?.title}</div>
             <div className="alter">
-              {data.user_id === user?.id ? (
+              {data?.user_id === user?.id ? (
                 <>
-                  {" "}
+                  <HeartIcon>
+                    {isLike ? (
+                      <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
+                    ) : (
+                      <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
+                    )}
+                  </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
                     {share ? <ShareSocialButton /> : null}
                     <FontAwesomeIcon icon={faShareNodes} />
                   </ShareIcon>
-
-                  <div className="update" onClick={() => navigate(`/study/edit/${data.id}`)}>
-
-
+                  <div className="update" onClick={() => navigate(`/study/edit/${data?.id}`)}>
                     수정
                   </div>
                   <div className="delete" onClick={handleStudyDeletion}>
                     삭제
                   </div>
                 </>
-              ) : null}
+              ) : (
+                <HeartIcon>
+                  {isLike ? (
+                    <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
+                  ) : (
+                    <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
+                  )}
+                </HeartIcon>
+              )}
             </div>
           </TitleBar>
           <Host>
             <Wrap>
-              <img className="profile" src={user?.image} />
-              <Text>{user?.username}</Text>
+              <img className="profile" src={data?.image} />
+              <Text>{data?.username}</Text>
             </Wrap>
           </Host>
           <Wrap>
-            <Icon>
-              {data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
-            </Icon>
-            <Text>{data.closed ? "모집마감" : "모집중"}</Text>
-            {console.log(data.closed)}
+            <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
+            <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
+
           </Wrap>
           <Wrap>
             <Icon>
               <BsFileEarmarkCodeFill />
             </Icon>
             <Text>
-              <span className="langSpan">
-                {data.language.map((el) => el.name).join()}
-              </span>
+              {data?.language.map((el, idx) => (
+                <span key={idx} className="langSpan">
+                  {el.name + ","}
+                </span>
+              ))}
+
             </Text>
           </Wrap>
           <Wrap>
             <Icon>
               <BsFillCalendarDateFill />
             </Icon>
-            <Text>{data.startDate}</Text>
+            <Text>{data?.startDate}</Text>
           </Wrap>
           <Wrap>
             <Icon>
               <FaMapMarkerAlt />
             </Icon>
-            <Text>{data.location.name}</Text>
+            <Text>{data?.location.name}</Text>
           </Wrap>
           <div className="mapview">
             <MapView id="map" ref={container} />
@@ -346,22 +390,23 @@ const StudyDesc = () => {
             <Icon>
               <BsFillFileEarmarkTextFill />
             </Icon>
-            <Content>{data.content}</Content>
-          </ContentWrap>
+            <Content>{data?.content}</Content>
+          </ContentWrap>{" "}
+
           <ProfileWrap>
             <ProfileImage>
-              <img src={user?.image} />
+              <img src={data?.image} />
             </ProfileImage>
 
             <Profile>
               <h1>스터디 장, {data?.username}을 소개합니다!</h1>
-              <Bio>{user?.bio}</Bio>
+              <Bio>{data?.bio}</Bio>
               <LinkButtons>
-                <a href={user?.github} target="_blank" rel="noreferrer">
+                <a href={data?.github} target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faGithubAlt} />
                   깃허브
                 </a>
-                <a href={user?.blog} target="_blank" rel="noreferrer">
+                <a href={data?.blog} target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faBlogger} />
                   블로그
                 </a>
@@ -369,7 +414,7 @@ const StudyDesc = () => {
             </Profile>
           </ProfileWrap>
           <ButtonWrap>
-            <Button href={data.kakaoLink}>스터디 참여하기</Button>
+            <Button src={data?.kakaoLink}>스터디 참여하기</Button>
           </ButtonWrap>
           <CommentsDiv>
             <button onClick={() => setShowComments(!showComments)}>

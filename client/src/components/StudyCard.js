@@ -4,17 +4,12 @@ import styled from "styled-components";
 // import Content from "../components/styles/Content.styled";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getLikedStudies,
-  getMyStudies,
-  likeStudy,
-  unLikeStudy,
-} from "../features/studies/allStudiesSlice";
+import { getLikedStudies, likeStudy, unLikeStudy } from "../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import { langImg } from "../static/images/langImg";
 import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
-import { lang } from "moment";
+import { nanoid } from "nanoid";
 
 const CardContainer = styled.div`
   box-shadow: 7px 7px 10px grey;
@@ -120,6 +115,17 @@ const StudyCard = ({ myStudy, likedStudy }) => {
     }
   }, [myStudies, likedStudies]);
 
+  const imageHandler = (study) => {
+    return study.language
+      .slice(0, 2)
+      .map((el) =>
+        el["name"] === "c++" ? (
+          <img key={nanoid()} src={langImg["c"]} alt=""></img>
+        ) : (
+          <img key={nanoid()} src={langImg[el["name"]]} alt=""></img>
+        )
+      );
+  };
 
 
   const handleUnlike = async () => {

@@ -99,7 +99,7 @@ const Comment = ({
     <CommentDiv>
       <CommentUpperPart key={comment.id}>
         <CommentImageContainer>
-          <img src={user?.id === comment.user_id ? user.image : comment.image} alt="" />
+          <img src={user?.id === comment.user_id ? user.image : comment.image} alt=""></img>
         </CommentImageContainer>
         <CommentRightPart>
           <CommentAuthor>{comment.username}</CommentAuthor>

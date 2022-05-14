@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-
 import { useDispatch, useSelector } from "react-redux";
 import { getLikedStudies, reset } from "../features/studies/allStudiesSlice";
 import StudyCard from "../components/StudyCard";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { useNavigate } from "react-router-dom";
+import { nanoid } from "nanoid";
 
 const MyStudyContainer = styled.div`
   min-height: 100%;
@@ -112,8 +112,8 @@ const LikedStudy = () => {
         </Tab>
 
         <StyledSection>
-          {likedStudies?.map((likedStudy, i) => (
-            <StudyCard key={i} likedStudy={likedStudy} />
+          {likedStudies?.map((likedStudy) => (
+            <StudyCard key={nanoid()} likedStudy={likedStudy} />
           ))}
         </StyledSection>
       </MyStudyContainer>
