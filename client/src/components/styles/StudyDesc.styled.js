@@ -18,11 +18,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
 import { faAngleDown, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
 import ShareSocialButton from "../styles/ShareSocial.styled";
 import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
+
 const StyleStudyDesc = styled.div`
   grid-column: 4/12;
   min-width: 500px;
@@ -174,6 +177,16 @@ const ContentWrap = styled.div`
 const Icon = styled.div`
   margin-right: 10px;
 `;
+const HeartIcon = styled.span`
+  font-size: 30px;
+  margin-left: 80%;
+  .like {
+    color: #d32f2f;
+  }
+  @media screen and (max-width: 1100px) {
+    font-size: 20px;
+  }
+`;
 
 const CreateAt = styled.p`
   color: darkray;
@@ -193,7 +206,7 @@ const TextL = styled.div`
   margin-right: 10px;
 `;
 
-console.log("random", Math.floor(Math.random() * 10));
+
 const dummyimg = DummyImgs[Math.floor(Math.random() * 10)];
 const DummyImg = styled.div`
   width: 100%;
@@ -290,6 +303,7 @@ const StudyDesc = () => {
   const { user } = useSelector((state) => state.user);
   const { likedStudies } = useSelector((state) => state.allStudies);
   const [isLike, setIsLike] = useState(false);
+
   const [showComments, setShowComments] = useState(false);
   const [share, setShare] = useState(false);
   const moment = require("moment");
@@ -345,7 +359,7 @@ const StudyDesc = () => {
       }
     }
   }, [data, likedStudies]);
-  console.log(data);
+
   useEffect(() => {
     studyApi(id).then((res) => {
       setData(res.data?.data?.study);
@@ -356,19 +370,21 @@ const StudyDesc = () => {
   }, []);
 
   const handleUnlike = async () => {
-    await dispatch(
-      unLikeStudy({ id: user.id, studyData: { study_id: data.id } })
-    );
+
+    await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: data.id } }));
+
     setIsLike(!isLike);
   };
 
   const handleLike = async () => {
+
+    await dispatch(likeStudy({ id: user.id, studyData: { study_id: data.id } }));
     setIsLike(!isLike);
-    await dispatch(
-      likeStudy({ id: user.id, studyData: { study_id: data.id } })
-    );
   };
-  // const createAtDate = moment(data.createAt).format("YYYY.MM.DD");
+
+
+
+
   const handleStudyDeletion = (e) => {
     e.preventDefault();
     dispatch(
@@ -383,6 +399,7 @@ const StudyDesc = () => {
       {data ? (
         <StyleStudyDesc>
           <TitleBar>
+
             <Title>{data.title}</Title>
             <Alter>
               {data.user_id === user?.id ? (
@@ -401,18 +418,22 @@ const StudyDesc = () => {
                         icon={unLike}
                         size="1x"
                       />
+
                     )}
                   </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
                     {share ? <ShareSocialButton /> : null}
                     <FontAwesomeIcon icon={faShareNodes} />
                   </ShareIcon>
+
                   <Update onClick={() => navigate(`/study/edit/${data.id}`)}>
+
                     수정
                   </Update>
                   <Delete onClick={handleStudyDeletion}>삭제</Delete>
                 </>
               ) : (
+
                 <>
                   <HeartIcon>
                     {isLike ? (
@@ -445,9 +466,11 @@ const StudyDesc = () => {
               <img className="profile" src={data?.image} />
               <p>{data?.username}</p>
             </MiniProfileWrap>
+
           </Host>
           <DummyImg></DummyImg>
           <Wrap>
+
             <Icon>
               {data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
             </Icon>
@@ -460,21 +483,25 @@ const StudyDesc = () => {
                 {data?.language.map((el, idx) => el.name).join()}
               </span>
             </TextL>
+
           </Wrap>
           <Wrap>
             <Icon>
               <BsFillCalendarDateFill />
             </Icon>
             <Text>{data?.startDate}</Text>
+
             <Icon>
               <FaMapMarkerAlt />
             </Icon>
             <TextL>{data?.location.name}</TextL>
+
           </Wrap>
           <div className="mapview">
             <MapView id="map" ref={container} />
           </div>
           <ContentWrap>
+
             <Content>{data?.content}</Content>
           </ContentWrap>
 
@@ -483,6 +510,7 @@ const StudyDesc = () => {
               <ProfileImage>
                 <img src={data?.image} />
               </ProfileImage>
+
               <LinkButtons>
                 <a href={data?.github} target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faGithubAlt} />
@@ -501,6 +529,7 @@ const StudyDesc = () => {
             </Profile>
           </ProfileWrap>
           <ButtonWrap>
+
             <ConfirmButton onClick={() => setShowComments(!showComments)}>
               <p>댓글작성 | 보기</p>
 
@@ -509,6 +538,7 @@ const StudyDesc = () => {
               </Icon>
             </ConfirmButton>
             <ConfirmButton src={data?.kakaoLink}>스터디 참여하기</ConfirmButton>
+
           </ButtonWrap>
 
           <CommentsDiv>

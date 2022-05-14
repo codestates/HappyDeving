@@ -63,20 +63,20 @@ module.exports = {
       if (loginMethod === 1) {
         githubWithdrawal(accessToken);
       }
-      return res.json("ok");
       if (loginMethod === 2) {
         googleWithdrawal(accessToken);
         // withdrawal(id);
       }
       // return res.json("ok");
-      if (loginMethod === 3) {
-        kakaoWithdrawal(accessToken);
-        withdrawal(id);
-      }
-      if (loginMethod === 4) {
-        naverWithdrawal(accessToken);
-        withdrawal(id);
-      }
+      // return res.json("ok");
+      // if (loginMethod === 3) {
+      //   kakaoWithdrawal(accessToken);
+      //   withdrawal(id);
+      // }
+      // if (loginMethod === 4) {
+      //   naverWithdrawal(accessToken);
+      //   withdrawal(id);
+      // }
 
       // console.log(accessToken);
       res.cookie("accessToken", null, { maxAge: 0 });

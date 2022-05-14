@@ -18,6 +18,7 @@
     "sequelize-cli": "^6.4.1"
   },
   "dependencies": {
+    "@octokit/core": "^3.6.0",
     "aws-sdk": "^2.1134.0",
     "axios": "^0.26.1",
     "bcrypt": "^5.0.1",
