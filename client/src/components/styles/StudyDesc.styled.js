@@ -193,20 +193,17 @@ const TextL = styled.div`
   margin-right: 10px;
 `;
 
-const DummyWrap = styled.div`
-  display: flex;
-  background-color: rgba(233, 193, 255, 20%);
-  min-height: 0px;
-
-  min-height: 200px;
-  width: 100%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px; ;
-`;
-
+console.log("random", Math.floor(Math.random() * 10));
+const dummyimg = DummyImgs[Math.floor(Math.random() * 10)];
 const DummyImg = styled.div`
   width: 100%;
-  padding: 10px;
+  height: 300px;
+
+  background-image: url(${dummyimg});
+  background-position: center;
+  background-size: cover;
+
+  margin-bottom: 20px;
 `;
 
 const Content = styled.div`
@@ -442,22 +439,14 @@ const StudyDesc = () => {
             </Alter>
           </TitleBar>
           <Host>
-            <CreateAt>
-              {/* {data?.updateAt} */}
-              {/* {createAtDate} */}
-              {moment(data.createAt).format("YYYY.MM.DD")}
-            </CreateAt>
+            <CreateAt>{moment(data.createAt).format("YYYY.MM.DD")}</CreateAt>
 
             <MiniProfileWrap>
               <img className="profile" src={data?.image} />
               <p>{data?.username}</p>
             </MiniProfileWrap>
           </Host>
-          <DummyWrap>
-            <DummyImg>
-              <img src={DummyImgs[id % 10]} />
-            </DummyImg>
-          </DummyWrap>
+          <DummyImg></DummyImg>
           <Wrap>
             <Icon>
               {data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
