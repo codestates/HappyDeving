@@ -14,6 +14,7 @@ const StyledEditProfile = styled.div`
   min-height: 80%;
   text-align: left;
   min-width: 524px;
+  margin-top: 150px;
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
     transition: 1s;
@@ -25,14 +26,15 @@ const StyledEditProfile = styled.div`
 `;
 
 const UserTitle = styled.div`
-  font-size: 40px;
+  font-size: 30px;
+  font-family: "Binggrae";
   margin-bottom: 50px;
   span {
     font-weight: 500;
     border-bottom: 5px solid #dfc1ff;
   }
   @media screen and (max-width: 1024px) {
-    font-size: 30px;
+    font-size: 20px;
     transition: 1s;
   }
 `;
@@ -90,39 +92,65 @@ const ProfileWrap = styled.div`
 
 const Text = styled.div`
   width: 150px;
+  font-family: "Binggrae";
   padding-bottom: 2px;
   border-bottom: 1px solid gray;
   color: gray;
-  font-size: 18px;
+  font-size: 14px;
   margin-bottom: 10px;
+
   margin-top: 25px;
   @media screen and (max-width: 764px) {
-    font-size: 16px;
+    font-size: 12px;
   }
 `;
 
 const Info = styled.div`
-  margin-top: 10px;
+  background-color: rgba(233, 193, 255, 20%);
+  border-radius: 5px;
+  height: 40px;
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+  height: 50px;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+    width: 100%;
+  }
+  /* margin-top: 10px;
   margin-bottom: 10px;
   font-size: 18px;
   @media screen and (max-width: 764px) {
     font-size: 16px;
-  }
+  } */
 `;
 
 const ButtonWrap = styled.div`
   display: flex;
   font-size: 16px;
   margin-top: 30px;
-  p {
-    border-bottom: 1px solid gray;
-    margin-right: 10px;
-    color: gray;
-    font-weight: 700;
+  button {
+    font-family: "Binggrae";
+    display: flex;
+    justify-content: center;
+    width: 120px;
+    padding: 5px 5px;
     cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid #5e17eb;
+    font-size: 14px;
+    transition: 1ms;
     &:hover {
-      color: black;
-      border-bottom: 3px solid #dfc1ff;
+      color: #5e17eb;
+      font-weight: 600;
+      background-color: rgba(233, 193, 255, 10%);
+      position: relative;
+      top: -2px;
+    }
+    &:active {
+      position: relative;
+      top: 0px;
     }
   }
 `;
@@ -160,10 +188,7 @@ const Profile = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab
-            className="tap"
-            onClick={() => navigate("/likedstudy")}
-          >
+          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>
@@ -185,7 +210,7 @@ const Profile = () => {
             <Text>블로그 주소</Text>
             <Info>{user?.blog}</Info>
             <ButtonWrap>
-              <p onClick={MoveToEditPage}>프로필 수정하기</p>
+              <button onClick={MoveToEditPage}>프로필 수정하기</button>
             </ButtonWrap>
           </ProfileWrap>
         </ProfileContainer>

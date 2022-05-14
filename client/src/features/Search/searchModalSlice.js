@@ -15,9 +15,9 @@ const searchModalSlice = createSlice({
       state.date = false;
       state.language = false;
     },
-    dateModal: (state) => {
+    dateModal: (state, action) => {
       state.location = false;
-      state.date = true;
+      state.date = action.payload;
       state.language = false;
     },
 

@@ -19,6 +19,7 @@ const StyledComments = styled(Content)`
 `;
 const CommentsContainer = styled.div`
   margin-top: 40px;
+  /* background-color: rgba(233, 193, 255, 10%); */
 `;
 
 const Comments = ({ studyId }) => {

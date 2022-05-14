@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import Comments from "../Comments";
-import { DummyImgs } from "../../static/images/DummyImg";
 import "./Map.styled.css";
 import {
   BsFillDoorOpenFill,
@@ -16,15 +15,13 @@ import { studyApi } from "../../api/study";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown, faShareNodes } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
 import ShareSocialButton from "../styles/ShareSocial.styled";
 import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
-
 const StyleStudyDesc = styled.div`
+  margin-top: 150px;
   grid-column: 4/12;
   min-width: 500px;
   padding: 3% 5% 3% 5%;
@@ -170,16 +167,6 @@ const ContentWrap = styled.div`
 const Icon = styled.div`
   margin-right: 10px;
 `;
-const HeartIcon = styled.span`
-  font-size: 30px;
-  margin-left: 80%;
-  .like {
-    color: #d32f2f;
-  }
-  @media screen and (max-width: 1100px) {
-    font-size: 20px;
-  }
-`;
 
 const CreateAt = styled.p`
   color: darkray;
@@ -198,6 +185,7 @@ const TextL = styled.div`
   padding-bottom: 5px;
   margin-right: 10px;
 `;
+
 
 const dummyimg = DummyImgs[Math.floor(Math.random() * 10)];
 const DummyImg = styled.div`
@@ -264,6 +252,7 @@ const ButtonWrap = styled.div`
 const ConfirmButton = styled.button`
   display: flex;
   justify-content: center;
+  font-family: "Binggrae";
   width: 150px;
   padding: 5px 5px;
   cursor: pointer;
@@ -295,7 +284,6 @@ const StudyDesc = () => {
   const { user } = useSelector((state) => state.user);
   const { likedStudies } = useSelector((state) => state.allStudies);
   const [isLike, setIsLike] = useState(false);
-
   const [showComments, setShowComments] = useState(false);
   const [share, setShare] = useState(false);
   const moment = require("moment");
@@ -322,9 +310,7 @@ const StudyDesc = () => {
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var imgname =
-      data.language[0]["name"] === "c++" ? "c" : data.language[0]["name"];
-    var img = langImg[imgname];
+    var img = langImg.javascript;
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -351,7 +337,7 @@ const StudyDesc = () => {
       }
     }
   }, [data, likedStudies]);
-
+  console.log(data);
   useEffect(() => {
     studyApi(id).then((res) => {
       setData(res.data?.data?.study);
@@ -362,18 +348,19 @@ const StudyDesc = () => {
   }, []);
 
   const handleUnlike = async () => {
+
     await dispatch(
       unLikeStudy({ id: user.id, studyData: { study_id: data.id } })
     );
+
 
     setIsLike(!isLike);
   };
 
   const handleLike = async () => {
-    await dispatch(
-      likeStudy({ id: user.id, studyData: { study_id: data.id } })
-    );
+
     setIsLike(!isLike);
+    await dispatch(likeStudy({ id: user.id, studyData: { study_id: data.id } }));
   };
 
   const handleStudyDeletion = (e) => {
@@ -396,18 +383,15 @@ const StudyDesc = () => {
                 <>
                   <HeartIcon>
                     {isLike ? (
-                      <FontAwesomeIcon
-                        onClick={handleUnlike}
-                        icon={like}
-                        size="1x"
-                        color="red"
-                      />
+                      <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
                     ) : (
+
                       <FontAwesomeIcon
                         onClick={handleLike}
                         icon={unLike}
                         size="1x"
                       />
+
                     )}
                   </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
@@ -415,27 +399,17 @@ const StudyDesc = () => {
                     <FontAwesomeIcon icon={faShareNodes} />
                   </ShareIcon>
 
-                  <Update onClick={() => navigate(`/study/edit/${data.id}`)}>
-                    수정
-                  </Update>
+                  <Update onClick={() => navigate(`/study/edit/${data.id}`)}>수정</Update>
+
                   <Delete onClick={handleStudyDeletion}>삭제</Delete>
                 </>
               ) : (
                 <>
                   <HeartIcon>
                     {isLike ? (
-                      <FontAwesomeIcon
-                        onClick={handleUnlike}
-                        icon={like}
-                        size="1x"
-                        color="red"
-                      />
+                      <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
                     ) : (
-                      <FontAwesomeIcon
-                        onClick={handleLike}
-                        icon={unLike}
-                        size="1x"
-                      />
+                      <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
                     )}
                   </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
@@ -447,26 +421,31 @@ const StudyDesc = () => {
             </Alter>
           </TitleBar>
           <Host>
-            <CreateAt>{moment(data.createAt).format("YYYY.MM.DD")}</CreateAt>
+            <CreateAt>
+              {/* {data?.updateAt} */}
+              {/* {createAtDate} */}
+              {moment(data.createAt).format("YYYY.MM.DD")}
+            </CreateAt>
 
             <MiniProfileWrap>
               <img className="profile" src={data?.image} />
               <p>{data?.username}</p>
             </MiniProfileWrap>
           </Host>
-          <DummyImg></DummyImg>
           <Wrap>
-            <Icon>
-              {data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
-            </Icon>
+
+            <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
+
             <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
             <Icon>
               <BsFileEarmarkCodeFill />
             </Icon>
             <TextL>
-              <span className="langSpan">
-                {data?.language.map((el, idx) => el.name).join()}
-              </span>
+              {data?.language.map((el, idx) => (
+                <span key={idx} className="langSpan">
+                  {el.name + ","}
+                </span>
+              ))}
             </TextL>
           </Wrap>
           <Wrap>
@@ -474,7 +453,6 @@ const StudyDesc = () => {
               <BsFillCalendarDateFill />
             </Icon>
             <Text>{data?.startDate}</Text>
-
             <Icon>
               <FaMapMarkerAlt />
             </Icon>
@@ -492,7 +470,6 @@ const StudyDesc = () => {
               <ProfileImage>
                 <img src={data?.image} />
               </ProfileImage>
-
               <LinkButtons>
                 <a href={data?.github} target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faGithubAlt} />
@@ -521,9 +498,7 @@ const StudyDesc = () => {
             <ConfirmButton src={data?.kakaoLink}>스터디 참여하기</ConfirmButton>
           </ButtonWrap>
 
-          <CommentsDiv>
-            {showComments ? <Comments studyId={id} /> : null}
-          </CommentsDiv>
+          <CommentsDiv>{showComments ? <Comments studyId={id} /> : null}</CommentsDiv>
         </StyleStudyDesc>
       ) : (
         "data가 없습니다"

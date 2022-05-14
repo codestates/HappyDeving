@@ -13,7 +13,6 @@ function CalenderDate() {
   const { dateData } = useSelector((store) => store.searchData);
   const dispatch = useDispatch();
   const [value, onChange] = useState(new Date());
-  // const today = moment();
 
   const handleDate = (value) => {
     onChange(value);
@@ -25,6 +24,9 @@ function CalenderDate() {
     dispatch(languageModal());
     dispatch(setDateModal(false));
   };
+
+  console.log(`서치바:${calenderDateValue}`);
+  console.log(`데이터:${dateData}`);
 
   return (
     <div>

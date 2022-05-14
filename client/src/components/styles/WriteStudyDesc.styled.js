@@ -9,11 +9,13 @@ import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../features/modal/modalSlice";
+import { dateModal } from "../../features/Search/searchModalSlice";
 // import { writeStudyApi } from "../../api/study";
 // import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
+  margin-top: 150px;
 
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
@@ -30,14 +32,14 @@ const Desc = styled(Content)`
   padding: 3% 5% 3% 5%;
 
   input {
-    background-color: white;
-    border: 1px solid gray;
+    background-color: rgba(233, 193, 255, 20%);
     border-radius: 5px;
     height: 40px;
     width: 100%;
     font-size: 16px;
     padding: 10px;
-
+    height: 50px;
+    cursor: pointer;
     @media screen and (max-width: 768px) {
       font-size: 14px;
       width: 100%;
@@ -45,40 +47,51 @@ const Desc = styled(Content)`
 
     &:focus {
       outline: none;
-      border: 1px solid #5e17eb;
-    }
-
-    &:hover {
-      cursor: pointer;
-      border: 1px solid #5e17eb;
     }
   }
 `;
 
 const DescDateModal = styled.div`
-  display: flex;
   width: 100%;
-  justify-content: center;
+  height: auto;
 
-  box-shadow: none;
+  text-align: center;
+  z-index: 30;
+  border-radius: 5px;
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  padding: 0px 10px;
+  border: 4px solid rgba(250, 240, 255, 100%);
+  background: white;
+  outline: none;
+  &:focus {
+    border: 1px solid #5e17eb;
+  }
+  &:hover {
+    cursor: pointer;
+    border: 1px solid #5e17eb;
+  }
 `;
 
 const DescLanguageModal = styled.div`
   width: 100%;
   height: auto;
   text-align: center;
-  z-index: 10;
-  background: whitesmoke;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 30;
+
   border-radius: 5px;
   position: absolute;
-  top: 85px;
-  padding: 30px 10px;
+  top: 50px;
+  left: 0px;
+  padding: 32px 10px;
+  border: 4px solid rgba(250, 240, 255, 100%);
+  background: white;
+  cursor: pointer;
   &:focus {
     border: 1px solid #5e17eb;
   }
   &:hover {
-    cursor: pointer;
     border: 1px solid #5e17eb;
   }
 `;
@@ -91,45 +104,37 @@ const DescLocationModal = styled.div`
   height: auto;
   z-index: 10;
   position: absolute;
-  top: 85px;
+  top: 95px;
+  left: 0px;
   width: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   font-size: 16px;
   text-align: center;
-  background: whitesmoke;
   padding: 20px;
+  border: 4px solid rgba(250, 240, 255, 100%);
+  background: white;
   cursor: pointer;
 
   &:focus {
-    outline: none;
     border: 1px solid #5e17eb;
   }
   &:hover {
-    /* cursor: pointer; */
+    cursor: pointer;
     border: 1px solid #5e17eb;
   }
 `;
 
 const HalfInput = styled.div`
   display: flex;
-  position: relative;
-  background-color: white;
-  width: 100%;
-  border: 1px solid gray;
+  background-color: rgba(233, 193, 255, 20%);
   border-radius: 5px;
-  height: 40px;
+  position: relative;
+  width: 100%;
+  height: 50px;
   font-size: 16px;
   padding: 5px 10px;
-
-  &:focus {
-    border: 1px solid #5e17eb;
-  }
-
-  &:hover {
-    cursor: pointer;
-    border: 1px solid #5e17eb;
-  }
+  align-items: center;
+  cursor: pointer;
 
   @media screen and (max-width: 768px) {
     font-size: 16px;
@@ -137,12 +142,23 @@ const HalfInput = styled.div`
   }
 `;
 
-const IconDrop = styled.div`
+const LangDrop = styled.div`
   position: absolute;
-  border-left: 1px solid gray;
+  /* border-left: 1px solid gray; */
   right: 0px;
   top: 2px;
   font-size: 34px;
+  color: #5e17eb;
+  padding: 0px 5px;
+  cursor: pointer;
+`;
+
+const DateDrop = styled.div`
+  position: absolute;
+  /* border-left: 1px solid gray; */
+  right: 0px;
+  top: 2px;
+  font-size: 30px;
   color: #5e17eb;
   padding: 0px 5px;
   cursor: pointer;
@@ -151,10 +167,10 @@ const IconSerch = styled.div`
   position: absolute;
   right: 0px;
   top: 50px;
-  border-left: 1px solid gray;
+  /* border-left: 1px solid gray; */
   font-size: 30px;
   color: #5e17eb;
-  padding: 0px 10px;
+  padding: 5px 10px;
   cursor: pointer;
 `;
 
@@ -165,7 +181,6 @@ const RowWrap = styled.div`
   justify-content: space-between;
   @media screen and (max-width: 768px) {
     flex-direction: column;
-    /* justify-content: center; */
     align-items: center;
   }
 `;
@@ -189,6 +204,7 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.div`
+  font-family: "Binggrae";
   font-size: 18px;
   margin: 10px 0px;
   @media screen and (max-width: 1024px) {
@@ -196,32 +212,37 @@ const Text = styled.div`
   }
 `;
 
-const Button = styled.button`
-  padding: 8px 15px;
-  background: #5e17eb;
+const ConfirmButton = styled.button`
+  display: flex;
+  font-family: "Binggrae";
+  justify-content: center;
+  width: 150px;
+  padding: 5px 5px;
+  cursor: pointer;
   border-radius: 10px;
-  border: 2px solid #dfc1ff;
-  color: white;
-  transition: 5ms;
-
+  border: 1px solid #5e17eb;
+  font-size: 14px;
+  transition: 1ms;
   &:hover {
-    background-color: #c593fe;
-    border: 1px solid #6733e5;
+    color: #5e17eb;
+    font-weight: 600;
+    background-color: rgba(233, 193, 255, 10%);
+    position: relative;
+    top: -2px;
   }
   &:active {
     position: relative;
-    top: -2px;
+    top: 0px;
   }
 `;
 
 const Textarea = styled.textarea`
   padding: 10px;
   border-radius: 5px;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background-color: rgba(233, 193, 255, 20%);
   width: 100%;
   height: 200px;
-  /* resize: none; */
-  overflow: scroll;
+  outline: none;
   &:focus {
     outline: none;
   }
@@ -232,20 +253,19 @@ const { kakao } = window;
 const MapView = styled(Content)`
   border-radius: 0px;
   grid-column: 2/14;
-  height: 300px;
+  height: 400px;
+  min-width: 300px;
   border-radius: 5px;
   margin-bottom: 20px;
 `;
 const Closed = styled.div`
   display: flex;
-
   align-items: center;
   justify-content: space-between;
 
   input {
-    margin-right: 10px;
-    width: 15px;
-    background-color: red;
+    margin-left: 10px;
+    width: 18px;
   }
 `;
 const Checkbox = styled.div`
@@ -256,8 +276,10 @@ const Checkbox = styled.div`
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
 
 const StudyDesc = () => {
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const container = useRef(null);
+  const { date } = useSelector((store) => store.search);
   const [location, setLocation] = useState({
     place_name: "광화문",
     y: 37.570975,
@@ -291,24 +313,30 @@ const StudyDesc = () => {
   }
 
   const handleLocationValue = (e, value) => {
-    if (e.type === "click" || e.key === "Enter") {
+    if (e === "click") {
+      console.log("location");
+
+      console.log(value);
       searchPlaces(value);
     }
+
+    if (e.key === "Enter") {
+      searchPlaces(value);
+    } // true
   };
 
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: new kakao.maps.LatLng(location.y, location.x), //지도의 중심좌표
-      level: 5, //지도의 레벨(확대, 축소 정도)
+      level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
     var img =
-      data.language.length !== 0
-        ? langImg[data.language[0].name]
-        : "https://i.ibb.co/nr4FYns/happydevil.png";
-
+      data.language.length === 0
+        ? "https://i.ibb.co/nr4FYns/happydevil.png"
+        : langImg[data.language[0].name];
     var // 마커이미지의 주소입니다
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
@@ -337,11 +365,11 @@ const StudyDesc = () => {
   const [checked, setChecked] = useState(false);
   const locationInput = useRef(null);
 
+  const [locationSearch, setLocationSearch] = useState("");
   const [langOpen, setLangOpen] = useState(false);
   const [locOpen, setLocOpen] = useState(false);
-
   const { user } = useSelector((state) => state.user);
-
+  // const { dateModal } = useSelector((store) => store.studyModal);
   const { dateData } = useSelector((store) => store.searchData);
   const { calenderDateValue } = useSelector((store) => store.calender);
   const [data, setData] = useState({
@@ -367,10 +395,6 @@ const StudyDesc = () => {
     setData({ ...data, closed: checked });
   }, [checked]);
 
-  useEffect(() => {
-    mapscript();
-  }, [data.language]);
-
   const locationListHandler = (locationList) => {
     //검색한 조건에 맞는 스터디들의 목록을 div로 표현
     //return 문에서 사용해줘야 함
@@ -382,9 +406,7 @@ const StudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name
-            .split(" ")
-            .filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -421,90 +443,88 @@ const StudyDesc = () => {
       <Desc checked={checked}>
         <Wrapper>
           <Text>제목</Text>
-
-          <input
-            onChange={(e) => handleInputValue("title", e.target.value)}
-          ></input>
+          <input onChange={(e) => handleInputValue("title", e.target.value)}></input>
         </Wrapper>
         <RowWrap>
           <HalfWrapper>
-            <Text>시작일</Text>
+            <Text>스터디 시작일</Text>
             <HalfInput>
-              {dateData ? calenderDateValue : "ex. 스터디 시작 날짜"}
+              {dateData ? calenderDateValue : null}
+              <DateDrop>
+                <IoMdArrowDropdown onClick={() => dispatch(dateModal(!date))} />
+              </DateDrop>
+              {date ? (
+                <DescDateModal>
+                  <CalenderDate />
+                </DescDateModal>
+              ) : null}
             </HalfInput>
-            <DescDateModal>
-              <CalenderDate />
-            </DescDateModal>
           </HalfWrapper>
           <HalfWrapper>
             <Text classNane="lanaguage">언어</Text>
-            {/* <LanguageDrop> */}
-            <HalfInput>
-              {data.language.map((el) => el.name).join()}
-              <IconDrop>
-                <IoMdArrowDropdown onClick={() => setLangOpen(!langOpen)} />
-              </IconDrop>
-            </HalfInput>
 
-            {/* </LanguageDrop> */}
-            {langOpen ? (
-              <DescLanguageModal>
-                <div>
-                  {console.log("langImg", Object.keys(langImg))}
-                  {Object.keys(langImg).map((el, idx) => (
-                    <div
-                      key={idx}
-                      className="elements"
-                      onClick={() => {
-                        setData({
-                          ...data,
-                          language: [
-                            ...data.language,
-                            {
-                              id: idx + 1,
-                              name: el,
-                            },
-                          ],
-                        });
-                        setLangOpen(!langOpen);
-                      }}
-                    >
-                      {el}
-                    </div>
-                  ))}
-                </div>
-              </DescLanguageModal>
-            ) : null}
+            <HalfInput>
+              {data.language.map((el) => el.name + "," + " ")}
+              <LangDrop>
+                <IoMdArrowDropdown onClick={() => setLangOpen(!langOpen)} />
+              </LangDrop>
+
+              {langOpen ? (
+                <DescLanguageModal>
+                  <div>
+                    {Object.keys(langImg).map((el, idx) => (
+                      <div
+                        key={idx}
+                        className="elements"
+                        onClick={() => {
+                          setData({
+                            ...data,
+                            language: [
+                              ...data.language,
+                              {
+                                id: idx + 1,
+                                name: el,
+                              },
+                            ],
+                          });
+                          setLangOpen(!langOpen);
+                        }}
+                      >
+                        {el}
+                      </div>
+                    ))}
+                  </div>
+                </DescLanguageModal>
+              ) : null}
+            </HalfInput>
           </HalfWrapper>
         </RowWrap>
         <Wrapper>
-          <Text>오픈링크</Text>
+          <Text>스터디 참여링크</Text>
           <input
-            placeholder="ex. 카카오톡 오픈채팅 링크를 입력해주세요"
+            placeholder="ex. 카카오톡 오픈채팅 링크"
             onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
           ></input>
         </Wrapper>
         <Wrapper>
-          <Text>장소</Text>
+          <Text>스터디 장소</Text>
           <input
             className="locaitionInput"
             onKeyDown={(e) => {
               handleLocationValue(e, e.target.value);
+              setLocationSearch(e.target.value);
             }}
             placeholder="ex. 송파구 오륜동"
             ref={locationInput}
           ></input>
-
           {locOpen ? (
-            <DescLocationModal>
-              {locationListHandler(locationList)}
-            </DescLocationModal>
+            <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
           ) : null}
           <IconSerch>
             <IoIosSearch
               onClick={(e) => {
                 setLocOpen(!locOpen);
-                handleLocationValue(e, locationInput.current.value);
+                handleLocationValue(e, locationSearch);
               }}
             ></IoIosSearch>
           </IconSerch>
@@ -513,22 +533,22 @@ const StudyDesc = () => {
         <Wrapper>
           <Text>내용</Text>
           <Textarea
-            placeholder="ex. 스터디 모집 글을 자유롭게 작성해주세요 ^^."
+            placeholder="ex. 스터디 모집 글을 작성해주세요 ^^."
             onChange={(e) => handleInputValue("content", e.target.value)}
           ></Textarea>
         </Wrapper>
 
         <Closed>
           <Checkbox>
+            <label htmlFor="closed">스터디 모집마감</label>{" "}
             <input
               type="checkbox"
               onClick={() => {
                 setChecked(!checked);
               }}
             ></input>
-            <label htmlFor="closed">모집마감</label>
           </Checkbox>
-          <Button onClick={handleStudyPosting}>저장하기</Button>
+          <ConfirmButton onClick={handleStudyPosting}>저장하기</ConfirmButton>
         </Closed>
       </Desc>
     </WriteStudyDesc>

@@ -1,9 +1,7 @@
+/* eslint-disable react/prop-types */
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  deleteStudy,
-  reset,
-} from "../../../../features/studies/allStudiesSlice";
+import { deleteStudy, reset } from "../../../../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
