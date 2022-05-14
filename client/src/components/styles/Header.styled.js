@@ -244,6 +244,7 @@ const Language = styled.div`
 const LocationWrapper = styled.div`
   width: 100%;
   height: 100%;
+  overflow: scroll;
 `;
 const DateWrapper = styled.div`
   width: 100%;
