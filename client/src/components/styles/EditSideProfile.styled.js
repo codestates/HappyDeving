@@ -50,16 +50,27 @@ const ProfilePrieview = styled.div`
   }
 `;
 const ProfileButton = styled.div`
-  margin-top: 20px;
-  border-bottom: 1px solid gray;
-  font-weight: 500;
-  font-size: 16px;
-  color: gray;
-  font-weight: 700;
+  font-family: "Binggrae";
+  display: flex;
+  justify-content: center;
+  width: 120px;
+  padding: 5px 5px;
+  margin-top: 10px;
   cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid #5e17eb;
+  font-size: 12px;
+  transition: 1ms;
   &:hover {
-    color: black;
-    border-bottom: 3px solid #dfc1ff;
+    color: #5e17eb;
+    font-weight: 600;
+    background-color: rgba(233, 193, 255, 10%);
+    position: relative;
+    top: -2px;
+  }
+  &:active {
+    position: relative;
+    top: 0px;
   }
 `;
 
@@ -122,7 +133,7 @@ const EditSideProfile = () => {
             ref={fileInput}
           />
 
-          <ProfileButton onClick={onSave}>프로필 저장하기</ProfileButton>
+          <ProfileButton onClick={onSave}>사진 저장하기</ProfileButton>
         </Profile>
       </Container>
     </>

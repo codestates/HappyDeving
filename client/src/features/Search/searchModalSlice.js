@@ -15,7 +15,7 @@ const searchModalSlice = createSlice({
       state.date = false;
       state.language = false;
     },
-    dateModal: (state) => {
+    dateModal: (state, action) => {
       state.location = false;
       state.date = true;
       state.language = false;
@@ -34,6 +34,7 @@ const searchModalSlice = createSlice({
   },
 });
 
-export const { locationModal, dateModal, languageModal, reset } = searchModalSlice.actions;
+export const { locationModal, dateModal, languageModal, reset } =
+  searchModalSlice.actions;
 
 export default searchModalSlice.reducer;

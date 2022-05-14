@@ -5,35 +5,30 @@ import { useSelector } from "react-redux";
 
 const CommentFormDiv = styled.div`
   grid-column: 4/12;
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
   /* position: relative; */
-  height: auto;
-  padding: 0.5% 2% 6% 2%;
+  /* height: auto; */
+  /* background-color: red; */
+  /* padding: 0.5% 2% 6% 2%; */
+  height: 120px;
 
-  div {
-    form {
-      margin-bottom: 10px;
-      border-radius: 30px;
-      text-align: center;
-      textarea {
-        width: 100%;
-        height: 80px;
-        margin-bottom: 20px;
-        margin-top: 20px;
-        border: 1px solid rgb(107, 114, 12);
-      }
-      button {
-        font-size: 16px;
-        float: right;
-        width: 5vw;
-        height: 30px;
-        text-align: center;
-        line-height: 30px;
-        &:hover {
-          cursor: pointer;
-          text-decoration: underline;
-        }
-      }
-    }
+  /* div { */
+  form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    /* background-color: whitesmoke; */
+    height: 120px;
+  }
+  textarea {
+    width: 100%;
+    height: 80px;
+    /* margin-bottom: 20px; */
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: rgba(233, 193, 255, 20%);
   }
   @media screen and (min-width: 768px) and (max-width: 1023px) {
     grid-column: 3 / 13;
@@ -45,7 +40,39 @@ const CommentFormDiv = styled.div`
     flex-direction: column;
   }
 `;
+const ButtonWrap = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  /* background-color: red; */
+`;
+const Button = styled.button`
+  display: flex;
+  /* background-color: orange; */
+  font-size: 13px;
 
+  color: rgb(51, 51, 51);
+  cursor: pointer;
+  margin-top: 8px;
+  margin-right: 10px;
+  &:hover {
+    color: #5e17eb;
+    text-decoration: underline;
+  }
+`;
+// const Button = styled.button`
+//   /* margin-left: 42%; */
+//   /* margin-top: 10%; */
+//   margin-right: 5px;
+//   padding: 3px 8px;
+//   cursor: pointer;
+//   border-radius: 10px;
+//   border: 1px solid #5e17eb;
+//   font-size: 14px;
+
+//   &:hover {
+//     color: #5e17eb;
+//   }
+// `;
 const CommentForm = ({
   commentId,
   studyId,
@@ -87,8 +114,10 @@ const CommentForm = ({
             }}
           />
           {/* 버튼 태그 form 바깥으로 빼면 작동 안 함 */}
-          <button disabled={isTextareaDisabled}>{submitLabel}</button>
-          {hasCancelButton && <button onClick={handleCancel}>취소</button>}
+          <ButtonWrap>
+            <Button disabled={isTextareaDisabled}>{submitLabel}</Button>
+            {hasCancelButton && <Button onClick={handleCancel}>취소</Button>}
+          </ButtonWrap>
         </form>
       </div>
     </CommentFormDiv>

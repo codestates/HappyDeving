@@ -13,7 +13,6 @@ function CalenderDate() {
   const { dateData } = useSelector((store) => store.searchData);
   const dispatch = useDispatch();
   const [value, onChange] = useState(new Date());
-  // const today = moment();
 
   const handleDate = (value) => {
     onChange(value);

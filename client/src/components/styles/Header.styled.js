@@ -57,45 +57,64 @@ const StyledHeader = styled.header`
 `;
 
 const Logo = styled.div`
-  position: absolute;
-  top: 20px;
   grid-column: 2/ 4;
+  width: 100%;
+  position: ${(props) => (props.header ? "absolute" : "relative")};
+  top: ${(props) => (props.header ? "20px" : "0px")};
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  text-align: center;
+
+  img {
+    @media screen and (min-width: 900px) {
+      width: 150px;
+    }
+
+    @media screen and (max-width: 900px) {
+      min-width: 100px;
+    }
+  }
 `;
 
 const Links = styled.div`
   grid-column: 13/14;
   position: absolute;
+  position: absolute;
   top: 30px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
 
   .profile {
-    /* position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); */
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
+    min-width: 40px;
+    height: 40px;
+  }
+
+  .signin {
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    color: #5e17eb;
+    @media screen and (max-width: 630px) {
+      font-size: 13px;
+    }
+
+    &:hover {
+      color: #c593fe;
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+    }
   }
 `;
 
 const SearchDiv = styled.div`
   grid-column: ${(props) => (props.header ? "4/13" : "5/12")};
   padding-top: ${(props) => (props.header ? "120px" : "25px")};
-`;
-const StyleSearch = styled.div`
-  position: relative;
-  grid-row: 3/4;
-  grid-column: 5/13;
-
-  @media only screen and (max-width: 768px) {
-    display: block;
-  }
-
-  @media only screen and (min-width: 768px) {
-    position: relative;
-  }
 `;
 
 export const StyledSearch = styled.div`
@@ -131,7 +150,8 @@ const SearchIcon = styled.div`
     line-height: 20px;
   }
   height: 40px;
-  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
   border-radius: 50%;
   margin: 4px 5px 0px 0px;
   background-color: ${(props) => props.theme.colors.purple};
@@ -175,7 +195,7 @@ const DesktopModal = styled.div`
 
 const Modal = styled.div`
   @media screen and (max-width: 768px) {
-    display: ${(props) => (props.modal ? "block" : "none")};
+    display: ${(props) => (props.header ? "block" : "none")};
   }
   display: none;
   width: 100%;
@@ -224,6 +244,7 @@ const Language = styled.div`
 const LocationWrapper = styled.div`
   width: 100%;
   height: 100%;
+  overflow: scroll;
 `;
 const DateWrapper = styled.div`
   width: 100%;
@@ -281,9 +302,12 @@ const InfoFinal = styled(Info)`
 
 const Icon = styled.div`
   position: absolute;
-  top: 75px;
+  top: 80px;
   left: 20px;
-  cursor: pointer;
+  padding: 10px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Header = () => {
@@ -297,7 +321,6 @@ const Header = () => {
   );
   const { calenderDateValue } = useSelector((store) => store.calender);
 
-  const [modal, setModal] = useState(false);
   const [header, setHeader] = useState(false);
 
   const goToHome = () => {
@@ -310,8 +333,8 @@ const Header = () => {
   return (
     <>
       {header ? (
-        <Backdrop>
-          <DesktopModal>
+        <Backdrop onClick={() => setHeader(false)}>
+          <DesktopModal onClick={(e) => e.stopPropagation()}>
             {location ? (
               <LocationWrapper>
                 <HeaderLocationModal />
@@ -331,18 +354,17 @@ const Header = () => {
         </Backdrop>
       ) : null}
       <StyledHeader header={header}>
-        <Logo onClick={goToHome}>
+        <Logo onClick={goToHome} header={header}>
           <img src={icons.logo} />
         </Logo>
         <SearchDiv header={header}>
           {header ? (
             // 헤더 모달창은 Search 안에 있다
-            <Search />
+            <Search setHeader={setHeader} />
           ) : (
             <StyledSearch
               onClick={() => {
                 setHeader(true);
-                setModal(true);
                 dispatch(locationModal());
               }}
             >
@@ -364,14 +386,14 @@ const Header = () => {
             </Link>
           ) : (
             <Link to="/signin">
-              <span className="signin">로그인</span>
+              <div className="signin">로그인</div>
             </Link>
           )}
         </Links>
       </StyledHeader>
 
       {/* 모바일 모달창 */}
-      <Modal modal={modal}>
+      <Modal header={header}>
         {location ? (
           <Location>
             <Icon
@@ -447,7 +469,6 @@ const Header = () => {
             </InfoFinal>
             <Info
               onClick={() => {
-                setModal(false);
                 setHeader(false);
                 getStudiesMapApi({
                   guType,

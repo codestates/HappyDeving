@@ -9,7 +9,7 @@ const cookieParser = require("cookie-parser");
 const { sequelize } = require("./models/index");
 
 app.use(express.json({ strict: false }));
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(
@@ -32,6 +32,6 @@ app.listen(PORT, async () => {
     await sequelize.authenticate();
     console.log(`Database Connected!`);
   } catch (error) {
-    console.Err(`Unable to connect to the database: ${error}`);
+    console.log(`Unable to connect to the database: ${error}`);
   }
 });

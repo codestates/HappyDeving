@@ -36,6 +36,7 @@ const Background = styled.div`
   margin: 20% auto;
   font-size: 18px;
   font-weight: 500;
+  margin-top: 150px;
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
     width: 80%;
@@ -61,28 +62,33 @@ const SigninWrap = styled.div`
     width: 90%;
     flex-direction: column;
   }
+
   input {
-    display: flex;
-    background: transparent;
-    margin-top: 10px;
-    margin-bottom: 30px;
-    padding: 5px 5px;
+    background-color: rgba(233, 193, 255, 20%);
+    border-radius: 5px;
+    height: 40px;
     width: 100%;
-    border: none;
-    border-bottom: 3px solid #ccc;
-  }
-  input:hover {
-    outline: none;
-    border-bottom: 3px solid #6733e5;
-  }
-  input:focus {
-    outline: none;
-    border-bottom: 3px solid #6733e5;
+    font-size: 16px;
+    padding: 10px;
+    height: 50px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    @media screen and (max-width: 768px) {
+      font-size: 14px;
+      width: 100%;
+    }
+
+    &:focus {
+      outline: none;
+      border: 1px solid #6733e5;
+    }
   }
 `;
+
 const Title = styled.h1`
   display: flex;
   color: #6733e5;
+  font-family: "Binggrae";
   justify-content: center;
   align-items: center;
   margin-bottom: 30px;
@@ -92,39 +98,40 @@ const Title = styled.h1`
 `;
 const Text = styled.div`
   margin-right: 10px;
-  color: #6733e5;
-  opacity: 0.5;
-  font-size: 20px;
+  margin-bottom: 5px;
+  color: gray;
+  font-size: 14px;
 `;
 
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;
-  button {
-    cursor: pointer;
-    padding: 10px 0px;
-    font-size: 22px;
-    font-weight: 900;
-    border: 3px solid #c593fe;
-    width: 100%;
-    color: white;
-    background-color: #6733e5;
-    border-radius: 10px;
-    margin-top: 30px;
-    margin-border: 30px;
-    transition: 5ms;
-  }
-  button:hover {
-    background-color: #c593fe;
-    border: 3px solid #6733e5;
+
+  margin-bottom: 20px;
+  margin-top: 20px;
+`;
+const ConfirmButton = styled.button`
+  display: flex;
+  font-family: "Binggrae";
+  justify-content: center;
+  width: 100%;
+  padding: 5px 5px;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid #5e17eb;
+  font-size: 20px;
+  transition: 1ms;
+  &:hover {
+    color: #5e17eb;
+    font-weight: 600;
+    background-color: rgba(233, 193, 255, 10%);
     position: relative;
     top: -2px;
   }
-  button:active {
+  &:active {
     position: relative;
-    top: 2px;
+    top: 0px;
   }
-  margin-bottom: 20px;
 `;
 const SocialTitle = styled.div`
   display: flex;
@@ -203,7 +210,6 @@ const Resister = styled.div`
     border-bottom: 1px solid #c593fe;
   }
 `;
-
 function Signin() {
   const [userData, setUserData] = useState({
     email: "",
@@ -215,9 +221,7 @@ function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.user
-  );
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
 
   useEffect(() => {
     // dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
@@ -356,7 +360,6 @@ function Signin() {
   if (isLoading) {
     return <LoadingIndicator />;
   }
-
   return (
     <>
       <Background>
@@ -382,7 +385,7 @@ function Signin() {
               </Link>
             </Resister>
             <ButtonWrap>
-              <button type="submit">로그인 </button>
+              <ConfirmButton type="submit">로그인 </ConfirmButton>
             </ButtonWrap>
             <div>
               <SocialTitle> 소셜 로그인 </SocialTitle>
@@ -398,10 +401,7 @@ function Signin() {
               <GoogleButton className="sButton">
                 <GoogleLogin
                   render={(renderProps) => (
-                    <button
-                      onClick={renderProps.onClick}
-                      disabled={renderProps.disabled}
-                    >
+                    <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
                       <img src={google} alt="google" />
                     </button>
                   )}
@@ -413,17 +413,10 @@ function Signin() {
                 ></GoogleLogin>
               </GoogleButton>
               <NaverButton className="sButton">
-                <img
-                  src={naver}
-                  alt="naver"
-                  onClick={() => socialLoginHandler("naver")}
-                />
+                <img src={naver} alt="naver" onClick={() => socialLoginHandler("naver")} />
               </NaverButton>
               <GitButton className="sButton">
-                <img
-                  src={github}
-                  onClick={() => socialLoginHandler("github")}
-                />
+                <img src={github} onClick={() => socialLoginHandler("github")} />
               </GitButton>
             </SocialLoginButton>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>

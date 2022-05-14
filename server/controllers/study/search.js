@@ -33,7 +33,6 @@ module.exports = {
             "updatedAt",
           ],
         });
-        // console.log(locationList);
         return res.status(200).json(locationList);
       } else if (startDate && !language) {
         const locationList = await Study.findAll({

@@ -31,7 +31,7 @@ module.exports = {
       const KAKAO_CLIENT_SECRET = process.env.KAKAO_CLIENT_SECRET;
       const redirectUri = process.env.CLIENT_ORIGIN;
 
-      // authorizationCode로 kakao token 을 받아온다.
+      // authorizationCode로 kakao token 을 받아온다.dd
       const resp = await fetch("https://kauth.kakao.com/oauth/token", {
         method: "POST",
         headers: {

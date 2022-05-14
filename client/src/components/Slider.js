@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const SliderDefault = styled.div`
   font-family: "Binggrae";
-  grid-column: 4 / 12;
+  grid-column: 3 / 13;
   display: flex;
   align-items: center;
   opacity: 0;

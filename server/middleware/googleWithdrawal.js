@@ -1,15 +1,6 @@
-require("dotenv").config();
-const axios = require("axios");
-const fetch = require("node-fetch");
-const {
-  User,
-  Study_comment,
-  Study,
-  Language,
-  Study_language,
-  Location,
-  User_likes_study,
-} = require("../models");
+const https = require("https");
+const dotenv = require("dotenv");
+dotenv.config();
 
 module.exports = {
   googleWithdrawal: async (accessToken) => {
@@ -26,6 +17,19 @@ module.exports = {
       },
     });
 
-    console.log(googleinfo);
+    const postReq = await https.request(postOptions, function (res) {
+      res.setEncoding("utf8");
+      res.on("data", (d) => {
+        console.log("Response: " + d);
+      });
+    });
+
+    postReq.on("error", (error) => {
+      console.log(error);
+    });
+
+    // Post the request with data
+    postReq.write(postData);
+    postReq.end();
   },
 };

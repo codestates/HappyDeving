@@ -71,14 +71,15 @@ module.exports = {
         withdrawal(id);
       }
       // return res.json("ok");
-      if (loginMethod === 3) {
-        kakaoWithdrawal(accessToken);
-        withdrawal(id);
-      }
-      if (loginMethod === 4) {
-        naverWithdrawal(accessToken);
-        withdrawal(id);
-      }
+      // return res.json("ok");
+      // if (loginMethod === 3) {
+      //   kakaoWithdrawal(accessToken);
+      //   withdrawal(id);
+      // }
+      // if (loginMethod === 4) {
+      //   naverWithdrawal(accessToken);
+      //   withdrawal(id);
+      // }
 
       // console.log(accessToken);
       res.cookie("accessToken", null, { maxAge: 0 });
