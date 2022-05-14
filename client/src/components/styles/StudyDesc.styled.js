@@ -14,8 +14,6 @@ import { langImg } from "../../static/images/langImg";
 import { studyApi } from "../../api/study";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
 import { faAngleDown, faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import ShareSocialButton from "../styles/ShareSocial.styled";
 import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
@@ -90,11 +88,6 @@ const ShareIcon = styled.div`
   position: relative;
 `;
 
-const HeartIcon = styled.div`
-  .like {
-    color: #d32f2f;
-  }
-`;
 const CommentsDiv = styled.div`
   /* background: pink; */
 `;
@@ -191,6 +184,19 @@ const TextL = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding-bottom: 5px;
   margin-right: 10px;
+`;
+
+
+const dummyimg = DummyImgs[Math.floor(Math.random() * 10)];
+const DummyImg = styled.div`
+  width: 100%;
+  height: 300px;
+
+  background-image: url(${dummyimg});
+  background-position: center;
+  background-size: cover;
+
+  margin-bottom: 20px;
 `;
 
 const Content = styled.div`
@@ -342,15 +348,21 @@ const StudyDesc = () => {
   }, []);
 
   const handleUnlike = async () => {
-    await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: data.id } }));
+
+    await dispatch(
+      unLikeStudy({ id: user.id, studyData: { study_id: data.id } })
+    );
+
+
     setIsLike(!isLike);
   };
 
   const handleLike = async () => {
+
     setIsLike(!isLike);
     await dispatch(likeStudy({ id: user.id, studyData: { study_id: data.id } }));
   };
-  // const createAtDate = moment(data.createAt).format("YYYY.MM.DD");
+
   const handleStudyDeletion = (e) => {
     e.preventDefault();
     dispatch(
@@ -373,14 +385,22 @@ const StudyDesc = () => {
                     {isLike ? (
                       <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
                     ) : (
-                      <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
+
+                      <FontAwesomeIcon
+                        onClick={handleLike}
+                        icon={unLike}
+                        size="1x"
+                      />
+
                     )}
                   </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
                     {share ? <ShareSocialButton /> : null}
                     <FontAwesomeIcon icon={faShareNodes} />
                   </ShareIcon>
+
                   <Update onClick={() => navigate(`/study/edit/${data.id}`)}>수정</Update>
+
                   <Delete onClick={handleStudyDeletion}>삭제</Delete>
                 </>
               ) : (
@@ -413,7 +433,9 @@ const StudyDesc = () => {
             </MiniProfileWrap>
           </Host>
           <Wrap>
+
             <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
+
             <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
             <Icon>
               <BsFileEarmarkCodeFill />
