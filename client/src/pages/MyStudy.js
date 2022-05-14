@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-// import Content from "../components/styles/Content.styled";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyStudies, reset } from "../features/studies/allStudiesSlice";
 import StudyCard from "../components/StudyCard";
@@ -74,9 +73,7 @@ const MyStudy = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const { myStudies, isLoading, isError, message } = useSelector(
-    (state) => state.allStudies
-  );
+  const { myStudies, isLoading, isError, message } = useSelector((state) => state.allStudies);
 
   // console.log(`my studies: ${JSON.stringify(myStudies)}`);
   useEffect(() => {
@@ -98,10 +95,7 @@ const MyStudy = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab
-            className="tap"
-            onClick={() => navigate("/likedstudy")}
-          >
+          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>

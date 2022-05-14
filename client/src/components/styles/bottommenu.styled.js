@@ -1,13 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-// import Content from "./Content.styled";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signout, reset } from "../../features/user/userSlice.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare, faUser, faFolder, faHeart } from "@fortawesome/free-regular-svg-icons";
-// import Content from "./Content.styled";
 const StyledBottommenu = styled.div`
   grid-column: 1/15;
   /* grid-template-columns: repeat(7, 1fr); */
@@ -85,9 +83,7 @@ const Menu5 = styled.div`
 
 const BottomMenu = () => {
   const { user } = useSelector((state) => state.user);
-  console.log(user);
   const dispatch = useDispatch();
-  // const { user, isLoading, isError, message } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const goToHome = () => {
@@ -99,6 +95,10 @@ const BottomMenu = () => {
     dispatch(reset());
     navigate("/");
   };
+
+  if (isLoading) {
+    return <LoadingIndicator />;
+  }
 
   return (
     <>

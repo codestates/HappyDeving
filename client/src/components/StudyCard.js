@@ -4,11 +4,17 @@ import styled from "styled-components";
 // import Content from "../components/styles/Content.styled";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { likeStudy, unLikeStudy } from "../features/studies/allStudiesSlice";
+import {
+  getLikedStudies,
+  getMyStudies,
+  likeStudy,
+  unLikeStudy,
+} from "../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import { langImg } from "../static/images/langImg";
 import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
+import { lang } from "moment";
 
 const CardContainer = styled.div`
   box-shadow: 7px 7px 10px grey;
@@ -19,7 +25,6 @@ const CardContainer = styled.div`
   width: 400px;
   margin-top: 10%;
   text-align: flex-start;
-  cursor: pointer;
   &:hover {
     position: relative;
     top: -2px;
@@ -58,6 +63,7 @@ const CardForm = styled.div`
   display: flex;
   flex-direction: column;
   h1 {
+    cursor: pointer;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -101,88 +107,72 @@ const HeartIcon = styled.span`
 const StudyCard = ({ myStudy, likedStudy }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [study, setStudy] = useState({});
   const [isLike, setIsLike] = useState(true);
-
   const { user } = useSelector((state) => state.user);
+  const { myStudies, likedStudies } = useSelector((state) => state.allStudies);
 
   useEffect(() => {
     if (likedStudy) {
       setIsLike(true);
-      setStudy(likedStudy);
     }
-
     if (myStudy) {
       setIsLike(false);
-      setStudy(myStudy);
     }
-  }, []);
+  }, [myStudies, likedStudies]);
 
-  const handleHeart = () => {
-    if (isLike) {
-      dispatch(unLikeStudy({ id: user.id, studyData: { study_id: study.id } }));
-      setIsLike(false);
-    } else {
-      dispatch(likeStudy({ id: user.id, studyData: { study_id: study.id } }));
-      setIsLike(true);
-    }
+  const imageHandler = (study) => {
+    return study.language
+      .slice(0, 2)
+      .map((el) =>
+        el["name"] === "c++" ? (
+          <img src={langImg["c"]} alt=""></img>
+        ) : (
+          <img src={langImg[el["name"]]} alt=""></img>
+        )
+      );
   };
 
-  const moveToStudyPage = () => {
+  const handleUnlike = async () => {
+    await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: likedStudy.id } }));
+    setIsLike(!isLike);
+    await dispatch(getLikedStudies(user.id));
+  };
+
+  const handleLike = async () => {
+    await dispatch(likeStudy({ id: user.id, studyData: { study_id: myStudy.id } }));
+    setIsLike(!isLike);
+    await dispatch(getLikedStudies(user.id));
+    navigate("/likedstudy");
+  };
+
+  const moveToStudyPage = (study) => {
     navigate(`/study/${study.id}`);
-  };
-
-  const imgHandler = () => {
-    if (myStudy) {
-      myStudy.language
-        .slice(0, 2)
-        .map((el) =>
-          el["name"] === "c++" ? (
-            <img src={langImg["c"]}></img>
-          ) : (
-            <img src={langImg[el["name"]]}></img>
-          )
-        );
-    } else {
-      console.log(likedStudy);
-      likedStudy.language
-        .slice(0, 2)
-        .map((el) =>
-          el["name"] === "c++" ? (
-            <img src={langImg["c"]}></img>
-          ) : (
-            <img src={langImg[el["name"]]}></img>
-          )
-        );
-    }
   };
 
   return (
     <>
       {/* <Container> */}
-      <CardContainer onClick={moveToStudyPage}>
+      <CardContainer>
         {myStudy ? (
-          <LanguageImg>{imgHandler()}</LanguageImg>
+          <LanguageImg>{imageHandler(myStudy)}</LanguageImg>
         ) : (
-          <LanguageImg>
-            <img src={langImg[likedStudy.language[0]["name"]]}></img>
-            <img src={langImg[likedStudy.language[1]["name"]]}></img>
-          </LanguageImg>
+          <LanguageImg>{imageHandler(likedStudy)}</LanguageImg>
         )}
         <CardForm>
-          <div>
-            <h1 onClick={moveToStudyPage}>{study.title}</h1>
-            <hr />
-            {/* <p>- 위치</p> */}
-            <p>- {study.startDate}</p>
-          </div>
-
+          {/* <div> */}
+          <h1 onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>
+            {myStudy ? myStudy.title : likedStudy.title}
+          </h1>
+          <hr />
+          {/* <p>- 위치</p> */}
+          <p>- {myStudy ? myStudy.startDate : likedStudy.startDate}</p>
+          {/* </div> */}
           <LikeButton>
-            <HeartIcon onClick={handleHeart} className="heart-icon">
+            <HeartIcon className="heart-icon">
               {isLike ? (
-                <FontAwesomeIcon icon={like} size="1x" color="red" />
+                <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
               ) : (
-                <FontAwesomeIcon icon={unLike} size="1x" />
+                <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
               )}
             </HeartIcon>
           </LikeButton>

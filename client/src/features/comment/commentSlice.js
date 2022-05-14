@@ -89,8 +89,6 @@ export const commentSlice = createSlice({
       .addCase(getComments.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // console.log("action.payload", action.payload);
-        // console.log(typeof action.payload);
         state.comments = [...action.payload];
       })
       .addCase(getComments.rejected, (state, action) => {
@@ -135,8 +133,6 @@ export const commentSlice = createSlice({
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        // console.log("deleting comment data: ", action.payload);
-        // console.log("deleting comment data: ", action);
         state.comments = state.comments.filter((comment) => comment.id !== action.meta.arg.id);
       })
       .addCase(deleteComment.rejected, (state, action) => {
