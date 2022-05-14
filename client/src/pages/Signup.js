@@ -147,7 +147,9 @@ function Signup() {
       return;
     }
     if (!validatedEmail || !validatedPassword) {
-      setErrorMessage("유효한 이메일과 비밀번호를 입력해 주세요");
+      setErrorMessage(
+        "알파벳 소문자, 대문자, 숫자, 특수문자를 포함한 8자 이상의 비밀번호를 설정해 주세요."
+      );
       return;
     }
     if (password !== confirmPassword) {

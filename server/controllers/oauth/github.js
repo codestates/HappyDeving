@@ -2,7 +2,11 @@ require("dotenv").config();
 const { User } = require("../../models");
 const axios = require("axios");
 const bcrypt = require("bcrypt");
-const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
+const {
+  generateAccessToken,
+  sendTocookie,
+  generaterefreshToken,
+} = require("../tokenFunctions");
 
 module.exports = {
   post: async (req, res) => {
@@ -32,7 +36,13 @@ module.exports = {
         },
       });
 
-      const { id, login: nickname, html_url, blog, avatar_url: image } = response.data;
+      const {
+        id,
+        login: nickname,
+        html_url,
+        blog,
+        avatar_url: image,
+      } = response.data;
       let { email } = response.data;
       const password = `${id}${nickname}`;
       if (email === null) {
@@ -58,7 +68,7 @@ module.exports = {
 
         const newAccessToken = generateAccessToken(newUser.dataValues);
         const newrefreshToken = generaterefreshToken(newUser.dataValues);
-        sendTocookie(res, newAccessToken, newrefreshToken);
+        sendTocookie(res, access_token, newrefreshToken);
         return res.status(201).json({
           user: newUser,
           accessToken: newAccessToken,
@@ -66,7 +76,7 @@ module.exports = {
       }
       const newAccessToken = generateAccessToken(userInfo.dataValues);
       const newrefreshToken = generaterefreshToken(userInfo.dataValues);
-      sendTocookie(res, newAccessToken, newrefreshToken);
+      sendTocookie(res, access_token, newrefreshToken);
 
       return res.status(200).json({
         user: userInfo,

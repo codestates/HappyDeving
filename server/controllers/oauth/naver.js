@@ -65,7 +65,7 @@ module.exports = {
 
         const newAccessToken = generateAccessToken(newUser.dataValues);
         const newrefreshToken = generaterefreshToken(newUser.dataValues);
-        sendTocookie(res, newAccessToken, newrefreshToken);
+        sendTocookie(res, access_token, newrefreshToken);
         return res.status(201).json({
           user: newUser,
           accessToken: newAccessToken,
@@ -74,7 +74,7 @@ module.exports = {
 
       const newAccessToken = generateAccessToken(userInfo.dataValues);
       const newrefreshToken = generaterefreshToken(userInfo.dataValues);
-      sendTocookie(res, newAccessToken, newrefreshToken);
+      sendTocookie(res, access_token, newrefreshToken);
 
       return res.status(200).json({
         user: userInfo,

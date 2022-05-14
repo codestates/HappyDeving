@@ -3,6 +3,8 @@ const { withdrawal } = require("../../middleware/withdrawal");
 const { kakaoWithdrawal } = require("../../middleware/kakaoWithdrawal");
 const { googleWithdrawal } = require("../../middleware/googleWithdrawal");
 const { githubWithdrawal } = require("../../middleware/githubWithdrawal");
+const { naverWithdrawal } = require("../../middleware/naverWithdrawal");
+
 const {
   User,
   Study_comment,
@@ -46,25 +48,33 @@ module.exports = {
       if (!userInfo) {
         return res.status(404).json("already withdrawal");
       }
+
       const { id, loginMethod, email } = userInfo.dataValues;
-      const kakaoId = Number(email.slice(0, 10));
       // return res.json("ok");
 
       // const { authorization } = req.cookie;
       // console.log("cookies", req.cookies.accessToken);
       // const accessToken = authorization.split(" ")[1];
+      const { accessToken } = req.cookies;
 
       if (loginMethod === 0) {
         withdrawal(id);
       }
       if (loginMethod === 1) {
-        githubWithdrawal(id);
+        githubWithdrawal(accessToken);
       }
+      return res.json("ok");
       if (loginMethod === 2) {
-        googleWithdrawal(id);
+        googleWithdrawal(accessToken);
+        // withdrawal(id);
       }
+      // return res.json("ok");
       if (loginMethod === 3) {
-        kakaoWithdrawal(kakaoId);
+        kakaoWithdrawal(accessToken);
+        withdrawal(id);
+      }
+      if (loginMethod === 4) {
+        naverWithdrawal(accessToken);
         withdrawal(id);
       }
 

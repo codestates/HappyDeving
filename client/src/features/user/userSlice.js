@@ -50,6 +50,8 @@ export const signin = createAsyncThunk("user/signin", async (signinData, thunkAP
 export const signout = createAsyncThunk("user/signout", async () => {
   await localStorage.removeItem("user");
   await localStorage.removeItem("token");
+  await localStorage.removeItem("login");
+  await localStorage.removeItem("reload");
 });
 
 export const getProfile = createAsyncThunk("user/getProfile", async (id, thunkAPI) => {

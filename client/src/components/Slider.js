@@ -5,18 +5,16 @@ import styled from "styled-components";
 
 const SliderDefault = styled.div`
   font-family: "Binggrae";
-  grid-column: 3 / 13;
+  grid-column: 4 / 12;
   display: flex;
   align-items: center;
   opacity: 0;
   transform: scale(85%);
   transition: 2s;
-  // 태블릿
   @media screen and (min-width: 768px) and (max-width: 1023px) {
     grid-column: 2 / 14;
     transition: 2s;
   }
-  // 모바일
   @media screen and (max-width: 767px) {
     grid-column: 1 / 15;
     transition: 2s;
@@ -34,11 +32,9 @@ const SliderWithZoom = styled.div`
   transform: scale(100%);
   transition: 2s;
 
-  // 태블릿
   @media screen and (min-width: 768px) and (max-width: 1023px) {
     grid-column: 2 / 14;
   }
-  // 모바일
   @media screen and (max-width: 767px) {
     grid-column: 1 / 15;
     flex-direction: column;

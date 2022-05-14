@@ -1,4 +1,12 @@
-const { User, Study, Study_comment, Language, Study_language, Location } = require("../../models");
+const {
+  User,
+  Study,
+  Study_comment,
+  Language,
+  User_likes_study,
+  Study_language,
+  Location,
+} = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 const { Op } = require("sequelize");
 const user = require("../../models/user");
@@ -36,6 +44,7 @@ module.exports = {
         closed,
         study_comment,
         location_id,
+        user_id,
         startDate,
         createdAt,
         updatedAt,
@@ -48,7 +57,10 @@ module.exports = {
       });
 
       study_comment.forEach(
-        (el) => ((el.dataValues.username = el.user.username), (el.dataValues.user = undefined))
+        (el) => (
+          (el.dataValues.username = el.user.username),
+          (el.dataValues.user = undefined)
+        )
       );
 
       res.status(200).json({
@@ -56,6 +68,11 @@ module.exports = {
           study: {
             id,
             username: study.user.username,
+            email: study.user.email,
+            github: study.user.github,
+            blog: study.user.blog,
+            image: study.user.image,
+            user_id,
             title,
             content,
             kakaoLink,
@@ -177,6 +194,7 @@ module.exports = {
       const data = checkAccessToken(req);
 
       const {
+        id: userId,
         study_id,
         username,
         content,
@@ -206,6 +224,7 @@ module.exports = {
       if (data.id !== studyInfo.dataValues.user_id) {
         return res.status(401).json("wrong user");
       }
+      // return res.json("ok");
 
       let studylangueId = [];
       for (let i = 0; i < studyInfo.language.length; i++) {
@@ -323,6 +342,9 @@ module.exports = {
         where: { study_id: id },
       });
 
+      await User_likes_study.destroy({
+        where: { study_id: id },
+      });
       const study = await Study.destroy({ where: { id } });
 
       res.status(200).json(study);

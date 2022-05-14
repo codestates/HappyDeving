@@ -73,21 +73,19 @@ const MyprofileTab = styled.div``;
 
 const LikedStudy = () => {
   const dispatch = useDispatch();
-  // const { id } = useParams(); // id undefined
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
+
   const { likedStudies, isLoading, isError, message } = useSelector(
     (state) => state.allStudies
   );
-  const [data, setData] = useState({});
-  // console.log(`liked studies: ${JSON.stringify(likedStudies)}`);
-  console.log(data);
+
   useEffect(() => {
     if (isError) {
       console.log(message);
     }
     dispatch(getLikedStudies(user.id));
-    setData(likedStudies);
+    // setData(likedStudies);
     dispatch(reset());
   }, []);
 

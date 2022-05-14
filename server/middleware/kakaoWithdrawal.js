@@ -13,19 +13,15 @@ const {
 } = require("../models");
 
 module.exports = {
-  kakaoWithdrawal: async (kakaoId) => {
+  kakaoWithdrawal: async (accessToken) => {
     const kakaoAdmin = process.env.KAKAO_ADMIN_KEY;
-    console.log(kakaoId);
 
-    await axios(
-      `https://kapi.kakao.com/v1/user/unlink?target_id_type=user_id&target_id=${kakaoId}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
-          Authorization: `KakaoAK ${kakaoAdmin}`,
-        },
-      }
-    );
+    await axios(`https://kapi.kakao.com/v1/user/unlink`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
   },
 };

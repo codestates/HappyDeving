@@ -66,19 +66,6 @@ const Replies = styled.div`
   margin-top: 10px;
 `;
 
-// const Button = styled.div`
-//   font-size: 14px;
-//   margin-right: 2rem;
-//   float: right;
-//   width: 5vw;
-//   height: 30px;
-//   text-align: center;
-//   line-height: 30px;
-//   &:hover {
-//     color: ${(props) => props.theme.colors.lavender};
-//   }
-// `;
-
 const Comment = ({
   comment,
   replies,
@@ -89,7 +76,6 @@ const Comment = ({
   deletingComment,
   parentId = null,
 }) => {
-  // const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
 
   const isEditing =
@@ -113,7 +99,7 @@ const Comment = ({
     <CommentDiv>
       <CommentUpperPart key={comment.id}>
         <CommentImageContainer>
-          <img src={comment.image} />
+          <img src={user?.id === comment.user_id ? user.image : comment.image} alt="" />
         </CommentImageContainer>
         <CommentRightPart>
           <CommentAuthor>{comment.username}</CommentAuthor>
