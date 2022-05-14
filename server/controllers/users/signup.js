@@ -1,6 +1,10 @@
 const { User } = require("../../models");
 const bcrypt = require("bcrypt");
-const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
+const {
+  generateAccessToken,
+  sendTocookie,
+  generaterefreshToken,
+} = require("../tokenFunctions");
 
 const sendEmail = require("../../utils/sendEmail");
 
@@ -28,8 +32,6 @@ module.exports = {
         password: hashedPassword,
         loginMethod: 0,
       });
-
-      console.log(newUser);
 
       // console.log("newUser.verified::", newUser.verified);
       const newAccessToken = generateAccessToken({ username, email });

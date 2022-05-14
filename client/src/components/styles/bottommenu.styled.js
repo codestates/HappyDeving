@@ -4,8 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signout, reset } from "../../features/user/userSlice.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHouse, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
-import { faPenToSquare, faUser, faFolder, faHeart } from "@fortawesome/free-regular-svg-icons";
+import {
+  faHouse,
+  faArrowRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  faPenToSquare,
+  faUser,
+  faFolder,
+  faHeart,
+} from "@fortawesome/free-regular-svg-icons";
 const StyledBottommenu = styled.div`
   grid-column: 1/15;
   /* grid-template-columns: repeat(7, 1fr); */
@@ -96,17 +104,16 @@ const BottomMenu = () => {
     navigate("/");
   };
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
-
   return (
     <>
       <StyledBottommenu>
         {user ? (
           <MeneContainter>
             <Menu1 onClick={handleSignout} className="menu">
-              <FontAwesomeIcon className="icon" icon={faArrowRightFromBracket} />
+              <FontAwesomeIcon
+                className="icon"
+                icon={faArrowRightFromBracket}
+              />
               <p>로그아웃</p>
             </Menu1>
             <Link to="/write">
