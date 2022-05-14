@@ -1,33 +1,37 @@
-require("dotenv").config();
-const axios = require("axios");
-const fetch = require("node-fetch");
-const {
-  User,
-  Study_comment,
-  Study,
-  Language,
-  Study_language,
-  Location,
-  User_likes_study,
-} = require("../models");
+const https = require("https");
+const dotenv = require("dotenv");
+dotenv.config();
 
 module.exports = {
   googleWithdrawal: async (accessToken) => {
-    // const googleRefreshToken = process.env.GOOGLE_REFRESH_TOKEN;
-    const googleaccessToken = process.env.GOOGLE_ACCESS_TOKEN;
-    let postData = "token=" + googleaccessToken;
-    const googleClientId = process.env.GOOGLE_CLIENT_ID;
-    const googleClinentSecret = process.env.GOOGLE_CLIENT_SECRET;
-    const googleinfo = await axios({
+    // Build the string for the POST request
+    // let postData = "token=" + userCredential.access_token;
+    let postData = "token=" + accessToken;
+
+    let postOptions = {
       host: "oauth2.googleapis.com",
       port: "443",
-      path: `/revoke${googleaccessToken}`,
+      path: "/revoke",
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": Buffer.byteLength(postData),
       },
+    };
+
+    const postReq = await https.request(postOptions, function (res) {
+      res.setEncoding("utf8");
+      res.on("data", (d) => {
+        console.log("Response: " + d);
+      });
     });
 
-    console.log(googleinfo);
+    postReq.on("error", (error) => {
+      console.log(error);
+    });
+
+    // Post the request with data
+    postReq.write(postData);
+    postReq.end();
   },
 };

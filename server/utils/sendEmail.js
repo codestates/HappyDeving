@@ -18,7 +18,7 @@ module.exports = async (recipient, subject, url) => {
       host: process.env.HOST,
       service: process.env.SERVICE,
       port: Number(process.env.EMAIL_PORT),
-      secure: Boolean(process.env.SECURE),
+      secure: true,
       auth: {
         type: "OAuth2",
         user: process.env.GOOGLE_USER,
@@ -27,6 +27,7 @@ module.exports = async (recipient, subject, url) => {
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
         refreshToken: process.env.GOOGLE_REFRESH_TOKEN,
         accessToken: accessToken.token,
+        expires: 1484314697598,
       },
     };
     console.log("mailerConfig: ", mailerConfig);
