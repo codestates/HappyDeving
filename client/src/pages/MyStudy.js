@@ -14,8 +14,8 @@ const MyprofileTab = styled.div``;
 const MyStudyContainer = styled.div`
   min-height: 100%;
   min-width: 500px;
-  margin-top: 150px;
   grid-column: 4/12;
+  background: white;
   justify-content: center;
   gap: 3%;
 
@@ -27,7 +27,7 @@ const MyStudyContainer = styled.div`
   }
 `;
 const StyledSection = styled.div`
-  min-height: 80%;
+  min-height: 100%;
   min-width: 500px;
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(380px, auto));
@@ -43,21 +43,7 @@ const StyledSection = styled.div`
     transition: 1s;
   }
   @media screen and (max-width: 764px) {
-    grid-template-columns: repeat(auto-fill, minmax(400px, auto));
-    transition: 1s;
-  }
-`;
-
-const UserTitle = styled.div`
-  font-size: 30px;
-  font-family: "Binggrae";
-  margin-bottom: 50px;
-  span {
-    font-weight: 500;
-    border-bottom: 5px solid #dfc1ff;
-  }
-  @media screen and (max-width: 1024px) {
-    font-size: 20px;
+    grid-template-columns: repeat(1, minmax(300px, auto));
     transition: 1s;
   }
 `;
@@ -106,11 +92,6 @@ const MyStudy = () => {
   return (
     <>
       <MyStudyContainer>
-        <UserTitle>
-          <h1>
-            <span>{user.username}</span> 님의 스터디
-          </h1>
-        </UserTitle>
         <Tab>
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디

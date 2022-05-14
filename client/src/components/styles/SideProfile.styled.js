@@ -31,31 +31,17 @@ const ProfileImage = styled.div`
 `;
 
 const LinkButtons = styled.div`
-  /* display: flex; */
-  a {
-    color: darkray;
-    font-size: 18px;
-    margin: 0px auto;
-    margin-left: 10px;
-    span {
-      margin-left: 3px;
-    }
+  display: flex;
+  img {
+    width: 3vh;
   }
-  &:hover {
+  a {
+    color: #6733e5;
+    font-size: 24px;
+    margin-left: 15px;
+    margin-right: 15px;
   }
 `;
-// const LinkButtons = styled.div`
-//   display: flex;
-//   img {
-//     width: 3vh;
-//   }
-//   a {
-//     color: #6733e5;
-//     font-size: 24px;
-//     margin-left: 15px;
-//     margin-right: 15px;
-//   }
-// `;
 const SideProfile = () => {
   // user.image
 
@@ -75,11 +61,9 @@ const SideProfile = () => {
           <LinkButtons>
             <a href={user.github} target="_blank" rel="noreferrer">
               <FontAwesomeIcon icon={faGithubAlt} />
-              <span>git</span>
             </a>
             <a href={user.blog} target="_blank" rel="noreferrer">
               <FontAwesomeIcon icon={faBlogger} />
-              <span>blog</span>
             </a>
           </LinkButtons>
         </Profile>

@@ -9,9 +9,6 @@ import { nanoid } from "nanoid";
 
 const MyStudyContainer = styled.div`
   min-height: 100%;
-
-  margin-top: 150px;
-  margin-bottom: 200px;
   min-width: 500px;
   grid-column: 4/12;
   background: white;
@@ -43,20 +40,6 @@ const StyledSection = styled.div`
   }
   @media screen and (max-width: 764px) {
     grid-template-columns: repeat(1, minmax(300px, auto));
-    transition: 1s;
-  }
-`;
-
-const UserTitle = styled.div`
-  font-size: 30px;
-  font-family: "Binggrae";
-  margin-bottom: 50px;
-  span {
-    font-weight: 500;
-    border-bottom: 5px solid #dfc1ff;
-  }
-  @media screen and (max-width: 1024px) {
-    font-size: 20px;
     transition: 1s;
   }
 `;
@@ -113,11 +96,6 @@ const LikedStudy = () => {
   return (
     <>
       <MyStudyContainer>
-        <UserTitle>
-          <h1>
-            <span>{user.username}</span> 님의 스터디
-          </h1>
-        </UserTitle>
         <Tab>
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디

@@ -35,7 +35,6 @@ const Background = styled.div`
   margin: 20% auto;
   font-size: 18px;
   font-weight: 500;
-  margin-top: 150px;
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
     width: 80%;
@@ -61,33 +60,28 @@ const SigninWrap = styled.div`
     width: 90%;
     flex-direction: column;
   }
-
   input {
-    background-color: rgba(233, 193, 255, 20%);
-    border-radius: 5px;
-    height: 40px;
+    display: flex;
+    background: transparent;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    padding: 5px 5px;
     width: 100%;
-    font-size: 16px;
-    padding: 10px;
-    height: 50px;
-    margin-bottom: 20px;
-    cursor: pointer;
-    @media screen and (max-width: 768px) {
-      font-size: 14px;
-      width: 100%;
-    }
-
-    &:focus {
-      outline: none;
-      border: 1px solid #6733e5;
-    }
+    border: none;
+    border-bottom: 3px solid #ccc;
+  }
+  input:hover {
+    outline: none;
+    border-bottom: 3px solid #6733e5;
+  }
+  input:focus {
+    outline: none;
+    border-bottom: 3px solid #6733e5;
   }
 `;
-
 const Title = styled.h1`
   display: flex;
   color: #6733e5;
-  font-family: "Binggrae";
   justify-content: center;
   align-items: center;
   margin-bottom: 30px;
@@ -97,40 +91,39 @@ const Title = styled.h1`
 `;
 const Text = styled.div`
   margin-right: 10px;
-  margin-bottom: 5px;
-  color: gray;
-  font-size: 14px;
+  color: #6733e5;
+  opacity: 0.5;
+  font-size: 20px;
 `;
 
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;
-
-  margin-bottom: 20px;
-  margin-top: 20px;
-`;
-const ConfirmButton = styled.button`
-  display: flex;
-  font-family: "Binggrae";
-  justify-content: center;
-  width: 100%;
-  padding: 5px 5px;
-  cursor: pointer;
-  border-radius: 10px;
-  border: 1px solid #5e17eb;
-  font-size: 20px;
-  transition: 1ms;
-  &:hover {
-    color: #5e17eb;
-    font-weight: 600;
-    background-color: rgba(233, 193, 255, 10%);
+  button {
+    cursor: pointer;
+    padding: 10px 0px;
+    font-size: 22px;
+    font-weight: 900;
+    border: 3px solid #c593fe;
+    width: 100%;
+    color: white;
+    background-color: #6733e5;
+    border-radius: 10px;
+    margin-top: 30px;
+    margin-border: 30px;
+    transition: 5ms;
+  }
+  button:hover {
+    background-color: #c593fe;
+    border: 3px solid #6733e5;
     position: relative;
     top: -2px;
   }
-  &:active {
+  button:active {
     position: relative;
-    top: 0px;
+    top: 2px;
   }
+  margin-bottom: 20px;
 `;
 const SocialTitle = styled.div`
   display: flex;
@@ -363,7 +356,7 @@ function Signin() {
               </Link>
             </Resister>
             <ButtonWrap>
-              <ConfirmButton type="submit">로그인 </ConfirmButton>
+              <button type="submit">로그인 </button>
             </ButtonWrap>
             <div>
               <SocialTitle> 소셜 로그인 </SocialTitle>
