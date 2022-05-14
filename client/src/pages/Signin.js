@@ -17,6 +17,7 @@ import {
   github_redirect_url,
   kakaoNaver_redirect_url,
   Kakao_url,
+  Github_url,
   Naver_url,
 } from "../config";
 //
@@ -221,26 +222,35 @@ function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     // dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
   }, [user, isError, isSuccess, message, navigate, dispatch]);
 
   useEffect(() => {
-    const kakaoOrNaver = localStorage.getItem("login");
-    if (kakaoOrNaver === "kakao") {
+    const whichone = localStorage.getItem("login");
+    if (whichone === "kakao") {
       const url = new URL(window.location.href);
       const authorizationCode = url.searchParams.get("code");
       if (authorizationCode) {
         getKakaoAccessToken(authorizationCode);
       }
     }
-    if (kakaoOrNaver === "naver") {
+    if (whichone === "naver") {
       const url = new URL(window.location.href);
       const authorizationCode = url.searchParams.get("code");
       if (authorizationCode) {
         getNaverAccessToken(authorizationCode);
+      }
+    }
+    if (whichone === "github") {
+      const url = new URL(window.location.href);
+      const authorizationCode = url.searchParams.get("code");
+      if (authorizationCode) {
+        getGithubAccessToken(authorizationCode);
       }
     }
   }, []);
@@ -268,6 +278,22 @@ function Signin() {
 
   const getKakaoAccessToken = async (authorizationCode) => {
     let resp = await axios.post(Kakao_url, {
+      authorizationCode: authorizationCode,
+    });
+    const { user } = resp.data;
+    const { accessToken } = resp.data;
+    localStorage.setItem("user", JSON.stringify(user));
+    localStorage.setItem("token", JSON.stringify(accessToken));
+    axios.defaults.headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + accessToken,
+    };
+    navigate("/");
+    window.location.reload();
+  };
+
+  const getGithubAccessToken = async (authorizationCode) => {
+    let resp = await axios.post(Github_url, {
       authorizationCode: authorizationCode,
     });
     const { user } = resp.data;
@@ -379,7 +405,10 @@ function Signin() {
               <GoogleButton className="sButton">
                 <GoogleLogin
                   render={(renderProps) => (
-                    <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                    <button
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                    >
                       <img src={google} alt="google" />
                     </button>
                   )}
@@ -391,10 +420,17 @@ function Signin() {
                 ></GoogleLogin>
               </GoogleButton>
               <NaverButton className="sButton">
-                <img src={naver} alt="naver" onClick={() => socialLoginHandler("naver")} />
+                <img
+                  src={naver}
+                  alt="naver"
+                  onClick={() => socialLoginHandler("naver")}
+                />
               </NaverButton>
               <GitButton className="sButton">
-                <img src={github} onClick={() => socialLoginHandler("github")} />
+                <img
+                  src={github}
+                  onClick={() => socialLoginHandler("github")}
+                />
               </GitButton>
             </SocialLoginButton>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
