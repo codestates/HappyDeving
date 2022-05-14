@@ -10,7 +10,9 @@ import landing_03 from "../../src/assets/landing3.png";
 
 const StyledLanding = styled.div`
   font-family: "Binggrae";
+
   grid-column: 4 / 12;
+
 
   display: flex;
   align-items: center;

@@ -21,9 +21,7 @@ import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const StyleStudyDesc = styled.div`
-  margin-top: 200px;
   grid-column: 4/12;
-
   padding: 3% 5% 3% 5%;
 
   .mapview {
@@ -73,6 +71,7 @@ const TitleBar = styled.div`
 const CommentsDiv = styled.div`
   /* background: pink; */
 `;
+
 
 const Wrap = styled.div`
   display: flex;
@@ -153,7 +152,7 @@ const Host = styled.div`
   height: 30px;
 `;
 
-const Button = styled.button`
+const Button = styled.a`
   padding: 8px 15px;
   background: #5e17eb;
   border-radius: 10px;
@@ -206,12 +205,13 @@ const StudyDesc = () => {
   const { id } = useParams();
   const { user } = useSelector((state) => state.user);
 
+
   const [showComments, setShowComments] = useState(false);
+
   const [share, setShare] = useState(false);
   const handleShareButton = () => {
     setShare(!share);
   };
-
   const [location, setLocation] = useState({
     place_name: "광화문",
     latitude: 37.570975,
@@ -232,7 +232,9 @@ const StudyDesc = () => {
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img = langImg.javascript;
+    var imgname =
+      data.language[0]["name"] === "c++" ? "c" : data.language[0]["name"];
+    var img = langImg[imgname];
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -277,6 +279,8 @@ const StudyDesc = () => {
     <>
       {data ? (
         <StyleStudyDesc>
+          {/* {console.log(data.user_id)}
+          {console.log(user?.id)} */}
           <TitleBar>
             <div className="title">{data.title}</div>
             <div className="alter">
@@ -287,7 +291,10 @@ const StudyDesc = () => {
                     {share ? <ShareSocialButton /> : null}
                     <FontAwesomeIcon icon={faShareNodes} />
                   </ShareIcon>
+
                   <div className="update" onClick={() => navigate(`/study/edit/${data.id}`)}>
+
+
                     수정
                   </div>
                   <div className="delete" onClick={handleStudyDeletion}>
@@ -304,19 +311,20 @@ const StudyDesc = () => {
             </Wrap>
           </Host>
           <Wrap>
-            <Icon>{data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
+            <Icon>
+              {data.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
+            </Icon>
             <Text>{data.closed ? "모집마감" : "모집중"}</Text>
+            {console.log(data.closed)}
           </Wrap>
           <Wrap>
             <Icon>
               <BsFileEarmarkCodeFill />
             </Icon>
             <Text>
-              {data.language.map((el, idx) => (
-                <span key={idx} className="langSpan">
-                  {el.name + ","}
-                </span>
-              ))}
+              <span className="langSpan">
+                {data.language.map((el) => el.name).join()}
+              </span>
             </Text>
           </Wrap>
           <Wrap>
@@ -339,14 +347,14 @@ const StudyDesc = () => {
               <BsFillFileEarmarkTextFill />
             </Icon>
             <Content>{data.content}</Content>
-          </ContentWrap>{" "}
+          </ContentWrap>
           <ProfileWrap>
             <ProfileImage>
               <img src={user?.image} />
             </ProfileImage>
 
             <Profile>
-              <h1>스터디 장, {user?.username}을 소개합니다!</h1>
+              <h1>스터디 장, {data?.username}을 소개합니다!</h1>
               <Bio>{user?.bio}</Bio>
               <LinkButtons>
                 <a href={user?.github} target="_blank" rel="noreferrer">
@@ -361,7 +369,7 @@ const StudyDesc = () => {
             </Profile>
           </ProfileWrap>
           <ButtonWrap>
-            <Button src={data.kakaoLink}>스터디 참여하기</Button>
+            <Button href={data.kakaoLink}>스터디 참여하기</Button>
           </ButtonWrap>
           <CommentsDiv>
             <button onClick={() => setShowComments(!showComments)}>

@@ -120,17 +120,7 @@ const StudyCard = ({ myStudy, likedStudy }) => {
     }
   }, [myStudies, likedStudies]);
 
-  const imageHandler = (study) => {
-    return study.language
-      .slice(0, 2)
-      .map((el) =>
-        el["name"] === "c++" ? (
-          <img src={langImg["c"]} alt=""></img>
-        ) : (
-          <img src={langImg[el["name"]]} alt=""></img>
-        )
-      );
-  };
+
 
   const handleUnlike = async () => {
     await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: likedStudy.id } }));
@@ -145,19 +135,46 @@ const StudyCard = ({ myStudy, likedStudy }) => {
     navigate("/likedstudy");
   };
 
+
   const moveToStudyPage = (study) => {
     navigate(`/study/${study.id}`);
-  };
 
+  const imgHandler = () => {
+    if (myStudy) {
+      return myStudy.language
+        .slice(0, 2)
+        .map((el, idx) =>
+          el["name"] === "c++" ? (
+            <img key={idx} src={langImg["c"]}></img>
+          ) : (
+            <img key={idx} src={langImg[el["name"]]}></img>
+          )
+        );
+    } else {
+      console.log(likedStudy);
+      return likedStudy.language
+        .slice(0, 2)
+        .map((el, idx) =>
+          el["name"] === "c++" ? (
+            <img key={idx} src={langImg["c"]}></img>
+          ) : (
+            <img key={idx} src={langImg[el["name"]]}></img>
+          )
+        );
+    }
+
+  };
   return (
     <>
       {/* <Container> */}
+
       <CardContainer>
         {myStudy ? (
           <LanguageImg>{imageHandler(myStudy)}</LanguageImg>
         ) : (
           <LanguageImg>{imageHandler(likedStudy)}</LanguageImg>
         )}
+
         <CardForm>
           {/* <div> */}
           <h1 onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>

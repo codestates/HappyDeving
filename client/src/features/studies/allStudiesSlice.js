@@ -45,35 +45,44 @@ const initialState = {
 //   }
 // );
 
-export const writeStudy = createAsyncThunk("allStudies/writeStudy", async (data, thunkAPI) => {
-  try {
-    return await writeStudyApi(data).then((res) => {
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const writeStudy = createAsyncThunk(
+  "allStudies/writeStudy",
+  async (data, thunkAPI) => {
+    try {
+      return await writeStudyApi(data).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
-export const editStudy = createAsyncThunk("allStudies/editStudy", async (data, thunkAPI) => {
-  try {
-    return await editStudyApi(data).then((res) => {
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const editStudy = createAsyncThunk(
+  "allStudies/editStudy",
+  async (data, thunkAPI) => {
+    try {
+      return await editStudyApi(data).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
-export const deleteStudy = createAsyncThunk("allStudies/deleteStudy", async (data, thunkAPI) => {
-  try {
-    return await deleteStudyApi(data).then((res) => {
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const deleteStudy = createAsyncThunk(
+  "allStudies/deleteStudy",
+  async (data, thunkAPI) => {
+    try {
+      return await deleteStudyApi(data).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
 export const likeStudy = createAsyncThunk(
   "allStudies/likeStudy",
@@ -118,16 +127,19 @@ export const unLikeStudy = createAsyncThunk(
   }
 );
 
-export const getMyStudies = createAsyncThunk("allStudies/getMyStudies", async (id, thunkAPI) => {
-  try {
-    return await getMyStudiesApi(id).then((res) => {
-      // console.log("my studies after axios", res);
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const getMyStudies = createAsyncThunk(
+  "allStudies/getMyStudies",
+  async (id, thunkAPI) => {
+    try {
+      return await getMyStudiesApi(id).then((res) => {
+        // console.log("my studies after axios", res);
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
 export const allStudiesSlice = createSlice({
   name: "allStudies",
@@ -192,7 +204,9 @@ export const allStudiesSlice = createSlice({
       .addCase(deleteStudy.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.allStudies = state.allStudies.filter((study) => study.id !== action.payload.id);
+        state.allStudies = state.allStudies.filter(
+          (study) => study.id !== action.payload.id
+        );
       })
       .addCase(deleteStudy.rejected, (state, action) => {
         state.isLoading = false;
@@ -206,7 +220,9 @@ export const allStudiesSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
 
-        state.allStudies.map((study) => (study.id === action.payload.id ? action.payload : study));
+        state.allStudies.map((study) =>
+          study.id === action.payload.id ? action.payload : study
+        );
       })
       .addCase(editStudy.rejected, (state, action) => {
         state.isLoading = false;

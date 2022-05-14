@@ -14,7 +14,6 @@ import { openModal } from "../../features/modal/modalSlice";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
-  margin-top: 200px;
 
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
@@ -257,7 +256,6 @@ const Checkbox = styled.div`
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
 
 const StudyDesc = () => {
-  // const navigate = useNavigate();
   const dispatch = useDispatch();
   const container = useRef(null);
   const [location, setLocation] = useState({
@@ -293,30 +291,24 @@ const StudyDesc = () => {
   }
 
   const handleLocationValue = (e, value) => {
-    if (e === "click") {
-      console.log("location");
-
-      console.log(value);
+    if (e.type === "click" || e.key === "Enter") {
       searchPlaces(value);
     }
-
-    if (e.key === "Enter") {
-      searchPlaces(value);
-    } // true
   };
 
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: new kakao.maps.LatLng(location.y, location.x), //지도의 중심좌표
-      level: 3, //지도의 레벨(확대, 축소 정도)
+      level: 5, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
     var img =
-      data.language.length === 0
-        ? "https://i.ibb.co/nr4FYns/happydevil.png"
-        : langImg[data.language[0].name];
+      data.language.length !== 0
+        ? langImg[data.language[0].name]
+        : "https://i.ibb.co/nr4FYns/happydevil.png";
+
     var // 마커이미지의 주소입니다
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
@@ -345,16 +337,11 @@ const StudyDesc = () => {
   const [checked, setChecked] = useState(false);
   const locationInput = useRef(null);
 
-  const [locationSearch, setLocationSearch] = useState("");
   const [langOpen, setLangOpen] = useState(false);
   const [locOpen, setLocOpen] = useState(false);
 
-  // const user = JSON.parse(localStorage.getItem("user"));
   const { user } = useSelector((state) => state.user);
 
-  // const dispatch = useDispatch();
-  // const { dateModal } = useSelector((store) => store.studyModal);
-  // const { calenderDateValue } = useSelector((store) => store.calender);
   const { dateData } = useSelector((store) => store.searchData);
   const { calenderDateValue } = useSelector((store) => store.calender);
   const [data, setData] = useState({
@@ -379,6 +366,10 @@ const StudyDesc = () => {
   useEffect(() => {
     setData({ ...data, closed: checked });
   }, [checked]);
+
+  useEffect(() => {
+    mapscript();
+  }, [data.language]);
 
   const locationListHandler = (locationList) => {
     //검색한 조건에 맞는 스터디들의 목록을 div로 표현
@@ -449,7 +440,7 @@ const StudyDesc = () => {
             <Text classNane="lanaguage">언어</Text>
             {/* <LanguageDrop> */}
             <HalfInput>
-              {data.language.map((el) => el.name + "," + " ")}
+              {data.language.map((el) => el.name).join()}
               <IconDrop>
                 <IoMdArrowDropdown onClick={() => setLangOpen(!langOpen)} />
               </IconDrop>
@@ -459,6 +450,7 @@ const StudyDesc = () => {
             {langOpen ? (
               <DescLanguageModal>
                 <div>
+                  {console.log("langImg", Object.keys(langImg))}
                   {Object.keys(langImg).map((el, idx) => (
                     <div
                       key={idx}
@@ -498,7 +490,6 @@ const StudyDesc = () => {
             className="locaitionInput"
             onKeyDown={(e) => {
               handleLocationValue(e, e.target.value);
-              setLocationSearch(e.target.value);
             }}
             placeholder="ex. 송파구 오륜동"
             ref={locationInput}
@@ -513,7 +504,7 @@ const StudyDesc = () => {
             <IoIosSearch
               onClick={(e) => {
                 setLocOpen(!locOpen);
-                handleLocationValue(e, locationSearch);
+                handleLocationValue(e, locationInput.current.value);
               }}
             ></IoIosSearch>
           </IconSerch>
@@ -531,7 +522,6 @@ const StudyDesc = () => {
           <Checkbox>
             <input
               type="checkbox"
-              // className="input"
               onClick={() => {
                 setChecked(!checked);
               }}
