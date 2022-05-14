@@ -1,19 +1,22 @@
 import React, { useRef, useEffect, useState } from "react";
 import styled from "styled-components";
 import Comments from "../Comments";
+import { DummyImgs } from "../../static/images/DummyImg";
 import "./Map.styled.css";
 import {
   BsFillDoorOpenFill,
   BsFillDoorClosedFill,
   BsFileEarmarkCodeFill,
   BsFillCalendarDateFill,
-  BsFillFileEarmarkTextFill,
+  // BsFillFileEarmarkTextFill,
 } from "react-icons/bs";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { langImg } from "../../static/images/langImg";
 import { studyApi } from "../../api/study";
 import { useNavigate, useParams } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
 import { faAngleDown, faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
@@ -25,8 +28,11 @@ import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
 
 const StyleStudyDesc = styled.div`
   grid-column: 4/12;
+  min-width: 500px;
   padding: 3% 5% 3% 5%;
-
+  div {
+    border-radius: 5px;
+  }
   .mapview {
     border-bottom: 2px solid #dfc1ff;
     margin-bottom: 20px;
@@ -40,41 +46,61 @@ const StyleStudyDesc = styled.div`
 `;
 
 const TitleBar = styled.div`
-  grid-row: 1/2;
-  height: 50px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
   border-radius: ${(props) => props.theme.borderRadius};
   border-bottom: 2px solid #dfc1ff;
-  margin-bottom: 30px;
+  padding: 0px 10px;
+`;
 
-  .title {
-    flex: 8;
-    font-family: "Bold";
-    font-size: 26px;
-    height: 40px;
-    line-height: 40px;
+const Title = styled.div`
+  display: flex;
+  font-family: "Binggrae";
+  font-size: 26px;
+  min-width: 200px;
+  @media screen and (max-width: 1023px) {
+    font-size: 20px;
   }
-
-  .alter {
-    flex: 2;
-    font-family: "Medium";
-    display: flex;
-    color: gray;
-    justify-content: space-around;
-    font-size: 16px;
-    height: 40px;
-    line-height: 40px;
-    float: right;
-    &:hover {
-      cursor: pointer;
-    }
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
   }
 `;
 
+const Alter = styled.div`
+  display: flex;
+  font-family: "Medium";
+  color: gray;
+  font-size: 18px;
+  &:hover {
+    cursor: pointer;
+  }
+  div {
+    display: flex;
+    align-items: center;
+    margin: 0px 5px;
+    min-width: 10px;
+  }
+  @media screen and (max-width: 768px) {
+    font-size: 13px;
+  }
+`;
+
+const Delete = styled.div``;
+const Update = styled.div``;
+const ShareIcon = styled.div`
+  position: relative;
+`;
+
+const HeartIcon = styled.div`
+  .like {
+    color: #d32f2f;
+  }
+`;
 const CommentsDiv = styled.div`
   /* background: pink; */
 `;
-
 
 const Wrap = styled.div`
   display: flex;
@@ -82,49 +108,74 @@ const Wrap = styled.div`
   height: auto;
   width: 100%;
   margin-bottom: 30px;
+`;
+const Host = styled.div`
+  display: flex;
+  padding-right: 10px;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  align-items: center;
+  padding: 10px 10px;
+`;
 
+const MiniProfileWrap = styled.div`
+  display: flex;
+  background-color: rgba(233, 193, 255, 20%);
+  border-radius: 5px;
+  padding: 3px 5px;
+  p {
+    font-size: 14px;
+  }
   .profile {
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     border-radius: 50%;
-    margin-right: 10px;
+    margin-right: 5px;
   }
 `;
 
 const ProfileWrap = styled.div`
   display: flex;
-  padding: 10px;
-  min-height: 100px;
-  width: 100%;
+  padding: 20px 0px;
+  min-height: 120px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 
   h1 {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
   }
 `;
-const ProfileImage = styled.div`
-  border-radius: 100px;
+const ProfileInWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: 100px;
+`;
+const ProfileImage = styled.div`
+  border-radius: 5px;
+  width: 80px;
+  padding: 2px;
   height: 80px;
-  border: 3px solid #c593fe;
-  margin-right: 10px;
+  border: 1px solid #c593fe;
 
   img {
-    border-radius: 100px;
+    /* border-radius: 100px; */
     width: 100%;
     height: 100%;
   }
 `;
 const ContentWrap = styled.div`
   display: flex;
+  background-color: rgba(233, 193, 255, 20%);
   min-height: 0px;
-  height: auto;
+
+  min-height: 200px;
   width: 100%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 `;
 
 const Icon = styled.div`
-  align-items: center;
-  margin-right: 20px;
+  margin-right: 10px;
 `;
 const HeartIcon = styled.span`
   font-size: 30px;
@@ -137,11 +188,39 @@ const HeartIcon = styled.span`
   }
 `;
 
+const CreateAt = styled.p`
+  color: darkray;
+  font-size: 14px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+`;
 const Text = styled.div`
   width: 120px;
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 5px;
+  margin-right: 30px;
 `;
+const TextL = styled.div`
+  width: auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 5px;
+  margin-right: 10px;
+`;
+
+
+const dummyimg = DummyImgs[Math.floor(Math.random() * 10)];
+const DummyImg = styled.div`
+  width: 100%;
+  height: 300px;
+
+  background-image: url(${dummyimg});
+  background-position: center;
+  background-size: cover;
+
+  margin-bottom: 20px;
+`;
+
 const Content = styled.div`
+  padding: 10px;
   width: 100%;
 `;
 const Profile = styled.div`
@@ -150,80 +229,84 @@ const Profile = styled.div`
   width: 100%;
 `;
 const Bio = styled.div`
-  background-color: rgba(233, 193, 255, 30%);
+  background-color: rgba(233, 193, 255, 10%);
   margin: 5px 0px;
   padding: 10px;
   width: 100%;
+  min-height: 50px;
   border-radius: 5px;
 
   p {
     font-size: 14px;
   }
 `;
-const Host = styled.div`
-  float: right;
-  height: 30px;
-`;
-
-const Button = styled.a`
-  padding: 8px 15px;
-  background: #5e17eb;
-  border-radius: 10px;
-  border: 2px solid #dfc1ff;
-  color: white;
-  transition: 5ms;
-
-  &:hover {
-    background-color: #c593fe;
-    border: 2px solid #6733e5;
-  }
-  &:active {
-    position: relative;
-    top: -2px;
-  }
-`;
 
 const LinkButtons = styled.div`
   display: flex;
   a {
-    color: #6733e5;
-    font-size: 16px;
-    margin-right: 10px;
+    color: darkray;
+    font-size: 12px;
+    margin: 0px auto;
+    span {
+      margin-left: 2px;
+    }
   }
 `;
 const { kakao } = window;
 
 const MapView = styled.div`
   grid-column: 2/14;
-  height: 200px;
+  border: 2px solid #dfc1ff;
+  width: 100%;
+  height: 400px;
+  min-height: 300px;
+  min-width: 300px;
   margin-bottom: 20px;
   border-radius: 0px;
 `;
 const ButtonWrap = styled.div`
   display: flex;
   margin: 20px 0px;
-  justify-content: flex-end;
+  justify-content: space-between;
 `;
-const ShareIcon = styled.div`
-  font-size: 20px;
+const ConfirmButton = styled.button`
+  display: flex;
+  justify-content: center;
+  width: 150px;
+  padding: 5px 5px;
   cursor: pointer;
-  position: relative;
+  border-radius: 10px;
+  border: 1px solid #5e17eb;
+  font-size: 14px;
+  transition: 1ms;
+  &:hover {
+    color: #5e17eb;
+    font-weight: 600;
+    background-color: rgba(233, 193, 255, 10%);
+    position: relative;
+    top: -2px;
+  }
+  &:active {
+    position: relative;
+    top: 0px;
+  }
 `;
+
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
 
 const StudyDesc = () => {
   const container = useRef(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { id } = useParams();
   const { user } = useSelector((state) => state.user);
   const { likedStudies } = useSelector((state) => state.allStudies);
   const [isLike, setIsLike] = useState(false);
 
-
   const [showComments, setShowComments] = useState(false);
-
   const [share, setShare] = useState(false);
+  const moment = require("moment");
   const handleShareButton = () => {
     setShare(!share);
   };
@@ -266,7 +349,6 @@ const StudyDesc = () => {
 
     //el.id 스터디 아이디가 담겨온다.
   };
-
   useEffect(() => {
     if (data) {
       mapscript();
@@ -288,14 +370,20 @@ const StudyDesc = () => {
   }, []);
 
   const handleUnlike = async () => {
+
     await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: data.id } }));
+
     setIsLike(!isLike);
   };
 
   const handleLike = async () => {
+
     await dispatch(likeStudy({ id: user.id, studyData: { study_id: data.id } }));
     setIsLike(!isLike);
   };
+
+
+
 
   const handleStudyDeletion = (e) => {
     e.preventDefault();
@@ -306,121 +394,154 @@ const StudyDesc = () => {
       })
     );
   };
-
   return (
     <>
       {data ? (
         <StyleStudyDesc>
-          {/* {console.log(data.user_id)}
-          {console.log(user?.id)} */}
           <TitleBar>
-            <div className="title">{data?.title}</div>
-            <div className="alter">
-              {data?.user_id === user?.id ? (
+
+            <Title>{data.title}</Title>
+            <Alter>
+              {data.user_id === user?.id ? (
                 <>
                   <HeartIcon>
                     {isLike ? (
-                      <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
+                      <FontAwesomeIcon
+                        onClick={handleUnlike}
+                        icon={like}
+                        size="1x"
+                        color="red"
+                      />
                     ) : (
-                      <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
+                      <FontAwesomeIcon
+                        onClick={handleLike}
+                        icon={unLike}
+                        size="1x"
+                      />
+
                     )}
                   </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
                     {share ? <ShareSocialButton /> : null}
                     <FontAwesomeIcon icon={faShareNodes} />
                   </ShareIcon>
-                  <div className="update" onClick={() => navigate(`/study/edit/${data?.id}`)}>
+
+                  <Update onClick={() => navigate(`/study/edit/${data.id}`)}>
+
                     수정
-                  </div>
-                  <div className="delete" onClick={handleStudyDeletion}>
-                    삭제
-                  </div>
+                  </Update>
+                  <Delete onClick={handleStudyDeletion}>삭제</Delete>
                 </>
               ) : (
-                <HeartIcon>
-                  {isLike ? (
-                    <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
-                  ) : (
-                    <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
-                  )}
-                </HeartIcon>
+
+                <>
+                  <HeartIcon>
+                    {isLike ? (
+                      <FontAwesomeIcon
+                        onClick={handleUnlike}
+                        icon={like}
+                        size="1x"
+                        color="red"
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        onClick={handleLike}
+                        icon={unLike}
+                        size="1x"
+                      />
+                    )}
+                  </HeartIcon>
+                  <ShareIcon onClick={handleShareButton}>
+                    {share ? <ShareSocialButton /> : null}
+                    <FontAwesomeIcon icon={faShareNodes} />
+                  </ShareIcon>
+                </>
               )}
-            </div>
+            </Alter>
           </TitleBar>
           <Host>
-            <Wrap>
-              <img className="profile" src={data?.image} />
-              <Text>{data?.username}</Text>
-            </Wrap>
-          </Host>
-          <Wrap>
-            <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
-            <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
+            <CreateAt>{moment(data.createAt).format("YYYY.MM.DD")}</CreateAt>
 
-          </Wrap>
+            <MiniProfileWrap>
+              <img className="profile" src={data?.image} />
+              <p>{data?.username}</p>
+            </MiniProfileWrap>
+
+          </Host>
+          <DummyImg></DummyImg>
           <Wrap>
+
+            <Icon>
+              {data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
+            </Icon>
+            <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
             <Icon>
               <BsFileEarmarkCodeFill />
             </Icon>
-            <Text>
-              {data?.language.map((el, idx) => (
-                <span key={idx} className="langSpan">
-                  {el.name + ","}
-                </span>
-              ))}
+            <TextL>
+              <span className="langSpan">
+                {data?.language.map((el, idx) => el.name).join()}
+              </span>
+            </TextL>
 
-            </Text>
           </Wrap>
           <Wrap>
             <Icon>
               <BsFillCalendarDateFill />
             </Icon>
             <Text>{data?.startDate}</Text>
-          </Wrap>
-          <Wrap>
+
             <Icon>
               <FaMapMarkerAlt />
             </Icon>
-            <Text>{data?.location.name}</Text>
+            <TextL>{data?.location.name}</TextL>
+
           </Wrap>
           <div className="mapview">
             <MapView id="map" ref={container} />
           </div>
           <ContentWrap>
-            <Icon>
-              <BsFillFileEarmarkTextFill />
-            </Icon>
+
             <Content>{data?.content}</Content>
-          </ContentWrap>{" "}
+          </ContentWrap>
 
           <ProfileWrap>
-            <ProfileImage>
-              <img src={data?.image} />
-            </ProfileImage>
+            <ProfileInWrap>
+              <ProfileImage>
+                <img src={data?.image} />
+              </ProfileImage>
 
-            <Profile>
-              <h1>스터디 장, {data?.username}을 소개합니다!</h1>
-              <Bio>{data?.bio}</Bio>
               <LinkButtons>
                 <a href={data?.github} target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faGithubAlt} />
-                  깃허브
+                  <span>git</span>
                 </a>
                 <a href={data?.blog} target="_blank" rel="noreferrer">
                   <FontAwesomeIcon icon={faBlogger} />
-                  블로그
+                  <span>blog</span>
                 </a>
               </LinkButtons>
+            </ProfileInWrap>
+
+            <Profile>
+              <h1>스터디장, {data?.username}을 소개합니다.</h1>
+              <Bio>{data?.bio}</Bio>
             </Profile>
           </ProfileWrap>
           <ButtonWrap>
-            <Button src={data?.kakaoLink}>스터디 참여하기</Button>
+
+            <ConfirmButton onClick={() => setShowComments(!showComments)}>
+              <p>댓글작성 | 보기</p>
+
+              <Icon>
+                <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
+              </Icon>
+            </ConfirmButton>
+            <ConfirmButton src={data?.kakaoLink}>스터디 참여하기</ConfirmButton>
+
           </ButtonWrap>
+
           <CommentsDiv>
-            <button onClick={() => setShowComments(!showComments)}>
-              댓글보기
-              <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
-            </button>
             {showComments ? <Comments studyId={id} /> : null}
           </CommentsDiv>
         </StyleStudyDesc>
