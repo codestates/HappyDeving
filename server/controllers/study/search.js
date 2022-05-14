@@ -3,10 +3,8 @@ const { Study, Language, Location } = require("../../models");
 module.exports = {
   get: async (req, res) => {
     try {
-      const decoded = decodeURI(req.url);
+      // const decoded = decodeURI(req.url);
       const { guType, dongType, language, startDate } = req.query;
-
-      console.log(decoded);
 
       if (language && !startDate) {
         const locationList = await Study.findAll({
@@ -117,6 +115,10 @@ module.exports = {
           "updatedAt",
         ],
       });
+      // console.log(locationList);
+      // if (!locationList.length) {
+      //   return res.status(404).json("not found");
+      // }
       return res.status(200).json(locationList);
     } catch (err) {
       console.error(err);

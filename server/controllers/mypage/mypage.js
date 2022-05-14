@@ -2,7 +2,6 @@ const { User, Study_comment, Study, Language, Location } = require("../../models
 const { checkAccessToken } = require("../tokenFunctions");
 
 module.exports = {
-  // ! 완료
   get: async (req, res) => {
     try {
       const data = checkAccessToken(req);
@@ -75,6 +74,7 @@ module.exports = {
         blog,
         bio,
         image,
+        loginMethod,
         createdAt,
         updatedAt,
         study,
@@ -92,6 +92,7 @@ module.exports = {
             blog,
             bio,
             image,
+            loginMethod,
             createdAt,
             updatedAt,
           },
@@ -116,7 +117,7 @@ module.exports = {
         return res.status(401).json("wrong req params");
       }
 
-      const { username, github, blog, bio, image } = req.body;
+      const { username, github, blog, bio } = req.body;
 
       const userInfo = await User.findOne({ where: { id: paramsId } });
 
@@ -126,14 +127,13 @@ module.exports = {
           github: github ? github : userInfo.github,
           blog: blog ? blog : userInfo.blog,
           bio: bio ? bio : userInfo.bio,
-          image: image ? image : userInfo.image,
         },
         { where: { id: paramsId } }
       );
 
       const result = await User.findOne({ where: { id: paramsId } });
 
-      res.status(200).json(result);
+      res.status(200).json({ data: { userInfo: result } });
     } catch (err) {
       console.error(err);
       return res.status(500).json();

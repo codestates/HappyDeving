@@ -40,6 +40,11 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: "https://i.ibb.co/nr4FYns/happydevil.png",
       },
+      loginMethod: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

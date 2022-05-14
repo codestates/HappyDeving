@@ -1,18 +1,27 @@
-const { User, Study_comment } = require("../../models");
+const { User, Study_comment, Study, Language } = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 
 module.exports = {
   get: async (req, res) => {
     try {
-      // const { id } = req.params;
-      // const data = checkAccessToken(req);
-      // if (!data) {
-      //   return res.status(401).json("signin required");
-      // }
+      let { id } = req.params;
 
-      const comment = await Study_comment.findAll({ include: [{ model: User, as: "user" }] });
+      id = Number(id);
 
-      res.json(comment);
+      const comment = await Study_comment.findAll({
+        where: { study_id: id },
+        include: [{ model: User, as: "user" }],
+      });
+
+      comment.forEach(
+        (el) => (
+          (el.dataValues.username = el.user.username),
+          (el.dataValues.user = undefined),
+          (el.dataValues.image = el.user.image)
+        )
+      );
+
+      return res.status(200).json({ data: { comments: comment } });
     } catch (err) {
       console.log(err);
       return res.status(500).json();
@@ -25,13 +34,17 @@ module.exports = {
       if (!data) {
         return res.status(401).json("signin required");
       }
-      const { user_id, study_id, content } = req.body;
+      const { user_id, study_id, content, parentId } = req.body;
 
-      if (!user_id || !study_id || !content) {
+      if (data.id !== user_id) {
+        return res.status(403).json("wrong user");
+      }
+
+      if (!user_id || !study_id || !content || !parentId === null) {
         return res.status(401).json("body required");
       }
 
-      const comment = await Study_comment.create({ user_id, study_id, content, parentId: null });
+      const comment = await Study_comment.create({ user_id, study_id, content, parentId });
 
       res.status(201).json(comment);
     } catch (err) {
@@ -46,9 +59,9 @@ module.exports = {
       if (!data) {
         return res.status(401).json("signin required");
       }
-      const { id: _id, content: _content } = req.body;
+      const { study_commentId, content: _content } = req.body;
 
-      if (!_id) {
+      if (!study_commentId || !_content) {
         return res.status(401).json("body required");
       }
 
@@ -57,26 +70,31 @@ module.exports = {
           {
             content: _content,
           },
-          { where: { id: _id } }
+          { where: { id: study_commentId } }
         );
       }
 
       const comment = await Study_comment.findOne({
-        where: { id: _id },
+        where: { id: study_commentId },
       });
 
-      const { id, user_id, content, parentId, createdAt, updatedAt } = comment;
+      if (!comment) {
+        return res.status(404).json("comment not found");
+      }
+
+      const { id, user_id, study_id, content, parentId, createdAt, updatedAt } = comment.dataValues;
 
       const userInfo = await User.findOne({
         where: { id: user_id },
       });
 
-      const { username } = userInfo;
+      const { username, image } = userInfo.dataValues;
 
       return res.status(200).json({
         data: {
-          comments: [{ id, content, username, parentId, createdAt, updatedAt }],
-          userInfo: { id, username },
+          comments: [
+            { id, content, user_id, study_id, username, parentId, createdAt, updatedAt, image },
+          ],
         },
       });
     } catch (err) {
@@ -86,10 +104,14 @@ module.exports = {
   },
   delete: async (req, res) => {
     try {
-      const { id } = req.body;
+      const { study_commentId } = req.body;
+
+      if (!study_commentId) {
+        return res.status(404).json("req body not found");
+      }
 
       let comment = await Study_comment.findOne({
-        where: { id: id },
+        where: { id: study_commentId },
       });
 
       const { content } = comment.dataValues;

@@ -1,9 +1,17 @@
-const { User, Study, Study_comment, Language, Study_language, Location } = require("../../models");
+const {
+  User,
+  Study,
+  Study_comment,
+  Language,
+  User_likes_study,
+  Study_language,
+  Location,
+} = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 const { Op } = require("sequelize");
+const user = require("../../models/user");
 
 module.exports = {
-  // ! 완료
   get: async (req, res) => {
     try {
       const study = await Study.findOne({
@@ -14,6 +22,11 @@ module.exports = {
             model: Study_comment,
             as: "study_comment",
             attributes: ["id", "content", "createdAt", "updatedAt", "parentId"],
+            include: [{ model: User, as: "user", attributes: ["username"] }],
+          },
+          {
+            model: User,
+            as: "user",
           },
         ],
       });
@@ -31,30 +44,35 @@ module.exports = {
         closed,
         study_comment,
         location_id,
+        user_id,
         startDate,
         createdAt,
         updatedAt,
         language,
-        user_id,
       } = study;
-
-      const findUsername = await User.findOne({
-        where: { id: user_id },
-        attributes: ["username"],
-      });
 
       const findLocation = await Location.findOne({
         where: { id: location_id },
-        attributes: ["latitude", "longitude"],
+        attributes: ["latitude", "longitude", "name"],
       });
 
-      study_comment.forEach((el) => (el.dataValues.username = findUsername.username));
+      study_comment.forEach(
+        (el) => (
+          (el.dataValues.username = el.user.username),
+          (el.dataValues.user = undefined)
+        )
+      );
 
       res.status(200).json({
         data: {
           study: {
             id,
-            username: findUsername.username,
+            username: study.user.username,
+            email: study.user.email,
+            github: study.user.github,
+            blog: study.user.blog,
+            image: study.user.image,
+            user_id,
             title,
             content,
             kakaoLink,
@@ -73,7 +91,6 @@ module.exports = {
       return res.status(500).json();
     }
   },
-  // ! 완료
   post: async (req, res) => {
     try {
       const {
@@ -84,7 +101,7 @@ module.exports = {
         closed,
         location,
         title,
-        language_id,
+        language,
         loginMethod,
       } = req.body;
 
@@ -106,10 +123,27 @@ module.exports = {
         closed === undefined ||
         !location ||
         !title ||
-        !language_id ||
+        !language ||
         loginMethod === undefined
       ) {
         return res.status(401).json("body required");
+      }
+
+      const findDong = location[3].split("");
+      const findGu = location[2].split("");
+
+      if (
+        !location[0] ||
+        typeof location[0] !== "string" ||
+        !location[1] ||
+        typeof location[1] !== "string" ||
+        !location[2] ||
+        !location[3] ||
+        findDong[findDong.length - 1] !== "동" ||
+        findGu[findGu.length - 1] !== "구" ||
+        !location[4]
+      ) {
+        return res.status(401).json("location array incorrent");
       }
 
       const findOrCreateLocation = await Location.findOrCreate({
@@ -140,15 +174,16 @@ module.exports = {
         closed,
         location,
       });
+      console.log(language.id);
 
-      for (let i = 0; i < language_id.length; i++) {
+      for (let i = 0; i < language.length; i++) {
         await Study_language.create({
           study_id: post.id,
-          language_id: language_id[i],
+          language_id: language[i].id,
         });
       }
 
-      res.json(post);
+      res.status(201).json(post);
     } catch (err) {
       console.error(err);
       return res.status(500).json();
@@ -159,6 +194,7 @@ module.exports = {
       const data = checkAccessToken(req);
 
       const {
+        id: userId,
         study_id,
         username,
         content,
@@ -167,7 +203,7 @@ module.exports = {
         closed,
         location,
         title,
-        language_id,
+        language,
         loginMethod,
       } = req.body;
 
@@ -184,6 +220,11 @@ module.exports = {
           { model: Language, as: "language" },
         ],
       });
+
+      if (data.id !== studyInfo.dataValues.user_id) {
+        return res.status(401).json("wrong user");
+      }
+      // return res.json("ok");
 
       let studylangueId = [];
       for (let i = 0; i < studyInfo.language.length; i++) {
@@ -210,12 +251,12 @@ module.exports = {
       const study_languageId = [];
       study_languageInfo.forEach((el) => study_languageId.push(el.id));
 
-      if (language_id) {
-        if (language_id.length === study_languageId) {
-          for (let i = 0; i < language_id.length; i++) {
+      if (language) {
+        if (language.length === study_languageId) {
+          for (let i = 0; i < language.length; i++) {
             await Study_language.update(
               {
-                language_id: language_id[i],
+                language_id: language[i].id,
               },
               { where: { id: study_languageId[i] } }
             );
@@ -227,10 +268,10 @@ module.exports = {
             });
           }
 
-          for (let i = 0; i < language_id.length; i++) {
+          for (let i = 0; i < language.length; i++) {
             Study_language.create({
               study_id: id,
-              language_id: language_id[i],
+              language_id: language[i].id,
             });
           }
         }
@@ -268,6 +309,7 @@ module.exports = {
               title: result.title,
               kakaoLink: result.kakaoLink,
               closed: result.closed,
+              startDate: result.startDate,
               location: {
                 latitude: result.location.latitude,
                 longitude: result.location.longitude,
@@ -284,7 +326,6 @@ module.exports = {
       return res.status(500).json();
     }
   },
-  // ! 완료
   delete: async (req, res) => {
     try {
       const data = checkAccessToken(req);
@@ -301,6 +342,9 @@ module.exports = {
         where: { study_id: id },
       });
 
+      await User_likes_study.destroy({
+        where: { study_id: id },
+      });
       const study = await Study.destroy({ where: { id } });
 
       res.status(200).json(study);

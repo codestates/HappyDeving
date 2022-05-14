@@ -22,13 +22,26 @@ module.exports = {
         username,
         email,
         password: userInfoPassword,
+        github,
+        blog,
+        bio,
+        image,
+        loginMethod,
+        verified,
         createdAt,
         updatedAt,
       } = userInfo.dataValues;
       const check = await bcrypt.compare(password, userInfoPassword);
 
+      // 비밀번호가 틀렸을때
       if (!check) {
         return res.status(403).json({ message: `password not matched` });
+      }
+
+      // 이메일 인증 받지 않았으면
+      if (!verified) {
+        
+        return res.status(403).json({ message: `email verification required` });
       }
 
       // 회원 비밀번호 삭제 후 accessToken 발급
@@ -40,7 +53,21 @@ module.exports = {
       sendTocookie(res, newAccessToken, newrefreshToken);
 
       res.status(200).json({
-        data: { userInfo: { id, username, createdAt, updatedAt, loginMethod: 1 } },
+        data: {
+          userInfo: {
+            id,
+            username,
+            email,
+            github,
+            blog,
+            bio,
+            image,
+            loginMethod,
+            verified,
+            createdAt,
+            updatedAt,
+          },
+        },
         newAccessToken,
       });
     } catch (err) {
