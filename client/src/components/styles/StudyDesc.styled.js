@@ -24,9 +24,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
 
 const StyleStudyDesc = styled.div`
-  margin-top: 200px;
   grid-column: 4/12;
-
   padding: 3% 5% 3% 5%;
 
   .mapview {
@@ -76,6 +74,7 @@ const TitleBar = styled.div`
 const CommentsDiv = styled.div`
   /* background: pink; */
 `;
+
 
 const Wrap = styled.div`
   display: flex;
@@ -166,7 +165,7 @@ const Host = styled.div`
   height: 30px;
 `;
 
-const Button = styled.button`
+const Button = styled.a`
   padding: 8px 15px;
   background: #5e17eb;
   border-radius: 10px;
@@ -221,12 +220,13 @@ const StudyDesc = () => {
   const { likedStudies } = useSelector((state) => state.allStudies);
   const [isLike, setIsLike] = useState(false);
 
+
   const [showComments, setShowComments] = useState(false);
+
   const [share, setShare] = useState(false);
   const handleShareButton = () => {
     setShare(!share);
   };
-
   const [location, setLocation] = useState({
     place_name: "광화문",
     latitude: 37.570975,
@@ -247,7 +247,9 @@ const StudyDesc = () => {
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img = langImg.javascript;
+    var imgname =
+      data.language[0]["name"] === "c++" ? "c" : data.language[0]["name"];
+    var img = langImg[imgname];
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -309,6 +311,8 @@ const StudyDesc = () => {
     <>
       {data ? (
         <StyleStudyDesc>
+          {/* {console.log(data.user_id)}
+          {console.log(user?.id)} */}
           <TitleBar>
             <div className="title">{data?.title}</div>
             <div className="alter">
@@ -352,6 +356,7 @@ const StudyDesc = () => {
           <Wrap>
             <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
             <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
+
           </Wrap>
           <Wrap>
             <Icon>
@@ -363,6 +368,7 @@ const StudyDesc = () => {
                   {el.name + ","}
                 </span>
               ))}
+
             </Text>
           </Wrap>
           <Wrap>
@@ -386,6 +392,7 @@ const StudyDesc = () => {
             </Icon>
             <Content>{data?.content}</Content>
           </ContentWrap>{" "}
+
           <ProfileWrap>
             <ProfileImage>
               <img src={data?.image} />
