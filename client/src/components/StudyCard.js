@@ -17,6 +17,7 @@ const CardContainer = styled.div`
   border-radius: 10px;
   background-color: white;
   height: 180px;
+  font-family: "Binggrae";
   width: 400px;
   margin-top: 10%;
   text-align: flex-start;

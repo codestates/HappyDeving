@@ -10,6 +10,7 @@ import EditSideProfile from "../components/styles/EditSideProfile.styled";
 const StyledEditProfile = styled.div`
   grid-column: 4 / 12;
   min-height: 80%;
+  margin-top: 150px;
   text-align: left;
   min-width: 524px;
 
@@ -24,14 +25,15 @@ const StyledEditProfile = styled.div`
 `;
 
 const UserTitle = styled.div`
-  font-size: 40px;
+  font-family: "Binggrae";
+  font-size: 30px;
   margin-bottom: 50px;
   span {
     font-weight: 500;
     border-bottom: 5px solid #dfc1ff;
   }
   @media screen and (max-width: 1024px) {
-    font-size: 30px;
+    font-size: 20px;
     transition: 1s;
   }
 `;
@@ -86,45 +88,80 @@ const ProfileWrap = styled.form`
 
 const Text = styled.div`
   width: 150px;
+  font-family: "Binggrae";
   padding-bottom: 2px;
   border-bottom: 1px solid gray;
   color: gray;
-  font-size: 18px;
+  font-size: 14px;
   margin-bottom: 10px;
   margin-top: 25px;
   @media screen and (max-width: 764px) {
-    font-size: 16px;
+    font-size: 12px;
   }
 `;
 
 const Input = styled.input`
-  display: flex;
-  border: 1px solid gray;
-  padding: 10px 10px;
-  margin-right: 20px;
+  background-color: rgba(233, 193, 255, 20%);
   border-radius: 5px;
+  height: 40px;
   width: 100%;
+  font-size: 16px;
+  padding: 10px;
+  height: 50px;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  &:focus {
+    outline: none;
+  }
 `;
 const InputBio = styled.textarea`
-  display: flex;
-  border: 1px solid gray;
-  padding: 10px 10px;
-  margin-right: 20px;
+  background-color: rgba(233, 193, 255, 20%);
+  border-radius: 5px;
+  height: 40px;
   width: 100%;
+  font-size: 16px;
+  padding: 10px;
+  height: 50px;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  &:focus {
+    outline: none;
+  }
 `;
 const ButtonWrap = styled.div`
   display: flex;
   font-size: 16px;
   margin-top: 30px;
-  p {
-    border-bottom: 1px solid gray;
+  button {
+    font-family: "Binggrae";
+    display: flex;
+    justify-content: center;
+    width: 120px;
+    padding: 5px 5px;
     margin-right: 10px;
-    color: gray;
-    font-weight: 700;
     cursor: pointer;
+    border-radius: 10px;
+    border: 1px solid #5e17eb;
+    font-size: 14px;
+    transition: 1ms;
     &:hover {
-      color: black;
-      border-bottom: 3px solid #dfc1ff;
+      color: #5e17eb;
+      font-weight: 600;
+      background-color: rgba(233, 193, 255, 10%);
+      position: relative;
+      top: -2px;
+    }
+    &:active {
+      position: relative;
+      top: 0px;
     }
   }
 `;
@@ -203,7 +240,6 @@ const MyPage = () => {
             <EditSideProfile />
           </Side>
           <ProfileWrap>
-            {/* <form> */}
             <Text>닉네임</Text>
             <Input
               className="username2"
@@ -238,13 +274,13 @@ const MyPage = () => {
 
             <ButtonWrap>
               <Link to="/profile">
-                <p onClick={handleEditing}>수정하기</p>
+                <button onClick={handleEditing}>수정하기</button>
               </Link>
               <Link to="/">
-                <p onClick={handleSignout}>로그아웃</p>
+                <button onClick={handleSignout}>로그아웃</button>
               </Link>
               <Link to="/">
-                <p onClick={handlePermanentDeletion}>회원 탈퇴</p>
+                <button onClick={handlePermanentDeletion}>회원 탈퇴</button>
               </Link>
             </ButtonWrap>
             {/* </form> */}
