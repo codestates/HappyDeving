@@ -11,6 +11,7 @@ const { uploadFile, getFileStream } = require("../../middleware/s3");
 module.exports = {
   post: async (req, res) => {
     try {
+      // 로그인 상태 확인
       const data = checkAccessToken(req);
 
       if (!data) {
@@ -18,22 +19,20 @@ module.exports = {
       }
       const { id: paramsId } = req.params;
 
+      // 로그인된 유저랑 요청 params 확인
       if (data.id !== Number(paramsId)) {
         return res.status(401).json("wrong req params");
       }
 
+      // 이미지 파일 s3에 업로드
       const file = req.file;
       const uploadImg = await uploadFile(file);
 
       const image = uploadImg.Location;
 
-      // const image = await getFileStream(result.Key);
-      // console.log("image=========", image);
-
-      // return res.json({ image: result.Location });
-
       const userInfo = await User.findOne({ where: { id: paramsId } });
 
+      // 유저의 이미지 업로드
       await User.update(
         {
           image: image ? image : userInfo.image,

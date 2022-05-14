@@ -52,21 +52,23 @@ module.exports = {
       const { id, loginMethod, email } = userInfo.dataValues;
       // return res.json("ok");
 
+      console.log(req.headers);
+      const { authorization } = req.headers;
+      console.log(userInfo.dataValues);
       // const { authorization } = req.cookie;
       // console.log("cookies", req.cookies.accessToken);
-      // const accessToken = authorization.split(" ")[1];
-      const { accessToken } = req.cookies;
+      const accessToken = authorization.split(" ")[1];
+      // const { accessToken } = req.cookies;
 
       if (loginMethod === 0) {
         withdrawal(id);
       }
       if (loginMethod === 1) {
-        githubWithdrawal(accessToken);
+        // githubWithdrawal(accessToken);
       }
-      return res.json("ok");
       if (loginMethod === 2) {
-        googleWithdrawal(accessToken);
-        // withdrawal(id);
+        // googleWithdrawal(accessToken);
+        withdrawal(id);
       }
       // return res.json("ok");
       if (loginMethod === 3) {
