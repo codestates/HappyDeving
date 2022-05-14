@@ -93,6 +93,23 @@ const Links = styled.div`
     min-width: 40px;
     height: 40px;
   }
+
+  .signin {
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    color: #5e17eb;
+    @media screen and (max-width: 630px) {
+      font-size: 13px;
+    }
+
+    &:hover {
+      color: #c593fe;
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+    }
+  }
 `;
 
 const SearchDiv = styled.div`
@@ -370,7 +387,7 @@ const Header = () => {
             </Link>
           ) : (
             <Link to="/signin">
-              <span className="signin">로그인</span>
+              <div className="signin">로그인</div>
             </Link>
           )}
         </Links>
