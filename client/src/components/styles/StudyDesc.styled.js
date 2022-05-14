@@ -24,7 +24,6 @@ import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
 const StyleStudyDesc = styled.div`
-  margin-top: 150px;
   grid-column: 4/12;
   min-width: 500px;
   padding: 3% 5% 3% 5%;
@@ -320,7 +319,9 @@ const StudyDesc = () => {
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img = langImg.javascript;
+    var imgname =
+      data.language[0]["name"] === "c++" ? "c" : data.language[0]["name"];
+    var img = langImg[imgname];
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -466,11 +467,9 @@ const StudyDesc = () => {
               <BsFileEarmarkCodeFill />
             </Icon>
             <TextL>
-              {data?.language.map((el, idx) => (
-                <span key={idx} className="langSpan">
-                  {el.name + ","}
-                </span>
-              ))}
+              <span className="langSpan">
+                {data?.language.map((el, idx) => el.name).join()}
+              </span>
             </TextL>
           </Wrap>
           <Wrap>
