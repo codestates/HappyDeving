@@ -30,7 +30,6 @@ module.exports = {
           },
         ],
       });
-      console.log(study.user);
 
       // study 없으면
       if (!study) {

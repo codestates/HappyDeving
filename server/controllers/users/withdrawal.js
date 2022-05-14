@@ -61,8 +61,9 @@ module.exports = {
         withdrawal(id);
       }
       if (loginMethod === 1) {
-        // githubWithdrawal(id);
+        githubWithdrawal(accessToken);
       }
+      return res.json("ok");
       if (loginMethod === 2) {
         googleWithdrawal(accessToken);
         // withdrawal(id);

@@ -14,12 +14,15 @@ const {
 module.exports = {
   googleWithdrawal: async (accessToken) => {
     // const googleRefreshToken = process.env.GOOGLE_REFRESH_TOKEN;
-    console.log(accessToken);
+    const googleaccessToken = process.env.GOOGLE_ACCESS_TOKEN;
+    let postData = "token=" + googleaccessToken;
     const googleClientId = process.env.GOOGLE_CLIENT_ID;
     const googleClinentSecret = process.env.GOOGLE_CLIENT_SECRET;
     const googleinfo = await axios({
+      host: "oauth2.googleapis.com",
+      port: "443",
+      path: `/revoke${googleaccessToken}`,
       method: "POST",
-      url: ` https://oauth2.googleapis.com/revoke?token=${accessToken}`,
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },

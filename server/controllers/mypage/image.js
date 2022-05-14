@@ -1,4 +1,10 @@
-const { User, Study_comment, Study, Language, Location } = require("../../models");
+const {
+  User,
+  Study_comment,
+  Study,
+  Language,
+  Location,
+} = require("../../models");
 const { checkAccessToken } = require("../tokenFunctions");
 const { uploadFile, getFileStream } = require("../../middleware/s3");
 
@@ -20,8 +26,6 @@ module.exports = {
       const uploadImg = await uploadFile(file);
 
       const image = uploadImg.Location;
-
-      console.log(typeof image);
 
       // const image = await getFileStream(result.Key);
       // console.log("image=========", image);
