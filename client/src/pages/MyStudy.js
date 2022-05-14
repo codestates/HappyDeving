@@ -5,6 +5,7 @@ import { getMyStudies, reset } from "../features/studies/allStudiesSlice";
 import StudyCard from "../components/StudyCard";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { useNavigate } from "react-router-dom";
+import { nanoid } from "nanoid";
 
 const MyStudyTab = styled.div``;
 const LikedStudyTab = styled.div``;
@@ -103,8 +104,8 @@ const MyStudy = () => {
           </MyprofileTab>
         </Tab>
         <StyledSection>
-          {myStudies?.map((myStudy, i) => (
-            <StudyCard key={i} myStudy={myStudy} />
+          {myStudies?.map((myStudy) => (
+            <StudyCard key={nanoid()} myStudy={myStudy} />
           ))}
         </StyledSection>
       </MyStudyContainer>

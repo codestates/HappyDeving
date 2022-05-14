@@ -40,7 +40,8 @@ module.exports = {
 
       // 이메일 인증 받지 않았으면
       if (!verified) {
-        return res.status(403).json({ message: `email verified required` });
+        
+        return res.status(403).json({ message: `email verification required` });
       }
 
       // 회원 비밀번호 삭제 후 accessToken 발급

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
+// import Content from "../components/styles/Content.styled";
 import { Search } from "../components/styles/Search.styled";
 import Slider from "../components/Slider";
 import whiteSpace from "../../src/assets/whiteSpace.png";
@@ -74,6 +74,7 @@ const TitleTransBox = styled.div`
 const Landing = ({ drop, imageSrc }) => {
   return (
     <>
+      <Search />
       <StyledLanding>
         <LandingImage src={imageSrc} />
         <TitleTransBox>
