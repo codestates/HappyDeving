@@ -120,84 +120,94 @@ const StudyCard = ({ myStudy, likedStudy }) => {
     }
   }, [myStudies, likedStudies]);
 
-
-
   const handleUnlike = async () => {
-    await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: likedStudy.id } }));
+    await dispatch(
+      unLikeStudy({ id: user.id, studyData: { study_id: likedStudy.id } })
+    );
     setIsLike(!isLike);
     await dispatch(getLikedStudies(user.id));
   };
 
   const handleLike = async () => {
-    await dispatch(likeStudy({ id: user.id, studyData: { study_id: myStudy.id } }));
+    await dispatch(
+      likeStudy({ id: user.id, studyData: { study_id: myStudy.id } })
+    );
     setIsLike(!isLike);
     await dispatch(getLikedStudies(user.id));
     navigate("/likedstudy");
   };
 
-
   const moveToStudyPage = (study) => {
     navigate(`/study/${study.id}`);
 
-  const imgHandler = () => {
-    if (myStudy) {
-      return myStudy.language
-        .slice(0, 2)
-        .map((el, idx) =>
-          el["name"] === "c++" ? (
-            <img key={idx} src={langImg["c"]}></img>
-          ) : (
-            <img key={idx} src={langImg[el["name"]]}></img>
-          )
-        );
-    } else {
-      console.log(likedStudy);
-      return likedStudy.language
-        .slice(0, 2)
-        .map((el, idx) =>
-          el["name"] === "c++" ? (
-            <img key={idx} src={langImg["c"]}></img>
-          ) : (
-            <img key={idx} src={langImg[el["name"]]}></img>
-          )
-        );
-    }
+    const imageHandler = () => {
+      if (myStudy) {
+        return myStudy.language
+          .slice(0, 2)
+          .map((el, idx) =>
+            el["name"] === "c++" ? (
+              <img key={idx} src={langImg["c"]}></img>
+            ) : (
+              <img key={idx} src={langImg[el["name"]]}></img>
+            )
+          );
+      } else {
+        console.log(likedStudy);
+        return likedStudy.language
+          .slice(0, 2)
+          .map((el, idx) =>
+            el["name"] === "c++" ? (
+              <img key={idx} src={langImg["c"]}></img>
+            ) : (
+              <img key={idx} src={langImg[el["name"]]}></img>
+            )
+          );
+      }
+    };
+    return (
+      <>
+        {/* <Container> */}
 
+        <CardContainer>
+          {myStudy ? (
+            <LanguageImg>{imageHandler(myStudy)}</LanguageImg>
+          ) : (
+            <LanguageImg>{imageHandler(likedStudy)}</LanguageImg>
+          )}
+
+          <CardForm>
+            {/* <div> */}
+            <h1 onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>
+              {myStudy ? myStudy.title : likedStudy.title}
+            </h1>
+            <hr />
+            {/* <p>- 위치</p> */}
+            <p>- {myStudy ? myStudy.startDate : likedStudy.startDate}</p>
+            {/* </div> */}
+            <LikeButton>
+              <HeartIcon className="heart-icon">
+                {isLike ? (
+                  <FontAwesomeIcon
+                    onClick={handleUnlike}
+                    icon={like}
+                    size="1x"
+                    color="red"
+                  />
+                ) : (
+                  <FontAwesomeIcon
+                    onClick={handleLike}
+                    icon={unLike}
+                    size="1x"
+                  />
+                )}
+              </HeartIcon>
+            </LikeButton>
+          </CardForm>
+        </CardContainer>
+        {/* </Container> */}
+      </>
+    );
   };
-  return (
-    <>
-      {/* <Container> */}
-
-      <CardContainer>
-        {myStudy ? (
-          <LanguageImg>{imageHandler(myStudy)}</LanguageImg>
-        ) : (
-          <LanguageImg>{imageHandler(likedStudy)}</LanguageImg>
-        )}
-
-        <CardForm>
-          {/* <div> */}
-          <h1 onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>
-            {myStudy ? myStudy.title : likedStudy.title}
-          </h1>
-          <hr />
-          {/* <p>- 위치</p> */}
-          <p>- {myStudy ? myStudy.startDate : likedStudy.startDate}</p>
-          {/* </div> */}
-          <LikeButton>
-            <HeartIcon className="heart-icon">
-              {isLike ? (
-                <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
-              ) : (
-                <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
-              )}
-            </HeartIcon>
-          </LikeButton>
-        </CardForm>
-      </CardContainer>
-      {/* </Container> */}
-    </>
-  );
 };
 
 export default StudyCard;

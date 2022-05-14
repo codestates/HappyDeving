@@ -43,6 +43,8 @@ const Map = () => {
   //마커 생성용 데이터 가공
   const markerdata = studies.map((el) => {
     var langname = el.language[0]?.name === "c++" ? "c" : el.language[0]?.name;
+
+    console.log("langname", langname);
     return {
       id: el.id,
       title: el.title,
@@ -55,7 +57,6 @@ const Map = () => {
   });
 
   const { likedStudies, isLoading } = useSelector((store) => store.allStudies);
-  console.log(likedStudies);
 
   const mapscript = () => {
     const options = {
@@ -74,7 +75,7 @@ const Map = () => {
       imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
     markerdata.forEach((el) => {
-      console.log(el.img);
+      console.log("el.img", el.img);
 
       var marker = new kakao.maps.Marker({
         map: map,
@@ -170,7 +171,7 @@ const Map = () => {
 
   useEffect(() => {
     mapscript();
-  });
+  }, [studies]);
 
   useEffect(() => {
     dispatch(getLikedStudies(user.id));
