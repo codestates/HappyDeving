@@ -9,7 +9,7 @@ import LoadingIndicator from "../LoadingIndicator";
 import { useNavigate } from "react-router-dom";
 
 const Title = styled.div`
-  margin-top: 150px;
+  margin-top: 50px;
   grid-column: 3/13;
   font-size: 20px;
   text-align: center;
@@ -73,7 +73,6 @@ const Map = () => {
         ];
 
   const { likedStudies, isLoading } = useSelector((store) => store.allStudies);
-  console.log(likedStudies);
 
   const mapscript = () => {
     const options = {
@@ -82,7 +81,7 @@ const Map = () => {
         studies.length === 0
           ? new kakao.maps.LatLng(37.570975, 126.977759)
           : new kakao.maps.LatLng(markerdata[0].lat, markerdata[0].lng), //지도의 중심좌표.
-      level: 3, //지도의 레벨(확대, 축소 정도)
+      level: 5, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
@@ -92,6 +91,8 @@ const Map = () => {
       imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
     markerdata.forEach((el) => {
+      console.log("el.img", el.img);
+
       var marker = new kakao.maps.Marker({
         map: map,
         position: new kakao.maps.LatLng(el.lat, el.lng),
@@ -135,19 +136,16 @@ const Map = () => {
       icon.className = `fa-regular fa-heart fa-2x`;
       icon.onclick = heartHandler;
 
-      console.log(icon.className);
-      console.log(user.id);
-
       function heartHandler() {
-        if (icon.className === "fa-solid fa-heart fa-2x") {
-          icon.className = "fa-regular fa-heart fa-2x";
+        if (icon.className === "fa-solid fa-heart fa-1x") {
+          icon.className = "fa-regular fa-heart fa-1x";
 
           // dispatch(
           // unLikeStudy({ id: user.id, studyData: { study_id: el.id } })
           unLikeStudyApi(user.id, { study_id: el.id });
           // );
         } else {
-          icon.className = "fa-solid fa-heart fa-2x";
+          icon.className = "fa-solid fa-heart fa-1x";
 
           likeStudyApi(user.id, { study_id: el.id }).then((res) =>
             console.log(res)
@@ -168,9 +166,9 @@ const Map = () => {
       const firstHeartHandler = () => {
         let heartStudy = likedStudies.filter((study) => study.id === el.id);
         if (heartStudy.length > 0) {
-          icon.className = "fa-solid fa-heart fa-2x";
+          icon.className = "fa-solid fa-heart fa-1x";
         } else {
-          icon.className = "fa-regular fa-heart fa-2x";
+          icon.className = "fa-regular fa-heart fa-1x";
         }
       };
 
@@ -189,7 +187,7 @@ const Map = () => {
 
   useEffect(() => {
     mapscript();
-  });
+  }, [studies]);
 
   if (isLoading) {
     return <LoadingIndicator />;

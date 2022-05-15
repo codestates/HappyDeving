@@ -90,7 +90,9 @@ const LikedStudy = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const { likedStudies, isLoading, isError, message } = useSelector((state) => state.allStudies);
+  const { likedStudies, isLoading, isError, message } = useSelector(
+    (state) => state.allStudies
+  );
   // const [data, setData] = useState({});
   // console.log(`liked studies: ${JSON.stringify(likedStudies)}`);
   // console.log(data);
@@ -119,7 +121,10 @@ const LikedStudy = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
+          <LikedStudyTab
+            className="tap"
+            onClick={() => navigate("/likedstudy")}
+          >
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>

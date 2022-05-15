@@ -34,6 +34,7 @@ const searchModalSlice = createSlice({
   },
 });
 
-export const { locationModal, dateModal, languageModal, reset } = searchModalSlice.actions;
+export const { locationModal, dateModal, languageModal, reset } =
+  searchModalSlice.actions;
 
 export default searchModalSlice.reducer;

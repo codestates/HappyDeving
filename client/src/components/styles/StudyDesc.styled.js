@@ -9,6 +9,9 @@ import {
   BsFillCalendarDateFill,
   // BsFillFileEarmarkTextFill,
 } from "react-icons/bs";
+import { DummyImgs } from "../../static/images/DummyImg";
+import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
+import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { langImg } from "../../static/images/langImg";
 import { studyApi } from "../../api/study";
@@ -37,6 +40,17 @@ const StyleStudyDesc = styled.div`
   }
   @media screen and (max-width: 768px) {
     grid-column: 2/14;
+  }
+`;
+
+const HeartIcon = styled.span`
+  font-size: 30px;
+  margin-left: 80%;
+  .like {
+    color: #d32f2f;
+  }
+  @media screen and (max-width: 1100px) {
+    font-size: 20px;
   }
 `;
 
@@ -185,7 +199,6 @@ const TextL = styled.div`
   padding-bottom: 5px;
   margin-right: 10px;
 `;
-
 
 const dummyimg = DummyImgs[Math.floor(Math.random() * 10)];
 const DummyImg = styled.div`
@@ -348,19 +361,18 @@ const StudyDesc = () => {
   }, []);
 
   const handleUnlike = async () => {
-
     await dispatch(
       unLikeStudy({ id: user.id, studyData: { study_id: data.id } })
     );
-
 
     setIsLike(!isLike);
   };
 
   const handleLike = async () => {
-
     setIsLike(!isLike);
-    await dispatch(likeStudy({ id: user.id, studyData: { study_id: data.id } }));
+    await dispatch(
+      likeStudy({ id: user.id, studyData: { study_id: data.id } })
+    );
   };
 
   const handleStudyDeletion = (e) => {
@@ -383,15 +395,18 @@ const StudyDesc = () => {
                 <>
                   <HeartIcon>
                     {isLike ? (
-                      <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
+                      <FontAwesomeIcon
+                        onClick={handleUnlike}
+                        icon={like}
+                        size="1x"
+                        color="red"
+                      />
                     ) : (
-
                       <FontAwesomeIcon
                         onClick={handleLike}
                         icon={unLike}
                         size="1x"
                       />
-
                     )}
                   </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
@@ -399,7 +414,9 @@ const StudyDesc = () => {
                     <FontAwesomeIcon icon={faShareNodes} />
                   </ShareIcon>
 
-                  <Update onClick={() => navigate(`/study/edit/${data.id}`)}>수정</Update>
+                  <Update onClick={() => navigate(`/study/edit/${data.id}`)}>
+                    수정
+                  </Update>
 
                   <Delete onClick={handleStudyDeletion}>삭제</Delete>
                 </>
@@ -407,9 +424,18 @@ const StudyDesc = () => {
                 <>
                   <HeartIcon>
                     {isLike ? (
-                      <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
+                      <FontAwesomeIcon
+                        onClick={handleUnlike}
+                        icon={like}
+                        size="1x"
+                        color="red"
+                      />
                     ) : (
-                      <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
+                      <FontAwesomeIcon
+                        onClick={handleLike}
+                        icon={unLike}
+                        size="1x"
+                      />
                     )}
                   </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
@@ -432,9 +458,11 @@ const StudyDesc = () => {
               <p>{data?.username}</p>
             </MiniProfileWrap>
           </Host>
+          <DummyImg></DummyImg>
           <Wrap>
-
-            <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
+            <Icon>
+              {data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
+            </Icon>
 
             <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
             <Icon>
@@ -498,7 +526,9 @@ const StudyDesc = () => {
             <ConfirmButton src={data?.kakaoLink}>스터디 참여하기</ConfirmButton>
           </ButtonWrap>
 
-          <CommentsDiv>{showComments ? <Comments studyId={id} /> : null}</CommentsDiv>
+          <CommentsDiv>
+            {showComments ? <Comments studyId={id} /> : null}
+          </CommentsDiv>
         </StyleStudyDesc>
       ) : (
         "data가 없습니다"

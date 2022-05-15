@@ -3,17 +3,13 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-// import LanguageModal from "./Modals/LanguageModal";
-import DateModal from "./Modals/DateModal";
-import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
-// import { setDateModal } from "../../features/studies/studyModalSlice";
 import { openModal } from "../../features/modal/modalSlice";
 
-import { studyApi, editStudyApi } from "../../api/study";
-import { useNavigate } from "react-router-dom";
+import { studyApi } from "../../api/study";
+import { useParams } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
@@ -49,6 +45,12 @@ const Desc = styled(Content)`
 
     &:focus {
       outline: none;
+      /*border: 1px solid #5e17eb;
+    }
+
+    &:hover {
+      cursor: pointer;
+      border: 1px solid #5e17eb;*/
     }
   }
 `;
@@ -266,17 +268,30 @@ const Checkbox = styled.div`
 `;
 
 const EditStudyDesc = () => {
+  const dispatch = useDispatch();
+
   const container = useRef(null);
   const locationInput = useRef(null);
+
   const { calenderDateValue } = useSelector((store) => store.calender);
+  const { dateData } = useSelector((store) => store.searchData);
+  const { isError, message } = useSelector((state) => state.allStudies);
+
   const [location, setLocation] = useState({
     name: "광화문",
     latitude: 37.570975,
     longitude: 126.977759,
   });
-
-  console.log(location);
   const [locationList, setLocationList] = useState([]);
+  const [lang, setLang] = useState([{ id: 6, name: "react" }]);
+  const [open, setOpen] = useState({
+    language: false,
+    date: false,
+    location: false,
+  });
+
+  const [data, setData] = useState(null);
+
   var ps = new kakao.maps.services.Places();
 
   // 키워드 검색을 요청하는 함수입니다
@@ -303,17 +318,17 @@ const EditStudyDesc = () => {
     }
   }
 
-  const handleLocationValue = (e) => {
-    if (e.key === "Enter") {
-      searchPlaces(e.target.value);
-    } // true
+  const handleLocationValue = (e, value) => {
+    if (e.type === "click" || e.key === "Enter") {
+      searchPlaces(value);
+    }
   };
 
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: new kakao.maps.LatLng(location.y, location.x), //지도의 중심좌표
-      level: 3, //지도의 레벨(확대, 축소 정도)
+      level: 5, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
@@ -322,8 +337,7 @@ const EditStudyDesc = () => {
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img =
-      "https://i0.wp.com/www.primefaces.org/wp-content/uploads/2017/09/feature-react.png?ssl=1";
+    var img = langImg[lang[0]["name"]];
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -341,16 +355,12 @@ const EditStudyDesc = () => {
     //el.id 스터디 아이디가 담겨온다.
   };
 
-  const [data, setData] = useState();
-  const [checked, setChecked] = useState(false);
-
-  const href = document.location.href.split("/");
-  const id = href[href.length - 1];
+  // const href = document.location.href.split("/");
+  // const id  = href[href.length - 1];
+  const { id } = useParams();
 
   useEffect(() => {
     studyApi(id).then((res) => {
-      console.log(res);
-
       const {
         id,
         title,
@@ -373,11 +383,14 @@ const EditStudyDesc = () => {
         language,
       });
 
+      setLang(language);
+
       setLocation({
         y: location.latitude,
         x: location.longitude,
         place_name: location.name,
       });
+
       //location이 된다음에 해야 한다
     });
   }, [id]);
@@ -387,18 +400,6 @@ const EditStudyDesc = () => {
       mapscript();
     }
   }, [data]);
-
-  const [open, setOpen] = useState({
-    language: false,
-    date: false,
-    location: false,
-  });
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  // const { dateModal } = useSelector((store) => store.studyModal);
-  const { dateData } = useSelector((store) => store.searchData);
-  const { isError, message } = useSelector((state) => state.allStudies);
 
   useEffect(() => {
     setData({ ...data, startDate: dateData });
@@ -424,6 +425,7 @@ const EditStudyDesc = () => {
             location: [location.y, location.x, gu, dong, location.place_name],
           });
           //클릭한 장소로 location 새로 세팅
+          locationInput.current.value = location.place_name;
           setOpen({ ...open, location: false });
         }}
       >
@@ -470,7 +472,7 @@ const EditStudyDesc = () => {
                 <HalfWrapper>
                   <Text classNane="lanaguage">언어</Text>
                   <HalfInput>
-                    {data.language?.map((el) => el.name + ",")}
+                    {data.language?.map((el) => el.name).join()}
                     <IconDrop>
                       <IoMdArrowDropdown
                         className="icon"
@@ -486,6 +488,7 @@ const EditStudyDesc = () => {
                             key={idx}
                             className="elements"
                             onClick={() => {
+                              console.log(el, idx + 1);
                               setData({
                                 ...data,
                                 language: [
@@ -512,28 +515,34 @@ const EditStudyDesc = () => {
 
                 <input
                   placeholder="ex. 카카오톡 오픈채팅 링크를 입력해주세요"
-                  onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
+                  onChange={(e) =>
+                    handleInputValue("kakaoLink", e.target.value)
+                  }
                   defaultValue={data.kakaoLink}
                 ></input>
               </Wrapper>
+
               <Wrapper>
                 <Text>장소</Text>
-
                 <input
                   className="locaitionInput"
-                  onKeyDown={(e) => handleLocationValue(e)}
+                  onKeyDown={(e) => {
+                    handleLocationValue(e, e.target.value);
+                  }}
                   defaultValue={location.place_name}
                   ref={locationInput}
                 ></input>
                 {open.location ? (
-                  <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+                  <DescLocationModal>
+                    {locationListHandler(locationList)}
+                  </DescLocationModal>
                 ) : null}
                 <IconSerch>
                   <IoIosSearch
                     className="icon"
-                    onClick={(locationInput) => {
-                      console.log(locationInput.target.value);
+                    onClick={(e) => {
                       setOpen({ ...open, location: true });
+                      handleLocationValue(e, locationInput.current.value);
                     }}
                   />
                   {/* </div> */}
@@ -553,10 +562,9 @@ const EditStudyDesc = () => {
                   <input
                     type="checkbox"
                     className="input"
-                    checked={data.closed ? "checked" : null}
+                    defaultChecked={data.closed}
                     onClick={() => {
-                      setChecked(!checked);
-                      setData({ ...data, closed: checked });
+                      setData({ ...data, closed: !data.closed });
                     }}
                   ></input>
                   <label htmlFor="closed">모집마감</label>

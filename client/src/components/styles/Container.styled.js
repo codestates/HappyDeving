@@ -9,7 +9,7 @@ const Container = styled.div`
   max-width: 970px;
   grid-gap: 10px;
   max-width: 100%;
-  padding: 0 2px;
+  padding: 100px 2px;
   margin: 0 auto;
   position: relative;
   z-index: 0;
