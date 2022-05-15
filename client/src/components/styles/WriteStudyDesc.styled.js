@@ -15,7 +15,6 @@ import { dateModal } from "../../features/Search/searchModalSlice";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
-  margin-top: 150px;
 
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
@@ -49,6 +48,20 @@ const Desc = styled(Content)`
       outline: none;
     }
   }
+`;
+
+const Title = styled.div`
+  width: 80%;
+  margin: 0 auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+  margin: 50px auto;
+`;
+
+const TitleText = styled.div`
+  font-size: 20px;
+  font-family: "Binggrae";
+  text-align: center;
 `;
 
 const DescDateModal = styled.div`
@@ -406,7 +419,9 @@ const StudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -441,9 +456,14 @@ const StudyDesc = () => {
   return (
     <WriteStudyDesc>
       <Desc checked={checked}>
+        <Title>
+          <TitleText>스터디 모집 글쓰기</TitleText>
+        </Title>
         <Wrapper>
           <Text>제목</Text>
-          <input onChange={(e) => handleInputValue("title", e.target.value)}></input>
+          <input
+            onChange={(e) => handleInputValue("title", e.target.value)}
+          ></input>
         </Wrapper>
         <RowWrap>
           <HalfWrapper>
@@ -514,11 +534,13 @@ const StudyDesc = () => {
               handleLocationValue(e, e.target.value);
               setLocationSearch(e.target.value);
             }}
-            placeholder="ex. 송파구 오륜동"
+            placeholder="ex. 신촌역 4번 출구"
             ref={locationInput}
           ></input>
           {locOpen ? (
-            <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+            <DescLocationModal>
+              {locationListHandler(locationList)}
+            </DescLocationModal>
           ) : null}
           <IconSerch>
             <IoIosSearch
