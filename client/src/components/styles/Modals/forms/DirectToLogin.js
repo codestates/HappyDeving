@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { reset, deleteUser } from "../../../../features/user/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
@@ -37,28 +36,24 @@ const ConfirmSubtitle = styled.p`
   /* margin-bottom: 10%; */
 `;
 
-const DeleteUser = (props) => {
-  // console.log("DeleteUser props: ", props); // {id: 130, loginMethod: 0}
-  const { isLoading } = useSelector((state) => state.user);
+const DirectToLogin = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.allStudies);
+
   if (isLoading) {
     return <LoadingIndicator />;
   }
-
   return (
     <>
       <Div>
-        <ConfirmTitle>정말 탈퇴하시겠습니까?</ConfirmTitle>
-        <ConfirmSubtitle>
-          데이터는 모두 삭제되며 재가입을 위해서는 재인증이 필요합니다.
-        </ConfirmSubtitle>
+        <ConfirmTitle>로그인이 필요한 서비스입니다.</ConfirmTitle>
+        <ConfirmSubtitle>로그인 페이지로 이동합니다.</ConfirmSubtitle>
+
         <ConfirmButton
           onClick={async () => {
-            navigate("/");
-            await dispatch(deleteUser(props));
-            dispatch(reset());
             dispatch(closeModal());
+            navigate("/signin");
           }}
         >
           확인
@@ -67,4 +62,4 @@ const DeleteUser = (props) => {
     </>
   );
 };
-export default DeleteUser;
+export default DirectToLogin;

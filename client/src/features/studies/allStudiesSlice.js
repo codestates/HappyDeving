@@ -9,6 +9,7 @@ import {
   getLikedStudiesApi,
   unLikeStudyApi,
   getMyStudiesApi,
+  studyApi,
 } from "../../api/study";
 
 const initialState = {
@@ -32,18 +33,18 @@ const initialState = {
 //   }
 // });
 
-// export const getSingleStudy = createAsyncThunk(
-//   "allStudies/getSingleStudy",
-//   async (id, thunkAPI) => {
-//     try {
-//       return await singleStudyApi(id).then((res) => {
-//         return res.data;
-//       });
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
+export const getSingleStudy = createAsyncThunk(
+  "allStudies/getSingleStudy",
+  async (id, thunkAPI) => {
+    try {
+      return await studyApi(id).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
 
 export const writeStudy = createAsyncThunk("allStudies/writeStudy", async (data, thunkAPI) => {
   try {
@@ -160,19 +161,19 @@ export const allStudiesSlice = createSlice({
       //   state.message = action.payload;
       //   state.allStudies = null;
       // })
-      // .addCase(getSingleStudy.pending, (state) => {
-      //   state.isLoading = true;
-      // })
-      // .addCase(getSingleStudy.fulfilled, (state) => {
-      //   state.isLoading = false;
-      //   state.isSuccess = true;
-      //   state.allStudies = action.payload;
-      // })
-      // .addCase(getSingleStudy.rejected, (state, action) => {
-      //   state.isLoading = false;
-      //   state.isError = true;
-      //   state.message = action.payload;
-      // })
+      .addCase(getSingleStudy.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSingleStudy.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.allStudies = action.payload;
+      })
+      .addCase(getSingleStudy.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
       .addCase(writeStudy.pending, (state) => {
         state.isLoading = true;
       })

@@ -129,7 +129,7 @@ const StudyCard = ({ myStudy, likedStudy }) => {
   const { user } = useSelector((state) => state.user);
 
   const imageHandler = (study) => {
-    console.log("image handler study: ", study);
+    // console.log("image handler study: ", study);
     return study.language
       ?.slice(0, 2)
       .map((el, i) =>

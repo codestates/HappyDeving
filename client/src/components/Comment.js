@@ -88,16 +88,18 @@ const CommentAction = styled.div`
   }
 `;
 const Replies = styled.div`
+  position: relative;
   display: flex;
+  flex-direction: column;
   margin-left: 60px;
   margin-top: 10px;
 `;
 const ReplieIcon = styled.div`
   margin-top: 10px;
-  font-size: 20px;
+  position: absolute;
+  left: -40px;
+  font-size: 25px;
   color: gray;
-  display: flex;
-  align-items: flex-end;
   transform: rotate(175deg);
 `;
 
@@ -112,6 +114,7 @@ const Comment = ({
   parentId = null,
 }) => {
   const { user } = useSelector((state) => state.user);
+  const moment = require("moment");
 
   const isEditing =
     activeComment && activeComment.id === comment.id && activeComment.type === "editing";
@@ -124,17 +127,19 @@ const Comment = ({
   const canEdit = user?.id === comment.user_id;
 
   const replyId = parentId ? parentId : comment.id;
-  const createdAt = new Date(comment.createdAt).toLocaleDateString();
+  const createdAt = moment(comment.createdAt).format("YYYY-MM-DD");
 
   return (
     <CommentDiv>
       <CommentUserDataPart key={comment.id}>
         <CommentImageContainer>
-          <img src={user?.image} alt="" />
+          <img src={user?.id === comment.user_id ? user?.image : comment.image} alt="" />
         </CommentImageContainer>
         <CommentDataContainer>
           <CommentUpperPart>
-            <CommentAuthor>{user?.username}</CommentAuthor>
+            <CommentAuthor>
+              {user?.id === comment.user_id ? user?.username : comment.username}
+            </CommentAuthor>
             <CommentDate>{createdAt}</CommentDate>
           </CommentUpperPart>
           {!isEditing && <Text>{comment.content}</Text>}
