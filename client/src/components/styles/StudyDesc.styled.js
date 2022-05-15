@@ -23,7 +23,8 @@ import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
-import emptyPorder from "../../static/images/emptyPorder.png";
+import emptyFolder from "../../static/images/emptyPorder.png";
+
 const StyleStudyDesc = styled.div`
   grid-column: 4/12;
   min-width: 500px;
@@ -403,8 +404,17 @@ const StudyDesc = () => {
     await dispatch(likeStudy({ id: user.id, studyData: { study_id: data.id } }));
   };
 
-  const handleStudyDeletion = (e) => {
-    e.preventDefault();
+  const handleLogin = () => {
+    if (!user) {
+      dispatch(openModal({ name: "DirectToLogin" }));
+    }
+  };
+
+  const handleKakaoConnect = () => {
+    navigate(`/${data?.kakaoLink}`);
+  };
+
+  const handleStudyDeletion = () => {
     dispatch(
       openModal({
         name: "DeleteStudy",
@@ -439,9 +449,18 @@ const StudyDesc = () => {
                 <>
                   <HeartIcon>
                     {isLike ? (
-                      <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
+                      <FontAwesomeIcon
+                        onClick={user ? handleUnlike : handleLogin}
+                        icon={like}
+                        size="1x"
+                        color="red"
+                      />
                     ) : (
-                      <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
+                      <FontAwesomeIcon
+                        onClick={user ? handleLike : handleLogin}
+                        icon={unLike}
+                        size="1x"
+                      />
                     )}
                   </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
@@ -454,6 +473,7 @@ const StudyDesc = () => {
           </TitleBar>
           <Host>
             <CreateAt>{moment(data.createAt).format("YYYY-MM-DD")}</CreateAt>
+
 
             <MiniProfileWrap>
               <img className="profile" src={data?.image} />
@@ -523,14 +543,16 @@ const StudyDesc = () => {
                 <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
               </Icon>
             </ConfirmButton>
-            <ConfirmButton src={data?.kakaoLink}>스터디 참여하기</ConfirmButton>
+            <ConfirmButton onClick={user ? handleKakaoConnect : handleLogin}>
+              스터디 참여하기
+            </ConfirmButton>
           </ButtonWrap>
 
           <CommentsDiv>{showComments ? <Comments studyId={id} /> : null}</CommentsDiv>
         </StyleStudyDesc>
       ) : (
         <Alert>
-          <img src={emptyPorder} alt="google" />
+          <img src={emptyFolder} alt="google" />
           <AlertText>
             <h1>존재하지 않는 게시글입니다</h1>
           </AlertText>

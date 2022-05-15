@@ -137,7 +137,7 @@ const SearchIcon = styled.div`
 
 const { kakao } = window;
 
-const Search = () => {
+const Search = ({ setHeader }) => {
   const [locationList, setLocationList] = useState([]);
   // const [icon, setIcon] = useState("1.5em");
   const dispatch = useDispatch();
@@ -245,6 +245,7 @@ const Search = () => {
             navigate("/map");
             dispatch(resetData());
             dispatch(reset());
+            setHeader(false);
           }}
         >
           <IconContext.Provider value={{ className: "icon" }}>

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -15,6 +15,7 @@ const CardContainer = styled.div`
   border: 3px solid rgba(233, 193, 255, 20%);
   width: 300px;
   height: 170px;
+
   margin-top: 5%;
   text-align: flex-start;
   cursor: pointer;
@@ -57,6 +58,7 @@ const CardForm = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 
 const Title = styled.div`
   width: 200px;
@@ -111,7 +113,6 @@ const LikeButton = styled.button`
 
 const HeartIcon = styled.span`
   font-size: 20px;
-
   color: #d32f2f;
 
   @media screen and (max-width: 1100px) {
@@ -125,7 +126,6 @@ const StudyCard = ({ myStudy, likedStudy }) => {
   const { user } = useSelector((state) => state.user);
 
   const imageHandler = (study) => {
-    console.log("image handler study: ", study);
     return study.language
       ?.slice(0, 2)
       .map((el, i) =>
@@ -158,8 +158,7 @@ const StudyCard = ({ myStudy, likedStudy }) => {
           <Title onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>
             {myStudy ? myStudy.title : likedStudy.title}
           </Title>
-
-          <Content> {myStudy ? myStudy.content : likedStudy.content}</Content>
+          <Content onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}> {myStudy ? myStudy.content : likedStudy.content}</Content>
           <LikeButton>
             <StartDate>
               시작 예정일 | {myStudy ? myStudy.startDate : likedStudy.startDate}
@@ -169,6 +168,7 @@ const StudyCard = ({ myStudy, likedStudy }) => {
                 <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x"></FontAwesomeIcon>
               </HeartIcon>
             )}
+
           </LikeButton>
         </CardForm>
       </CardContainer>

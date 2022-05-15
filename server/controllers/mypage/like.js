@@ -3,6 +3,7 @@ const { User_likes_study, Study, Language } = require("../../models");
 
 module.exports = {
   get: async (req, res) => {
+    // 로그인 상태 확인
     const data = checkAccessToken(req);
 
     if (!data) {
@@ -10,6 +11,7 @@ module.exports = {
     }
     const { id: paramsId } = req.params;
 
+    // 좋아요 누른 스터디 찾기
     const userLike = await User_likes_study.findAll({
       where: { user_id: paramsId },
       include: [

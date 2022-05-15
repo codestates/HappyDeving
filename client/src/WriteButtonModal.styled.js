@@ -1,9 +1,11 @@
 import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import Content from "./components/styles/Content.styled";
+import { openModal } from "./features/modal/modalSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const StyledContainer = styled(Content)`
   min-height: 100%;
@@ -46,17 +48,24 @@ const StyledButtonContainer = styled.div`
 `;
 
 const WriteButtonModal = () => {
-  // const { user } = useSelector((state) => state.user);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.user);
+
+  const handleLogin = () => {
+    if (user) {
+      navigate("/write");
+    } else {
+      dispatch(openModal({ name: "DirectToLogin" }));
+    }
+  };
 
   return (
     <>
       <StyledContainer>
-        <Link to="/write">
-          <StyledButtonContainer>
-            <FontAwesomeIcon icon={faPlus} color="white" />
-          </StyledButtonContainer>
-        </Link>
+        <StyledButtonContainer>
+          <FontAwesomeIcon onClick={handleLogin} icon={faPlus} color="white" />
+        </StyledButtonContainer>
       </StyledContainer>
     </>
   );

@@ -1,7 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal } from "../features/modal/modalSlice";
 
 const CommentFormDiv = styled.div`
   grid-column: 4/12;
@@ -84,6 +85,7 @@ const CommentForm = ({
   initialContent = "",
 }) => {
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch;
 
   const [content, setContent] = useState(initialContent);
 
@@ -95,18 +97,20 @@ const CommentForm = ({
     study_commentId: commentId,
   };
 
-  const isTextareaDisabled = content.length === 0;
+  const isTextareaDisabled = !user;
   const onSubmit = (e) => {
     e.preventDefault();
     commentData["content"] = content;
     handleSubmit(commentData);
     setContent("");
   };
+
   return (
     <CommentFormDiv>
       <div>
         <form onSubmit={onSubmit}>
           <textarea
+            disabled={isTextareaDisabled}
             className="comment-form-textarea"
             value={content}
             onChange={(e) => {
@@ -115,7 +119,7 @@ const CommentForm = ({
           />
           {/* 버튼 태그 form 바깥으로 빼면 작동 안 함 */}
           <ButtonWrap>
-            <Button disabled={isTextareaDisabled}>{submitLabel}</Button>
+            <Button>{submitLabel}</Button>
             {hasCancelButton && <Button onClick={handleCancel}>취소</Button>}
           </ButtonWrap>
         </form>

@@ -14,6 +14,7 @@ import { dateModal } from "../../features/Search/searchModalSlice";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
+  
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
     transform: 1s;
@@ -316,6 +317,7 @@ const EditStudyDesc = () => {
     latitude: 37.570975,
     longitude: 126.977759,
   });
+
   const [locationList, setLocationList] = useState([]);
   const { date } = useSelector((store) => store.search);
   const [lang, setLang] = useState([{ id: 6, name: "react" }]);
@@ -374,6 +376,7 @@ const EditStudyDesc = () => {
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
     var img = langImg[lang[0]["name"]];
+
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -452,7 +455,9 @@ const EditStudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -479,7 +484,9 @@ const EditStudyDesc = () => {
     if (isError) {
       console.log("editStudy.rejected :", message);
     }
-    dispatch(openModal({ name: "UpdateStudy", childrenProps: { id, ...data } }));
+    dispatch(
+      openModal({ name: "UpdateStudy", childrenProps: { id, ...data } })
+    );
   };
 
   return (
@@ -560,6 +567,7 @@ const EditStudyDesc = () => {
                 <input
                   placeholder="ex. 카카오톡 오픈채팅 링크"
                   onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
+
                   defaultValue={data.kakaoLink}
                 ></input>
               </Wrapper>
@@ -576,7 +584,9 @@ const EditStudyDesc = () => {
                   ref={locationInput}
                 ></input>
                 {open.location ? (
-                  <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+                  <DescLocationModal>
+                    {locationListHandler(locationList)}
+                  </DescLocationModal>
                 ) : null}
                 <IconSerch>
                   <IoIosSearch

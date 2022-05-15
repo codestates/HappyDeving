@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, BrowserRouter as Router } from "react-router-dom";
 import { ThemeProvider } from "styled-components";
 import Container from "./components/styles/Container.styled";
 import Header from "./components/styles/Header.styled";
@@ -19,6 +19,8 @@ import "./App.css";
 import Signin from "./pages/Signin";
 import Signup from "./pages/Signup";
 import "./App.css";
+import axios from "axios";
+import { Github_url } from "./config";
 import WriteButtonModal from "./WriteButtonModal.styled";
 import BottomMenu from "./components/styles/bottommenu.styled";
 // import Content from "./components/styles/Content.styled";
@@ -52,55 +54,13 @@ function App() {
     },
   };
 
-  let login = localStorage.getItem("login");
-
-  // useEffect(() => {
-  //   if (login === "github" && localStorage.getItem("reload") !== "true") {
-  //     const url = new URL(window.location.href);
-  //     const authorizationCode = url.searchParams.get("code");
-  //     if (authorizationCode) {
-  //       getGithubAccessToken(authorizationCode);
-  //     }
-  //   }
-  // }, []);
-
-  useEffect(() => {
-    console.log(drop);
-
-    if (
-      window.location.href.split("/")[1] === "map" ||
-      window.location.href === "http://localhost:3000"
-    ) {
-      setDrop(false);
-    } else {
-      setDrop(true);
-    }
-  }, []);
-
-  // console.log(localStorage.getItem("user"));
-
-  const [drop, setDrop] = useState(false);
-  window.onscroll = function () {
-    let windowTop = window.scrollY;
-    if (windowTop >= 20) {
-      setDrop(true);
-    } else if (
-      (window.location.href.split("/")[1] === "map" ||
-        window.location.href === "http://localhost:3000") &&
-      windowTop < 20
-    ) {
-      setDrop(false);
-    }
-  };
-
   return (
     <Router>
       <ThemeProvider theme={theme}>
         <GlobalFonts />
-        <Header img={theme.icons} drop={drop} />
+        <Header img={theme.icons} />
+        <ConfirmModal />
         <Container>
-          <Header img={theme.icons} />
-          <ConfirmModal />
           <div className="App">
             <header className="App-header"></header>
           </div>

@@ -23,6 +23,7 @@ import {
 import HeaderLanguageModal from "./Modals/HeaderLanguageModal";
 import HeaderDateModal from "./Modals/HeaderDateModal";
 import HeaderLocationModal from "./Modals/HeaderLocationModal";
+import { signout } from "../../features/user/userSlice";
 
 const icons = {
   logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
@@ -54,43 +55,100 @@ const StyledHeader = styled.header`
 `;
 
 const Logo = styled.div`
-  /* position: absolute; */
-  top: 20px;
   grid-column: 2/ 4;
+  width: 100%;
+  position: ${(props) => (props.header ? "absolute" : "relative")};
+  top: ${(props) => (props.header ? "20px" : "0px")};
   display: flex;
+  flex-direction: column;
   align-items: center;
-  min-width: 80px;
+  justify-content: center;
+  text-align: center;
+
+  img {
+    @media screen and (min-width: 900px) {
+      width: 150px;
+    }
+
+    @media screen and (max-width: 900px) {
+      min-width: 100px;
+    }
+  }
 `;
 
 const Links = styled.div`
-  display: flex;
-  grid-column: 13/14;
+  grid-column: 11/14;
+  width: 100%;
   position: absolute;
+  display: flex;
   top: 30px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
 
   .profile {
-    width: 40px;
-    height: 40px;
+    flex: 1;
     border-radius: 50%;
     min-width: 40px;
+    height: 40px;
+  }
+
+  .write {
+    flex: 1;
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    color: #5e17eb;
+    @media screen and (max-width: 630px) {
+      font-size: 13px;
+    }
+
+    &:hover {
+      color: #c593fe;
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+    }
+  }
+
+  .signin {
+    flex: 1;
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    color: #5e17eb;
+    @media screen and (max-width: 630px) {
+      font-size: 13px;
+    }
+
+    &:hover {
+      color: #c593fe;
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+    }
+  }
+
+  .signout {
+    flex: 1;
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    color: #5e17eb;
+
+    &:hover {
+      color: #c593fe;
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+    }
   }
 `;
 
 const SearchDiv = styled.div`
   grid-column: ${(props) => (props.header ? "4/13" : "5/12")};
   padding-top: ${(props) => (props.header ? "120px" : "25px")};
-`;
-const StyleSearch = styled.div`
-  position: relative;
-  grid-column: 5/13;
-
-  @media only screen and (max-width: 768px) {
-    display: block;
-  }
-
-  @media only screen and (min-width: 768px) {
-    position: relative;
-  }
 `;
 
 export const StyledSearch = styled.div`
@@ -100,7 +158,6 @@ export const StyledSearch = styled.div`
   border-radius: 30px;
   display: flex;
   height: 50px;
-
   line-height: 50px;
   .searchbar {
     flex: 15;
@@ -127,10 +184,10 @@ const SearchIcon = styled.div`
     line-height: 20px;
   }
   height: 40px;
-  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
   border-radius: 50%;
   margin: 4px 5px 0px 0px;
-  min-width: 40px;
   background-color: ${(props) => props.theme.colors.purple};
   &:hover {
     background-color: ${(props) => props.theme.colors.lavender};
@@ -141,15 +198,6 @@ const SearchIcon = styled.div`
   &:active {
     box-shadow: ${(props) => props.theme.contents.boxShadow};
     top: 2px;
-  }
-  @media screen and (max-width: 768px) {
-    min-width: 30px;
-    height: 30px;
-    margin: 8px 5px 0px 0px;
-    .icon {
-      height: 15px;
-      width: 15px;
-    }
   }
 `;
 
@@ -181,7 +229,7 @@ const DesktopModal = styled.div`
 
 const Modal = styled.div`
   @media screen and (max-width: 768px) {
-    display: ${(props) => (props.modal ? "block" : "none")};
+    display: ${(props) => (props.header ? "block" : "none")};
   }
   display: none;
   width: 100%;
@@ -230,6 +278,7 @@ const Language = styled.div`
 const LocationWrapper = styled.div`
   width: 100%;
   height: 100%;
+  overflow: scroll;
 `;
 const DateWrapper = styled.div`
   width: 100%;
@@ -283,13 +332,17 @@ const InfoFinal = styled(Info)`
   top: 40%;
   transform: translateY(-50%);
   height: 30%;
+  box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
 `;
 
 const Icon = styled.div`
   position: absolute;
-  top: 75px;
+  top: 80px;
   left: 20px;
-  cursor: pointer;
+  padding: 10px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Header = () => {
@@ -301,21 +354,26 @@ const Header = () => {
   const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
   const { calenderDateValue } = useSelector((store) => store.calender);
 
-  const [modal, setModal] = useState(false);
   const [header, setHeader] = useState(false);
+
+  const guType = locationData.split(" ")[0];
+  const dongType = locationData.split(" ")[1];
+
+  const handleSignout = () => {
+    dispatch(signout());
+    dispatch(reset());
+    navigate("/");
+  };
 
   const goToHome = () => {
     navigate("/");
   };
 
-  const guType = locationData.split(" ")[0];
-  const dongType = locationData.split(" ")[1];
-
   return (
     <>
       {header ? (
-        <Backdrop>
-          <DesktopModal>
+        <Backdrop onClick={() => setHeader(false)}>
+          <DesktopModal onClick={(e) => e.stopPropagation()}>
             {location ? (
               <LocationWrapper>
                 <HeaderLocationModal />
@@ -335,18 +393,17 @@ const Header = () => {
         </Backdrop>
       ) : null}
       <StyledHeader header={header}>
-        <Logo onClick={goToHome}>
+        <Logo onClick={goToHome} header={header}>
           <img src={icons.logo} />
         </Logo>
         <SearchDiv header={header}>
           {header ? (
             // 헤더 모달창은 Search 안에 있다
-            <Search />
+            <Search setHeader={setHeader} />
           ) : (
             <StyledSearch
               onClick={() => {
                 setHeader(true);
-                setModal(true);
                 dispatch(locationModal());
               }}
             >
@@ -363,19 +420,27 @@ const Header = () => {
         </SearchDiv>
         <Links>
           {user ? (
-            <Link to="/profile">
-              <img src={user.image} className="profile" />
-            </Link>
+            <>
+              <Link to="/profile">
+                <img src={user.image} className="profile" />
+              </Link>
+              <Link to="/write">
+                <div className="write">새 글 쓰기</div>
+              </Link>
+              <div className="signout" onClick={handleSignout}>
+                로그아웃
+              </div>
+            </>
           ) : (
             <Link to="/signin">
-              <span className="signin">로그인</span>
+              <div className="signin">로그인</div>
             </Link>
           )}
         </Links>
       </StyledHeader>
 
       {/* 모바일 모달창 */}
-      <Modal modal={modal}>
+      <Modal header={header}>
         {location ? (
           <Location>
             <Icon
@@ -451,7 +516,6 @@ const Header = () => {
             </InfoFinal>
             <Info
               onClick={() => {
-                setModal(false);
                 setHeader(false);
                 getStudiesMapApi({
                   guType,
@@ -463,9 +527,10 @@ const Header = () => {
                   dispatch(setStudiesData(res.data));
                 });
                 //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
-                navigate("/map");
                 dispatch(resetData());
                 dispatch(reset());
+                navigate("/map");
+                setHeader(false);
               }}
             >
               <div className="searchIcon">
