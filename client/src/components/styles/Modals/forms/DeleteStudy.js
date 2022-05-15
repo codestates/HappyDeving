@@ -7,20 +7,19 @@ import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
 import LoadingIndicator from "../../../LoadingIndicator";
 
+const Div = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 const ConfirmTitle = styled.h2`
   font-size: 16px;
-  padding: 5%;
+  margin-bottom: 20px;
 `;
-const ConfirmSubtitle = styled.p`
-  font-size: 14px;
-  padding: 5%;
 
-  /* margin-bottom: 10%; */
-`;
 const ConfirmButton = styled.button`
-  margin-left: 42%;
   margin-top: 10%;
-  padding: 3px 8px;
+  padding: 3px 15px;
   cursor: pointer;
   border-radius: 10px;
   border: 1px solid #5e17eb;
@@ -29,6 +28,12 @@ const ConfirmButton = styled.button`
   &:hover {
     color: #5e17eb;
   }
+`;
+
+const ConfirmSubtitle = styled.p`
+  font-size: 14px;
+
+  /* margin-bottom: 10%; */
 `;
 
 const DeleteStudy = (props) => {
@@ -42,7 +47,7 @@ const DeleteStudy = (props) => {
   }
   return (
     <>
-      <div>
+      <Div>
         <ConfirmTitle>게시글을 삭제하시겠습니까?</ConfirmTitle>
         <ConfirmSubtitle>삭제한 데이터는 복구할 수 없습니다.</ConfirmSubtitle>
         <ConfirmButton
@@ -55,7 +60,7 @@ const DeleteStudy = (props) => {
         >
           확인
         </ConfirmButton>
-      </div>
+      </Div>
     </>
   );
 };

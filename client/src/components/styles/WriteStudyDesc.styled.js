@@ -12,6 +12,7 @@ import { resetData } from "../../features/Search/searchDataSlice";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
+
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
     transform: 1s;
@@ -52,9 +53,9 @@ const Desc = styled(Content)`
 
 const Title = styled.div`
   width: 80%;
-  margin: 0 auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding-bottom: 10px;
+  margin: 0 auto;
 `;
 
 const TitleText = styled.div`
@@ -453,8 +454,8 @@ const StudyDesc = () => {
     ));
   };
 
-  const handleStudyPosting = (e) => {
-    e.preventDefault();
+  const handleStudyPosting = () => {
+    
     dispatch(
       openModal({
         name: "WriteStudy",
@@ -560,6 +561,7 @@ const StudyDesc = () => {
               handleLocationValue(e, e.target.value);
               setLocationSearch(e.target.value);
             }}
+
             ref={locationInput}
           ></input>
           {locOpen ? (
@@ -595,7 +597,11 @@ const StudyDesc = () => {
               }}
             ></input>
           </Checkbox>
-          <ConfirmButton onClick={handleStudyPosting}>저장하기</ConfirmButton>
+          <ConfirmButton onClick={() => { 
+handleStudyPosting();
+dispatch(resetData());
+
+}}>저장하기</ConfirmButton>
         </Closed>
       </Desc>
     </WriteStudyDesc>

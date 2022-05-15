@@ -62,7 +62,8 @@ function App() {
       <ThemeProvider theme={theme}>
         <GlobalFonts />
         <Header img={theme.icons} />
-        <ConfirmModal></ConfirmModal>
+
+        <ConfirmModal />
 
         <Container>
           <div className="App">

@@ -10,21 +10,17 @@ import DeleteUser from "./forms/DeleteUser";
 import DeleteStudy from "./forms/DeleteStudy";
 import WriteStudy from "./forms/WriteStudy";
 import NoResults from "./forms/NoResults";
+import DirectToLogin from "./forms/DirectToLogin";
 import { closeModal } from "../../../features/modal/modalSlice";
 
 const ModalBackdrop = styled.div`
   opacity: 0;
   visibility: hidden;
-
-  position: absolute;
+  position: fixed;
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.8);
-  width: 100%;
-  height: 250%;
   top: 0;
   left: 0;
-  /* right: 0;
-  bottom: 0; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -38,7 +34,6 @@ const ModalBackdrop = styled.div`
 const ModalContainer = styled.div`
   opacity: 0;
   visibility: hidden;
-
   position: fixed;
   z-index: 1500;
   background-color: white;
@@ -87,9 +82,7 @@ const ModalContent = styled.div`
 
 const ConfirmModal = () => {
   const dispatch = useDispatch();
-  const { isOpen, componentName, childrenProps } = useSelector(
-    (state) => state.modal
-  );
+  const { isOpen, componentName, childrenProps } = useSelector((state) => state.modal);
   const closeModalHandler = () => {
     dispatch(closeModal());
   };
@@ -101,6 +94,7 @@ const ConfirmModal = () => {
     DeleteStudy,
     WriteStudy,
     NoResults,
+    DirectToLogin,
   };
   let renderComponent;
   if (componentName) {
@@ -114,16 +108,16 @@ const ConfirmModal = () => {
       <ModalBackdrop
         onClick={closeModalHandler}
         className={isOpen ? "modal-show" : null}
-      >
-        <ModalContainer className={isOpen ? "modal-show" : null}>
-          <ModalClose>
-            <button onClick={closeModalHandler}>
-              <FontAwesomeIcon icon={faClose} size="1x" />
-            </button>
-          </ModalClose>
-          <ModalContent>{renderComponent}</ModalContent>
-        </ModalContainer>
-      </ModalBackdrop>
+      ></ModalBackdrop>
+
+      <ModalContainer className={isOpen ? "modal-show" : null}>
+        <ModalClose>
+          <button onClick={closeModalHandler}>
+            <FontAwesomeIcon icon={faClose} size="1x" />
+          </button>
+        </ModalClose>
+        <ModalContent>{renderComponent}</ModalContent>
+      </ModalContainer>
     </>
   );
 };

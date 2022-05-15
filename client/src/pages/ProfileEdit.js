@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { signout, reset } from "../features/user/userSlice.js";
+import { reset } from "../features/user/userSlice.js";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import { openModal } from "../features/modal/modalSlice.js";
@@ -9,10 +9,8 @@ import EditSideProfile from "../components/styles/EditSideProfile.styled";
 
 const StyledEditProfile = styled.div`
   grid-column: 4 / 12;
-  min-height: 80%;
-  margin-top: 150px;
   text-align: left;
-  min-width: 524px;
+  min-width: 400px;
 
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
@@ -30,21 +28,22 @@ const UserTitle = styled.div`
   margin-bottom: 50px;
   span {
     font-weight: 500;
-    border-bottom: 5px solid #dfc1ff;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #dfc1ff;
   }
   @media screen and (max-width: 1024px) {
     font-size: 20px;
     transition: 1s;
   }
 `;
-
 const Tab = styled.div`
   display: flex;
   font-weight: 800;
   border-bottom: 2px solid darkgray;
   margin-bottom: 20px;
   color: gray;
-  font-size: 16px;
+  font-size: 14px;
+  font-family: "Binggrae";
   cursor: pointer;
   .tap {
     padding: 10px 3%;
@@ -54,20 +53,25 @@ const Tab = styled.div`
       color: black;
       border-bottom: 3px solid #dfc1ff;
     }
-    @media screen and (max-width: 764px) {
-      font-size: 14px;
-    }
+  }
+  @media screen and (max-width: 764px) {
+    font-size: 12px;
+    transition: 0.5s;
   }
 `;
 
 const MyStudyTab = styled.div``;
 const LikedStudyTab = styled.div``;
-const MyprofileTab = styled.div``;
+const MyprofileTab = styled.div`
+  color: black;
+  border-bottom: 3px solid #dfc1ff;
+`;
 
 const ProfileContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  margin-top: 50px;
+  padding: 30px 0px 40px 0px;
+  border-bottom: 2px solid darkgray;
   @media screen and (max-width: 1024px) {
     display: flex;
     flex-direction: column;
@@ -76,6 +80,8 @@ const ProfileContainer = styled.div`
 
 const Side = styled.div`
   padding: 0px 20px;
+  margin-right: 20px;
+  margin-left: 20px;
   grid-column: 1 / 3;
 `;
 
@@ -83,20 +89,20 @@ const ProfileWrap = styled.form`
   display: flex;
   grid-column: 3 / 9;
   flex-direction: column;
-  margin: 0px 30px;
+  padding: 0px 10px;
 `;
 
 const Text = styled.div`
   width: 150px;
   font-family: "Binggrae";
-  padding-bottom: 2px;
   border-bottom: 1px solid gray;
-  color: gray;
-  font-size: 14px;
+  color: dimgray;
+  font-size: 16px;
+  padding-bottom: 2px;
   margin-bottom: 10px;
   margin-top: 25px;
   @media screen and (max-width: 764px) {
-    font-size: 12px;
+    font-size: 14px;
   }
 `;
 
@@ -105,17 +111,23 @@ const Input = styled.input`
   border-radius: 5px;
   height: 40px;
   width: 100%;
-  font-size: 16px;
+  font-size: 17px;
   padding: 10px;
   height: 50px;
   cursor: pointer;
   @media screen and (max-width: 768px) {
     font-size: 14px;
-    width: 100%;
+    height: 40px;
+  }
+
+  &:hover {
+    outline: none;
+    border-bottom: 1px solid #5e17eb;
   }
 
   &:focus {
     outline: none;
+    border-bottom: 1px solid #5e17eb;
   }
 `;
 const InputBio = styled.textarea`
@@ -193,13 +205,6 @@ const MyPage = () => {
       })
     );
   };
-  // 임시
-  const handleSignout = (e) => {
-    e.preventDefault();
-    dispatch(signout());
-    dispatch(reset());
-    navigate("/");
-  };
 
   const handlePermanentDeletion = (e) => {
     e.preventDefault();
@@ -276,9 +281,7 @@ const MyPage = () => {
               <Link to="/profile">
                 <button onClick={handleEditing}>수정하기</button>
               </Link>
-              <Link to="/">
-                <button onClick={handleSignout}>로그아웃</button>
-              </Link>
+
               <Link to="/">
                 <button onClick={handlePermanentDeletion}>회원 탈퇴</button>
               </Link>

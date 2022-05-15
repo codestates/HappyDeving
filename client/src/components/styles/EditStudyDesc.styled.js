@@ -13,6 +13,7 @@ import { resetData } from "../../features/Search/searchDataSlice";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
+
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
     transform: 1s;
@@ -315,6 +316,7 @@ const EditStudyDesc = () => {
     latitude: 37.570975,
     longitude: 126.977759,
   });
+
   const [locationList, setLocationList] = useState([]);
   const { date } = useSelector((store) => store.search);
   const [lang, setLang] = useState([{ id: 6, name: "react" }]);
@@ -326,7 +328,9 @@ const EditStudyDesc = () => {
 
   const [data, setData] = useState(null);
   const [checked, setChecked] = useState(false);
+
   const moment = require("moment");
+
 
   var ps = new kakao.maps.services.Places();
 
@@ -374,6 +378,7 @@ const EditStudyDesc = () => {
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
     var img = langImg[lang[0]["name"]];
+
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -505,6 +510,7 @@ const EditStudyDesc = () => {
               <RowWrap>
                 <HalfWrapper>
                   <Text>스터디 시작일</Text>
+
                   <HalfInput>
                     {dateData
                       ? calenderDateValue
@@ -517,6 +523,7 @@ const EditStudyDesc = () => {
                     {open.date ? (
                       <DescDateModal>
                         <CalenderDate setOpen={setOpen} open={open} />
+
                       </DescDateModal>
                     ) : null}
                   </HalfInput>
@@ -527,9 +534,11 @@ const EditStudyDesc = () => {
                     {data.language?.map((el) => el.name).join()}
                     <DateDrop>
                       <IoMdArrowDropdown
+
                         onClick={() =>
                           setOpen({ ...open, language: !open.language })
                         }
+
                       />
                     </DateDrop>
                     {open.language ? (
@@ -540,10 +549,12 @@ const EditStudyDesc = () => {
                               key={idx}
                               className="elements"
                               onClick={() => {
+
                                 if (
                                   data.language.filter((obj) => obj.name === el)
                                     .length === 0
                                 ) {
+
                                   setData({
                                     ...data,
 
@@ -572,9 +583,11 @@ const EditStudyDesc = () => {
                 <Text>스터디 참여 링크</Text>
                 <input
                   placeholder="ex. 카카오톡 오픈채팅 링크"
+
                   onChange={(e) =>
                     handleInputValue("kakaoLink", e.target.value)
                   }
+
                   defaultValue={data.kakaoLink}
                 ></input>
               </Wrapper>
@@ -626,6 +639,7 @@ const EditStudyDesc = () => {
                     }}
                   ></input>
                 </Checkbox>
+
                 <ConfirmButton
                   onClick={(e) => {
                     handleUpdateStudy(e);
@@ -634,6 +648,7 @@ const EditStudyDesc = () => {
                 >
                   수정완료
                 </ConfirmButton>
+
               </Closed>
             </Desc>
           </WriteStudyDesc>

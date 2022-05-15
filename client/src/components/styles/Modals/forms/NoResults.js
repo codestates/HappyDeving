@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
 import LoadingIndicator from "../../../LoadingIndicator";
 
+
 const Div = styled.div`
   display: flex;
   flex-direction: column;
@@ -19,6 +20,7 @@ const ConfirmTitle = styled.h2`
 const ConfirmButton = styled.button`
   margin-top: 10%;
   padding: 3px 15px;
+
   cursor: pointer;
   border-radius: 10px;
   border: 1px solid #5e17eb;
@@ -40,7 +42,9 @@ const NoResult = (props) => {
   }
   return (
     <>
+
       <Div>
+
         <ConfirmTitle>검색 결과가 없습니다.</ConfirmTitle>
         <ConfirmButton
           onClick={async () => {
@@ -50,7 +54,10 @@ const NoResult = (props) => {
         >
           확인
         </ConfirmButton>
+
       </Div>
+
+
     </>
   );
 };

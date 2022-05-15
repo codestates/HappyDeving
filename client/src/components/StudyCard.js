@@ -1,29 +1,21 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import styled from "styled-components";
-// import Content from "../components/styles/Content.styled";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  getLikedStudies,
-  // getMyStudies,
-  likeStudy,
-  unLikeStudy,
-} from "../features/studies/allStudiesSlice";
+import { getLikedStudies, unLikeStudy } from "../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import { langImg } from "../static/images/langImg";
 import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
-import { faHeart as unLike } from "@fortawesome/free-regular-svg-icons";
-// import { lang } from "moment";
 
 const CardContainer = styled.div`
-  box-shadow: 3px 3px 5px grey;
+  box-shadow: 3px 3px 5px gray;
   display: flex;
   border-radius: 10px;
-  /* background: rgba(233, 193, 255, 10%); */
   border: 3px solid rgba(233, 193, 255, 20%);
-  width: 380px;
-  height: auto;
+  width: 300px;
+  height: 170px;
+
   margin-top: 5%;
   text-align: flex-start;
   cursor: pointer;
@@ -31,19 +23,15 @@ const CardContainer = styled.div`
     position: relative;
     top: -2px;
   }
-  @media screen and (max-width: 2200px) {
-    width: 350px;
+
+  @media screen and (max-width: 1800px) {
+    width: 280px;
     transition: 1s;
   }
 
   @media screen and (max-width: 1100px) {
-    height: 180px;
-    width: 300px;
-    transition: 1s;
-  }
-  @media screen and (max-width: 768px) {
-    height: 180px;
-    width: 300px;
+    height: 160px;
+    width: 280px;
     transition: 1s;
   }
 `;
@@ -65,13 +53,12 @@ const CardForm = styled.div`
   background: white;
   width: 90%;
   margin: 10px 10px 10px 0px;
-  border: 2.5px solid rgba(233, 193, 255, 80%);
   padding: 5px;
   border-radius: 5px;
-  /* background-color: pink; */
   display: flex;
   flex-direction: column;
 `;
+
 
 const Title = styled.div`
   width: 200px;
@@ -80,36 +67,40 @@ const Title = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   min-height: 25px;
-  margin-bottom: 5px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
+  @media screen and (max-width: 1110px) {
+    font-size: 16px;
+    transition: 0.5s;
+  }
   @media screen and (max-width: 768px) {
     font-size: 14px;
+    transition: 0.5s;
   }
-  /* width: 80%; */
 `;
 
 const StartDate = styled.div`
   display: flex;
-
   font-size: 15px;
   color: darkgray;
   @media screen and (max-width: 1110px) {
     font-size: 14px;
+    transition: 0.5s;
   }
 `;
 const Content = styled.div`
+  font-family: "Binggrae";
   width: 100%;
-  /* background-color: #dfc1ff; */
-  border-top: 2px solid rgba(233, 193, 255, 80%);
-  /* border-bottom: 2px solid #dfc1ff; */
+  margin: 5px 0px;
+  /* border-top: 2px solid rgba(233, 193, 255, 80%); */
+  border-top: 2px solid darkgray;
+  font-size: 16px;
   padding: 10px 10px 0px 0px;
-  /* white-space: nowrap; */
   overflow: hidden;
   display: flex;
   height: 110px;
-  overflow: hidden;
-  @media screen and (max-width: 768px) {
+
+  @media screen and (max-width: 1100px) {
     font-size: 14px;
   }
 `;
@@ -122,9 +113,8 @@ const LikeButton = styled.button`
 
 const HeartIcon = styled.span`
   font-size: 20px;
-  .like {
-    color: #d32f2f;
-  }
+  color: #d32f2f;
+
   @media screen and (max-width: 1100px) {
     font-size: 18px;
   }
@@ -133,46 +123,23 @@ const HeartIcon = styled.span`
 const StudyCard = ({ myStudy, likedStudy }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isLike, setIsLike] = useState(true);
   const { user } = useSelector((state) => state.user);
-  const { myStudies, likedStudies } = useSelector((state) => state.allStudies);
-
-  useEffect(() => {
-    if (likedStudy) {
-      setIsLike(true);
-    }
-    if (myStudy) {
-      setIsLike(false);
-    }
-  }, [myStudies, likedStudies]);
 
   const imageHandler = (study) => {
     return study.language
-      .slice(0, 2)
-      .map((el) =>
+      ?.slice(0, 2)
+      .map((el, i) =>
         el["name"] === "c++" ? (
-          <img src={langImg["c"]} alt=""></img>
+          <img key={i} src={langImg["c"]} alt=""></img>
         ) : (
-          <img src={langImg[el["name"]]} alt=""></img>
+          <img key={i} src={langImg[el["name"]]} alt=""></img>
         )
       );
   };
 
   const handleUnlike = async () => {
-    await dispatch(
-      unLikeStudy({ id: user.id, studyData: { study_id: likedStudy.id } })
-    );
-    setIsLike(!isLike);
+    await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: likedStudy.id } }));
     await dispatch(getLikedStudies(user.id));
-  };
-
-  const handleLike = async () => {
-    await dispatch(
-      likeStudy({ id: user.id, studyData: { study_id: myStudy.id } })
-    );
-    setIsLike(!isLike);
-    await dispatch(getLikedStudies(user.id));
-    navigate("/likedstudy");
   };
 
   const moveToStudyPage = (study) => {
@@ -181,7 +148,6 @@ const StudyCard = ({ myStudy, likedStudy }) => {
 
   return (
     <>
-      {/* <Container> */}
       <CardContainer>
         {myStudy ? (
           <LanguageImg>{imageHandler(myStudy)}</LanguageImg>
@@ -189,34 +155,23 @@ const StudyCard = ({ myStudy, likedStudy }) => {
           <LanguageImg>{imageHandler(likedStudy)}</LanguageImg>
         )}
         <CardForm>
-          <Title
-            onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}
-          >
+          <Title onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>
             {myStudy ? myStudy.title : likedStudy.title}
           </Title>
-          <hr />
-
-          <Content> {myStudy ? myStudy.content : likedStudy.content}</Content>
+          <Content onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}> {myStudy ? myStudy.content : likedStudy.content}</Content>
           <LikeButton>
             <StartDate>
               시작 예정일 | {myStudy ? myStudy.startDate : likedStudy.startDate}
             </StartDate>
-            <HeartIcon className="heart-icon">
-              {isLike ? (
-                <FontAwesomeIcon
-                  onClick={handleUnlike}
-                  icon={like}
-                  size="1x"
-                  color="red"
-                />
-              ) : (
-                <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
-              )}
-            </HeartIcon>
+            {myStudy ? null : (
+              <HeartIcon>
+                <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x"></FontAwesomeIcon>
+              </HeartIcon>
+            )}
+
           </LikeButton>
         </CardForm>
       </CardContainer>
-      {/* </Container> */}
     </>
   );
 };

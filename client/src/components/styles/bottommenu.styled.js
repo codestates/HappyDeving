@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signout, reset } from "../../features/user/userSlice.js";
+import { openModal } from "../../features/modal/modalSlice.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHouse, faArrowRightFromBracket } from "@fortawesome/free-solid-svg-icons";
 import { faPenToSquare, faUser, faFolder, faHeart } from "@fortawesome/free-regular-svg-icons";
 import LoadingIndicator from "../LoadingIndicator.js";
 const StyledBottommenu = styled.div`
   grid-column: 1/15;
-  /* grid-template-columns: repeat(7, 1fr); */
-  min-width: 520px;
+  min-width: 400px;
   position: fixed;
   display: flex;
   align-items: center;
@@ -18,11 +18,9 @@ const StyledBottommenu = styled.div`
   bottom: 0px;
   width: 100%;
   height: 70px;
-  /* background: rgba(255, 255, 255, 0.5); */
   background: white;
   border-top: 1px solid #5e17eb;
   z-index: 9;
-  margin: 0px;
 
   @media screen and (min-width: 768px) {
     display: none;
@@ -97,6 +95,13 @@ const BottomMenu = () => {
     navigate("/");
   };
 
+  const handleWriteButton = () => {
+    if (user) {
+      navigate("/write");
+    }
+    dispatch(openModal({ name: "DirectToLogin" }));
+  };
+
   if (isLoading) {
     return <LoadingIndicator />;
   }
@@ -141,12 +146,10 @@ const BottomMenu = () => {
               <FontAwesomeIcon className="icon" icon={faHouse} />
               <p>둘러보기</p>
             </Menu2>
-            <Link to="/write">
-              <Menu3 className="menu">
-                <FontAwesomeIcon className="icon" icon={faPenToSquare} />
-                <p>작성하기</p>
-              </Menu3>
-            </Link>
+            <Menu3 onClick={handleWriteButton} className="menu">
+              <FontAwesomeIcon className="icon" icon={faPenToSquare} />
+              <p>작성하기</p>
+            </Menu3>
             <Link to="/signin">
               <Menu4 className="menu">
                 <FontAwesomeIcon className="icon" icon={faUser} />

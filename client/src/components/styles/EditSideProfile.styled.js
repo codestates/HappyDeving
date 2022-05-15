@@ -22,8 +22,8 @@ const ProfileImage = styled.div`
   width: 150px;
   height: 150px;
   margin-top: 15px;
-  border: 3px solid #c593fe;
-
+  margin-bottom: 10px;
+  border: 2px solid #c593fe;
   img {
     border-radius: 100px;
     width: 100%;

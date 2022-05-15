@@ -23,11 +23,12 @@ import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
+import emptyFolder from "../../static/images/emptyPorder.png";
+
 const StyleStudyDesc = styled.div`
-  margin-top: 150px;
   grid-column: 4/12;
   min-width: 500px;
-  padding: 3% 5% 3% 5%;
+  padding: 0% 5%;
   div {
     border-radius: 5px;
   }
@@ -40,17 +41,6 @@ const StyleStudyDesc = styled.div`
   }
   @media screen and (max-width: 768px) {
     grid-column: 2/14;
-  }
-`;
-
-const HeartIcon = styled.span`
-  font-size: 30px;
-  margin-left: 80%;
-  .like {
-    color: #d32f2f;
-  }
-  @media screen and (max-width: 1100px) {
-    font-size: 20px;
   }
 `;
 
@@ -90,9 +80,15 @@ const Alter = styled.div`
     align-items: center;
     margin: 0px 5px;
     min-width: 10px;
+    &:hover {
+      color: #6733e5;
+    }
+  }
+  @media screen and (max-width: 1024px) {
+    font-size: 16px;
   }
   @media screen and (max-width: 768px) {
-    font-size: 13px;
+    font-size: 14px;
   }
 `;
 
@@ -102,9 +98,12 @@ const ShareIcon = styled.div`
   position: relative;
 `;
 
-const CommentsDiv = styled.div`
-  /* background: pink; */
+const HeartIcon = styled.div`
+  .like {
+    color: #d32f2f;
+  }
 `;
+const CommentsDiv = styled.div``;
 
 const Wrap = styled.div`
   display: flex;
@@ -123,6 +122,7 @@ const Host = styled.div`
 `;
 
 const MiniProfileWrap = styled.div`
+  font-family: "Binggrae";
   display: flex;
   background-color: rgba(233, 193, 255, 20%);
   border-radius: 5px;
@@ -142,12 +142,10 @@ const ProfileWrap = styled.div`
   display: flex;
   padding: 20px 0px;
   min-height: 120px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-
-  h1 {
-    /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
-  }
+  margin: 10px 0px;
+  border-top: 2px solid #dfc1ff;
+  border-bottom: 2px solid #dfc1ff;
+  /* border-bottom: 1px solid rgba(0, 0, 0, 0.1); */
 `;
 const ProfileInWrap = styled.div`
   display: flex;
@@ -163,7 +161,6 @@ const ProfileImage = styled.div`
   border: 1px solid #c593fe;
 
   img {
-    /* border-radius: 100px; */
     width: 100%;
     height: 100%;
   }
@@ -172,7 +169,6 @@ const ContentWrap = styled.div`
   display: flex;
   background-color: rgba(233, 193, 255, 20%);
   min-height: 0px;
-
   min-height: 200px;
   width: 100%;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -203,7 +199,7 @@ const TextL = styled.div`
 const dummyimg = DummyImgs[Math.floor(Math.random() * 10)];
 const DummyImg = styled.div`
   width: 100%;
-  height: 300px;
+  height: 200px;
 
   background-image: url(${dummyimg});
   background-position: center;
@@ -237,7 +233,7 @@ const Bio = styled.div`
 const LinkButtons = styled.div`
   display: flex;
   a {
-    color: darkray;
+    color: gray;
     font-size: 12px;
     margin: 0px auto;
     span {
@@ -284,6 +280,42 @@ const ConfirmButton = styled.button`
     position: relative;
     top: 0px;
   }
+  p {
+    margin-right: 10px;
+  }
+`;
+const Alert = styled.div`
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Binggrae";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  img {
+    width: 30%;
+  }
+`;
+const AlertText = styled.div`
+  text-align: center;
+  h1 {
+    font-size: 40px;
+  }
+
+  @media screen and (max-width: 1024px) {
+    h1 {
+      font-size: 30px;
+    }
+
+    @media screen and (max-width: 768px) {
+      h1 {
+        font-size: 20px;
+      }
+    }
+  }
 `;
 
 //바뀐 location으로 marker 만들기용으오로 데이터 가공
@@ -300,6 +332,7 @@ const StudyDesc = () => {
   const [showComments, setShowComments] = useState(false);
   const [share, setShare] = useState(false);
   const moment = require("moment");
+
   const handleShareButton = () => {
     setShare(!share);
   };
@@ -364,22 +397,27 @@ const StudyDesc = () => {
   }, []);
 
   const handleUnlike = async () => {
-    await dispatch(
-      unLikeStudy({ id: user.id, studyData: { study_id: data.id } })
-    );
+    await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: data.id } }));
 
     setIsLike(!isLike);
   };
 
   const handleLike = async () => {
     setIsLike(!isLike);
-    await dispatch(
-      likeStudy({ id: user.id, studyData: { study_id: data.id } })
-    );
+    await dispatch(likeStudy({ id: user.id, studyData: { study_id: data.id } }));
   };
 
-  const handleStudyDeletion = (e) => {
-    e.preventDefault();
+  const handleLogin = () => {
+    if (!user) {
+      dispatch(openModal({ name: "DirectToLogin" }));
+    }
+  };
+
+  const handleKakaoConnect = () => {
+    navigate(`/${data?.kakaoLink}`);
+  };
+
+  const handleStudyDeletion = () => {
     dispatch(
       openModal({
         name: "DeleteStudy",
@@ -398,29 +436,16 @@ const StudyDesc = () => {
                 <>
                   <HeartIcon>
                     {isLike ? (
-                      <FontAwesomeIcon
-                        onClick={handleUnlike}
-                        icon={like}
-                        size="1x"
-                        color="red"
-                      />
+                      <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
                     ) : (
-                      <FontAwesomeIcon
-                        onClick={handleLike}
-                        icon={unLike}
-                        size="1x"
-                      />
+                      <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
                     )}
                   </HeartIcon>
                   <ShareIcon onClick={handleShareButton}>
                     {share ? <ShareSocialButton /> : null}
                     <FontAwesomeIcon icon={faShareNodes} />
                   </ShareIcon>
-
-                  <Update onClick={() => navigate(`/study/edit/${data.id}`)}>
-                    수정
-                  </Update>
-
+                  <Update onClick={() => navigate(`/study/edit/${data.id}`)}>수정</Update>
                   <Delete onClick={handleStudyDeletion}>삭제</Delete>
                 </>
               ) : (
@@ -428,14 +453,14 @@ const StudyDesc = () => {
                   <HeartIcon>
                     {isLike ? (
                       <FontAwesomeIcon
-                        onClick={handleUnlike}
+                        onClick={user ? handleUnlike : handleLogin}
                         icon={like}
                         size="1x"
                         color="red"
                       />
                     ) : (
                       <FontAwesomeIcon
-                        onClick={handleLike}
+                        onClick={user ? handleLike : handleLogin}
                         icon={unLike}
                         size="1x"
                       />
@@ -450,11 +475,8 @@ const StudyDesc = () => {
             </Alter>
           </TitleBar>
           <Host>
-            <CreateAt>
-              {/* {data?.updateAt} */}
-              {/* {createAtDate} */}
-              {moment(data.createAt).format("YYYY.MM.DD")}
-            </CreateAt>
+            <CreateAt>{moment(data.createAt).format("YYYY-MM-DD")}</CreateAt>
+
 
             <MiniProfileWrap>
               <img className="profile" src={data?.image} />
@@ -463,9 +485,7 @@ const StudyDesc = () => {
           </Host>
           <DummyImg></DummyImg>
           <Wrap>
-            <Icon>
-              {data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}
-            </Icon>
+            <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
 
             <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
             <Icon>
@@ -526,15 +546,20 @@ const StudyDesc = () => {
                 <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
               </Icon>
             </ConfirmButton>
-            <ConfirmButton src={data?.kakaoLink}>스터디 참여하기</ConfirmButton>
+            <ConfirmButton onClick={user ? handleKakaoConnect : handleLogin}>
+              스터디 참여하기
+            </ConfirmButton>
           </ButtonWrap>
 
-          <CommentsDiv>
-            {showComments ? <Comments studyId={id} /> : null}
-          </CommentsDiv>
+          <CommentsDiv>{showComments ? <Comments studyId={id} /> : null}</CommentsDiv>
         </StyleStudyDesc>
       ) : (
-        "data가 없습니다"
+        <Alert>
+          <img src={emptyFolder} alt="google" />
+          <AlertText>
+            <h1>존재하지 않는 게시글입니다</h1>
+          </AlertText>
+        </Alert>
       )}
     </>
   );

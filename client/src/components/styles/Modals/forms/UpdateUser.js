@@ -11,17 +11,14 @@ const Div = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
 const ConfirmTitle = styled.h2`
   font-size: 16px;
+  margin-bottom: 20px;
 `;
-// const ConfirmSubtitle = styled.p`
-//   font-size: 14px;
-//   /* margin-bottom: 10%; */
-// `;
+
 const ConfirmButton = styled.button`
-  margin-top: 25%;
-  padding: 3px 8px;
+  margin-top: 10%;
+  padding: 3px 15px;
   cursor: pointer;
   border-radius: 10px;
   border: 1px solid #5e17eb;

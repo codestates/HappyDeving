@@ -3,7 +3,7 @@ import React from "react";
 import { useInView } from "react-intersection-observer";
 import styled from "styled-components";
 
-const SliderDefault = styled.div`
+const SliderDiv = styled.div`
   font-family: "Binggrae";
   grid-column: 3 / 13;
   display: flex;
@@ -11,6 +11,11 @@ const SliderDefault = styled.div`
   opacity: 0;
   transform: scale(85%);
   transition: 2s;
+  &.slider-zoom {
+    opacity: 1;
+    transform: scale(100%);
+    transition: 2s;
+  }
   @media screen and (min-width: 768px) and (max-width: 1023px) {
     grid-column: 2 / 14;
     transition: 2s;
@@ -19,26 +24,6 @@ const SliderDefault = styled.div`
     grid-column: 1 / 15;
     transition: 2s;
     flex-direction: column;
-    background-color: rgb(236, 236, 236);
-  }
-`;
-const SliderWithZoom = styled.div`
-  font-family: "Binggrae";
-  grid-column: 3 / 13;
-  display: flex;
-  align-items: center;
-  margin: 20px;
-  opacity: 1;
-  transform: scale(100%);
-  transition: 2s;
-
-  @media screen and (min-width: 768px) and (max-width: 1023px) {
-    grid-column: 2 / 14;
-  }
-  @media screen and (max-width: 767px) {
-    grid-column: 1 / 15;
-    flex-direction: column;
-    background-color: rgb(236, 236, 236);
   }
 `;
 
@@ -61,10 +46,12 @@ const SliderContent = styled.div`
   h1 {
     overflow: hidden;
     white-space: nowrap;
-    font-size: 2rem;
+    font-size: 3rem;
+    margin-bottom: 15px;
   }
   p {
-    font-size: 1.5rem;
+    color: rgb(70, 69, 71);
+    font-size: 2rem;
   }
 
   @media screen and (min-width: 768px) and (max-width: 1023px) {
@@ -78,10 +65,10 @@ const SliderContent = styled.div`
   }
   @media screen and (max-width: 767px) {
     h1 {
-      font-size: 1.5rem;
+      font-size: 1.8rem;
     }
     p {
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
   }
 `;
@@ -117,11 +104,9 @@ const Slider = ({ imageSrc, title, subtitle, flipped }) => {
 
   return (
     <>
-      {inView ? (
-        <SliderWithZoom ref={ref}>{renderContent()}</SliderWithZoom>
-      ) : (
-        <SliderDefault ref={ref}>{renderContent()}</SliderDefault>
-      )}
+      <SliderDiv className={inView ? "slider-zoom" : null} ref={ref}>
+        {renderContent()}
+      </SliderDiv>
     </>
   );
 };
