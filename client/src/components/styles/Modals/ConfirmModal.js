@@ -10,6 +10,7 @@ import DeleteUser from "./forms/DeleteUser";
 import DeleteStudy from "./forms/DeleteStudy";
 import WriteStudy from "./forms/WriteStudy";
 import NoResults from "./forms/NoResults";
+import DirectToLogin from "./forms/DirectToLogin";
 import { closeModal } from "../../../features/modal/modalSlice";
 
 const ModalBackdrop = styled.div`
@@ -85,9 +86,7 @@ const ModalContent = styled.div`
 
 const ConfirmModal = () => {
   const dispatch = useDispatch();
-  const { isOpen, componentName, childrenProps } = useSelector(
-    (state) => state.modal
-  );
+  const { isOpen, componentName, childrenProps } = useSelector((state) => state.modal);
   const closeModalHandler = () => {
     dispatch(closeModal());
   };
@@ -99,6 +98,7 @@ const ConfirmModal = () => {
     DeleteStudy,
     WriteStudy,
     NoResults,
+    DirectToLogin,
   };
   let renderComponent;
   if (componentName) {

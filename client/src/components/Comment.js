@@ -130,11 +130,13 @@ const Comment = ({
     <CommentDiv>
       <CommentUserDataPart key={comment.id}>
         <CommentImageContainer>
-          <img src={user?.image} alt="" />
+          <img src={user?.id === comment.user_id ? user?.image : comment.image} alt="" />
         </CommentImageContainer>
         <CommentDataContainer>
           <CommentUpperPart>
-            <CommentAuthor>{user?.username}</CommentAuthor>
+            <CommentAuthor>
+              {user?.id === comment.user_id ? user?.username : comment.username}
+            </CommentAuthor>
             <CommentDate>{createdAt}</CommentDate>
           </CommentUpperPart>
           {!isEditing && <Text>{comment.content}</Text>}
