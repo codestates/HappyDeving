@@ -12,36 +12,35 @@ const SignupContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
-  margin: 20% auto;
   font-size: 18px;
-  font-weight: 500;
-  margin-top: 150px;
+  font-weight: 600;
+
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
-    width: 80%;
     transition: 1s;
   }
   @media screen and (max-width: 764px) {
     grid-column: 2 / 14;
+
     transition: 1s;
   }
 `;
 
 const SignupWrap = styled.div`
   display: flex;
+  box-shadow: 0px 1px 3px darkgray;
   min-width: 400px;
   width: 600px;
-  height: 100%;
   padding: 20px;
   align-items: center;
   flex-direction: column;
   border-radius: 10px;
   form {
     display: flex;
-    width: 80%;
+    width: 90%;
     flex-direction: column;
   }
+
   input {
     background-color: rgba(233, 193, 255, 20%);
     border-radius: 5px;
@@ -56,11 +55,19 @@ const SignupWrap = styled.div`
       font-size: 14px;
       width: 100%;
     }
+    &:hover {
+      outline: none;
+    }
 
     &:focus {
       outline: none;
-      border: 1px solid #6733e5;
+      border-bottom: 1.5px solid #6733e5;
     }
+  }
+  @media screen and (max-width: 1024px) {
+    width: 80%;
+    transition: 0.5s;
+    box-shadow: none;
   }
 `;
 const Title = styled.h1`
@@ -78,9 +85,8 @@ const Text = styled.div`
   margin-right: 10px;
   margin-bottom: 5px;
   color: gray;
-  font-size: 14px;
+  font-size: 15px;
 `;
-
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;

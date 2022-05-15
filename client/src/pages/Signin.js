@@ -32,14 +32,11 @@ const Background = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 100%;
-  margin: 20% auto;
   font-size: 18px;
-  font-weight: 500;
-  margin-top: 150px;
+  font-weight: 600;
+
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
-    width: 80%;
     transition: 1s;
   }
   @media screen and (max-width: 764px) {
@@ -50,9 +47,9 @@ const Background = styled.div`
 
 const SigninWrap = styled.div`
   display: flex;
+  box-shadow: 0px 1px 3px darkgray;
   min-width: 400px;
   width: 600px;
-  height: 100%;
   padding: 20px;
   align-items: center;
   flex-direction: column;
@@ -77,11 +74,19 @@ const SigninWrap = styled.div`
       font-size: 14px;
       width: 100%;
     }
+    &:hover {
+      outline: none;
+    }
 
     &:focus {
       outline: none;
-      border: 1px solid #6733e5;
+      border-bottom: 1.5px solid #6733e5;
     }
+  }
+  @media screen and (max-width: 1024px) {
+    width: 80%;
+    transition: 0.5s;
+    box-shadow: none;
   }
 `;
 
@@ -100,13 +105,12 @@ const Text = styled.div`
   margin-right: 10px;
   margin-bottom: 5px;
   color: gray;
-  font-size: 14px;
+  font-size: 15px;
 `;
 
 const ButtonWrap = styled.div`
   display: flex;
   justify-content: center;
-
   margin-bottom: 20px;
   margin-top: 20px;
 `;
@@ -137,8 +141,8 @@ const SocialTitle = styled.div`
   display: flex;
   flex-basis: 100%;
   align-items: center;
-  color: rgba(0, 0, 0, 0.35);
-  font-size: 12px;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 13px;
   margin: 8px 0px;
   &::before,
   &::after {
@@ -157,7 +161,7 @@ const SocialLoginButton = styled.div`
   margin-top: 10px;
   cursor: pointer;
   .sButton {
-    width: 60px;
+    width: 50px;
     margin: 10px;
     box-shadow: 3px 3px 3px gray;
     border-radius: 10px;
@@ -169,29 +173,18 @@ const SocialLoginButton = styled.div`
   }
 `;
 const KakaoButton = styled.div`
-  /* width: 80px; */
   background-color: yellow;
-  image {
-    width: 100%;
-  }
 `;
 const GitButton = styled.div`
   background-color: black;
-  /* width: 80px;
-  background-color: gray; */
+  width: 80px;
+  background-color: derkgray;
 `;
 const GoogleButton = styled.div`
-  border-radius: 10px;
   background-color: #d3d3d3;
-  /* width: 80px; */
-  position: relative;
-  image {
-    width: 100%;
-  }
 `;
 const NaverButton = styled.div`
   background-color: green;
-  border-radius: 10px;
 `;
 const AlertBox = styled.div`
   display: flex;
