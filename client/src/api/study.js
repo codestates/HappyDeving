@@ -2,22 +2,8 @@ import axios from "axios";
 import { likeStudy, unLikeStudy } from "../features/studies/allStudiesSlice";
 
 // 스터디 검색 결과
-export const getStudiesMapApi = ({
-  guType,
-  dongType,
-  dateData,
-  languageData,
-}) => {
-  console.log(
-    "gu",
-    guType,
-    "dong",
-    dongType,
-    "date",
-    dateData,
-    "lang",
-    languageData
-  );
+export const getStudiesMapApi = ({ guType, dongType, dateData, languageData }) => {
+  console.log("gu", guType, "dong", dongType, "date", dateData, "lang", languageData);
   //위치 있는 경우
   if (guType && dongType) {
     console.log("gudong");
@@ -31,15 +17,11 @@ export const getStudiesMapApi = ({
     //날짜만 있는 경우
     else if (dateData) {
       console.log("date");
-      return axios.get(
-        `/search?guType=${guType}&dongType=${dongType}&date=${dateData}`
-      );
+      return axios.get(`/search?guType=${guType}&dongType=${dongType}&date=${dateData}`);
     }
     //언어만 있는 경우
     else if (languageData) {
-      return axios.get(
-        `/search?guType=${guType}&dongType=${dongType}&language=${languageData}`
-      );
+      return axios.get(`/search?guType=${guType}&dongType=${dongType}&language=${languageData}`);
     }
     //위치만 있는 경우
     else {
@@ -51,32 +33,21 @@ export const getStudiesMapApi = ({
     return "location is required";
   }
 };
-// 모든 스터디
+
 export const getAllStudiesApi = () => axios.get("/search");
-// 스터디 상세 페이지
+
 export const studyApi = (id) => axios.get(`/study/${id}`);
 
-// 스터디 글쓰기
-export const writeStudyApi = (data) => {
-  console.log("write data.id", data.id);
-  axios.post(`/study/${data.id}`, data);
-};
-// 스터디 글 수정
-export const editStudyApi = (data) => axios.patch(`/study/${data.id}`, data);
-// 스터디 글 삭제
-export const deleteStudyApi = (data) =>
-  axios.delete(`/study/${data.study_id}`, { data: data });
+export const writeStudyApi = (data) => axios.post(`/study/${data.id}`, data);
 
-// 스터디 찜하기
-export const likeStudyApi = (id, data) =>
-  axios.post(`/mypage/${id}/like/`, data).then((res) => likeStudy(res.data));
-// 찜 목록 스터디 불러오기
-export const getLikedStudiesApi = (id) => axios.get(`/mypage/${id}/like/`);
-// 찜 목록 스터디 삭제
-export const unLikeStudyApi = async (id, data) => {
-  await axios
-    .delete(`/mypage/${id}/like/`, { data: data })
-    .then((res) => unLikeStudy(res.data));
-};
-// 내가 쓴 스터디 목록
+export const editStudyApi = (data) => axios.patch(`/study/${data.id}`, data);
+
+export const deleteStudyApi = (data) => axios.delete(`/study/${data.study_id}`, { data: data });
+
+export const likeStudyApi = (id, data) => axios.post(`/mypage/${id}/like`, data);
+
+export const getLikedStudiesApi = (id) => axios.get(`/mypage/${id}/like`);
+
+export const unLikeStudyApi = (id, data) => axios.delete(`/mypage/${id}/like/`, { data: data });
+
 export const getMyStudiesApi = (id) => axios.get(`/mypage/${id}/write`);

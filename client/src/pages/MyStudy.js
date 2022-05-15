@@ -5,7 +5,7 @@ import { getMyStudies, reset } from "../features/studies/allStudiesSlice";
 import StudyCard from "../components/StudyCard";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { useNavigate } from "react-router-dom";
-import emptyPorder from "../static/images/emptyPorder.png";
+import { nanoid } from "@reduxjs/toolkit";
 
 const MyStudyTab = styled.div`
   color: black;
@@ -133,9 +133,7 @@ const MyStudy = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.user);
-  const { myStudies, isLoading, isError, message } = useSelector(
-    (state) => state.allStudies
-  );
+  const { myStudies, isLoading, isError, message } = useSelector((state) => state.allStudies);
 
   // console.log(`my studies: ${JSON.stringify(myStudies)}`);
   useEffect(() => {
@@ -162,10 +160,7 @@ const MyStudy = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab
-            className="tap"
-            onClick={() => navigate("/likedstudy")}
-          >
+          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>
@@ -173,17 +168,18 @@ const MyStudy = () => {
           </MyprofileTab>
         </Tab>
         <StyledSection>
-          {myStudies.length !== 0 ? (
-            myStudies.map((myStudy, i) => <StudyCard key={i} myStudy={myStudy} />)
-          ) : (
-            <Alert>
-              <img src={emptyPorder} alt="google" />
-              <AlertText>
-                <h1>작성한 스터디가 없습니다</h1>
-                <p>스터디를 작성해주세요</p>
-              </AlertText>
-            </Alert>
-          )}
+          {
+            myStudies?.length !== 0
+              ? myStudies.map((myStudy) => <StudyCard key={nanoid()} myStudy={myStudy} />)
+              : null
+            // <Alert>
+            //   <img src={emptyPorder} alt="google" />
+            //   <AlertText>
+            //     <h1>작성한 스터디가 없습니다</h1>
+            //     <p>스터디를 작성해주세요</p>
+            //   </AlertText>
+            // </Alert>
+          }
         </StyledSection>
       </MyStudyContainer>
     </>

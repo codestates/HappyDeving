@@ -59,7 +59,6 @@ const CardForm = styled.div`
   flex-direction: column;
 `;
 
-
 const Title = styled.div`
   width: 200px;
   font-family: "Binggrae";
@@ -158,7 +157,9 @@ const StudyCard = ({ myStudy, likedStudy }) => {
           <Title onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>
             {myStudy ? myStudy.title : likedStudy.title}
           </Title>
-          <Content onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}> {myStudy ? myStudy.content : likedStudy.content}</Content>
+          <Content onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>
+            {myStudy ? myStudy.content : likedStudy.content}
+          </Content>
           <LikeButton>
             <StartDate>
               시작 예정일 | {myStudy ? myStudy.startDate : likedStudy.startDate}
@@ -168,7 +169,6 @@ const StudyCard = ({ myStudy, likedStudy }) => {
                 <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x"></FontAwesomeIcon>
               </HeartIcon>
             )}
-
           </LikeButton>
         </CardForm>
       </CardContainer>

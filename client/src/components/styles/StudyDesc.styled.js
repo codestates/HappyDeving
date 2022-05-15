@@ -22,8 +22,7 @@ import ShareSocialButton from "../styles/ShareSocial.styled";
 import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
-import emptyFolder from "../../static/images/emptyPorder.png";
+import { unLikeStudy, likeStudy, getLikedStudies } from "../../features/studies/allStudiesSlice";
 
 const StyleStudyDesc = styled.div`
   grid-column: 4/12;
@@ -357,8 +356,7 @@ const StudyDesc = () => {
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
-    var imgName =
-      data.language[0]["name"] === "c++" ? "c" : data.language[0]["name"];
+    var imgName = data.language[0]["name"] === "c++" ? "c" : data.language[0]["name"];
     var img = langImg[imgName];
 
     var marker = new kakao.maps.Marker({
@@ -386,7 +384,7 @@ const StudyDesc = () => {
       }
     }
   }, [data, likedStudies]);
-  console.log(data);
+
   useEffect(() => {
     studyApi(id).then((res) => {
       setData(res.data?.data?.study);
@@ -394,6 +392,7 @@ const StudyDesc = () => {
 
       setLocation(res.data?.data?.study.location);
     });
+    dispatch(getLikedStudies(user.id)); // 새로고침마다 슬라이스가 리셋되면서 빈배열로 나오니까 다시 get 요청을 하는 수밖에 없다
   }, []);
 
   const handleUnlike = async () => {
@@ -477,7 +476,6 @@ const StudyDesc = () => {
           <Host>
             <CreateAt>{moment(data.createAt).format("YYYY-MM-DD")}</CreateAt>
 
-
             <MiniProfileWrap>
               <img className="profile" src={data?.image} />
               <p>{data?.username}</p>
@@ -555,9 +553,8 @@ const StudyDesc = () => {
         </StyleStudyDesc>
       ) : (
         <Alert>
-          <img src={emptyFolder} alt="google" />
           <AlertText>
-            <h1>존재하지 않는 게시글입니다</h1>
+            <h1>존재하지 않는 게시글입니다.</h1>
           </AlertText>
         </Alert>
       )}

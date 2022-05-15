@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
+
 import { useDispatch, useSelector } from "react-redux";
 import { getLikedStudies, reset } from "../features/studies/allStudiesSlice";
 import StudyCard from "../components/StudyCard";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { useNavigate } from "react-router-dom";
-import emptyPorder from "../static/images/emptyPorder.png";
+import { nanoid } from "@reduxjs/toolkit";
 
 const MyStudyContainer = styled.div`
   min-height: 100%;
@@ -14,7 +15,7 @@ const MyStudyContainer = styled.div`
   justify-content: center;
   gap: 3%;
 
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1100px) {
     grid-column: 3 / 13;
   }
   @media screen and (max-width: 768px) {
@@ -27,17 +28,14 @@ const StyledSection = styled.div`
   display: grid;
   align-items: flex-start;
   justify-content: space-evenly;
-  grid-template-columns: repeat(auto-fill, minmax(360px, auto));
+  grid-template-columns: repeat(auto-fill, minmax(300px, auto));
   gap: 1%;
 
   @media screen and (max-width: 1800px) {
     grid-template-columns: repeat(auto-fill, minmax(280px, auto));
     transition: 1s;
   }
-  @media screen and (max-width: 1024px) {
-    grid-template-columns: repeat(auto-fill, minmax(280px, auto));
-    transition: 1s;
-  }
+
   @media screen and (max-width: 768px) {
     grid-template-columns: repeat(1, minmax(300px, auto));
     transition: 1s;
@@ -79,52 +77,52 @@ const Tab = styled.div`
   }
   @media screen and (max-width: 764px) {
     font-size: 12px;
-    transition: 0.5s;
+    transition: 1s;
   }
 `;
-const Alert = styled.div`
-  display: flex;
-  width: 80%;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: "Binggrae";
-  position: absolute;
-  top: 65%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  img {
-    width: 30%;
-  }
-`;
-const AlertText = styled.div`
-  text-align: center;
-  h1 {
-    font-size: 40px;
-  }
-  p {
-    font-size: 22px;
-    color: gray;
-  }
-  @media screen and (max-width: 1024px) {
-    h1 {
-      font-size: 30px;
-    }
-    p {
-      font-size: 18px;
-      transition: 0.5s;
-    }
-  }
-  @media screen and (max-width: 768px) {
-    h1 {
-      font-size: 20px;
-    }
-    p {
-      font-size: 16px;
-      transition: 0.5s;
-    }
-  }
-`;
+// const Alert = styled.div`
+//   display: flex;
+//   width: 80%;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+//   font-family: "Binggrae";
+//   position: absolute;
+//   top: 65%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   img {
+//     width: 30%;
+//   }
+// `;
+// const AlertText = styled.div`
+//   text-align: center;
+//   h1 {
+//     font-size: 40px;
+//   }
+//   p {
+//     font-size: 22px;
+//     color: gray;
+//   }
+//   @media screen and (max-width: 1024px) {
+//     h1 {
+//       font-size: 30px;
+//     }
+//     p {
+//       font-size: 18px;
+//       transition: 0.5s;
+//     }
+//   }
+//   @media screen and (max-width: 768px) {
+//     h1 {
+//       font-size: 20px;
+//     }
+//     p {
+//       font-size: 16px;
+//       transition: 0.5s;
+//     }
+//   }
+// `;
 const MyStudyTab = styled.div``;
 const LikedStudyTab = styled.div`
   color: black;
@@ -172,17 +170,9 @@ const LikedStudy = () => {
         </Tab>
 
         <StyledSection>
-          {likedStudies.length !== 0 ? (
-            likedStudies.map((likedStudy, i) => <StudyCard key={i} likedStudy={likedStudy} />)
-          ) : (
-            <Alert>
-              <img src={emptyPorder} alt="google" />
-              <AlertText>
-                <h1>찜한 스터디가 없습니다</h1>
-                <p>스터디를 찜해 주세요</p>
-              </AlertText>
-            </Alert>
-          )}
+          {likedStudies?.map((likedStudy) => (
+            <StudyCard key={nanoid()} likedStudy={likedStudy} />
+          ))}
         </StyledSection>
       </MyStudyContainer>
     </>
