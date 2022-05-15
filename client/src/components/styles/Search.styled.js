@@ -17,11 +17,7 @@ import {
   dateModal,
   reset,
 } from "../../features/Search/searchModalSlice";
-import {
-  setLocationData,
-  setLanguageData,
-  resetData,
-} from "../../features/Search/searchDataSlice";
+import { setLocationData, setLanguageData, resetData } from "../../features/Search/searchDataSlice";
 import CalenderDate from "../Calendar.js";
 
 export const StyledSearch = styled.div`
@@ -179,9 +175,7 @@ const Search = ({ setHeader }) => {
 
   const { location, date, language } = useSelector((store) => store.search);
 
-  const { locationData, dateData, languageData } = useSelector(
-    (store) => store.searchData
-  );
+  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
   const { calenderDateValue } = useSelector((store) => store.calender);
 
   const guType = locationData.split(" ")[0];
@@ -190,9 +184,7 @@ const Search = ({ setHeader }) => {
   const locationListHandler = (locationList) => {
     const list = locationList.map(
       (location) =>
-        location["address_name"].split(" ")[1] +
-        " " +
-        location["address_name"].split(" ")[2]
+        location["address_name"].split(" ")[1] + " " + location["address_name"].split(" ")[2]
     );
     const filteredList = Array.from(new Set(list));
     return filteredList.map((location, idx) => (
@@ -225,22 +217,18 @@ const Search = ({ setHeader }) => {
             console.log(date);
           }}
         >
-          <span className="desc">
-            {dateData ? calenderDateValue : "시작일"}
-          </span>
+          <span className="desc">{dateData ? calenderDateValue : "시작일"}</span>
         </Date>
         <Language onClick={() => dispatch(languageModal())}>
           <span className="desc">{languageData ? languageData : "언어"} </span>
         </Language>
         <SearchIcon
           id="search"
-          onClick={() => {
-            getStudiesMapApi({ guType, dongType, languageData, dateData }).then(
-              (res) => {
-                console.log(res.data);
-                dispatch(setStudiesData(res.data));
-              }
-            );
+          onClick={async () => {
+            await getStudiesMapApi({ guType, dongType, languageData, dateData }).then((res) => {
+              console.log(res.data);
+              dispatch(setStudiesData(res.data));
+            });
             //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
             navigate("/map");
             dispatch(resetData());
@@ -259,10 +247,7 @@ const Search = ({ setHeader }) => {
       <Modals>
         {location ? (
           <HeaderLocationModal>
-            <input
-              onKeyDown={(e) => handleInputValue(e)}
-              placeholder="ex. 송파구 오륜동"
-            ></input>
+            <input onKeyDown={(e) => handleInputValue(e)} placeholder="ex. 송파구 오륜동"></input>
             <div></div>
             {locationListHandler(locationList)}
           </HeaderLocationModal>

@@ -48,6 +48,6 @@ export const likeStudyApi = (id, data) => axios.post(`/mypage/${id}/like`, data)
 
 export const getLikedStudiesApi = (id) => axios.get(`/mypage/${id}/like`);
 
-export const unLikeStudyApi = (id, data) => axios.delete(`/mypage/${id}/like/`, { data: data });
+export const unLikeStudyApi = (id, data) => axios.delete(`/mypage/${id}/like`, { data: data });
 
 export const getMyStudiesApi = (id) => axios.get(`/mypage/${id}/write`);

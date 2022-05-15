@@ -69,13 +69,12 @@ const Map = () => {
   //검색한 조건에 맞는 스터디들의 목록
   const { studies } = useSelector((store) => store.studies);
   console.log(studies);
-  const { user } = useSelector((state) => state.user);
+  // const { user } = useSelector((state) => state.user);
 
   //마커 생성용 데이터 가공
   const markerdata = studies
     ? studies.map((el) => {
-        var langname =
-          el.language[0]?.name === "c++" ? "c" : el.language[0]?.name;
+        var langname = el.language[0]?.name === "c++" ? "c" : el.language[0]?.name;
 
         console.log("langname", langname);
         return {
@@ -97,7 +96,7 @@ const Map = () => {
         },
       ];
 
-  const { likedStudies, isLoading } = useSelector((store) => store.allStudies);
+  const { isLoading } = useSelector((store) => store.allStudies);
 
   const mapscript = () => {
     const options = {
@@ -223,14 +222,14 @@ const Map = () => {
   };
 
   useEffect(() => {
-    console.log(studies.length);
+    console.log("studies.length: ", studies.length);
     if (studies.length !== 0) {
       mapscript();
     }
     if (studies.length === 0) {
       handleNoResult();
     }
-  }, [studies, likedStudies]);
+  }, [studies]);
 
   if (isLoading) {
     return <LoadingIndicator />;
