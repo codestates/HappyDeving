@@ -3,10 +3,9 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import { getLikedStudies } from "../../features/studies/allStudiesSlice";
+import ConfirmModal from "./Modals/ConfirmModal";
 import { unLikeStudyApi, likeStudyApi } from "../../api/study";
 import LoadingIndicator from "../LoadingIndicator";
-import { useNavigate } from "react-router-dom";
 
 const Title = styled.div`
   margin-top: 50px;
@@ -30,47 +29,71 @@ const MapView = styled.div`
   border-radius: 10px;
 `;
 
+const Div = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Center = styled.div`
+  height: 50%;
+  width: 50%;
+  transform: translateY(200px);
+  border-radius: 10px;
+  text-align: center;
+  font-size: 30px;
+  color: gray;
+
+  @media screen and (min-width: 1024px) {
+    width: 500px;
+  }
+
+  .none {
+    display: none;
+  }
+`;
+
 const Map = () => {
   const { kakao } = window;
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const container = useRef(null);
 
   //검색한 조건에 맞는 스터디들의 목록
   const { studies } = useSelector((store) => store.studies);
+  console.log(studies);
   const { user } = useSelector((state) => state.user);
 
-  console.log(studies);
+  //마커 생성용 데이터 가공
+  const markerdata = studies
+    ? studies.map((el) => {
+        var langname =
+          el.language[0]?.name === "c++" ? "c" : el.language[0]?.name;
 
-
-  const markerdata =
-    studies.length !== 0
-      ? studies.map((el) => {
-          var langname =
-            el.language[0]?.name === "c++" ? "c" : el.language[0]?.name;
-
-          console.log("langname", langname);
-          return {
-            id: el.id,
-            title: el.title,
-            lat: Number(el.location.latitude),
-            lng: Number(el.location.longitude),
-            img: langImg[langname],
-            //이름
-            info: el.startDate,
-          };
-        })
-      : [
-          {
-            id: 0,
-            title: "결과가 없습니다",
-            lat: 37.570975,
-            lng: 126.977759,
-            img: "https://i.ibb.co/nr4FYns/happydevil.png",
-            info: "결과없음",
-          },
-        ];
+        console.log("langname", langname);
+        return {
+          id: el.id,
+          title: el.title,
+          lat: Number(el.location.latitude),
+          lng: Number(el.location.longitude),
+          img: langImg[langname],
+          //이름
+          info: el.startDate,
+        };
+      })
+    : [
+        {
+          title: "결과가 없습니다",
+          lat: 37.570975,
+          lng: 126.977759,
+          img: "https://i.ibb.co/nr4FYns/happydevil.png",
+        },
+      ];
 
   const { likedStudies, isLoading } = useSelector((store) => store.allStudies);
 
@@ -108,7 +131,7 @@ const Map = () => {
       //el.id 스터디 아이디가 담겨온다.
       function contentHandler() {
         //모달 창 클릭 시 상세스터디 페이지로 이동
-        navigate(`/study/${el.id}`);
+        document.location.href = `/study/${el.id}`;
       }
 
       //모달창 내용 구현 : 바닐라JS로 해야 함
@@ -127,7 +150,7 @@ const Map = () => {
       const desc = document.createElement("div");
       desc.id = "desc";
 
-      const info = document.createElement("span");
+      const info = document.createElement("div");
       info.id = "info";
       info.textContent = el.info;
 
@@ -195,8 +218,20 @@ const Map = () => {
 
   return (
     <>
-      <Title>검색결과</Title>
-      <MapView id="map" ref={container} />
+      {studies.length === 0 ? (
+        <>
+          <Div>
+            <Center>"검색 결과가 없습니다"</Center>
+            <MapView id="map" ref={container} className="none" />
+          </Div>
+          <ConfirmModal />
+        </>
+      ) : (
+        <>
+          <Title>"검색 결과" </Title>
+          <MapView id="map" ref={container} />
+        </>
+      )}
     </>
   );
 };

@@ -9,6 +9,7 @@ import UpdateStudy from "./forms/UpdateStudy";
 import DeleteUser from "./forms/DeleteUser";
 import DeleteStudy from "./forms/DeleteStudy";
 import WriteStudy from "./forms/WriteStudy";
+import NoResults from "./forms/NoResults";
 import { closeModal } from "../../../features/modal/modalSlice";
 
 const ModalBackdrop = styled.div`
@@ -84,12 +85,21 @@ const ModalContent = styled.div`
 
 const ConfirmModal = () => {
   const dispatch = useDispatch();
-  const { isOpen, componentName, childrenProps } = useSelector((state) => state.modal);
+  const { isOpen, componentName, childrenProps } = useSelector(
+    (state) => state.modal
+  );
   const closeModalHandler = () => {
     dispatch(closeModal());
   };
 
-  const componentsLookUp = { UpdateUser, DeleteUser, UpdateStudy, DeleteStudy, WriteStudy };
+  const componentsLookUp = {
+    UpdateUser,
+    DeleteUser,
+    UpdateStudy,
+    DeleteStudy,
+    WriteStudy,
+    NoResults,
+  };
   let renderComponent;
   if (componentName) {
     const SelectedComponent = componentsLookUp[componentName];

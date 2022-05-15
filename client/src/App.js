@@ -54,44 +54,12 @@ function App() {
     },
   };
 
-  let login = localStorage.getItem("login");
-  const getGithubAccessToken = async (authorizationCode) => {
-    localStorage.setItem("reload", true);
-    let resp = await axios.post(Github_url, {
-      authorizationCode: authorizationCode,
-    });
-    const { user } = resp.data;
-    const { accessToken } = resp.data;
-    localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("token", JSON.stringify(accessToken));
-    axios.defaults.headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
-    };
-    // navigate("/");
-    window.location.reload();
-  };
-
-  useEffect(() => {
-    if (login === "github" && localStorage.getItem("reload") !== "true") {
-      const url = new URL(window.location.href);
-      const authorizationCode = url.searchParams.get("code");
-      if (authorizationCode) {
-        getGithubAccessToken(authorizationCode);
-      }
-
-
-    }
-  }, []);
-
   return (
     <Router>
       <ThemeProvider theme={theme}>
         <GlobalFonts />
         <Header img={theme.icons} />
         <Container>
-
-
           <ConfirmModal />
           <div className="App">
             <header className="App-header"></header>

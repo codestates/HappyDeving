@@ -3,17 +3,20 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
+// import LanguageModal from "./Modals/LanguageModal";
+import DateModal from "./Modals/DateModal";
+import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
+// import { setDateModal } from "../../features/studies/studyModalSlice";
 import { openModal } from "../../features/modal/modalSlice";
 
-import { studyApi } from "../../api/study";
-import { useParams } from "react-router-dom";
+import { studyApi, editStudyApi } from "../../api/study";
+import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
-  margin-top: 150px;
 
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
@@ -45,14 +48,21 @@ const Desc = styled(Content)`
 
     &:focus {
       outline: none;
-      /*border: 1px solid #5e17eb;
-    }
-
-    &:hover {
-      cursor: pointer;
-      border: 1px solid #5e17eb;*/
     }
   }
+`;
+
+const Title = styled.div`
+  width: 80%;
+  margin: 50px auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+`;
+
+const TitleText = styled.div`
+  font-size: 20px;
+  font-family: "Binggrae";
+  text-align: center;
 `;
 
 const DescDateModal = styled.div`
@@ -268,30 +278,18 @@ const Checkbox = styled.div`
 `;
 
 const EditStudyDesc = () => {
-  const dispatch = useDispatch();
-
   const container = useRef(null);
   const locationInput = useRef(null);
-
   const { calenderDateValue } = useSelector((store) => store.calender);
-  const { dateData } = useSelector((store) => store.searchData);
-  const { isError, message } = useSelector((state) => state.allStudies);
-
   const [location, setLocation] = useState({
     name: "광화문",
     latitude: 37.570975,
     longitude: 126.977759,
   });
+  const [language, setLanguage] = useState("react");
+
+  console.log(location);
   const [locationList, setLocationList] = useState([]);
-  const [lang, setLang] = useState([{ id: 6, name: "react" }]);
-  const [open, setOpen] = useState({
-    language: false,
-    date: false,
-    location: false,
-  });
-
-  const [data, setData] = useState(null);
-
   var ps = new kakao.maps.services.Places();
 
   // 키워드 검색을 요청하는 함수입니다
@@ -318,17 +316,17 @@ const EditStudyDesc = () => {
     }
   }
 
-  const handleLocationValue = (e, value) => {
-    if (e.type === "click" || e.key === "Enter") {
-      searchPlaces(value);
-    }
+  const handleLocationValue = (e) => {
+    if (e.key === "Enter") {
+      searchPlaces(e.target.value);
+    } // true
   };
 
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: new kakao.maps.LatLng(location.y, location.x), //지도의 중심좌표
-      level: 5, //지도의 레벨(확대, 축소 정도)
+      level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
@@ -337,7 +335,10 @@ const EditStudyDesc = () => {
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img = langImg[lang[0]["name"]];
+
+    console.log(data);
+
+    var img = langImg[language[0]["name"]];
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -355,12 +356,16 @@ const EditStudyDesc = () => {
     //el.id 스터디 아이디가 담겨온다.
   };
 
-  // const href = document.location.href.split("/");
-  // const id  = href[href.length - 1];
-  const { id } = useParams();
+  const [data, setData] = useState();
+  const [checked, setChecked] = useState(false);
+
+  const href = document.location.href.split("/");
+  const id = href[href.length - 1];
 
   useEffect(() => {
     studyApi(id).then((res) => {
+      console.log(res);
+
       const {
         id,
         title,
@@ -383,14 +388,13 @@ const EditStudyDesc = () => {
         language,
       });
 
-      setLang(language);
-
       setLocation({
         y: location.latitude,
         x: location.longitude,
         place_name: location.name,
       });
 
+      setLanguage(language);
       //location이 된다음에 해야 한다
     });
   }, [id]);
@@ -400,6 +404,18 @@ const EditStudyDesc = () => {
       mapscript();
     }
   }, [data]);
+
+  const [open, setOpen] = useState({
+    language: false,
+    date: false,
+    location: false,
+  });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const { dateModal } = useSelector((store) => store.studyModal);
+  const { dateData } = useSelector((store) => store.searchData);
+  const { isError, message } = useSelector((state) => state.allStudies);
 
   useEffect(() => {
     setData({ ...data, startDate: dateData });
@@ -416,7 +432,9 @@ const EditStudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -425,7 +443,6 @@ const EditStudyDesc = () => {
             location: [location.y, location.x, gu, dong, location.place_name],
           });
           //클릭한 장소로 location 새로 세팅
-          locationInput.current.value = location.place_name;
           setOpen({ ...open, location: false });
         }}
       >
@@ -443,7 +460,9 @@ const EditStudyDesc = () => {
     if (isError) {
       console.log("editStudy.rejected :", message);
     }
-    dispatch(openModal({ name: "UpdateStudy", childrenProps: { id, ...data } }));
+    dispatch(
+      openModal({ name: "UpdateStudy", childrenProps: { id, ...data } })
+    );
   };
 
   return (
@@ -452,6 +471,9 @@ const EditStudyDesc = () => {
         <>
           <WriteStudyDesc>
             <Desc>
+              <Title>
+                <TitleText>스터디 글 수정하기</TitleText>
+              </Title>
               <Wrapper>
                 <Text>제목</Text>
                 <input
@@ -472,7 +494,7 @@ const EditStudyDesc = () => {
                 <HalfWrapper>
                   <Text classNane="lanaguage">언어</Text>
                   <HalfInput>
-                    {data.language?.map((el) => el.name).join()}
+                    {data.language?.map((el) => el.name + ",")}
                     <IconDrop>
                       <IoMdArrowDropdown
                         className="icon"
@@ -488,7 +510,6 @@ const EditStudyDesc = () => {
                             key={idx}
                             className="elements"
                             onClick={() => {
-                              console.log(el, idx + 1);
                               setData({
                                 ...data,
                                 language: [
@@ -521,14 +542,12 @@ const EditStudyDesc = () => {
                   defaultValue={data.kakaoLink}
                 ></input>
               </Wrapper>
-
               <Wrapper>
                 <Text>장소</Text>
+
                 <input
                   className="locaitionInput"
-                  onKeyDown={(e) => {
-                    handleLocationValue(e, e.target.value);
-                  }}
+                  onKeyDown={(e) => handleLocationValue(e)}
                   defaultValue={location.place_name}
                   ref={locationInput}
                 ></input>
@@ -540,9 +559,9 @@ const EditStudyDesc = () => {
                 <IconSerch>
                   <IoIosSearch
                     className="icon"
-                    onClick={(e) => {
+                    onClick={(locationInput) => {
+                      console.log(locationInput.target.value);
                       setOpen({ ...open, location: true });
-                      handleLocationValue(e, locationInput.current.value);
                     }}
                   />
                   {/* </div> */}
@@ -562,9 +581,10 @@ const EditStudyDesc = () => {
                   <input
                     type="checkbox"
                     className="input"
-                    defaultChecked={data.closed}
+                    checked={data.closed ? "checked" : null}
                     onClick={() => {
-                      setData({ ...data, closed: !data.closed });
+                      setChecked(!checked);
+                      setData({ ...data, closed: checked });
                     }}
                   ></input>
                   <label htmlFor="closed">모집마감</label>
