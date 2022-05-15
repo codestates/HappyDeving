@@ -16,14 +16,11 @@ import { closeModal } from "../../../features/modal/modalSlice";
 const ModalBackdrop = styled.div`
   opacity: 0;
   visibility: hidden;
-
   position: fixed;
   z-index: 1000;
   background-color: rgba(0, 0, 0, 0.8);
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,7 +34,6 @@ const ModalBackdrop = styled.div`
 const ModalContainer = styled.div`
   opacity: 0;
   visibility: hidden;
-
   position: fixed;
   z-index: 1500;
   background-color: white;
@@ -46,7 +42,7 @@ const ModalContainer = styled.div`
   border-radius: 15px;
   padding: 10px;
   box-shadow: 0px 0px 16px 1px rgba(0, 0, 0, 0.1);
-  top: 30%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   transition: all 0.3s;

@@ -55,8 +55,9 @@ const WriteButtonModal = () => {
   const handleLogin = () => {
     if (user) {
       navigate("/write");
+    } else {
+      dispatch(openModal({ name: "DirectToLogin" }));
     }
-    dispatch(openModal({ name: "DirectToLogin" }));
   };
 
   return (

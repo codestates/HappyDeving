@@ -279,6 +279,9 @@ const ConfirmButton = styled.button`
     position: relative;
     top: 0px;
   }
+  p {
+    margin-right: 10px;
+  }
 `;
 const Alert = styled.div`
   display: flex;
@@ -300,26 +303,16 @@ const AlertText = styled.div`
   h1 {
     font-size: 40px;
   }
-  p {
-    font-size: 22px;
-    color: gray;
-  }
+
   @media screen and (max-width: 1024px) {
     h1 {
       font-size: 30px;
     }
-    p {
-      font-size: 18px;
-      transition: 0.5s;
-    }
-  }
-  @media screen and (max-width: 768px) {
-    h1 {
-      font-size: 20px;
-    }
-    p {
-      font-size: 16px;
-      transition: 0.5s;
+
+    @media screen and (max-width: 768px) {
+      h1 {
+        font-size: 20px;
+      }
     }
   }
 `;
@@ -338,6 +331,7 @@ const StudyDesc = () => {
   const [showComments, setShowComments] = useState(false);
   const [share, setShare] = useState(false);
   const moment = require("moment");
+
   const handleShareButton = () => {
     setShare(!share);
   };
@@ -419,8 +413,7 @@ const StudyDesc = () => {
     navigate(`/${data?.kakaoLink}`);
   };
 
-  const handleStudyDeletion = (e) => {
-    e.preventDefault();
+  const handleStudyDeletion = () => {
     dispatch(
       openModal({
         name: "DeleteStudy",

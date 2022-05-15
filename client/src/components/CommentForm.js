@@ -97,7 +97,7 @@ const CommentForm = ({
     study_commentId: commentId,
   };
 
-  const isTextareaDisabled = content.length === 0 || !user;
+  const isTextareaDisabled = !user;
   const onSubmit = (e) => {
     e.preventDefault();
     commentData["content"] = content;

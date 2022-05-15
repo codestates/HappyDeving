@@ -59,8 +59,8 @@ function App() {
       <ThemeProvider theme={theme}>
         <GlobalFonts />
         <Header img={theme.icons} />
+        <ConfirmModal />
         <Container>
-          <ConfirmModal />
           <div className="App">
             <header className="App-header"></header>
           </div>
