@@ -13,6 +13,7 @@ import { FaSearch } from "react-icons/fa";
 import { getStudiesMapApi } from "../../api/study";
 import { setStudiesData } from "../../features/studies/studiesSlice";
 import { resetData } from "../../features/Search/searchDataSlice";
+import { signout, reset as resetUser } from "../../features/user/userSlice.js";
 import { BsFillCalendarDateFill, BsFileEarmarkCodeFill } from "react-icons/bs";
 import {
   locationModal,
@@ -41,7 +42,7 @@ const StyledHeader = styled.header`
   font-family: "Bold";
   display: grid;
   grid-template-columns: repeat(14, 1fr);
-  z-index: 10;
+  z-index: 1200;
   height: 100px;
   width: 100%;
   line-height: 100px;
@@ -75,32 +76,44 @@ const Logo = styled.div`
     @media screen and (max-width: 900px) {
       min-width: 100px;
     }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 `;
 
 const Links = styled.div`
-  grid-column: 13/14;
+  grid-column: 12/15;
+  width: 100%;
   position: absolute;
-  position: absolute;
+  display: flex;
   top: 30px;
   align-items: center;
   justify-content: center;
   text-align: center;
-  flex-direction: column;
 
   .profile {
     border-radius: 50%;
     min-width: 40px;
     height: 40px;
+    margin-right: 12px;
   }
 
-  .signin {
+  .write {
+    flex: 1;
     min-width: 40px;
     height: 40px;
     line-height: 40px;
     color: #5e17eb;
-    @media screen and (max-width: 630px) {
-      font-size: 13px;
+    margin-right: 13px;
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+
+    @media screen and (max-width: 960px) {
+      font-size: 11px;
     }
 
     &:hover {
@@ -108,6 +121,50 @@ const Links = styled.div`
       cursor: pointer;
       position: relative;
       top: 2px;
+    }
+  }
+
+  .signin {
+    flex: 1;
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    color: #5e17eb;
+    margin-right: 13px;
+
+    @media screen and (max-width: 960px) {
+      font-size: 11px;
+    }
+
+    &:hover {
+      color: #c593fe;
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+    }
+  }
+
+  .signout {
+    flex: 1;
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+    color: #5e17eb;
+    margin-right: 13px;
+
+    &:hover {
+      color: #c593fe;
+      cursor: pointer;
+      position: relative;
+      top: 2px;
+    }
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+
+    @media screen and (max-width: 960px) {
+      font-size: 11px;
     }
   }
 `;
@@ -206,7 +263,7 @@ const Modal = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 100;
+  z-index: 1500;
 `;
 
 const Location = styled.div`
@@ -298,6 +355,7 @@ const InfoFinal = styled(Info)`
   top: 40%;
   transform: translateY(-50%);
   height: 30%;
+  box-shadow: 1px 1px 10px 2px rgba(0, 0, 0, 0.1);
 `;
 
 const Icon = styled.div`
@@ -326,7 +384,12 @@ const Header = () => {
   const goToHome = () => {
     navigate("/");
   };
-
+  const handleSignout = (e) => {
+    e.preventDefault();
+    dispatch(signout());
+    dispatch(resetUser());
+    navigate("/");
+  };
   const guType = locationData.split(" ")[0];
   const dongType = locationData.split(" ")[1];
 
@@ -381,9 +444,19 @@ const Header = () => {
         </SearchDiv>
         <Links>
           {user ? (
-            <Link to="/profile">
-              <img src={user.image} className="profile" />
-            </Link>
+            <>
+              <Link to="/profile">
+                <img src={user.image} className="profile" />
+              </Link>
+              <Link to="/write">
+                <div className="write">새 글 쓰기</div>
+              </Link>
+              <Link to="/">
+                <div onClick={handleSignout} className="signout">
+                  로그아웃
+                </div>
+              </Link>
+            </>
           ) : (
             <Link to="/signin">
               <div className="signin">로그인</div>
@@ -480,9 +553,10 @@ const Header = () => {
                   dispatch(setStudiesData(res.data));
                 });
                 //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
-                navigate("/map");
                 dispatch(resetData());
                 dispatch(reset());
+                navigate("/map");
+                setHeader(false);
               }}
             >
               <div className="searchIcon">

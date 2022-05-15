@@ -15,7 +15,6 @@ import { dateModal } from "../../features/Search/searchModalSlice";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
-  margin-top: 150px;
 
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
@@ -51,10 +50,23 @@ const Desc = styled(Content)`
   }
 `;
 
+const Title = styled.div`
+  width: 80%;
+  margin: 0 auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+  margin: 50px auto;
+`;
+
+const TitleText = styled.div`
+  font-size: 20px;
+  font-family: "Binggrae";
+  text-align: center;
+`;
+
 const DescDateModal = styled.div`
   width: 100%;
   height: auto;
-
   text-align: center;
   z-index: 30;
   border-radius: 5px;
@@ -368,6 +380,8 @@ const StudyDesc = () => {
   const [locationSearch, setLocationSearch] = useState("");
   const [langOpen, setLangOpen] = useState(false);
   const [locOpen, setLocOpen] = useState(false);
+  const [dateOpen, setDateOpen] = useState(false);
+
   const { user } = useSelector((state) => state.user);
   // const { dateModal } = useSelector((store) => store.studyModal);
   const { dateData } = useSelector((store) => store.searchData);
@@ -406,7 +420,9 @@ const StudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -441,9 +457,14 @@ const StudyDesc = () => {
   return (
     <WriteStudyDesc>
       <Desc checked={checked}>
+        <Title>
+          <TitleText>스터디 모집 글쓰기</TitleText>
+        </Title>
         <Wrapper>
           <Text>제목</Text>
-          <input onChange={(e) => handleInputValue("title", e.target.value)}></input>
+          <input
+            onChange={(e) => handleInputValue("title", e.target.value)}
+          ></input>
         </Wrapper>
         <RowWrap>
           <HalfWrapper>
@@ -451,9 +472,14 @@ const StudyDesc = () => {
             <HalfInput>
               {dateData ? calenderDateValue : null}
               <DateDrop>
-                <IoMdArrowDropdown onClick={() => dispatch(dateModal(!date))} />
+                <IoMdArrowDropdown
+                  onClick={() => {
+                    setDateOpen(!dateOpen);
+                    dispatch(dateModal());
+                  }}
+                />
               </DateDrop>
-              {date ? (
+              {dateOpen ? (
                 <DescDateModal>
                   <CalenderDate />
                 </DescDateModal>
@@ -464,7 +490,7 @@ const StudyDesc = () => {
             <Text classNane="lanaguage">언어</Text>
 
             <HalfInput>
-              {data.language.map((el) => el.name + "," + " ")}
+              {data.language.map((el) => el.name).join()}
               <LangDrop>
                 <IoMdArrowDropdown onClick={() => setLangOpen(!langOpen)} />
               </LangDrop>
@@ -477,16 +503,21 @@ const StudyDesc = () => {
                         key={idx}
                         className="elements"
                         onClick={() => {
-                          setData({
-                            ...data,
-                            language: [
-                              ...data.language,
-                              {
-                                id: idx + 1,
-                                name: el,
-                              },
-                            ],
-                          });
+                          if (
+                            data.language.filter((obj) => obj.name === el)
+                              .length === 0
+                          ) {
+                            setData({
+                              ...data,
+                              language: [
+                                ...data.language,
+                                {
+                                  id: idx + 1,
+                                  name: el,
+                                },
+                              ],
+                            });
+                          }
                           setLangOpen(!langOpen);
                         }}
                       >
@@ -514,11 +545,13 @@ const StudyDesc = () => {
               handleLocationValue(e, e.target.value);
               setLocationSearch(e.target.value);
             }}
-            placeholder="ex. 송파구 오륜동"
+            placeholder="ex. 신촌역 4번 출구"
             ref={locationInput}
           ></input>
           {locOpen ? (
-            <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+            <DescLocationModal>
+              {locationListHandler(locationList)}
+            </DescLocationModal>
           ) : null}
           <IconSerch>
             <IoIosSearch

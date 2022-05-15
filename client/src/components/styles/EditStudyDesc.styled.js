@@ -3,23 +3,27 @@ import styled from "styled-components";
 import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
+// import LanguageModal from "./Modals/LanguageModal";
+import DateModal from "./Modals/DateModal";
+import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
+// import { setDateModal } from "../../features/studies/studyModalSlice";
 import { openModal } from "../../features/modal/modalSlice";
 
-import { studyApi } from "../../api/study";
-import { useParams } from "react-router-dom";
+import { studyApi, editStudyApi } from "../../api/study";
+import { useNavigate } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
 
   @media screen and (max-width: 1024px) {
-    grid-column: 2/14;
+    grid-column: 3/13;
     transform: 1s;
   }
   @media screen and (max-width: 768px) {
-    grid-column: 1/15;
+    grid-column: 2/14;
     transform: 1s;
   }
 `;
@@ -29,14 +33,14 @@ const Desc = styled(Content)`
   padding: 3% 5% 3% 5%;
 
   input {
-    background-color: white;
-    border: 1px solid gray;
+    background-color: rgba(233, 193, 255, 20%);
     border-radius: 5px;
     height: 40px;
     width: 100%;
     font-size: 16px;
     padding: 10px;
-
+    height: 50px;
+    cursor: pointer;
     @media screen and (max-width: 768px) {
       font-size: 14px;
       width: 100%;
@@ -44,40 +48,62 @@ const Desc = styled(Content)`
 
     &:focus {
       outline: none;
-      border: 1px solid #5e17eb;
-    }
-
-    &:hover {
-      cursor: pointer;
-      border: 1px solid #5e17eb;
     }
   }
 `;
 
-const DescDateModal = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-
-  box-shadow: none;
+const Title = styled.div`
+  width: 80%;
+  margin: 50px auto;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
 `;
 
-const DescLanguageModal = styled.div`
+const TitleText = styled.div`
+  font-size: 20px;
+  font-family: "Binggrae";
+  text-align: center;
+`;
+
+const DescDateModal = styled.div`
   width: 100%;
   height: auto;
   text-align: center;
-  z-index: 10;
-  background: whitesmoke;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 30;
   border-radius: 5px;
   position: absolute;
   top: 85px;
-  padding: 30px 10px;
+  left: 0px;
+  padding: 0px 10px;
+  border: 4px solid rgba(250, 240, 255, 100%);
+  background: white;
+  outline: none;
   &:focus {
     border: 1px solid #5e17eb;
   }
   &:hover {
     cursor: pointer;
+    border: 1px solid #5e17eb;
+  }
+`;
+const DescLanguageModal = styled.div`
+  width: 100%;
+  height: auto;
+  text-align: center;
+  z-index: 30;
+
+  border-radius: 5px;
+  position: absolute;
+  top: 85px;
+  left: 0px;
+  padding: 32px 10px;
+  border: 4px solid rgba(250, 240, 255, 100%);
+  background: white;
+  cursor: pointer;
+  &:focus {
+    border: 1px solid #5e17eb;
+  }
+  &:hover {
     border: 1px solid #5e17eb;
   }
 `;
@@ -90,22 +116,22 @@ const DescLocationModal = styled.div`
   height: auto;
   z-index: 10;
   position: absolute;
-  top: 85px;
+  top: 95px;
+  left: 0px;
   width: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   font-size: 16px;
   text-align: center;
-  background: whitesmoke;
   padding: 20px;
+  border: 4px solid rgba(250, 240, 255, 100%);
+  background: white;
   cursor: pointer;
 
   &:focus {
-    outline: none;
     border: 1px solid #5e17eb;
   }
   &:hover {
-    /* cursor: pointer; */
+    cursor: pointer;
     border: 1px solid #5e17eb;
   }
 `;
@@ -188,6 +214,7 @@ const HalfInput = styled.div`
 const Text = styled.div`
   font-size: 18px;
   margin: 10px 0px;
+  font-family: "Binggrae";
   @media screen and (max-width: 1024px) {
     font-size: 16px;
   }
@@ -251,30 +278,18 @@ const Checkbox = styled.div`
 `;
 
 const EditStudyDesc = () => {
-  const dispatch = useDispatch();
-
   const container = useRef(null);
   const locationInput = useRef(null);
-
   const { calenderDateValue } = useSelector((store) => store.calender);
-  const { dateData } = useSelector((store) => store.searchData);
-  const { isError, message } = useSelector((state) => state.allStudies);
-
   const [location, setLocation] = useState({
     name: "광화문",
     latitude: 37.570975,
     longitude: 126.977759,
   });
+  const [language, setLanguage] = useState("devil");
+
+  console.log(location);
   const [locationList, setLocationList] = useState([]);
-  const [lang, setLang] = useState([{ id: 6, name: "react" }]);
-  const [open, setOpen] = useState({
-    language: false,
-    date: false,
-    location: false,
-  });
-
-  const [data, setData] = useState(null);
-
   var ps = new kakao.maps.services.Places();
 
   // 키워드 검색을 요청하는 함수입니다
@@ -301,17 +316,17 @@ const EditStudyDesc = () => {
     }
   }
 
-  const handleLocationValue = (e, value) => {
-    if (e.type === "click" || e.key === "Enter") {
-      searchPlaces(value);
-    }
+  const handleLocationValue = (e) => {
+    if (e.key === "Enter") {
+      searchPlaces(e.target.value);
+    } // true
   };
 
   const mapscript = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: new kakao.maps.LatLng(location.y, location.x), //지도의 중심좌표
-      level: 5, //지도의 레벨(확대, 축소 정도)
+      level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
@@ -320,7 +335,10 @@ const EditStudyDesc = () => {
       imageSize = new kakao.maps.Size(65, 65), // 마커이미지의 크기입니다
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
-    var img = langImg[lang[0]["name"]];
+
+    console.log(data);
+
+    var img = langImg[language[0]["name"]];
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -338,12 +356,16 @@ const EditStudyDesc = () => {
     //el.id 스터디 아이디가 담겨온다.
   };
 
-  // const href = document.location.href.split("/");
-  // const id  = href[href.length - 1];
-  const { id } = useParams();
+  const [data, setData] = useState();
+  const [checked, setChecked] = useState(false);
+
+  const href = document.location.href.split("/");
+  const id = href[href.length - 1];
 
   useEffect(() => {
     studyApi(id).then((res) => {
+      console.log(res);
+
       const {
         id,
         title,
@@ -366,7 +388,7 @@ const EditStudyDesc = () => {
         language,
       });
 
-      setLang(language);
+      setLanguage(language);
 
       setLocation({
         y: location.latitude,
@@ -383,6 +405,18 @@ const EditStudyDesc = () => {
       mapscript();
     }
   }, [data]);
+
+  const [open, setOpen] = useState({
+    language: false,
+    date: false,
+    location: false,
+  });
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  // const { dateModal } = useSelector((store) => store.studyModal);
+  const { dateData } = useSelector((store) => store.searchData);
+  const { isError, message } = useSelector((state) => state.allStudies);
 
   useEffect(() => {
     setData({ ...data, startDate: dateData });
@@ -410,7 +444,6 @@ const EditStudyDesc = () => {
             location: [location.y, location.x, gu, dong, location.place_name],
           });
           //클릭한 장소로 location 새로 세팅
-          locationInput.current.value = location.place_name;
           setOpen({ ...open, location: false });
         }}
       >
@@ -439,6 +472,9 @@ const EditStudyDesc = () => {
         <>
           <WriteStudyDesc>
             <Desc>
+              <Title>
+                <TitleText>스터디 글 수정하기</TitleText>
+              </Title>
               <Wrapper>
                 <Text>제목</Text>
                 <input
@@ -450,11 +486,19 @@ const EditStudyDesc = () => {
                 <HalfWrapper>
                   <Text>시작일</Text>
                   <HalfInput defaultValue={data.startDate}>
-                    {dateData ? calenderDateValue : data.startDate}
+                    {dateData ? dateData : data.startDate}
+                    <IconDrop>
+                      <IoMdArrowDropdown
+                        className="icon"
+                        onClick={() => setOpen({ ...open, date: !open.date })}
+                      />
+                    </IconDrop>
                   </HalfInput>
-                  <DescDateModal>
-                    <CalenderDate />
-                  </DescDateModal>
+                  {open.date ? (
+                    <DescDateModal>
+                      <CalenderDate />
+                    </DescDateModal>
+                  ) : null}
                 </HalfWrapper>
                 <HalfWrapper>
                   <Text classNane="lanaguage">언어</Text>
@@ -463,7 +507,9 @@ const EditStudyDesc = () => {
                     <IconDrop>
                       <IoMdArrowDropdown
                         className="icon"
-                        onClick={() => setOpen({ ...open, language: true })}
+                        onClick={() =>
+                          setOpen({ ...open, language: !open.language })
+                        }
                       />
                     </IconDrop>
                   </HalfInput>
@@ -475,17 +521,23 @@ const EditStudyDesc = () => {
                             key={idx}
                             className="elements"
                             onClick={() => {
-                              console.log(el, idx + 1);
-                              setData({
-                                ...data,
-                                language: [
-                                  ...data.language,
-                                  {
-                                    id: idx + 1,
-                                    name: el,
-                                  },
-                                ],
-                              });
+                              if (
+                                data.language.filter((obj) => obj.name === el)
+                                  .length === 0
+                              ) {
+                                setData({
+                                  ...data,
+
+                                  language: [
+                                    ...data.language,
+                                    {
+                                      id: idx + 1,
+                                      name: el,
+                                    },
+                                  ],
+                                });
+                              }
+
                               setOpen({ ...open, language: false });
                             }}
                           >
@@ -508,14 +560,12 @@ const EditStudyDesc = () => {
                   defaultValue={data.kakaoLink}
                 ></input>
               </Wrapper>
-
               <Wrapper>
                 <Text>장소</Text>
+
                 <input
                   className="locaitionInput"
-                  onKeyDown={(e) => {
-                    handleLocationValue(e, e.target.value);
-                  }}
+                  onKeyDown={(e) => handleLocationValue(e)}
                   defaultValue={location.place_name}
                   ref={locationInput}
                 ></input>
@@ -527,9 +577,9 @@ const EditStudyDesc = () => {
                 <IconSerch>
                   <IoIosSearch
                     className="icon"
-                    onClick={(e) => {
+                    onClick={(locationInput) => {
+                      console.log(locationInput.target.value);
                       setOpen({ ...open, location: true });
-                      handleLocationValue(e, locationInput.current.value);
                     }}
                   />
                   {/* </div> */}
@@ -549,9 +599,10 @@ const EditStudyDesc = () => {
                   <input
                     type="checkbox"
                     className="input"
-                    defaultChecked={data.closed}
+                    checked={data.closed ? "checked" : null}
                     onClick={() => {
-                      setData({ ...data, closed: !data.closed });
+                      setChecked(!checked);
+                      setData({ ...data, closed: checked });
                     }}
                   ></input>
                   <label htmlFor="closed">모집마감</label>

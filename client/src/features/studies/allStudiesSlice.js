@@ -21,67 +21,51 @@ const initialState = {
   message: "",
 };
 
-// export const getAllStudies = createAsyncThunk("allStudies/getAllStudies", async (thunkAPI) => {
-//   try {
-//     return await getAllStudiesApi().then((res) => {
-//       // console.log("all studies: ", res); // Postman 아무 정보 없음
-//       return res.data;
-//     });
-//   } catch (error) {
-//     return thunkAPI.rejectWithValue(error.message);
-//   }
-// });
-
-// export const getSingleStudy = createAsyncThunk(
-//   "allStudies/getSingleStudy",
-//   async (id, thunkAPI) => {
-//     try {
-//       return await singleStudyApi(id).then((res) => {
-//         return res.data;
-//       });
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
-
-export const writeStudy = createAsyncThunk("allStudies/writeStudy", async (data, thunkAPI) => {
-  try {
-    return await writeStudyApi(data).then((res) => {
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const writeStudy = createAsyncThunk(
+  "allStudies/writeStudy",
+  async (data, thunkAPI) => {
+    try {
+      return await writeStudyApi(data).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
-export const editStudy = createAsyncThunk("allStudies/editStudy", async (data, thunkAPI) => {
-  try {
-    return await editStudyApi(data).then((res) => {
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const editStudy = createAsyncThunk(
+  "allStudies/editStudy",
+  async (data, thunkAPI) => {
+    try {
+      return await editStudyApi(data).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
-export const deleteStudy = createAsyncThunk("allStudies/deleteStudy", async (data, thunkAPI) => {
-  try {
-    return await deleteStudyApi(data).then((res) => {
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const deleteStudy = createAsyncThunk(
+  "allStudies/deleteStudy",
+  async (data, thunkAPI) => {
+    try {
+      return await deleteStudyApi(data).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
 export const likeStudy = createAsyncThunk(
   "allStudies/likeStudy",
-  async ({ id, studyData }, thunkAPI) => {
+  async (data, thunkAPI) => {
+    console.log("like", data);
     try {
-      return await likeStudyApi(id, studyData).then((res) => {
-        return res.data;
-      });
+      return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -105,11 +89,22 @@ export const getLikedStudies = createAsyncThunk(
 
 export const unLikeStudy = createAsyncThunk(
   "allStudies/unLikeStudy",
-  async ({ id, studyData }, thunkAPI) => {
-    console.log("delete studyData", id, studyData);
+  async (data, thunkAPI) => {
+    console.log("delete studyData", data);
     try {
-      return await unLikeStudyApi(id, studyData).then((res) => {
-        console.log("unlike clicked: ", res.data);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getMyStudies = createAsyncThunk(
+  "allStudies/getMyStudies",
+  async (id, thunkAPI) => {
+    try {
+      return await getMyStudiesApi(id).then((res) => {
+        // console.log("my studies after axios", res);
         return res.data;
       });
     } catch (error) {
@@ -117,17 +112,6 @@ export const unLikeStudy = createAsyncThunk(
     }
   }
 );
-
-export const getMyStudies = createAsyncThunk("allStudies/getMyStudies", async (id, thunkAPI) => {
-  try {
-    return await getMyStudiesApi(id).then((res) => {
-      // console.log("my studies after axios", res);
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
-  }
-});
 
 export const allStudiesSlice = createSlice({
   name: "allStudies",
@@ -146,33 +130,6 @@ export const allStudiesSlice = createSlice({
     }),
   extraReducers: (builder) => {
     builder
-      // .addCase(getAllStudies.pending, (state) => {
-      //   state.isLoading = true;
-      // })
-      // .addCase(getAllStudies.fulfilled, (state, action) => {
-      //   state.isLoading = false;
-      //   state.isSuccess = true;
-      //   state.allStudies = action.payload;
-      // })
-      // .addCase(getAllStudies.rejected, (state, action) => {
-      //   state.isLoading = false;
-      //   state.isError = true;
-      //   state.message = action.payload;
-      //   state.allStudies = null;
-      // })
-      // .addCase(getSingleStudy.pending, (state) => {
-      //   state.isLoading = true;
-      // })
-      // .addCase(getSingleStudy.fulfilled, (state) => {
-      //   state.isLoading = false;
-      //   state.isSuccess = true;
-      //   state.allStudies = action.payload;
-      // })
-      // .addCase(getSingleStudy.rejected, (state, action) => {
-      //   state.isLoading = false;
-      //   state.isError = true;
-      //   state.message = action.payload;
-      // })
       .addCase(writeStudy.pending, (state) => {
         state.isLoading = true;
       })
@@ -192,7 +149,9 @@ export const allStudiesSlice = createSlice({
       .addCase(deleteStudy.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.allStudies = state.allStudies.filter((study) => study.id !== action.payload.id);
+        state.allStudies = state.allStudies.filter(
+          (study) => study.id !== action.payload.id
+        );
       })
       .addCase(deleteStudy.rejected, (state, action) => {
         state.isLoading = false;
@@ -206,7 +165,9 @@ export const allStudiesSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
 
-        state.allStudies.map((study) => (study.id === action.payload.id ? action.payload : study));
+        state.allStudies.map((study) =>
+          study.id === action.payload.id ? action.payload : study
+        );
       })
       .addCase(editStudy.rejected, (state, action) => {
         state.isLoading = false;

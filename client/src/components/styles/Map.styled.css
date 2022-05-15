@@ -1,19 +1,20 @@
 #content{ 
     position: relative;
-    width: 100px;
-    height:100px;
+    width: 20vw;
+    height:20vw;
     box-sizing: border-box;
     background-color: rgb(247, 247, 247);
     border-radius: 10px;
     box-shadow: 10px 5px 15px 0.1px rgba(0, 0, 0, 0.1);
     font-size: 2vw;
-    font-family: "Bold"
+    font-family: "Binggrae";
+ 
 }
 
 #title{ 
-    width: 20vw;
-    height: 5vw;
-    line-height: 5vw;
+    width:100%;
+    height: 25%;
+    line-height: 250%;
     position: absolute;
     z-index:1;
     background-color: rgb(247, 247, 247);
@@ -22,36 +23,51 @@
 }
 
 #img{ 
-    width: 20vw;
-    height: 10vw;
+    position: absolute;
+    width: 100%;
+    height: 50%;
     object-fit: contain;
     position: absolute;
-    top: 5vw;
+    top: 25%;
     background-color: white;
     box-shadow: 10px 5px 15px 0.1px rgba(0, 0, 0, 0.1);
 }
 
 #desc{ 
     position: absolute;
-    top: 15vw;
+    top: 75%;
     display: flex;
-    padding: 0.5vw;
-    justify-content: space-between;
-    width: 20vw;
-    box-sizing: border-box;
-    height: 5vw;
+    align-items: center;
+    justify-content:space-around;
+    width: 100%;
+    height: 20%;
 }
+
 
 #info{ 
     text-align: center;
-    line-height: 5vw;
+    line-height:100%;
+    position: absolute;
+    top:50%;
+    left: 20%;
 }
+
+
 
 #icon{ 
-    margin-top: 0.2vw;
+    position: absolute;
+    left:105%;
+    top:50%;
     color:rgb(200, 48, 48);
+
 }
 
 
 
-
+@media screen and (min-width: 1024px) {
+    #content{
+    width: 200px;
+    height:200px;
+    font-size: 20px;
+    }
+}

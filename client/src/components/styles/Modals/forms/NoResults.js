@@ -1,6 +1,6 @@
+/* eslint-disable react/prop-types */
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { reset, editProfile } from "../../../../features/user/userSlice";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
@@ -11,17 +11,14 @@ const Div = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
 const ConfirmTitle = styled.h2`
   font-size: 16px;
+  margin-bottom: 20px;
 `;
-// const ConfirmSubtitle = styled.p`
-//   font-size: 14px;
-//   /* margin-bottom: 10%; */
-// `;
+
 const ConfirmButton = styled.button`
-  margin-top: 25%;
-  padding: 3px 8px;
+  margin-top: 10%;
+  padding: 3px 15px;
   cursor: pointer;
   border-radius: 10px;
   border: 1px solid #5e17eb;
@@ -32,27 +29,23 @@ const ConfirmButton = styled.button`
   }
 `;
 
-const UpdateUser = (props) => {
-  // console.log("updateuser props: ", props);
-  const { isLoading } = useSelector((state) => state.user);
+const NoResult = (props) => {
+  console.log("Noresult props: ", props); // { study_id: id }
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { isLoading } = useSelector((state) => state.allStudies);
 
   if (isLoading) {
     return <LoadingIndicator />;
   }
-
   return (
     <>
       <Div>
-        <ConfirmTitle>수정이 완료되었습니다!</ConfirmTitle>
-        {/* <ConfirmSubtitle>수정 후에는 이전 정보로 되돌릴 수 없습니다.</ConfirmSubtitle> */}
+        <ConfirmTitle>검색 결과가 없습니다.</ConfirmTitle>
         <ConfirmButton
           onClick={async () => {
-            await dispatch(editProfile(props));
-            dispatch(reset());
             dispatch(closeModal());
-            navigate("/profile");
+            navigate("/");
           }}
         >
           확인
@@ -61,4 +54,4 @@ const UpdateUser = (props) => {
     </>
   );
 };
-export default UpdateUser;
+export default NoResult;

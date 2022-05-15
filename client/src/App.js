@@ -37,9 +37,12 @@ function App() {
     },
     icons: {
       logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-      write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
-      login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
-      mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+      write:
+        "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+      login:
+        "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+      mypage:
+        "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
     },
     contents: {
       marginBottom: "20px",
@@ -54,45 +57,14 @@ function App() {
     },
   };
 
-  let login = localStorage.getItem("login");
-  const getGithubAccessToken = async (authorizationCode) => {
-    localStorage.setItem("reload", true);
-    let resp = await axios.post(Github_url, {
-      authorizationCode: authorizationCode,
-    });
-    const { user } = resp.data;
-    const { accessToken } = resp.data;
-    localStorage.setItem("user", JSON.stringify(user));
-    localStorage.setItem("token", JSON.stringify(accessToken));
-    axios.defaults.headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer " + accessToken,
-    };
-    // navigate("/");
-    window.location.reload();
-  };
-
-  useEffect(() => {
-    if (login === "github" && localStorage.getItem("reload") !== "true") {
-      const url = new URL(window.location.href);
-      const authorizationCode = url.searchParams.get("code");
-      if (authorizationCode) {
-        getGithubAccessToken(authorizationCode);
-      }
-
-
-    }
-  }, []);
-
   return (
     <Router>
       <ThemeProvider theme={theme}>
         <GlobalFonts />
         <Header img={theme.icons} />
+        <ConfirmModal></ConfirmModal>
+
         <Container>
-
-
-          <ConfirmModal />
           <div className="App">
             <header className="App-header"></header>
           </div>
@@ -135,6 +107,7 @@ function App() {
           </Routes>
           <BottomMenu />
         </Container>
+
         <Footer />
       </ThemeProvider>
     </Router>
