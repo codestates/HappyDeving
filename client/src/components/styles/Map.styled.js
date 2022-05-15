@@ -223,9 +223,11 @@ const Map = () => {
   };
 
   useEffect(() => {
+    console.log(studies.length);
     if (studies.length !== 0) {
       mapscript();
-    } else {
+    }
+    if (studies.length === 0) {
       handleNoResult();
     }
   }, [studies, likedStudies]);
@@ -238,9 +240,7 @@ const Map = () => {
     <>
       {studies.length === 0 ? (
         <>
-          <Div>
-            <MapView id="map" ref={container} className="none" />
-          </Div>
+          <MapView id="map" ref={container} className="none" />
         </>
       ) : (
         <>

@@ -39,7 +39,6 @@ const StyledHeader = styled.header`
   position: fixed;
   background-color: white;
   box-shadow: 10px 3px 10px rgba(0, 0, 0, 0.1);
-  font-family: "Bold";
   display: grid;
   grid-template-columns: repeat(14, 1fr);
   z-index: 1200;
@@ -73,7 +72,7 @@ const Logo = styled.div`
       width: 150px;
     }
 
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 1000px) {
       min-width: 100px;
     }
 
@@ -92,6 +91,7 @@ const Links = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  font-family: "Binggrae";
 
   .profile {
     border-radius: 50%;
@@ -112,8 +112,12 @@ const Links = styled.div`
       display: none;
     }
 
-    @media screen and (max-width: 960px) {
+    @media screen and (max-width: 1000px) {
       font-size: 11px;
+    }
+
+    @media screen and (max-width: 800px) {
+      font-size: 10px;
     }
 
     &:hover {
@@ -163,9 +167,12 @@ const Links = styled.div`
       display: none;
     }
 
-    @media screen and (max-width: 960px) {
+    @media screen and (max-width: 1000px) {
       font-size: 11px;
     }
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
   }
 `;
 

@@ -1,6 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { writeStudy, reset } from "../../../../features/studies/allStudiesSlice";
+import {
+  writeStudy,
+  reset,
+} from "../../../../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
@@ -47,7 +50,7 @@ const WriteStudy = (props) => {
             await dispatch(writeStudy(props));
             dispatch(reset());
             dispatch(closeModal());
-            navigate("/mystudy");
+            navigate(`/mystudy`);
           }}
         >
           확인
