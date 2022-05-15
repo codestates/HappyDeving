@@ -44,9 +44,21 @@ module.exports = {
         return res.status(401).json("body required");
       }
 
-      const comment = await Study_comment.create({ user_id, study_id, content, parentId });
+      const comment = await Study_comment.create({
+        user_id,
+        study_id,
+        content,
+        parentId,
+      });
 
-      res.status(201).json(comment);
+      const userInfo = await User.findOne({
+        where: { id: user_id },
+      });
+
+      const { username } = userInfo.dataValues;
+      const commentInfo = comment.dataValues;
+
+      res.status(201).json({ ...commentInfo, username });
     } catch (err) {
       console.error(err);
       return res.status(500).json();
@@ -82,7 +94,8 @@ module.exports = {
         return res.status(404).json("comment not found");
       }
 
-      const { id, user_id, study_id, content, parentId, createdAt, updatedAt } = comment.dataValues;
+      const { id, user_id, study_id, content, parentId, createdAt, updatedAt } =
+        comment.dataValues;
 
       const userInfo = await User.findOne({
         where: { id: user_id },
@@ -93,7 +106,17 @@ module.exports = {
       return res.status(200).json({
         data: {
           comments: [
-            { id, content, user_id, study_id, username, parentId, createdAt, updatedAt, image },
+            {
+              id,
+              content,
+              user_id,
+              study_id,
+              username,
+              parentId,
+              createdAt,
+              updatedAt,
+              image,
+            },
           ],
         },
       });
