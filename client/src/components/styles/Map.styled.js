@@ -6,6 +6,7 @@ import { langImg } from "../../static/images/langImg";
 import { getLikedStudies } from "../../features/studies/allStudiesSlice";
 import { unLikeStudyApi, likeStudyApi } from "../../api/study";
 import LoadingIndicator from "../LoadingIndicator";
+import { useNavigate } from "react-router-dom";
 
 const Title = styled.div`
   margin-top: 50px;
@@ -32,39 +33,44 @@ const MapView = styled.div`
 const Map = () => {
   const { kakao } = window;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const container = useRef(null);
 
   //검색한 조건에 맞는 스터디들의 목록
   const { studies } = useSelector((store) => store.studies);
-  console.log(studies);
   const { user } = useSelector((state) => state.user);
 
-  //마커 생성용 데이터 가공
-  const markerdata = studies
-    ? studies.map((el) => {
-        var langname =
-          el.language[0]?.name === "c++" ? "c" : el.language[0]?.name;
+  console.log(studies);
 
-        console.log("langname", langname);
-        return {
-          id: el.id,
-          title: el.title,
-          lat: Number(el.location.latitude),
-          lng: Number(el.location.longitude),
-          img: langImg[langname],
-          //이름
-          info: el.startDate,
-        };
-      })
-    : [
-        {
-          title: "결과가 없습니다",
-          lat: 37.570975,
-          lng: 126.977759,
-          img: "https://i.ibb.co/nr4FYns/happydevil.png",
-        },
-      ];
+
+  const markerdata =
+    studies.length !== 0
+      ? studies.map((el) => {
+          var langname =
+            el.language[0]?.name === "c++" ? "c" : el.language[0]?.name;
+
+          console.log("langname", langname);
+          return {
+            id: el.id,
+            title: el.title,
+            lat: Number(el.location.latitude),
+            lng: Number(el.location.longitude),
+            img: langImg[langname],
+            //이름
+            info: el.startDate,
+          };
+        })
+      : [
+          {
+            id: 0,
+            title: "결과가 없습니다",
+            lat: 37.570975,
+            lng: 126.977759,
+            img: "https://i.ibb.co/nr4FYns/happydevil.png",
+            info: "결과없음",
+          },
+        ];
 
   const { likedStudies, isLoading } = useSelector((store) => store.allStudies);
 
@@ -102,7 +108,7 @@ const Map = () => {
       //el.id 스터디 아이디가 담겨온다.
       function contentHandler() {
         //모달 창 클릭 시 상세스터디 페이지로 이동
-        document.location.href = `/study/${el.id}`;
+        navigate(`/study/${el.id}`);
       }
 
       //모달창 내용 구현 : 바닐라JS로 해야 함
@@ -189,9 +195,7 @@ const Map = () => {
 
   return (
     <>
-      <Title>
-        {studies.length === 0 ? "검색 결과가 없습니다" : "검색 결과"}
-      </Title>
+      <Title>검색결과</Title>
       <MapView id="map" ref={container} />
     </>
   );

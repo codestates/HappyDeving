@@ -26,12 +26,9 @@ import HeaderLocationModal from "./Modals/HeaderLocationModal";
 
 const icons = {
   logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-  write:
-    "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
-  login:
-    "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
-  mypage:
-    "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+  write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+  login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+  mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
 };
 
 const StyledHeader = styled.header`
@@ -57,6 +54,8 @@ const StyledHeader = styled.header`
 `;
 
 const Logo = styled.div`
+  /* position: absolute; */
+  /*top: 20px;*/
   grid-column: 2/ 4;
   width: 100%;
   position: ${(props) => (props.header ? "absolute" : "relative")};
@@ -64,6 +63,7 @@ const Logo = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  /*min-width: 80px;*/
   justify-content: center;
   text-align: center;
 
@@ -79,6 +79,7 @@ const Logo = styled.div`
 `;
 
 const Links = styled.div`
+  display: flex;
   grid-column: 13/14;
   position: absolute;
   position: absolute;
@@ -89,9 +90,9 @@ const Links = styled.div`
   flex-direction: column;
 
   .profile {
-    border-radius: 50%;
-    min-width: 40px;
+    width: 40px;
     height: 40px;
+    border-radius: 50%;
   }
 
   .signin {
@@ -116,6 +117,18 @@ const SearchDiv = styled.div`
   grid-column: ${(props) => (props.header ? "4/13" : "5/12")};
   padding-top: ${(props) => (props.header ? "120px" : "25px")};
 `;
+/*const StyleSearch = styled.div`
+  position: relative;
+  grid-column: 5/13;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
+
+  @media only screen and (min-width: 768px) {
+    position: relative;
+  }
+`;*/
 
 export const StyledSearch = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
@@ -124,6 +137,7 @@ export const StyledSearch = styled.div`
   border-radius: 30px;
   display: flex;
   height: 50px;
+
   line-height: 50px;
   .searchbar {
     flex: 15;
@@ -154,6 +168,7 @@ const SearchIcon = styled.div`
   max-width: 40px;
   border-radius: 50%;
   margin: 4px 5px 0px 0px;
+  min-width: 40px;
   background-color: ${(props) => props.theme.colors.purple};
   &:hover {
     background-color: ${(props) => props.theme.colors.lavender};
@@ -164,6 +179,15 @@ const SearchIcon = styled.div`
   &:active {
     box-shadow: ${(props) => props.theme.contents.boxShadow};
     top: 2px;
+  }
+  @media screen and (max-width: 768px) {
+    min-width: 30px;
+    height: 30px;
+    margin: 8px 5px 0px 0px;
+    .icon {
+      height: 15px;
+      width: 15px;
+    }
   }
 `;
 
@@ -316,9 +340,7 @@ const Header = () => {
 
   const { user } = useSelector((state) => state.user);
   const { location, date, language } = useSelector((store) => store.search);
-  const { locationData, dateData, languageData } = useSelector(
-    (store) => store.searchData
-  );
+  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
   const { calenderDateValue } = useSelector((store) => store.calender);
 
   const [header, setHeader] = useState(false);

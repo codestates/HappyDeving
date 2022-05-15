@@ -4,18 +4,20 @@ dotenv.config();
 
 module.exports = {
   googleWithdrawal: async (accessToken) => {
-    // const googleRefreshToken = process.env.GOOGLE_REFRESH_TOKEN;
-    const googleaccessToken = process.env.GOOGLE_ACCESS_TOKEN;
-    const googleClientId = process.env.GOOGLE_CLIENT_ID;
-    const googleClinentSecret = process.env.GOOGLE_CLIENT_SECRET;
-    const googleinfo = await axios({
-      url: `https://oauth2.googleapis.com/revoke?token=${accessToken}`,
+    // Build the string for the POST request
+    // let postData = "token=" + userCredential.access_token;
+    let postData = "token=" + accessToken;
+
+    let postOptions = {
+      host: "oauth2.googleapis.com",
       port: "443",
+      path: "/revoke",
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=utf-8",
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": Buffer.byteLength(postData),
       },
-    });
+    };
 
     const postReq = await https.request(postOptions, function (res) {
       res.setEncoding("utf8");

@@ -21,9 +21,13 @@ const CardContainer = styled.div`
   display: flex;
   border-radius: 10px;
   /* background: rgba(233, 193, 255, 10%); */
-  border: 3px solid rgba(233, 193, 255, 20%);
+  /* border: 3px solid rgba(233, 193, 255, 20%);
   width: 380px;
   height: auto;
+  margin-top: 5%;*/
+  height: 180px;
+  font-family: "Binggrae";
+  width: 380px;
   margin-top: 5%;
   text-align: flex-start;
   cursor: pointer;
@@ -37,20 +41,24 @@ const CardContainer = styled.div`
   }
 
   @media screen and (max-width: 1100px) {
-    height: 180px;
+    height: 160px;
+    /*height: 180px;
     width: 300px;
     transition: 1s;
   }
   @media screen and (max-width: 768px) {
-    height: 180px;
+    height: 180px;*/
     width: 300px;
     transition: 1s;
   }
 `;
 
 const LanguageImg = styled.div`
-  margin: 3%;
+  /*margin: 3%;
   width: 20%;
+  min-width: 50px;*/
+  margin-left: 15px;
+  width: 25%;
   min-width: 50px;
   flex-direction: column;
   display: flex;
@@ -62,15 +70,46 @@ const LanguageImg = styled.div`
   }
 `;
 const CardForm = styled.div`
-  background: white;
+  width: 300px;
+  margin: 15px;
+
+  /*background: white;
   width: 90%;
   margin: 10px 10px 10px 0px;
   border: 2.5px solid rgba(233, 193, 255, 80%);
   padding: 5px;
-  border-radius: 5px;
+  border-radius: 5px;*/
   /* background-color: pink; */
   display: flex;
   flex-direction: column;
+  /*h1 {
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100px;
+    margin: 0px 20px;
+    font-size: 16px;
+    border-bottom: #dfc1ff;
+    font-weight: 500;
+    /* width: 80%; *
+  }
+  hr {
+    margin-bottom: 20px;
+    width: 90%;
+    overflow: hidden;
+    height: 3px;
+    background: #dfc1ff;
+  }
+  p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: gray;
+  }
+  justify-content: space-between;*/
 `;
 
 const Title = styled.div`
@@ -122,6 +161,7 @@ const LikeButton = styled.button`
 
 const HeartIcon = styled.span`
   font-size: 20px;
+  margin-left: 90%;
   .like {
     color: #d32f2f;
   }

@@ -13,13 +13,14 @@ import { useParams } from "react-router-dom";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
+  margin-top: 150px;
 
   @media screen and (max-width: 1024px) {
-    grid-column: 2/14;
+    grid-column: 3/13;
     transform: 1s;
   }
   @media screen and (max-width: 768px) {
-    grid-column: 1/15;
+    grid-column: 2/14;
     transform: 1s;
   }
 `;
@@ -29,14 +30,14 @@ const Desc = styled(Content)`
   padding: 3% 5% 3% 5%;
 
   input {
-    background-color: white;
-    border: 1px solid gray;
+    background-color: rgba(233, 193, 255, 20%);
     border-radius: 5px;
     height: 40px;
     width: 100%;
     font-size: 16px;
     padding: 10px;
-
+    height: 50px;
+    cursor: pointer;
     @media screen and (max-width: 768px) {
       font-size: 14px;
       width: 100%;
@@ -44,40 +45,55 @@ const Desc = styled(Content)`
 
     &:focus {
       outline: none;
-      border: 1px solid #5e17eb;
+      /*border: 1px solid #5e17eb;
     }
 
     &:hover {
       cursor: pointer;
-      border: 1px solid #5e17eb;
+      border: 1px solid #5e17eb;*/
     }
   }
 `;
 
 const DescDateModal = styled.div`
-  display: flex;
-  width: 100%;
-  justify-content: center;
-
-  box-shadow: none;
-`;
-
-const DescLanguageModal = styled.div`
   width: 100%;
   height: auto;
   text-align: center;
-  z-index: 10;
-  background: whitesmoke;
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 30;
   border-radius: 5px;
   position: absolute;
-  top: 85px;
-  padding: 30px 10px;
+  top: 50px;
+  left: 0px;
+  padding: 0px 10px;
+  border: 4px solid rgba(250, 240, 255, 100%);
+  background: white;
+  outline: none;
   &:focus {
     border: 1px solid #5e17eb;
   }
   &:hover {
     cursor: pointer;
+    border: 1px solid #5e17eb;
+  }
+`;
+const DescLanguageModal = styled.div`
+  width: 100%;
+  height: auto;
+  text-align: center;
+  z-index: 30;
+
+  border-radius: 5px;
+  position: absolute;
+  top: 50px;
+  left: 0px;
+  padding: 32px 10px;
+  border: 4px solid rgba(250, 240, 255, 100%);
+  background: white;
+  cursor: pointer;
+  &:focus {
+    border: 1px solid #5e17eb;
+  }
+  &:hover {
     border: 1px solid #5e17eb;
   }
 `;
@@ -90,22 +106,22 @@ const DescLocationModal = styled.div`
   height: auto;
   z-index: 10;
   position: absolute;
-  top: 85px;
+  top: 95px;
+  left: 0px;
   width: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.1);
   margin: 0 auto;
   font-size: 16px;
   text-align: center;
-  background: whitesmoke;
   padding: 20px;
+  border: 4px solid rgba(250, 240, 255, 100%);
+  background: white;
   cursor: pointer;
 
   &:focus {
-    outline: none;
     border: 1px solid #5e17eb;
   }
   &:hover {
-    /* cursor: pointer; */
+    cursor: pointer;
     border: 1px solid #5e17eb;
   }
 `;
@@ -188,6 +204,7 @@ const HalfInput = styled.div`
 const Text = styled.div`
   font-size: 18px;
   margin: 10px 0px;
+  font-family: "Binggrae";
   @media screen and (max-width: 1024px) {
     font-size: 16px;
   }
@@ -399,9 +416,7 @@ const EditStudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name
-            .split(" ")
-            .filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -428,9 +443,7 @@ const EditStudyDesc = () => {
     if (isError) {
       console.log("editStudy.rejected :", message);
     }
-    dispatch(
-      openModal({ name: "UpdateStudy", childrenProps: { id, ...data } })
-    );
+    dispatch(openModal({ name: "UpdateStudy", childrenProps: { id, ...data } }));
   };
 
   return (
