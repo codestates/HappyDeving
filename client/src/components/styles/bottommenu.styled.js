@@ -10,8 +10,7 @@ import { faPenToSquare, faUser, faFolder, faHeart } from "@fortawesome/free-regu
 import LoadingIndicator from "../LoadingIndicator.js";
 const StyledBottommenu = styled.div`
   grid-column: 1/15;
-  /* grid-template-columns: repeat(7, 1fr); */
-  min-width: 520px;
+  min-width: 400px;
   position: fixed;
   display: flex;
   align-items: center;
@@ -19,11 +18,9 @@ const StyledBottommenu = styled.div`
   bottom: 0px;
   width: 100%;
   height: 70px;
-  /* background: rgba(255, 255, 255, 0.5); */
   background: white;
   border-top: 1px solid #5e17eb;
   z-index: 9;
-  margin: 0px;
 
   @media screen and (min-width: 768px) {
     display: none;

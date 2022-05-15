@@ -5,20 +5,23 @@ import { getMyStudies, reset } from "../features/studies/allStudiesSlice";
 import StudyCard from "../components/StudyCard";
 import LoadingIndicator from "../components/LoadingIndicator";
 import { useNavigate } from "react-router-dom";
+import emptyPorder from "../static/images/emptyPorder.png";
 
-const MyStudyTab = styled.div``;
+const MyStudyTab = styled.div`
+  color: black;
+  border-bottom: 3px solid #dfc1ff;
+`;
 const LikedStudyTab = styled.div``;
 const MyprofileTab = styled.div``;
 
 const MyStudyContainer = styled.div`
   min-height: 100%;
-  min-width: 500px;
-  margin-top: 150px;
+  min-width: 400px;
   grid-column: 4/12;
   justify-content: center;
-  gap: 2%;
+  gap: 3%;
 
-  @media screen and (max-width: 1400px) {
+  @media screen and (max-width: 1100px) {
     grid-column: 3 / 13;
   }
   @media screen and (max-width: 768px) {
@@ -27,21 +30,18 @@ const MyStudyContainer = styled.div`
 `;
 const StyledSection = styled.div`
   min-height: 100%;
-  min-width: 500px;
+  min-width: 400px;
   display: grid;
   align-items: flex-start;
   justify-content: space-evenly;
-  grid-template-columns: repeat(auto-fill, minmax(380px, auto));
+  grid-template-columns: repeat(auto-fill, minmax(300px, auto));
   gap: 1%;
-  @media screen and (max-width: 2200px) {
-    grid-template-columns: repeat(auto-fill, minmax(350px, auto));
+
+  @media screen and (max-width: 1800px) {
+    grid-template-columns: repeat(auto-fill, minmax(280px, auto));
     transition: 1s;
   }
 
-  @media screen and (max-width: 1100px) {
-    grid-template-columns: repeat(auto-fill, minmax(300px, auto));
-    transition: 1s;
-  }
   @media screen and (max-width: 768px) {
     grid-template-columns: repeat(1, minmax(300px, auto));
     transition: 1s;
@@ -54,7 +54,8 @@ const UserTitle = styled.div`
   margin-bottom: 50px;
   span {
     font-weight: 500;
-    border-bottom: 5px solid #dfc1ff;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #dfc1ff;
   }
   @media screen and (max-width: 1024px) {
     font-size: 20px;
@@ -68,8 +69,8 @@ const Tab = styled.div`
   border-bottom: 2px solid darkgray;
   margin-bottom: 20px;
   color: gray;
-  font-size: 18px;
-
+  font-size: 14px;
+  font-family: "Binggrae";
   cursor: pointer;
   .tap {
     padding: 10px 3%;
@@ -81,7 +82,51 @@ const Tab = styled.div`
     }
   }
   @media screen and (max-width: 764px) {
-    font-size: 14px;
+    font-size: 12px;
+    transition: 1s;
+  }
+`;
+const Alert = styled.div`
+  display: flex;
+  width: 80%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: "Binggrae";
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  img {
+    width: 30%;
+  }
+`;
+const AlertText = styled.div`
+  text-align: center;
+  h1 {
+    font-size: 40px;
+  }
+  p {
+    font-size: 22px;
+    color: gray;
+  }
+  @media screen and (max-width: 1024px) {
+    h1 {
+      font-size: 30px;
+    }
+    p {
+      font-size: 18px;
+      transition: 0.5s;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    h1 {
+      font-size: 20px;
+    }
+    p {
+      font-size: 16px;
+      transition: 0.5s;
+    }
   }
 `;
 const MyStudy = () => {
@@ -124,13 +169,21 @@ const MyStudy = () => {
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>
-            마이페이지
+            프로필
           </MyprofileTab>
         </Tab>
         <StyledSection>
-          {myStudies?.map((myStudy, i) => (
-            <StudyCard key={i} myStudy={myStudy} />
-          ))}
+          {myStudies.length !== 0 ? (
+            myStudies.map((myStudy, i) => <StudyCard key={i} myStudy={myStudy} />)
+          ) : (
+            <Alert>
+              <img src={emptyPorder} alt="google" />
+              <AlertText>
+                <h1>작성한 스터디가 없습니다</h1>
+                <p>스터디를 작성해주세요</p>
+              </AlertText>
+            </Alert>
+          )}
         </StyledSection>
       </MyStudyContainer>
     </>

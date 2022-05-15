@@ -1,25 +1,21 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { reset, getProfile } from "../features/user/userSlice";
 import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
-// import { signout } from "../features/user/userSlice";
-
+import { signout } from "../features/user/userSlice";
 import SideProfile from "../components/styles/SideProfile.styled";
 
 const StyledEditProfile = styled.div`
   grid-column: 4 / 12;
-  min-height: 80%;
   text-align: left;
-  min-width: 524px;
-  margin-top: 150px;
+  min-width: 400px;
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
     transition: 1s;
   }
-  @media screen and (max-width: 764px) {
+  @media screen and (max-width: 768px) {
     grid-column: 2 / 14;
     transition: 1s;
   }
@@ -31,22 +27,22 @@ const UserTitle = styled.div`
   margin-bottom: 50px;
   span {
     font-weight: 500;
-    border-bottom: 5px solid #dfc1ff;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #dfc1ff;
   }
   @media screen and (max-width: 1024px) {
     font-size: 20px;
     transition: 1s;
   }
 `;
-
 const Tab = styled.div`
   display: flex;
   font-weight: 800;
   border-bottom: 2px solid darkgray;
   margin-bottom: 20px;
   color: gray;
-  font-size: 16px;
-
+  font-size: 14px;
+  font-family: "Binggrae";
   cursor: pointer;
   .tap {
     padding: 10px 3%;
@@ -58,17 +54,22 @@ const Tab = styled.div`
     }
   }
   @media screen and (max-width: 764px) {
-    font-size: 14px;
+    font-size: 12px;
+    transition: 0.5s;
   }
 `;
 const MyStudyTab = styled.div``;
 const LikedStudyTab = styled.div``;
-const MyprofileTab = styled.div``;
+const MyprofileTab = styled.div`
+  color: black;
+  border-bottom: 3px solid #dfc1ff;
+`;
 
-const ProfileContainer = styled(Content)`
+const ProfileContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
-  margin-top: 50px;
+  padding: 30px 0px 40px 0px;
+  border-bottom: 2px solid darkgray;
   @media screen and (max-width: 1024px) {
     display: flex;
     flex-direction: column;
@@ -77,6 +78,8 @@ const ProfileContainer = styled(Content)`
 
 const Side = styled.div`
   padding: 0px 20px;
+  margin-right: 20px;
+  margin-left: 20px;
   grid-column: 1 / 3;
 `;
 
@@ -84,24 +87,20 @@ const ProfileWrap = styled.div`
   display: flex;
   grid-column: 3 / 9;
   flex-direction: column;
-
-  margin: 0px 30px;
-  @media screen and (max-width: 764px) {
-  }
+  padding: 0px 10px;
 `;
 
 const Text = styled.div`
   width: 150px;
   font-family: "Binggrae";
-  padding-bottom: 2px;
   border-bottom: 1px solid gray;
-  color: gray;
-  font-size: 14px;
+  color: dimgray;
+  font-size: 16px;
+  padding-bottom: 2px;
   margin-bottom: 10px;
-
   margin-top: 25px;
   @media screen and (max-width: 764px) {
-    font-size: 12px;
+    font-size: 14px;
   }
 `;
 
@@ -110,20 +109,14 @@ const Info = styled.div`
   border-radius: 5px;
   height: 40px;
   width: 100%;
-  font-size: 16px;
+  font-size: 17px;
   padding: 10px;
   height: 50px;
   cursor: pointer;
   @media screen and (max-width: 768px) {
     font-size: 14px;
-    width: 100%;
+    height: 40px;
   }
-  /* margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 18px;
-  @media screen and (max-width: 764px) {
-    font-size: 16px;
-  } */
 `;
 
 const ButtonWrap = styled.div`
@@ -136,6 +129,7 @@ const ButtonWrap = styled.div`
     justify-content: center;
     width: 120px;
     padding: 5px 5px;
+    margin-right: 10px;
     cursor: pointer;
     border-radius: 10px;
     border: 1px solid #5e17eb;
@@ -160,6 +154,13 @@ const Profile = () => {
   const dispatch = useDispatch();
   const { user, isLoading } = useSelector((state) => state.user);
   // console.log("profile user: ", user);
+  // 임시
+  const handleSignout = (e) => {
+    e.preventDefault();
+    dispatch(signout());
+    dispatch(reset());
+    navigate("/");
+  };
 
   // console.log(user.loginMethod);
   const MoveToEditPage = (e) => {
@@ -211,6 +212,9 @@ const Profile = () => {
             <Info>{user?.blog}</Info>
             <ButtonWrap>
               <button onClick={MoveToEditPage}>프로필 수정하기</button>
+              <Link to="/">
+                <button onClick={handleSignout}>로그아웃</button>
+              </Link>
             </ButtonWrap>
           </ProfileWrap>
         </ProfileContainer>

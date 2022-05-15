@@ -6,7 +6,6 @@ import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 
 const Container = styled.div`
   margin-bottom: 20px;
-  grid-template-columns: repeat(5, 1fr);
 `;
 
 const Profile = styled.div`
@@ -21,8 +20,8 @@ const ProfileImage = styled.div`
   width: 150px;
   height: 150px;
   margin-top: 15px;
-  border: 3px solid #c593fe;
-
+  border: 2px solid #c593fe;
+  margin-bottom: 10px;
   img {
     border-radius: 100px;
     width: 100%;
@@ -31,7 +30,8 @@ const ProfileImage = styled.div`
 `;
 
 const LinkButtons = styled.div`
-  /* display: flex; */
+  min-width: 200px;
+
   a {
     color: darkray;
     font-size: 18px;
@@ -44,18 +44,7 @@ const LinkButtons = styled.div`
   &:hover {
   }
 `;
-// const LinkButtons = styled.div`
-//   display: flex;
-//   img {
-//     width: 3vh;
-//   }
-//   a {
-//     color: #6733e5;
-//     font-size: 24px;
-//     margin-left: 15px;
-//     margin-right: 15px;
-//   }
-// `;
+
 const SideProfile = () => {
   // user.image
 
@@ -68,9 +57,6 @@ const SideProfile = () => {
           <ProfileImage>
             <img src={user.image} />
           </ProfileImage>
-          <form>
-            <input />
-          </form>
 
           <LinkButtons>
             <a href={user.github} target="_blank" rel="noreferrer">

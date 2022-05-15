@@ -24,6 +24,7 @@ import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
 import emptyFolder from "../../static/images/emptyPorder.png";
+
 const StyleStudyDesc = styled.div`
   grid-column: 4/12;
   min-width: 500px;
@@ -471,7 +472,8 @@ const StudyDesc = () => {
             </Alter>
           </TitleBar>
           <Host>
-            <CreateAt>{moment(data.createAt).format("YYYY.MM.DD")}</CreateAt>
+            <CreateAt>{moment(data.createAt).format("YYYY-MM-DD")}</CreateAt>
+
 
             <MiniProfileWrap>
               <img className="profile" src={data?.image} />
