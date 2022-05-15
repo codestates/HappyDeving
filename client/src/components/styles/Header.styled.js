@@ -13,6 +13,7 @@ import { FaSearch } from "react-icons/fa";
 import { getStudiesMapApi } from "../../api/study";
 import { setStudiesData } from "../../features/studies/studiesSlice";
 import { resetData } from "../../features/Search/searchDataSlice";
+import { signout, reset as resetUser } from "../../features/user/userSlice.js";
 import { BsFillCalendarDateFill, BsFileEarmarkCodeFill } from "react-icons/bs";
 import {
   locationModal,
@@ -23,23 +24,24 @@ import {
 import HeaderLanguageModal from "./Modals/HeaderLanguageModal";
 import HeaderDateModal from "./Modals/HeaderDateModal";
 import HeaderLocationModal from "./Modals/HeaderLocationModal";
-import { signout } from "../../features/user/userSlice";
 
 const icons = {
   logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-  write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
-  login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
-  mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+  write:
+    "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+  login:
+    "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+  mypage:
+    "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
 };
 
 const StyledHeader = styled.header`
   position: fixed;
   background-color: white;
   box-shadow: 10px 3px 10px rgba(0, 0, 0, 0.1);
-  font-family: "Bold";
   display: grid;
   grid-template-columns: repeat(14, 1fr);
-  z-index: 10;
+  z-index: 1200;
   height: 100px;
   width: 100%;
   line-height: 100px;
@@ -70,14 +72,18 @@ const Logo = styled.div`
       width: 150px;
     }
 
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: 1000px) {
       min-width: 100px;
+    }
+
+    &:hover {
+      cursor: pointer;
     }
   }
 `;
 
 const Links = styled.div`
-  grid-column: 11/14;
+  grid-column: 12/15;
   width: 100%;
   position: absolute;
   display: flex;
@@ -85,13 +91,13 @@ const Links = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
-  flex-direction: column;
+  font-family: "Binggrae";
 
   .profile {
-    flex: 1;
     border-radius: 50%;
     min-width: 40px;
     height: 40px;
+    margin-right: 12px;
   }
 
   .write {
@@ -100,8 +106,18 @@ const Links = styled.div`
     height: 40px;
     line-height: 40px;
     color: #5e17eb;
-    @media screen and (max-width: 630px) {
-      font-size: 13px;
+    margin-right: 13px;
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+
+    @media screen and (max-width: 1000px) {
+      font-size: 11px;
+    }
+
+    @media screen and (max-width: 800px) {
+      font-size: 10px;
     }
 
     &:hover {
@@ -118,8 +134,10 @@ const Links = styled.div`
     height: 40px;
     line-height: 40px;
     color: #5e17eb;
-    @media screen and (max-width: 630px) {
-      font-size: 13px;
+    margin-right: 13px;
+
+    @media screen and (max-width: 960px) {
+      font-size: 11px;
     }
 
     &:hover {
@@ -136,6 +154,7 @@ const Links = styled.div`
     height: 40px;
     line-height: 40px;
     color: #5e17eb;
+    margin-right: 13px;
 
     &:hover {
       color: #c593fe;
@@ -143,6 +162,17 @@ const Links = styled.div`
       position: relative;
       top: 2px;
     }
+
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+
+    @media screen and (max-width: 1000px) {
+      font-size: 11px;
+    }
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
   }
 `;
 
@@ -240,7 +270,7 @@ const Modal = styled.div`
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 100;
+  z-index: 1500;
 `;
 
 const Location = styled.div`
@@ -351,23 +381,24 @@ const Header = () => {
 
   const { user } = useSelector((state) => state.user);
   const { location, date, language } = useSelector((store) => store.search);
-  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
+  const { locationData, dateData, languageData } = useSelector(
+    (store) => store.searchData
+  );
   const { calenderDateValue } = useSelector((store) => store.calender);
 
   const [header, setHeader] = useState(false);
 
-  const guType = locationData.split(" ")[0];
-  const dongType = locationData.split(" ")[1];
-
-  const handleSignout = () => {
-    dispatch(signout());
-    dispatch(reset());
-    navigate("/");
-  };
-
   const goToHome = () => {
     navigate("/");
   };
+  const handleSignout = (e) => {
+    e.preventDefault();
+    dispatch(signout());
+    dispatch(resetUser());
+    navigate("/");
+  };
+  const guType = locationData.split(" ")[0];
+  const dongType = locationData.split(" ")[1];
 
   return (
     <>
@@ -427,9 +458,11 @@ const Header = () => {
               <Link to="/write">
                 <div className="write">새 글 쓰기</div>
               </Link>
-              <div className="signout" onClick={handleSignout}>
-                로그아웃
-              </div>
+              <Link to="/">
+                <div onClick={handleSignout} className="signout">
+                  로그아웃
+                </div>
+              </Link>
             </>
           ) : (
             <Link to="/signin">

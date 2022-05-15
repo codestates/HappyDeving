@@ -7,7 +7,7 @@ import { setDateData } from "../features/Search/searchDataSlice";
 import { languageModal } from "../features/Search/searchModalSlice";
 import { setDateModal } from "../features/studies/studyModalSlice";
 
-function CalenderDate() {
+function CalenderDate({ setDateOpen, open, setOpen }) {
   const moment = require("moment");
   const { calenderDateValue } = useSelector((store) => store.calender);
   const { dateData } = useSelector((store) => store.searchData);
@@ -23,6 +23,13 @@ function CalenderDate() {
     dispatch(ClickCalenderDate(moment(value).format("M월 D일")));
     dispatch(languageModal());
     dispatch(setDateModal(false));
+
+    if (setOpen) {
+      setOpen({ ...open, date: !open.date });
+    }
+    if (setDateOpen) {
+      setDateOpen(false);
+    }
   };
 
   console.log(`서치바:${calenderDateValue}`);

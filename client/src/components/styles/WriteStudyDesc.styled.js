@@ -4,14 +4,11 @@ import Content from "./Content.styled";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
 import { IoMdArrowDropdown, IoIosSearch } from "react-icons/io";
-// import DateModal from "./Modals/DateModal";
-// import LocationModal from "./Modals/LocationModal";
 import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal } from "../../features/modal/modalSlice";
 import { dateModal } from "../../features/Search/searchModalSlice";
-// import { writeStudyApi } from "../../api/study";
-// import { useNavigate } from "react-router-dom";
+import { resetData } from "../../features/Search/searchDataSlice";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
@@ -28,7 +25,7 @@ const WriteStudyDesc = styled.div`
 
 const Desc = styled(Content)`
   font-family: "Medium";
-  padding: 3% 5% 3% 5%;
+  padding: 0% 5%;
 
   input {
     background-color: rgba(233, 193, 255, 20%);
@@ -43,19 +40,22 @@ const Desc = styled(Content)`
       font-size: 14px;
       width: 100%;
     }
-
+    &:hover {
+      outline: none;
+      border-bottom: 1px solid #5e17eb;
+    }
     &:focus {
       outline: none;
+      border-bottom: 1px solid #5e17eb;
     }
   }
 `;
 
 const Title = styled.div`
   width: 80%;
-  margin: 0 auto;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   padding-bottom: 10px;
-  margin: 50px auto;
+  margin: 0 auto;
 `;
 
 const TitleText = styled.div`
@@ -132,7 +132,6 @@ const DescLocationModal = styled.div`
     border: 1px solid #5e17eb;
   }
   &:hover {
-    cursor: pointer;
     border: 1px solid #5e17eb;
   }
 `;
@@ -148,7 +147,14 @@ const HalfInput = styled.div`
   padding: 5px 10px;
   align-items: center;
   cursor: pointer;
-
+  &:hover {
+    outline: none;
+    border-bottom: 1px solid #5e17eb;
+  }
+  &:focus {
+    outline: none;
+    border-bottom: 1px solid #5e17eb;
+  }
   @media screen and (max-width: 768px) {
     font-size: 16px;
     width: 100%;
@@ -157,33 +163,34 @@ const HalfInput = styled.div`
 
 const LangDrop = styled.div`
   position: absolute;
-  /* border-left: 1px solid gray; */
+  border-left: 1px solid darkgray;
   right: 0px;
-  top: 2px;
+  top: 8px;
   font-size: 34px;
   color: #5e17eb;
-  padding: 0px 5px;
+  padding: 0px 2px;
   cursor: pointer;
 `;
 
 const DateDrop = styled.div`
   position: absolute;
-  /* border-left: 1px solid gray; */
+  border-left: 1px solid darkgray;
   right: 0px;
-  top: 2px;
-  font-size: 30px;
+  top: 8px;
+  font-size: 34px;
   color: #5e17eb;
-  padding: 0px 5px;
+  padding: 0px 2px;
   cursor: pointer;
 `;
 const IconSerch = styled.div`
   position: absolute;
   right: 0px;
-  top: 50px;
-  /* border-left: 1px solid gray; */
+  top: 55px;
+  border-left: 1px solid darkgray;
   font-size: 30px;
   color: #5e17eb;
-  padding: 5px 10px;
+  padding: 0px 5px;
+  /* padding: 5px 10px; */
   cursor: pointer;
 `;
 
@@ -197,6 +204,7 @@ const RowWrap = styled.div`
     align-items: center;
   }
 `;
+
 const HalfWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -255,9 +263,14 @@ const Textarea = styled.textarea`
   background-color: rgba(233, 193, 255, 20%);
   width: 100%;
   height: 200px;
-  outline: none;
+  /* outline: none; */
+  &:hover {
+    outline: none;
+    border-bottom: 1px solid #5e17eb;
+  }
   &:focus {
     outline: none;
+    border-bottom: 1px solid #5e17eb;
   }
 `;
 
@@ -271,6 +284,7 @@ const MapView = styled(Content)`
   border-radius: 5px;
   margin-bottom: 20px;
 `;
+
 const Closed = styled.div`
   display: flex;
   align-items: center;
@@ -326,7 +340,7 @@ const StudyDesc = () => {
   }
 
   const handleLocationValue = (e, value) => {
-    if (e === "click") {
+    if (e.type === "click") {
       console.log("location");
 
       console.log(value);
@@ -381,6 +395,7 @@ const StudyDesc = () => {
   const [locationSearch, setLocationSearch] = useState("");
   const [langOpen, setLangOpen] = useState(false);
   const [locOpen, setLocOpen] = useState(false);
+  const [dateOpen, setDateOpen] = useState(false);
   const { user } = useSelector((state) => state.user);
   // const { dateModal } = useSelector((store) => store.studyModal);
   const { dateData } = useSelector((store) => store.searchData);
@@ -439,8 +454,8 @@ const StudyDesc = () => {
     ));
   };
 
-  const handleStudyPosting = (e) => {
-    e.preventDefault();
+  const handleStudyPosting = () => {
+    
     dispatch(
       openModal({
         name: "WriteStudy",
@@ -471,20 +486,24 @@ const StudyDesc = () => {
             <HalfInput>
               {dateData ? calenderDateValue : null}
               <DateDrop>
-                <IoMdArrowDropdown onClick={() => dispatch(dateModal(!date))} />
+                <IoMdArrowDropdown
+                  onClick={() => {
+                    setDateOpen(!dateOpen);
+                    dispatch(dateModal());
+                  }}
+                />
               </DateDrop>
-              {date ? (
+              {dateOpen ? (
                 <DescDateModal>
-                  <CalenderDate />
+                  <CalenderDate setDateOpen={setDateOpen} />
                 </DescDateModal>
               ) : null}
             </HalfInput>
           </HalfWrapper>
           <HalfWrapper>
-            <Text classNane="lanaguage">언어</Text>
-
+            <Text classNane="lanaguage">학습 언어</Text>
             <HalfInput>
-              {data.language.map((el) => el.name + "," + " ")}
+              {data.language.map((el) => el.name).join()}
               <LangDrop>
                 <IoMdArrowDropdown onClick={() => setLangOpen(!langOpen)} />
               </LangDrop>
@@ -497,16 +516,23 @@ const StudyDesc = () => {
                         key={idx}
                         className="elements"
                         onClick={() => {
-                          setData({
-                            ...data,
-                            language: [
-                              ...data.language,
-                              {
-                                id: idx + 1,
-                                name: el,
-                              },
-                            ],
-                          });
+                          if (
+                            data.language.filter((obj) => obj.name === el)
+                              .length === 0
+                          ) {
+                            setData({
+                              ...data,
+
+                              language: [
+                                ...data.language,
+                                {
+                                  id: idx + 1,
+                                  name: el,
+                                },
+                              ],
+                            });
+                          }
+
                           setLangOpen(!langOpen);
                         }}
                       >
@@ -529,12 +555,13 @@ const StudyDesc = () => {
         <Wrapper>
           <Text>스터디 장소</Text>
           <input
+            placeholder="ex. 신촌역 4번 출구"
             className="locaitionInput"
             onKeyDown={(e) => {
               handleLocationValue(e, e.target.value);
               setLocationSearch(e.target.value);
             }}
-            placeholder="ex. 신촌역 4번 출구"
+
             ref={locationInput}
           ></input>
           {locOpen ? (
@@ -546,7 +573,7 @@ const StudyDesc = () => {
             <IoIosSearch
               onClick={(e) => {
                 setLocOpen(!locOpen);
-                handleLocationValue(e, locationSearch);
+                handleLocationValue(e, locationInput.current.value);
               }}
             ></IoIosSearch>
           </IconSerch>
@@ -570,7 +597,11 @@ const StudyDesc = () => {
               }}
             ></input>
           </Checkbox>
-          <ConfirmButton onClick={handleStudyPosting}>저장하기</ConfirmButton>
+          <ConfirmButton onClick={() => { 
+handleStudyPosting();
+dispatch(resetData());
+
+}}>저장하기</ConfirmButton>
         </Closed>
       </Desc>
     </WriteStudyDesc>

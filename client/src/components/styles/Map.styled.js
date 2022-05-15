@@ -3,8 +3,10 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import "./Map.styled.css";
 import { langImg } from "../../static/images/langImg";
-import ConfirmModal from "./Modals/ConfirmModal";
+import { openModal } from "../../features/modal/modalSlice";
+import { unLikeStudy, likeStudy } from "../../features/studies/allStudiesSlice";
 import { unLikeStudyApi, likeStudyApi } from "../../api/study";
+import { getLikedStudies, reset } from "../../features/studies/allStudiesSlice";
 import LoadingIndicator from "../LoadingIndicator";
 
 const Title = styled.div`
@@ -154,29 +156,30 @@ const Map = () => {
       info.id = "info";
       info.textContent = el.info;
 
-      const icon = document.createElement("i");
-      icon.id = "icon";
-      icon.className = `fa-regular fa-heart fa-2x`;
-      icon.onclick = heartHandler;
+      // const icon = document.createElement("i");
+      // icon.id = "icon";
+      // icon.className = `fa-regular fa-heart fa-2x`;
+      // icon.onclick = () => heartHandler();
 
-      function heartHandler() {
-        if (icon.className === "fa-solid fa-heart fa-1x") {
-          icon.className = "fa-regular fa-heart fa-1x";
+      // function heartHandler() {
+      //   if (icon.className === "fa-solid fa-heart fa-1x") {
+      //     icon.className = "fa-regular fa-heart fa-1x";
+      //     console.log("unlike");
+      //     unLikeStudyApi(user.id, { study_id: el.id });
+      //     // dispatch(
+      //     //   unLikeStudy({ id: user.id, studyData: { study_id: el.id } })
+      //     // );
+      //   } else {
+      //     icon.className = "fa-solid fa-heart fa-1x";
+      //     console.log("like");
+      //     likeStudyApi(user.id, { study_id: el.id }).then((res) =>
+      //       console.log(res)
+      //     );
+      //     // dispatch(likeStudy({ id: user.id, studyData: { study_id: el.id } }));
+      //   }
+      // }
 
-          // dispatch(
-          // unLikeStudy({ id: user.id, studyData: { study_id: el.id } })
-          unLikeStudyApi(user.id, { study_id: el.id });
-          // );
-        } else {
-          icon.className = "fa-solid fa-heart fa-1x";
-
-          likeStudyApi(user.id, { study_id: el.id }).then((res) =>
-            console.log(res)
-          );
-        }
-      }
-
-      desc.append(info, icon);
+      desc.append(info);
       content.append(title, img, desc);
 
       //overlay로 maps에 뿌려줌
@@ -186,18 +189,21 @@ const Map = () => {
         clickable: true,
       });
 
-      const firstHeartHandler = () => {
-        let heartStudy = likedStudies.filter((study) => study.id === el.id);
-        if (heartStudy.length > 0) {
-          icon.className = "fa-solid fa-heart fa-1x";
-        } else {
-          icon.className = "fa-regular fa-heart fa-1x";
-        }
-      };
+      // const firstHeartHandler = () => {
+      //   console.log("ls2", likedStudies);
+      //   console.log(el.id);
+      //   let heartStudy = likedStudies.filter((study) => study.id === el.id);
+      //   console.log("hs", heartStudy);
+      //   if (heartStudy.length > 0) {
+      //     icon.className = "fa-solid fa-heart fa-1x";
+      //   } else {
+      //     icon.className = "fa-regular fa-heart fa-1x";
+      //   }
+      // };
 
       //마커를 클릭하면 지도에 모달창 생성
       kakao.maps.event.addListener(marker, "click", function () {
-        firstHeartHandler();
+        // firstHeartHandler();
         overlay.setMap(map);
       });
 
@@ -208,9 +214,23 @@ const Map = () => {
     });
   };
 
+  const handleNoResult = (e) => {
+    dispatch(
+      openModal({
+        name: "NoResults",
+      })
+    );
+  };
+
   useEffect(() => {
-    mapscript();
-  }, [studies]);
+    console.log(studies.length);
+    if (studies.length !== 0) {
+      mapscript();
+    }
+    if (studies.length === 0) {
+      handleNoResult();
+    }
+  }, [studies, likedStudies]);
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -220,15 +240,11 @@ const Map = () => {
     <>
       {studies.length === 0 ? (
         <>
-          <Div>
-            <Center>"검색 결과가 없습니다"</Center>
-            <MapView id="map" ref={container} className="none" />
-          </Div>
-          <ConfirmModal />
+          <MapView id="map" ref={container} className="none" />
         </>
       ) : (
         <>
-          <Title>"검색 결과" </Title>
+          <Title>검색 결과</Title>
           <MapView id="map" ref={container} />
         </>
       )}

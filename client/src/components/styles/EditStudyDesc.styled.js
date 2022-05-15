@@ -9,12 +9,11 @@ import CalenderDate from "../Calendar.js";
 import { useDispatch, useSelector } from "react-redux";
 import { studyApi } from "../../api/study";
 import { useParams } from "react-router-dom";
-// import { openModal } from "../../features/modal/modalSlice";
-import { dateModal } from "../../features/Search/searchModalSlice";
+import { resetData } from "../../features/Search/searchDataSlice";
 
 const WriteStudyDesc = styled.div`
   grid-column: 4/12;
-  
+
   @media screen and (max-width: 1024px) {
     grid-column: 3/13;
     transform: 1s;
@@ -330,6 +329,9 @@ const EditStudyDesc = () => {
   const [data, setData] = useState(null);
   const [checked, setChecked] = useState(false);
 
+  const moment = require("moment");
+
+
   var ps = new kakao.maps.services.Places();
 
   // 키워드 검색을 요청하는 함수입니다
@@ -508,14 +510,20 @@ const EditStudyDesc = () => {
               <RowWrap>
                 <HalfWrapper>
                   <Text>스터디 시작일</Text>
-                  <HalfInput defaultValue={calenderDateValue}>
-                    {dateData ? calenderDateValue : calenderDateValue}
+
+                  <HalfInput>
+                    {dateData
+                      ? calenderDateValue
+                      : moment(data.startDate).format("M월 DD일")}
                     <DateDrop>
-                      <IoMdArrowDropdown onClick={() => setOpen({ ...open, date: !open.date })} />
+                      <IoMdArrowDropdown
+                        onClick={() => setOpen({ ...open, date: !open.date })}
+                      />
                     </DateDrop>
                     {open.date ? (
                       <DescDateModal>
-                        <CalenderDate />
+                        <CalenderDate setOpen={setOpen} open={open} />
+
                       </DescDateModal>
                     ) : null}
                   </HalfInput>
@@ -526,7 +534,11 @@ const EditStudyDesc = () => {
                     {data.language?.map((el) => el.name).join()}
                     <DateDrop>
                       <IoMdArrowDropdown
-                        onClick={() => setOpen({ ...open, language: !open.language })}
+
+                        onClick={() =>
+                          setOpen({ ...open, language: !open.language })
+                        }
+
                       />
                     </DateDrop>
                     {open.language ? (
@@ -537,7 +549,12 @@ const EditStudyDesc = () => {
                               key={idx}
                               className="elements"
                               onClick={() => {
-                                if (data.language.filter((obj) => obj.name === el).length === 0) {
+
+                                if (
+                                  data.language.filter((obj) => obj.name === el)
+                                    .length === 0
+                                ) {
+
                                   setData({
                                     ...data,
 
@@ -566,7 +583,10 @@ const EditStudyDesc = () => {
                 <Text>스터디 참여 링크</Text>
                 <input
                   placeholder="ex. 카카오톡 오픈채팅 링크"
-                  onChange={(e) => handleInputValue("kakaoLink", e.target.value)}
+
+                  onChange={(e) =>
+                    handleInputValue("kakaoLink", e.target.value)
+                  }
 
                   defaultValue={data.kakaoLink}
                 ></input>
@@ -619,7 +639,16 @@ const EditStudyDesc = () => {
                     }}
                   ></input>
                 </Checkbox>
-                <ConfirmButton onClick={handleUpdateStudy}>수정완료</ConfirmButton>
+
+                <ConfirmButton
+                  onClick={(e) => {
+                    handleUpdateStudy(e);
+                    dispatch(resetData());
+                  }}
+                >
+                  수정완료
+                </ConfirmButton>
+
               </Closed>
             </Desc>
           </WriteStudyDesc>
