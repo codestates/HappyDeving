@@ -27,12 +27,9 @@ import HeaderLocationModal from "./Modals/HeaderLocationModal";
 
 const icons = {
   logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-  write:
-    "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
-  login:
-    "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
-  mypage:
-    "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+  write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+  login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+  mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
 };
 
 const StyledHeader = styled.header`
@@ -250,8 +247,12 @@ const DesktopModal = styled.div`
   transform: translateY(90px);
   border-radius: 10px;
   background-color: white;
-  overflow: scroll;
-
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
   @media screen and (min-width: 1024px) {
     width: 500px;
   }
@@ -308,7 +309,7 @@ const Language = styled.div`
 const LocationWrapper = styled.div`
   width: 100%;
   height: 100%;
-  overflow: scroll;
+  /* overflow: scroll; */
 `;
 const DateWrapper = styled.div`
   width: 100%;
@@ -381,9 +382,7 @@ const Header = () => {
 
   const { user } = useSelector((state) => state.user);
   const { location, date, language } = useSelector((store) => store.search);
-  const { locationData, dateData, languageData } = useSelector(
-    (store) => store.searchData
-  );
+  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
   const { calenderDateValue } = useSelector((store) => store.calender);
 
   const [header, setHeader] = useState(false);

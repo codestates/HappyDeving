@@ -392,7 +392,7 @@ const StudyDesc = () => {
 
       setLocation(res.data?.data?.study.location);
     });
-    dispatch(getLikedStudies(user.id)); // 새로고침마다 슬라이스가 리셋되면서 빈배열로 나오니까 다시 get 요청을 하는 수밖에 없다
+    dispatch(getLikedStudies(user?.id)); // 새로고침마다 슬라이스가 리셋되면서 빈배열로 나오니까 다시 get 요청을 하는 수밖에 없다
   }, []);
 
   const handleUnlike = async () => {
@@ -426,138 +426,139 @@ const StudyDesc = () => {
   };
   return (
     <>
-      {data ? (
-        <StyleStudyDesc>
-          <TitleBar>
-            <Title>{data.title}</Title>
-            <Alter>
-              {data.user_id === user?.id ? (
-                <>
-                  <HeartIcon>
-                    {isLike ? (
-                      <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
-                    ) : (
-                      <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
-                    )}
-                  </HeartIcon>
-                  <ShareIcon onClick={handleShareButton}>
-                    {share ? <ShareSocialButton /> : null}
-                    <FontAwesomeIcon icon={faShareNodes} />
-                  </ShareIcon>
-                  <Update onClick={() => navigate(`/study/edit/${data.id}`)}>수정</Update>
-                  <Delete onClick={handleStudyDeletion}>삭제</Delete>
-                </>
-              ) : (
-                <>
-                  <HeartIcon>
-                    {isLike ? (
-                      <FontAwesomeIcon
-                        onClick={user ? handleUnlike : handleLogin}
-                        icon={like}
-                        size="1x"
-                        color="red"
-                      />
-                    ) : (
-                      <FontAwesomeIcon
-                        onClick={user ? handleLike : handleLogin}
-                        icon={unLike}
-                        size="1x"
-                      />
-                    )}
-                  </HeartIcon>
-                  <ShareIcon onClick={handleShareButton}>
-                    {share ? <ShareSocialButton /> : null}
-                    <FontAwesomeIcon icon={faShareNodes} />
-                  </ShareIcon>
-                </>
-              )}
-            </Alter>
-          </TitleBar>
-          <Host>
-            <CreateAt>{moment(data.createAt).format("YYYY-MM-DD")}</CreateAt>
+      {
+        data ? (
+          <StyleStudyDesc>
+            <TitleBar>
+              <Title>{data.title}</Title>
+              <Alter>
+                {data.user_id === user?.id ? (
+                  <>
+                    <HeartIcon>
+                      {isLike ? (
+                        <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
+                      ) : (
+                        <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
+                      )}
+                    </HeartIcon>
+                    <ShareIcon onClick={handleShareButton}>
+                      {share ? <ShareSocialButton /> : null}
+                      <FontAwesomeIcon icon={faShareNodes} />
+                    </ShareIcon>
+                    <Update onClick={() => navigate(`/study/edit/${data.id}`)}>수정</Update>
+                    <Delete onClick={handleStudyDeletion}>삭제</Delete>
+                  </>
+                ) : (
+                  <>
+                    <HeartIcon>
+                      {isLike ? (
+                        <FontAwesomeIcon
+                          onClick={user ? handleUnlike : handleLogin}
+                          icon={like}
+                          size="1x"
+                          color="red"
+                        />
+                      ) : (
+                        <FontAwesomeIcon
+                          onClick={user ? handleLike : handleLogin}
+                          icon={unLike}
+                          size="1x"
+                        />
+                      )}
+                    </HeartIcon>
+                    <ShareIcon onClick={handleShareButton}>
+                      {share ? <ShareSocialButton /> : null}
+                      <FontAwesomeIcon icon={faShareNodes} />
+                    </ShareIcon>
+                  </>
+                )}
+              </Alter>
+            </TitleBar>
+            <Host>
+              <CreateAt>{moment(data.createAt).format("YYYY-MM-DD")}</CreateAt>
 
-            <MiniProfileWrap>
-              <img className="profile" src={data?.image} />
-              <p>{data?.username}</p>
-            </MiniProfileWrap>
-          </Host>
-          <DummyImg></DummyImg>
-          <Wrap>
-            <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
+              <MiniProfileWrap>
+                <img className="profile" src={data?.image} />
+                <p>{data?.username}</p>
+              </MiniProfileWrap>
+            </Host>
+            <DummyImg></DummyImg>
+            <Wrap>
+              <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
 
-            <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
-            <Icon>
-              <BsFileEarmarkCodeFill />
-            </Icon>
-            <TextL>
-              {data?.language.map((el, idx) => (
-                <span key={idx} className="langSpan">
-                  {el.name + ","}
-                </span>
-              ))}
-            </TextL>
-          </Wrap>
-          <Wrap>
-            <Icon>
-              <BsFillCalendarDateFill />
-            </Icon>
-            <Text>{data?.startDate}</Text>
-            <Icon>
-              <FaMapMarkerAlt />
-            </Icon>
-            <TextL>{data?.location.name}</TextL>
-          </Wrap>
-          <div className="mapview">
-            <MapView id="map" ref={container} />
-          </div>
-          <ContentWrap>
-            <Content>{data?.content}</Content>
-          </ContentWrap>
-
-          <ProfileWrap>
-            <ProfileInWrap>
-              <ProfileImage>
-                <img src={data?.image} />
-              </ProfileImage>
-              <LinkButtons>
-                <a href={data?.github} target="_blank" rel="noreferrer">
-                  <FontAwesomeIcon icon={faGithubAlt} />
-                  <span>git</span>
-                </a>
-                <a href={data?.blog} target="_blank" rel="noreferrer">
-                  <FontAwesomeIcon icon={faBlogger} />
-                  <span>blog</span>
-                </a>
-              </LinkButtons>
-            </ProfileInWrap>
-
-            <Profile>
-              <h1>스터디장, {data?.username}을 소개합니다.</h1>
-              <Bio>{data?.bio}</Bio>
-            </Profile>
-          </ProfileWrap>
-          <ButtonWrap>
-            <ConfirmButton onClick={() => setShowComments(!showComments)}>
-              <p>댓글작성 | 보기</p>
-
+              <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
               <Icon>
-                <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
+                <BsFileEarmarkCodeFill />
               </Icon>
-            </ConfirmButton>
-            <ConfirmButton onClick={user ? handleKakaoConnect : handleLogin}>
-              스터디 참여하기
-            </ConfirmButton>
-          </ButtonWrap>
+              <TextL>
+                {data?.language.map((el, idx) => (
+                  <span key={idx} className="langSpan">
+                    {el.name + ","}
+                  </span>
+                ))}
+              </TextL>
+            </Wrap>
+            <Wrap>
+              <Icon>
+                <BsFillCalendarDateFill />
+              </Icon>
+              <Text>{data?.startDate}</Text>
+              <Icon>
+                <FaMapMarkerAlt />
+              </Icon>
+              <TextL>{data?.location.name}</TextL>
+            </Wrap>
+            <div className="mapview">
+              <MapView id="map" ref={container} />
+            </div>
+            <ContentWrap>
+              <Content>{data?.content}</Content>
+            </ContentWrap>
 
-          <CommentsDiv>{showComments ? <Comments studyId={id} /> : null}</CommentsDiv>
-        </StyleStudyDesc>
-      ) : (
-        <Alert>
-          <AlertText>
-            <h1>존재하지 않는 게시글입니다.</h1>
-          </AlertText>
-        </Alert>
-      )}
+            <ProfileWrap>
+              <ProfileInWrap>
+                <ProfileImage>
+                  <img src={data?.image} />
+                </ProfileImage>
+                <LinkButtons>
+                  <a href={data?.github} target="_blank" rel="noreferrer">
+                    <FontAwesomeIcon icon={faGithubAlt} />
+                    <span>git</span>
+                  </a>
+                  <a href={data?.blog} target="_blank" rel="noreferrer">
+                    <FontAwesomeIcon icon={faBlogger} />
+                    <span>blog</span>
+                  </a>
+                </LinkButtons>
+              </ProfileInWrap>
+
+              <Profile>
+                <h1>스터디장, {data?.username}을 소개합니다.</h1>
+                <Bio>{data?.bio}</Bio>
+              </Profile>
+            </ProfileWrap>
+            <ButtonWrap>
+              <ConfirmButton onClick={() => setShowComments(!showComments)}>
+                <p>댓글작성 | 보기</p>
+
+                <Icon>
+                  <FontAwesomeIcon icon={faAngleDown} size="1x" color="black" />
+                </Icon>
+              </ConfirmButton>
+              <ConfirmButton onClick={user ? handleKakaoConnect : handleLogin}>
+                스터디 참여하기
+              </ConfirmButton>
+            </ButtonWrap>
+
+            <CommentsDiv>{showComments ? <Comments studyId={id} /> : null}</CommentsDiv>
+          </StyleStudyDesc>
+        ) : null
+        // <Alert>
+        //   <AlertText>
+        //     <h1>존재하지 않는 게시글입니다.</h1>
+        //   </AlertText>
+        // </Alert>
+      }
     </>
   );
 };
