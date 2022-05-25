@@ -21,9 +21,7 @@ module.exports = {
 
     const postReq = await https.request(postOptions, function (res) {
       res.setEncoding("utf8");
-      res.on("data", (d) => {
-        console.log("Response: " + d);
-      });
+      res.on("data", (d) => {});
     });
 
     postReq.on("error", (error) => {

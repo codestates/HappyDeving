@@ -1,9 +1,12 @@
 /* eslint-disable react/prop-types */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getLikedStudies, unLikeStudy } from "../features/studies/allStudiesSlice";
+import {
+  getLikedStudies,
+  unLikeStudy,
+} from "../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import { langImg } from "../static/images/langImg";
 import { faHeart as like } from "@fortawesome/free-solid-svg-icons";
@@ -15,7 +18,6 @@ const CardContainer = styled.div`
   border: 3px solid rgba(233, 193, 255, 20%);
   width: 300px;
   height: 170px;
-
   margin-top: 5%;
   text-align: flex-start;
   cursor: pointer;
@@ -82,6 +84,7 @@ const StartDate = styled.div`
   display: flex;
   font-size: 15px;
   color: darkgray;
+  text-overflow: ellipsis;
   @media screen and (max-width: 1110px) {
     font-size: 14px;
     transition: 0.5s;
@@ -89,18 +92,20 @@ const StartDate = styled.div`
 `;
 const Content = styled.div`
   font-family: "Binggrae";
+  text-overflow: ellipsis;
+  overflow: hidden;
   width: 100%;
   margin: 5px 0px;
   /* border-top: 2px solid rgba(233, 193, 255, 80%); */
   border-top: 2px solid darkgray;
   font-size: 16px;
-  padding: 10px 10px 0px 0px;
-  overflow: hidden;
+  padding: 10px 5px 70px 0px;
   display: flex;
   height: 110px;
 
   @media screen and (max-width: 1100px) {
     font-size: 14px;
+    padding: 10px 5px 60px 0px;
   }
 `;
 
@@ -112,6 +117,7 @@ const LikeButton = styled.button`
 
 const HeartIcon = styled.span`
   font-size: 20px;
+
   color: #d32f2f;
 
   @media screen and (max-width: 1100px) {
@@ -137,7 +143,9 @@ const StudyCard = ({ myStudy, likedStudy }) => {
   };
 
   const handleUnlike = async () => {
-    await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: likedStudy.id } }));
+    await dispatch(
+      unLikeStudy({ id: user.id, studyData: { study_id: likedStudy.id } })
+    );
     await dispatch(getLikedStudies(user.id));
   };
 
@@ -154,10 +162,15 @@ const StudyCard = ({ myStudy, likedStudy }) => {
           <LanguageImg>{imageHandler(likedStudy)}</LanguageImg>
         )}
         <CardForm>
-          <Title onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>
+          <Title
+            onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}
+          >
             {myStudy ? myStudy.title : likedStudy.title}
           </Title>
-          <Content onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}>
+
+          <Content
+            onClick={() => moveToStudyPage(myStudy ? myStudy : likedStudy)}
+          >
             {myStudy ? myStudy.content : likedStudy.content}
           </Content>
           <LikeButton>
@@ -166,7 +179,11 @@ const StudyCard = ({ myStudy, likedStudy }) => {
             </StartDate>
             {myStudy ? null : (
               <HeartIcon>
-                <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x"></FontAwesomeIcon>
+                <FontAwesomeIcon
+                  onClick={handleUnlike}
+                  icon={like}
+                  size="1x"
+                ></FontAwesomeIcon>
               </HeartIcon>
             )}
           </LikeButton>

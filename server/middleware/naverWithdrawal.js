@@ -23,7 +23,5 @@ module.exports = {
         Authorization: `bearer ${accessToken}`,
       },
     });
-
-    console.log(naverInfo);
   },
 };

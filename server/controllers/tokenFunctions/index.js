@@ -35,13 +35,11 @@ module.exports = {
   },
   checkRefreshToken: (req, res) => {
     const { refreshToken } = req.cookies;
-    console.log(refreshToken);
 
     if (!refreshToken) {
       res.status(400).json("refreshToken not provided");
     } else {
       const data = verify(refreshToken, process.env.REFRESH_SECRET);
-      console.log(data);
       return data;
     }
   },

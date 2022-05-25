@@ -14,23 +14,23 @@ const initialState = {
   message: "",
 };
 
-export const getComments = createAsyncThunk("comment/getComments", async (id, thunkAPI) => {
-  try {
-    return await getCommentsApi(id).then((res) => {
-      console.log("getting comments: ", res.data.data.comments);
-
-      return res.data.data.comments;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const getComments = createAsyncThunk(
+  "comment/getComments",
+  async (id, thunkAPI) => {
+    try {
+      return await getCommentsApi(id).then((res) => {
+        return res.data.data.comments;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 export const writeComment = createAsyncThunk(
   "comment/writeComment",
   async (commentData, thunkAPI) => {
     try {
       return await writeCommentApi(commentData).then((res) => {
-        console.log("writing comment: ", res);
         return res.data;
       });
     } catch (error) {
@@ -57,9 +57,11 @@ export const deleteComment = createAsyncThunk(
   "comment/deleteComment",
   async (comment, thunkAPI) => {
     try {
-      return await deleteCommentApi({ study_commentId: comment.id }).then((res) => {
-        return res.data;
-      });
+      return await deleteCommentApi({ study_commentId: comment.id }).then(
+        (res) => {
+          return res.data;
+        }
+      );
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
     }
@@ -118,7 +120,9 @@ export const commentSlice = createSlice({
         // console.log("edit comment data: ", action.payload.data.comments[0]);
         // console.log("edit comment data: ", action.meta.arg.study_commentId);
         state.comments = state.comments.map((comment) =>
-          comment.id === action.meta.arg.study_commentId ? action.payload.data.comments[0] : comment
+          comment.id === action.meta.arg.study_commentId
+            ? action.payload.data.comments[0]
+            : comment
         );
       })
       .addCase(editComment.rejected, (state, action) => {
@@ -133,7 +137,9 @@ export const commentSlice = createSlice({
       .addCase(deleteComment.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
-        state.comments = state.comments.filter((comment) => comment.id !== action.meta.arg.id);
+        state.comments = state.comments.filter(
+          (comment) => comment.id !== action.meta.arg.id
+        );
       })
       .addCase(deleteComment.rejected, (state, action) => {
         state.isLoading = false;

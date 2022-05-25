@@ -4,7 +4,10 @@ import Content from "../Content.styled";
 import { langImg } from "../../../static/images/langImg";
 import { reset } from "../../../features/Search/searchModalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { setLanguageData, resetData } from "../../../features/Search/searchDataSlice";
+import {
+  setLanguageData,
+  resetData,
+} from "../../../features/Search/searchDataSlice";
 import { getStudiesMapApi } from "../../../api/study";
 import { setStudiesData } from "../../../features/studies/studiesSlice";
 import { useNavigate } from "react-router-dom";
@@ -41,7 +44,9 @@ const StyledLanguageModal = styled(Content)`
 const HeaderLanguageModal = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
+  const { locationData, dateData, languageData } = useSelector(
+    (store) => store.searchData
+  );
 
   const guType = locationData.split(" ")[0];
   const dongType = locationData.split(" ")[1];
@@ -53,10 +58,11 @@ const HeaderLanguageModal = () => {
           className="elements"
           onClick={() => {
             dispatch(setLanguageData(el));
-            getStudiesMapApi({ guType, dongType, languageData, dateData }).then((res) => {
-              console.log(res.data);
-              dispatch(setStudiesData(res.data));
-            });
+            getStudiesMapApi({ guType, dongType, languageData, dateData }).then(
+              (res) => {
+                dispatch(setStudiesData(res.data));
+              }
+            );
             //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,
             navigate("/map");
             dispatch(resetData());

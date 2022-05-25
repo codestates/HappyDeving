@@ -17,7 +17,7 @@ const StyledLanding = styled.div`
   width: 100%;
   height: 60vh;
   transition: 2s;
-  margin-top: 100px;
+  /* margin-top: 100px; */
   margin-bottom: 500px;
   @media screen and (min-width: 768px) and (max-width: 1023px) {
     grid-column: 2 / 14;
@@ -28,7 +28,7 @@ const StyledLanding = styled.div`
     grid-column: 1 / 15;
     transition: 2s;
     flex-direction: column;
-    margin-bottom: 200px;
+    margin-bottom: 100px;
   }
 `;
 
@@ -38,10 +38,14 @@ const LandingImage = styled.img`
   object-fit: cover;
   position: absolute;
   /* top: 5%; */
+  transition: 0.5s;
   @media screen and (min-width: 768px) and (max-width: 1023px) {
     object-fit: cover;
+    transition: 0.5s;
   }
   @media screen and (max-width: 767px) {
+    transition: 1s;
+    height: 50%;
     object-fit: scale-down;
   }
 `;
@@ -72,6 +76,7 @@ const TitleTransBox = styled.div`
     color: rgb(70, 69, 71);
   }
   @media screen and (min-width: 768px) and (max-width: 1023px) {
+    transition: 1s;
     h1 {
       font-size: 2.2rem;
       span {
@@ -83,6 +88,9 @@ const TitleTransBox = styled.div`
     }
   }
   @media screen and (max-width: 767px) {
+    transition: 1s;
+    top: 60%;
+    margin-top: 40px;
     h1 {
       padding: 20px;
       font-size: 1.5rem;

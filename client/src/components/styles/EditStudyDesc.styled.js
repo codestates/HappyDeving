@@ -331,7 +331,6 @@ const EditStudyDesc = () => {
 
   const moment = require("moment");
 
-
   var ps = new kakao.maps.services.Places();
 
   // 키워드 검색을 요청하는 함수입니다
@@ -368,7 +367,7 @@ const EditStudyDesc = () => {
     const options = {
       //지도를 생성할 때 필요한 기본 옵션
       center: new kakao.maps.LatLng(location.y, location.x), //지도의 중심좌표
-      level: 5, //지도의 레벨(확대, 축소 정도)
+      level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
@@ -378,7 +377,6 @@ const EditStudyDesc = () => {
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
     var img = langImg[lang[0]["name"]];
-
 
     var marker = new kakao.maps.Marker({
       map: map,
@@ -523,7 +521,6 @@ const EditStudyDesc = () => {
                     {open.date ? (
                       <DescDateModal>
                         <CalenderDate setOpen={setOpen} open={open} />
-
                       </DescDateModal>
                     ) : null}
                   </HalfInput>
@@ -534,11 +531,9 @@ const EditStudyDesc = () => {
                     {data.language?.map((el) => el.name).join()}
                     <DateDrop>
                       <IoMdArrowDropdown
-
                         onClick={() =>
                           setOpen({ ...open, language: !open.language })
                         }
-
                       />
                     </DateDrop>
                     {open.language ? (
@@ -549,12 +544,10 @@ const EditStudyDesc = () => {
                               key={idx}
                               className="elements"
                               onClick={() => {
-
                                 if (
                                   data.language.filter((obj) => obj.name === el)
                                     .length === 0
                                 ) {
-
                                   setData({
                                     ...data,
 
@@ -583,11 +576,9 @@ const EditStudyDesc = () => {
                 <Text>스터디 참여 링크</Text>
                 <input
                   placeholder="ex. 카카오톡 오픈채팅 링크"
-
                   onChange={(e) =>
                     handleInputValue("kakaoLink", e.target.value)
                   }
-
                   defaultValue={data.kakaoLink}
                 ></input>
               </Wrapper>
@@ -612,7 +603,6 @@ const EditStudyDesc = () => {
                   <IoIosSearch
                     className="icon"
                     onClick={(locationInput) => {
-                      console.log(locationInput.target.value);
                       setOpen({ ...open, location: true });
                     }}
                   />
@@ -648,7 +638,6 @@ const EditStudyDesc = () => {
                 >
                   수정완료
                 </ConfirmButton>
-
               </Closed>
             </Desc>
           </WriteStudyDesc>

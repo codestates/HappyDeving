@@ -6,7 +6,6 @@ import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
 import LoadingIndicator from "../../../LoadingIndicator";
 
-
 const Div = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,7 +31,6 @@ const ConfirmButton = styled.button`
 `;
 
 const NoResult = (props) => {
-  console.log("Noresult props: ", props); // { study_id: id }
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.allStudies);
@@ -42,9 +40,7 @@ const NoResult = (props) => {
   }
   return (
     <>
-
       <Div>
-
         <ConfirmTitle>검색 결과가 없습니다.</ConfirmTitle>
         <ConfirmButton
           onClick={async () => {
@@ -54,10 +50,7 @@ const NoResult = (props) => {
         >
           확인
         </ConfirmButton>
-
       </Div>
-
-
     </>
   );
 };

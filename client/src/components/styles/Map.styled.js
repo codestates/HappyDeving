@@ -68,15 +68,14 @@ const Map = () => {
 
   //검색한 조건에 맞는 스터디들의 목록
   const { studies } = useSelector((store) => store.studies);
-  console.log(studies);
   // const { user } = useSelector((state) => state.user);
 
   //마커 생성용 데이터 가공
   const markerdata = studies
     ? studies.map((el) => {
-        var langname = el.language[0]?.name === "c++" ? "c" : el.language[0]?.name;
+        var langname =
+          el.language[0]?.name === "c++" ? "c" : el.language[0]?.name;
 
-        console.log("langname", langname);
         return {
           id: el.id,
           title: el.title,
@@ -105,7 +104,7 @@ const Map = () => {
         studies.length === 0
           ? new kakao.maps.LatLng(37.570975, 126.977759)
           : new kakao.maps.LatLng(markerdata[0].lat, markerdata[0].lng), //지도의 중심좌표.
-      level: 5, //지도의 레벨(확대, 축소 정도)
+      level: 3, //지도의 레벨(확대, 축소 정도)
     };
 
     var map = new kakao.maps.Map(container.current, options);
@@ -115,8 +114,6 @@ const Map = () => {
       imageOption = { offset: new kakao.maps.Point(27, 69) }; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
     markerdata.forEach((el) => {
-      console.log("el.img", el.img);
-
       var marker = new kakao.maps.Marker({
         map: map,
         position: new kakao.maps.LatLng(el.lat, el.lng),
@@ -222,7 +219,6 @@ const Map = () => {
   };
 
   useEffect(() => {
-    console.log("studies.length: ", studies.length);
     if (studies.length !== 0) {
       mapscript();
     }

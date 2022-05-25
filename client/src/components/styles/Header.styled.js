@@ -27,9 +27,12 @@ import HeaderLocationModal from "./Modals/HeaderLocationModal";
 
 const icons = {
   logo: "https://cdn.discordapp.com/attachments/965506579564732419/967356348390076427/happylogo2.png",
-  write: "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
-  login: "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
-  mypage: "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
+  write:
+    "https://cdn.discordapp.com/attachments/965506579564732419/968872695011885076/7.png",
+  login:
+    "https://cdn.discordapp.com/attachments/965506579564732419/968872695255142420/8.png",
+  mypage:
+    "https://cdn.discordapp.com/attachments/965506579564732419/969043355067617321/9.png",
 };
 
 const StyledHeader = styled.header`
@@ -382,7 +385,9 @@ const Header = () => {
 
   const { user } = useSelector((state) => state.user);
   const { location, date, language } = useSelector((store) => store.search);
-  const { locationData, dateData, languageData } = useSelector((store) => store.searchData);
+  const { locationData, dateData, languageData } = useSelector(
+    (store) => store.searchData
+  );
   const { calenderDateValue } = useSelector((store) => store.calender);
 
   const [header, setHeader] = useState(false);
@@ -555,7 +560,6 @@ const Header = () => {
                   languageData,
                   dateData,
                 }).then((res) => {
-                  console.log(res.data);
                   dispatch(setStudiesData(res.data));
                 });
                 //res.data.studies를 markerdata로,  map api : 해당 동으로 center 지정,

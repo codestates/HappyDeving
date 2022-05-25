@@ -52,9 +52,7 @@ module.exports = {
       const { id, loginMethod, email } = userInfo.dataValues;
       // return res.json("ok");
 
-      console.log(req.headers);
       const { authorization } = req.headers;
-      console.log(userInfo.dataValues);
       // const { authorization } = req.cookie;
       // console.log("cookies", req.cookies.accessToken);
       const accessToken = authorization.split(" ")[1];

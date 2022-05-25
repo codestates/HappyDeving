@@ -25,7 +25,6 @@ const Map = () => {
       <div
         key={idx}
         onClick={() => {
-          console.log(location);
           setLocation(location);
         }}
       >
@@ -65,7 +64,11 @@ const Map = () => {
         map: map,
         position: new kakao.maps.LatLng(markerdata.lat, markerdata.lng),
         title: markerdata.title,
-        image: new kakao.maps.MarkerImage(markerdata.img, imageSize, imageOption),
+        image: new kakao.maps.MarkerImage(
+          markerdata.img,
+          imageSize,
+          imageOption
+        ),
       });
 
       //marker 배열 내용을 하나씩 넣어서 만드는 과정

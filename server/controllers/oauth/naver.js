@@ -3,7 +3,11 @@ const { User } = require("../../models");
 const bcrypt = require("bcrypt");
 const axios = require("axios");
 const fetch = require("node-fetch");
-const { generateAccessToken, sendTocookie, generaterefreshToken } = require("../tokenFunctions");
+const {
+  generateAccessToken,
+  sendTocookie,
+  generaterefreshToken,
+} = require("../tokenFunctions");
 
 module.exports = {
   get: async (req, res) => {
@@ -42,8 +46,12 @@ module.exports = {
           Authorization: `bearer ${access_token}`,
         },
       });
-      const { id, nickname, profile_image: image, email } = naverInfo.data.response;
-      console.log("id===", typeof id, "nickname", nickname, "image", image, "email", email);
+      const {
+        id,
+        nickname,
+        profile_image: image,
+        email,
+      } = naverInfo.data.response;
 
       const password = `${id}${nickname}`;
       const salt = await bcrypt.genSalt(12);

@@ -341,9 +341,6 @@ const StudyDesc = () => {
 
   const handleLocationValue = (e, value) => {
     if (e.type === "click") {
-      console.log("location");
-
-      console.log(value);
       searchPlaces(value);
     }
 
@@ -455,7 +452,6 @@ const StudyDesc = () => {
   };
 
   const handleStudyPosting = () => {
-    
     dispatch(
       openModal({
         name: "WriteStudy",
@@ -561,7 +557,6 @@ const StudyDesc = () => {
               handleLocationValue(e, e.target.value);
               setLocationSearch(e.target.value);
             }}
-
             ref={locationInput}
           ></input>
           {locOpen ? (
@@ -597,11 +592,14 @@ const StudyDesc = () => {
               }}
             ></input>
           </Checkbox>
-          <ConfirmButton onClick={() => { 
-handleStudyPosting();
-dispatch(resetData());
-
-}}>저장하기</ConfirmButton>
+          <ConfirmButton
+            onClick={() => {
+              handleStudyPosting();
+              dispatch(resetData());
+            }}
+          >
+            저장하기
+          </ConfirmButton>
         </Closed>
       </Desc>
     </WriteStudyDesc>

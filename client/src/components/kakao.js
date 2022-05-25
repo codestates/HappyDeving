@@ -1,6 +1,15 @@
 import React, { useEffect } from "react";
 import shareKakao from "../static/images/icon-kakao.png";
-
+import styled from "styled-components";
+const Div = styled.div`
+  margin: 0px;
+  padding: 0px;
+`;
+const Button = styled.button`
+  padding: 0px;
+  margin: 0px;
+  width: 30px;
+`;
 function KakaoShareButton() {
   useEffect(() => {
     createKakaoButton();
@@ -37,11 +46,11 @@ function KakaoShareButton() {
     }
   };
   return (
-    <div className="kakao-share-button" href="#">
-      <button id="kakao-link-btn">
+    <Div className="kakao-share-button" href="#">
+      <Button id="kakao-link-btn">
         <img src={shareKakao} alt="kakao-share-icon" />
-      </button>
-    </div>
+      </Button>
+    </Div>
   );
 }
 export default KakaoShareButton;

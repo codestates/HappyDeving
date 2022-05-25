@@ -58,8 +58,6 @@ module.exports = {
       const user = await User.findOne({ where: { id: req.params.id } });
       if (!user) return res.status(400).send("유효하지 않은 접근입니다.");
 
-      console.log(req.params);
-
       if (!req.params.token) {
         return res.status(400).send("유효하지 않은 접근입니다.");
       }

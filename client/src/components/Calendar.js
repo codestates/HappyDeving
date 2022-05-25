@@ -16,7 +16,6 @@ function CalenderDate({ setDateOpen, open, setOpen }) {
 
   const handleDate = (value) => {
     onChange(value);
-    console.log(`누르면 바로 변하는 것:${value}`);
     //! 클릭한 날짜를 date 전역 변수에 담아 저장한다. (이 date로 스터디 조회할 예정)
 
     dispatch(setDateData(moment(value).format("YYYY-MM-DD")));
@@ -31,9 +30,6 @@ function CalenderDate({ setDateOpen, open, setOpen }) {
       setDateOpen(false);
     }
   };
-
-  console.log(`서치바:${calenderDateValue}`);
-  console.log(`데이터:${dateData}`);
 
   return (
     <div>

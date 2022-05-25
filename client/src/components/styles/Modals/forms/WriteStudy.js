@@ -33,7 +33,6 @@ const ConfirmButton = styled.button`
 `;
 
 const WriteStudy = (props) => {
-  console.log("WriteStudy props: ", props); // { userId: user.id, ...data }
   const { isLoading } = useSelector((state) => state.allStudies);
   const navigate = useNavigate();
   const dispatch = useDispatch();

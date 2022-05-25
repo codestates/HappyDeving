@@ -174,7 +174,6 @@ module.exports = {
         closed,
         location,
       });
-      console.log(language.id);
 
       for (let i = 0; i < language.length; i++) {
         await Study_language.create({

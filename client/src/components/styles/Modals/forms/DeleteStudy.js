@@ -1,7 +1,10 @@
 /* eslint-disable react/prop-types */
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteStudy, reset } from "../../../../features/studies/allStudiesSlice";
+import {
+  deleteStudy,
+  reset,
+} from "../../../../features/studies/allStudiesSlice";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { closeModal } from "../../../../features/modal/modalSlice";
@@ -37,7 +40,6 @@ const ConfirmSubtitle = styled.p`
 `;
 
 const DeleteStudy = (props) => {
-  console.log("DeleteStudy props: ", props); // { study_id: id }
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading } = useSelector((state) => state.allStudies);

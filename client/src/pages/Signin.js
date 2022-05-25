@@ -214,7 +214,9 @@ function Signin() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     // dispatch(reset()); // 상태(로딩or성공or실패) 모두 리셋
@@ -336,9 +338,7 @@ function Signin() {
 
   const handleGoogleLogin = async (googleData) => {
     // body: {token: googleData.tokenId}
-    console.log("googleData", googleData);
     await GoogleLoginApi(googleData.tokenId).then((res) => {
-      console.log("google res: ", res);
       localStorage.setItem("user", JSON.stringify(res.data.userInfo));
       localStorage.setItem("token", JSON.stringify(res.data.accessToken));
       axios.defaults.headers = {
@@ -394,7 +394,10 @@ function Signin() {
               <GoogleButton className="sButton">
                 <GoogleLogin
                   render={(renderProps) => (
-                    <button onClick={renderProps.onClick} disabled={renderProps.disabled}>
+                    <button
+                      onClick={renderProps.onClick}
+                      disabled={renderProps.disabled}
+                    >
                       <img src={google} alt="google" />
                     </button>
                   )}
@@ -406,10 +409,17 @@ function Signin() {
                 ></GoogleLogin>
               </GoogleButton>
               <NaverButton className="sButton">
-                <img src={naver} alt="naver" onClick={() => socialLoginHandler("naver")} />
+                <img
+                  src={naver}
+                  alt="naver"
+                  onClick={() => socialLoginHandler("naver")}
+                />
               </NaverButton>
               <GitButton className="sButton">
-                <img src={github} onClick={() => socialLoginHandler("github")} />
+                <img
+                  src={github}
+                  onClick={() => socialLoginHandler("github")}
+                />
               </GitButton>
             </SocialLoginButton>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>

@@ -27,7 +27,5 @@ module.exports = {
         access_token: accessToken,
       }
     );
-
-    console.log(resp);
   },
 };

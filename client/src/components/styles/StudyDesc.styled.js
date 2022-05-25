@@ -22,7 +22,11 @@ import ShareSocialButton from "../styles/ShareSocial.styled";
 import { faGithubAlt, faBlogger } from "@fortawesome/free-brands-svg-icons";
 import { openModal } from "../../features/modal/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { unLikeStudy, likeStudy, getLikedStudies } from "../../features/studies/allStudiesSlice";
+import {
+  unLikeStudy,
+  likeStudy,
+  getLikedStudies,
+} from "../../features/studies/allStudiesSlice";
 
 const StyleStudyDesc = styled.div`
   grid-column: 4/12;
@@ -356,7 +360,8 @@ const StudyDesc = () => {
       imageOption = { offset: new kakao.maps.Point(27, 69) };
     // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다.
 
-    var imgName = data.language[0]["name"] === "c++" ? "c" : data.language[0]["name"];
+    var imgName =
+      data.language[0]["name"] === "c++" ? "c" : data.language[0]["name"];
     var img = langImg[imgName];
 
     var marker = new kakao.maps.Marker({
@@ -388,7 +393,6 @@ const StudyDesc = () => {
   useEffect(() => {
     studyApi(id).then((res) => {
       setData(res.data?.data?.study);
-      console.log("study get data: ", res.data?.data?.study);
 
       setLocation(res.data?.data?.study.location);
     });
@@ -396,14 +400,18 @@ const StudyDesc = () => {
   }, []);
 
   const handleUnlike = async () => {
-    await dispatch(unLikeStudy({ id: user.id, studyData: { study_id: data.id } }));
+    await dispatch(
+      unLikeStudy({ id: user.id, studyData: { study_id: data.id } })
+    );
 
     setIsLike(!isLike);
   };
 
   const handleLike = async () => {
     setIsLike(!isLike);
-    await dispatch(likeStudy({ id: user.id, studyData: { study_id: data.id } }));
+    await dispatch(
+      likeStudy({ id: user.id, studyData: { study_id: data.id } })
+    );
   };
 
   const handleLogin = () => {
@@ -413,7 +421,7 @@ const StudyDesc = () => {
   };
 
   const handleKakaoConnect = () => {
-    navigate(`/${data?.kakaoLink}`);
+    window.location.assign(`${data?.kakaoLink}`);
   };
 
   const handleStudyDeletion = () => {
@@ -436,16 +444,27 @@ const StudyDesc = () => {
                   <>
                     <HeartIcon>
                       {isLike ? (
-                        <FontAwesomeIcon onClick={handleUnlike} icon={like} size="1x" color="red" />
+                        <FontAwesomeIcon
+                          onClick={handleUnlike}
+                          icon={like}
+                          size="1x"
+                          color="red"
+                        />
                       ) : (
-                        <FontAwesomeIcon onClick={handleLike} icon={unLike} size="1x" />
+                        <FontAwesomeIcon
+                          onClick={handleLike}
+                          icon={unLike}
+                          size="1x"
+                        />
                       )}
                     </HeartIcon>
                     <ShareIcon onClick={handleShareButton}>
                       {share ? <ShareSocialButton /> : null}
                       <FontAwesomeIcon icon={faShareNodes} />
                     </ShareIcon>
-                    <Update onClick={() => navigate(`/study/edit/${data.id}`)}>수정</Update>
+                    <Update onClick={() => navigate(`/study/edit/${data.id}`)}>
+                      수정
+                    </Update>
                     <Delete onClick={handleStudyDeletion}>삭제</Delete>
                   </>
                 ) : (
@@ -484,7 +503,13 @@ const StudyDesc = () => {
             </Host>
             <DummyImg></DummyImg>
             <Wrap>
-              <Icon>{data?.closed ? <BsFillDoorClosedFill /> : <BsFillDoorOpenFill />}</Icon>
+              <Icon>
+                {data?.closed ? (
+                  <BsFillDoorClosedFill />
+                ) : (
+                  <BsFillDoorOpenFill />
+                )}
+              </Icon>
 
               <Text>{data?.closed ? "모집마감" : "모집중"}</Text>
               <Icon>
@@ -550,7 +575,9 @@ const StudyDesc = () => {
               </ConfirmButton>
             </ButtonWrap>
 
-            <CommentsDiv>{showComments ? <Comments studyId={id} /> : null}</CommentsDiv>
+            <CommentsDiv>
+              {showComments ? <Comments studyId={id} /> : null}
+            </CommentsDiv>
           </StyleStudyDesc>
         ) : null
         // <Alert>

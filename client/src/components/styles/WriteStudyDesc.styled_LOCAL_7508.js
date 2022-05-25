@@ -305,9 +305,7 @@ const StudyDesc = () => {
   }
 
   const handleLocationValue = (e) => {
-    console.log("location");
     if (e === "click" || e.key === "Enter") {
-      console.log("search:", e.target.value);
       searchPlaces(e.target.value);
     } // true
   };
@@ -398,7 +396,9 @@ const StudyDesc = () => {
         key={idx}
         onClick={() => {
           setLocation(location);
-          const gu = location.address_name.split(" ").filter((el) => el[el.length - 1] === "구")[0];
+          const gu = location.address_name
+            .split(" ")
+            .filter((el) => el[el.length - 1] === "구")[0];
           const dong = location.address_name
             .split(" ")
             .filter((el) => el[el.length - 1] === "동")[0];
@@ -424,12 +424,16 @@ const StudyDesc = () => {
       <Desc checked={checked}>
         <Wrapper>
           <Text>제목</Text>
-          <input onChange={(e) => handleInputValue("title", e.target.value)}></input>
+          <input
+            onChange={(e) => handleInputValue("title", e.target.value)}
+          ></input>
         </Wrapper>
         <RowWrap>
           <HalfWrapper>
             <Text>시작일</Text>
-            <HalfInput>{dateData ? calenderDateValue : "ex. 스터디 시작 날짜"}</HalfInput>
+            <HalfInput>
+              {dateData ? calenderDateValue : "ex. 스터디 시작 날짜"}
+            </HalfInput>
             <DescDateModal>
               <CalenderDate />
             </DescDateModal>
@@ -440,7 +444,9 @@ const StudyDesc = () => {
             <HalfInput>
               {data.language.map((el) => el.name + "," + " ")}
               <IconDrop>
-                <IoMdArrowDropdown onClick={() => setOpen({ ...open, language: true })} />
+                <IoMdArrowDropdown
+                  onClick={() => setOpen({ ...open, language: true })}
+                />
               </IconDrop>
             </HalfInput>
 
@@ -490,7 +496,9 @@ const StudyDesc = () => {
             defaultValue={data.location ? data.location : null}
           ></input>
           {open.location ? (
-            <DescLocationModal>{locationListHandler(locationList)}</DescLocationModal>
+            <DescLocationModal>
+              {locationListHandler(locationList)}
+            </DescLocationModal>
           ) : null}
           <IconSerch>
             <IoIosSearch
@@ -523,7 +531,6 @@ const StudyDesc = () => {
           <Button
             onClick={() =>
               writeStudyApi(user.id, data).then((res) => {
-                console.log(res);
                 alert("저장되었습니다");
                 navigate(`/study/${res.data.id}`);
               })

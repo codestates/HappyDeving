@@ -20,48 +20,61 @@ const initialState = {
   message: "",
 };
 
-export const signup = createAsyncThunk("user/signup", async (signupData, thunkAPI) => {
-  console.log(signupData);
-  try {
-    return await signupApi(signupData).then((res) => {
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const signup = createAsyncThunk(
+  "user/signup",
+  async (signupData, thunkAPI) => {
+    try {
+      return await signupApi(signupData).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 
-export const signin = createAsyncThunk("user/signin", async (signinData, thunkAPI) => {
-  try {
-    return await signinApi(signinData).then((res) => {
-      if (res) {
-        console.log("signin res.data: ", res.data);
-        localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
-        localStorage.setItem("token", JSON.stringify(res.data.newAccessToken));
-        axios.defaults.headers = { "Content-Type": "application/json", ...authHeader() };
-      }
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const signin = createAsyncThunk(
+  "user/signin",
+  async (signinData, thunkAPI) => {
+    try {
+      return await signinApi(signinData).then((res) => {
+        if (res) {
+          localStorage.setItem("user", JSON.stringify(res.data.data.userInfo));
+          localStorage.setItem(
+            "token",
+            JSON.stringify(res.data.newAccessToken)
+          );
+          axios.defaults.headers = {
+            "Content-Type": "application/json",
+            ...authHeader(),
+          };
+        }
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 
 export const signout = createAsyncThunk("user/signout", async () => {
   await localStorage.removeItem("user");
   await localStorage.removeItem("token");
 });
 
-export const getProfile = createAsyncThunk("user/getProfile", async (id, thunkAPI) => {
-  // console.log("getProfile id: ", id); // 2
-  try {
-    return await getProfileApi(id).then((res) => {
-      return res.data;
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error);
+export const getProfile = createAsyncThunk(
+  "user/getProfile",
+  async (id, thunkAPI) => {
+    // console.log("getProfile id: ", id); // 2
+    try {
+      return await getProfileApi(id).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
   }
-});
+);
 
 export const editProfile = createAsyncThunk(
   "user/editProfile",
@@ -81,10 +94,8 @@ export const editProfile = createAsyncThunk(
 export const editProfileImage = createAsyncThunk(
   "user/editProfileImage",
   async ({ id, formData }, thunkAPI) => {
-    console.log("실행은되나", { id, formData });
     try {
       return await editProfileImageApi(id, formData).then((res) => {
-        console.log("axios.patch 후 editProfileImage res.data ::", res.data);
         return res.data;
       });
     } catch (error) {
@@ -92,16 +103,19 @@ export const editProfileImage = createAsyncThunk(
     }
   }
 );
-export const deleteUser = createAsyncThunk("user/deleteUser", async (data, thunkAPI) => {
-  try {
-    return await deleteUserApi(data).then(() => {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-    });
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error.message);
+export const deleteUser = createAsyncThunk(
+  "user/deleteUser",
+  async (data, thunkAPI) => {
+    try {
+      return await deleteUserApi(data).then(() => {
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+      });
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   }
-});
+);
 
 export const userSlice = createSlice({
   name: "user",
@@ -186,7 +200,6 @@ export const userSlice = createSlice({
         state.isLoading = false;
         state.isSuccess = true;
         state.user.image = action.payload.data.userInfo.image;
-        console.log("action.payload.data.userInfo.image", action.payload.data.userInfo.image);
       })
       .addCase(editProfileImage.rejected, (state, action) => {
         state.isLoading = false;
