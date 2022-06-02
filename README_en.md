@@ -13,6 +13,7 @@
 ### :link:[Deployed domain: happydeving.com](https://happydeving.com/)
 
 ## ✨ Feature and Functionality
+- Email Verification using Nodemailer
 - Login using Kakao, Google, Naver, GitHub (JWT, Google OAuth2 Authentication and bcrypt)
 - Search study groups and projects based on an address, date, and computer languages using Kakao map API
 - Create a new post
