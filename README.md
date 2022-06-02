@@ -1,10 +1,10 @@
-# 프로젝트 소개
-Read this in English
+# 프로젝트 소개 (HappyDeving Project)
+Read this in [English](https://github.com/codestates/HappyDeving/blob/dev3/README_en.md)
 ## 😈 Logo
 ![happylogo3](https://user-images.githubusercontent.com/87491901/164157863-13772940-0652-4407-ba95-04406613b21e.png)
 
 ## ✏️ About
-### 해피데빙은 위치 정보와 스터디 시작일, 학습할 언어를 지정해 검색해 가까운 곳의 스터디에 참여할 수 있도록 하는 웹서비스입니다.
+### 해피데빙은 위치 정보와 스터디 시작일, 학습할 언어를 지정해 검색해 가까운 곳의 스터디에 참여할 수 있도록 하는 웹서비스입니다.
 #### Kick 1) 주변에서 일어나고 있는 놀라운 프로젝트를 알 수 있습니다.
 #### Kick 2) 마음에 드는 스터디를 찜목록에 저장해 관리할 수 있습니다.
 #### Kick 3) 스터디장 소개글과 소셜 네트워크 연동으로 다양한 개발자들과 관계를 맺고 소통할 수 있습니다.
