@@ -1,5 +1,5 @@
 # 프로젝트 소개 (HappyDeving Project)
-Read this in [English](https://github.com/codestates/HappyDeving/blob/dev3/README_en.md)
+*Read this in [English](https://github.com/codestates/HappyDeving/blob/dev3/README_en.md).*
 ## 😈 Logo
 ![happylogo3](https://user-images.githubusercontent.com/87491901/164157863-13772940-0652-4407-ba95-04406613b21e.png)
 
