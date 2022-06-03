@@ -29,14 +29,7 @@
 ## 🔧 Tech Stack
 ![Happy Deving Stack](https://user-images.githubusercontent.com/79065544/168771710-45857bd1-a9ef-4c48-8454-2e4e0e367473.png)
 
-## Flowcharts
-✨ [Happy Deving Flowcharts](https://www.figma.com/file/rgpYkg2kNQDUqIaTpRUD7b/HappyDeving-Flowcharts?node-id=0%3A1)
-
-## DB Schema 
-✨ [Happy Deving DBdiagram](https://dbdiagram.io/d/622ab22961d06e6eade12938)
-<img width="1283" alt="image" src="https://user-images.githubusercontent.com/75279575/168463115-d21242c6-bc79-499a-a332-1b9bb53d4c5e.png">
-
-## Final App View
+## 🌟 Final App View
 
 <details>
 <summary>Responsive Landing Page</summary>
@@ -171,5 +164,121 @@
   
 </div>
 
+</details>
+
+
+## Flowcharts
+✨ [Happy Deving Flowcharts](https://www.figma.com/file/rgpYkg2kNQDUqIaTpRUD7b/HappyDeving-Flowcharts?node-id=0%3A1)
+
+## DB Schema 
+✨ [Happy Deving DBdiagram](https://dbdiagram.io/d/622ab22961d06e6eade12938)
+<img width="1283" alt="image" src="https://user-images.githubusercontent.com/75279575/168463115-d21242c6-bc79-499a-a332-1b9bb53d4c5e.png">
+
+
+
+## 👩‍💻👨‍💻 Contributors
+## Somi Jeon
+> **Role** : Team Member
+>
+> **Position** : FE(Front-End)
+
+
+> **Stack**
+>  
+> <img src="https://img.shields.io/badge/axios-2A1659?style=for-the-badge&logo= Query&logoColor=blue"><img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"><img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"><img src="https://img.shields.io/badge/REDUX Toolkit-764ABC?style=for-the-badge&logo=Redux&logoColor=white"><img src="https://img.shields.io/badge/styled components-hotpink?style=for-the-badge&logo=styled-components&logoColor=white"><img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"><img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"><img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"><img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"><img src="https://img.shields.io/badge/oauth0.2-black?style=for-the-badge&logo=Auth0&logoColor=white">
+
+<details>
+<summary>Worklog</summary>
+<div markdown="1">
+
+- Google login (Google OAuth2 API)
+- Nodemailer email verification (Google OAuth2 API)
+- Signup validation check
+- StudyCard component
+- Like/unlike
+- Profile edit page
+- Comments and replies
+- Dialog modals
+- Responsive landing page
+- Routing
+
+</div>
+</details>
+<br />
+<br />
+
+## 곽나경
+> **Role** : Team Member
+>
+> **Position** :  FE(Front-End)
+
+> **Stack**
+>  
+> <img src="https://img.shields.io/badge/axios-2A1659?style=for-the-badge&logo= Query&logoColor=blue"><img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"><img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"><img src="https://img.shields.io/badge/REDUX Toolkit-764ABC?style=for-the-badge&logo=Redux&logoColor=white"><img src="https://img.shields.io/badge/styled components-hotpink?style=for-the-badge&logo=styled-components&logoColor=white"><img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"><img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"><img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
+
+
+<details>
+<summary>Worklog</summary>
+<div markdown="1">
+
+- 검색 결과 지도페이지 : 커스텀 마커, 모달 생성
+- 랜딩페이지 검색 필터 : 위치, 시작일, 언어 
+- 스터디 상세페이지, 글쓰기 페이지, 수정 페이지
+
+</div>
+</details>
+<br />
+<br />
+## 이희영 
+> **Role** : Team Member
+>
+> **Position** : BE(Back-End)
+
+> **Stack**
+>  
+> <img src="https://img.shields.io/badge/Sequelize-52B0E7?style=for-the-badge&logo=Sequelize&logoColor=white"><img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"><img src="https://img.shields.io/badge/Express-black?style=for-the-badge&logo=Express&logoColor=white"><img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white"><img src="https://img.shields.io/badge/amazonaws-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"><img src="https://img.shields.io/badge/oauth0.2-black?style=for-the-badge&logo=Auth0&logoColor=white">
+
+
+
+## 
+<details>
+<summary>Worklog</summary>
+<div markdown="1">
+
+- 로그인 : 소셜 (깃허브, 카카오, 네이버), jwt
+- api
+- 데이터베이스, 
+- 노드메일러
+- 배포 : 데이버베이스(RDS), 서버(EC2), 클라이언트(S3)
+
+</div>
+</details>
+<br />
+<br />
+
+
+## 지영서
+> **Role** : Team Leader
+>
+> **Position** : FE(Front-End)
+
+
+> **Stack** 
+>
+> <img src="https://img.shields.io/badge/axios-2A1659?style=for-the-badge&logo= Query&logoColor=blue"><img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"><img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"><img src="https://img.shields.io/badge/REDUX Toolkit-764ABC?style=for-the-badge&logo=Redux&logoColor=white"><img src="https://img.shields.io/badge/styled components-hotpink?style=for-the-badge&logo=styled-components&logoColor=white"><img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"><img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"><img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white">
+
+
+
+## 
+<details>
+<summary>Worklog</summary>
+<div markdown="1">
+
+- 카카오,페이스북 소셜에 페이지 공유
+- 로그인, 회원가입 페이지 
+- 마이페이지 - 찜 스터디 목록, 작성한 스터디 목록, 프로필
+- 검색 필터 : 캘린더 api
+
+</div>
 </details>
 
