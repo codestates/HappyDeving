@@ -6,7 +6,7 @@
 ### Happy Deving is a web service that allows you to participate in group studies or projects near you by specifying address, study date, and project languages.
 #### Kick 1) You can find the amazing projects around you.
 #### Kick 2) You can manage your favorite studies by adding them to your wishlist.
-#### Kick 3) Author’s profile section allows you to easily browse his/her GitHub repositories and personal blogs and facilitates networking with them.
+#### Kick 3) Author’s profile section allows you to easily browse his GitHub repositories and personal blogs and facilitates networking with them.
 
 
 
