@@ -11,6 +11,7 @@ import DeleteStudy from "./forms/DeleteStudy";
 import WriteStudy from "./forms/WriteStudy";
 import NoResults from "./forms/NoResults";
 import DirectToLogin from "./forms/DirectToLogin";
+import EmailVerification from "./forms/EmailVerification";
 import { closeModal } from "../../../features/modal/modalSlice";
 
 const ModalBackdrop = styled.div`
@@ -97,6 +98,7 @@ const ConfirmModal = () => {
     WriteStudy,
     NoResults,
     DirectToLogin,
+    EmailVerification,
   };
   let renderComponent;
   if (componentName) {

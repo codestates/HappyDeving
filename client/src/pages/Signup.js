@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signup, reset } from "../features/user/userSlice.js";
-import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
-// import Container from "../components/styles/Container.styled";
+import { openModal } from "../features/modal/modalSlice.js";
 
 const SignupContainer = styled.div`
   grid-column: 4/ 12;
@@ -139,7 +138,7 @@ function Signup() {
   const EMAIL_REGEX = /[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,8}(.[a-z{2,8}])?/g;
   const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/; // 8~24자, 소문자, 대문자, 숫자, 특수문자 1개 이상
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state) => state.user);
+  const { user, isError, isSuccess, message } = useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(reset()); // 상태 모두 리셋
@@ -173,9 +172,13 @@ function Signup() {
     navigate("/signin");
   };
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
+  const handleSendEmail = () => {
+    dispatch(
+      openModal({
+        name: "EmailVerification",
+      })
+    );
+  };
 
   return (
     <>
@@ -198,7 +201,9 @@ function Signup() {
               onChange={handleInputValue("confirmPassword")}
             />
             <ButtonWrap>
-              <ConfirmButton type="submit">회원가입</ConfirmButton>
+              <ConfirmButton onClick={handleSendEmail} type="submit">
+                회원가입
+              </ConfirmButton>
             </ButtonWrap>
             <AlertBox className="alert-box">{errorMessage}</AlertBox>
           </form>
