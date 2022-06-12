@@ -1,29 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { reset, getProfile } from "../features/user/userSlice";
-import LoadingIndicator from "../components/defaults/LoadingIndicator";
+import { reset } from "../../../features/user/userSlice.js";
+import LoadingIndicator from "../../defaults/LoadingIndicator.js";
 import styled from "styled-components";
-import { signout } from "../features/user/userSlice";
-import SideProfile from "../components/SideProfile";
+import { openModal } from "../../../features/modal/modalSlice.js";
+import EditProfileImg from "../../EditProfileImg.js";
 
 const StyledEditProfile = styled.div`
   grid-column: 4 / 12;
   text-align: left;
   min-width: 400px;
+
   @media screen and (max-width: 1024px) {
     grid-column: 3 / 13;
     transition: 1s;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 764px) {
     grid-column: 2 / 14;
     transition: 1s;
   }
 `;
 
 const UserTitle = styled.div`
-  font-size: 30px;
   font-family: "Binggrae";
+  font-size: 30px;
   margin-bottom: 50px;
   span {
     font-weight: 500;
@@ -58,6 +59,7 @@ const Tab = styled.div`
     transition: 0.5s;
   }
 `;
+
 const MyStudyTab = styled.div``;
 const LikedStudyTab = styled.div``;
 const MyprofileTab = styled.div`
@@ -83,7 +85,7 @@ const Side = styled.div`
   grid-column: 1 / 3;
 `;
 
-const ProfileWrap = styled.div`
+const ProfileWrap = styled.form`
   display: flex;
   grid-column: 3 / 9;
   flex-direction: column;
@@ -104,7 +106,7 @@ const Text = styled.div`
   }
 `;
 
-const Info = styled.div`
+const Input = styled.input`
   background-color: rgba(233, 193, 255, 20%);
   border-radius: 5px;
   height: 40px;
@@ -117,8 +119,35 @@ const Info = styled.div`
     font-size: 14px;
     height: 40px;
   }
-`;
 
+  &:hover {
+    outline: none;
+    border-bottom: 1px solid #5e17eb;
+  }
+
+  &:focus {
+    outline: none;
+    border-bottom: 1px solid #5e17eb;
+  }
+`;
+const InputBio = styled.textarea`
+  background-color: rgba(233, 193, 255, 20%);
+  border-radius: 5px;
+  height: 40px;
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+  height: 50px;
+  cursor: pointer;
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
 const ButtonWrap = styled.div`
   display: flex;
   font-size: 16px;
@@ -148,30 +177,46 @@ const ButtonWrap = styled.div`
     }
   }
 `;
-
-const Profile = () => {
+const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isLoading } = useSelector((state) => state.user);
-  // console.log("profile user: ", user);
-  // 임시
-  const handleSignout = (e) => {
-    e.preventDefault();
-    dispatch(signout());
-    dispatch(reset());
-    navigate("/");
+  const { user, isLoading, isError, message } = useSelector(
+    (state) => state.user
+  );
+
+  const [userData, setUserData] = useState({
+    username: "",
+    bio: "",
+    github: "",
+    blog: "",
+  });
+
+  const handleInputValue = (key) => (e) => {
+    setUserData({ ...userData, [key]: e.target.value });
   };
 
-  // console.log(user.loginMethod);
-  const MoveToEditPage = (e) => {
+  const handleEditing = async (e) => {
     e.preventDefault();
-    navigate("/editprofile");
+    if (isError) {
+      console.log("editProfile.rejected :", message);
+    }
+    dispatch(
+      openModal({
+        name: "UpdateUser",
+        childrenProps: { id: user.id, userData: userData },
+      })
+    );
   };
 
-  useEffect(() => {
-    dispatch(getProfile(user.id));
-    dispatch(reset());
-  }, []);
+  const handlePermanentDeletion = (e) => {
+    e.preventDefault();
+    dispatch(
+      openModal({
+        name: "DeleteUser",
+        childrenProps: { id: user.id, loginMethod: user.loginMethod },
+      })
+    );
+  };
 
   if (isLoading) {
     return <LoadingIndicator />;
@@ -202,23 +247,51 @@ const Profile = () => {
 
         <ProfileContainer>
           <Side>
-            <SideProfile />
+            <EditProfileImg />
           </Side>
           <ProfileWrap>
             <Text>닉네임</Text>
-            <Info>{user?.username}</Info>
+            <Input
+              className="username2"
+              type="username"
+              defaultValue={user?.username}
+              onChange={handleInputValue("username")}
+            />
+
             <Text>자기 소개</Text>
-            <Info>{user?.bio}</Info>
+            <InputBio
+              className="bio"
+              type="textarea"
+              defaultValue={user?.bio}
+              onChange={handleInputValue("bio")}
+            ></InputBio>
+
             <Text>깃허브 주소</Text>
-            <Info>{user?.github}</Info>
+            <Input
+              type="github"
+              className="github"
+              defaultValue={user?.github}
+              onChange={handleInputValue("github")}
+            />
+
             <Text>블로그 주소</Text>
-            <Info>{user?.blog}</Info>
+            <Input
+              className="blog"
+              type="blog"
+              defaultValue={user?.blog}
+              onChange={handleInputValue("blog")}
+            />
+
             <ButtonWrap>
-              <button onClick={MoveToEditPage}>프로필 수정하기</button>
+              <Link to="/profile">
+                <button onClick={handleEditing}>수정하기</button>
+              </Link>
+
               <Link to="/">
-                <button onClick={handleSignout}>로그아웃</button>
+                <button onClick={handlePermanentDeletion}>회원 탈퇴</button>
               </Link>
             </ButtonWrap>
+            {/* </form> */}
           </ProfileWrap>
         </ProfileContainer>
       </StyledEditProfile>
@@ -226,4 +299,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default MyPage;

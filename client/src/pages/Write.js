@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Content from "../components/styles/Content.styled";
 
-const StyledWrite = styled(Content)`
+const StyledWrite = styled.div`
   grid-column: 3 / 13;
   height: 400px;
   text-align: center;

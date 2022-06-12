@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { signin } from "../features/user/userSlice";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import LoadingIndicator from "../components/LoadingIndicator";
+import LoadingIndicator from "../components/defaults/LoadingIndicator";
 import axios from "axios";
 import { GoogleLoginApi } from "../api/socialAuth";
 import { GoogleLogin } from "react-google-login";
@@ -178,7 +178,7 @@ const KakaoButton = styled.div`
 const GitButton = styled.div`
   background-color: black;
   width: 80px;
-  background-color: derkgray;
+  background-color: darkgray;
 `;
 const GoogleButton = styled.div`
   background-color: #d3d3d3;

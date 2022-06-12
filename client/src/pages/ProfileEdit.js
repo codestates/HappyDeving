@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { reset } from "../features/user/userSlice.js";
-import LoadingIndicator from "../components/LoadingIndicator";
 import styled from "styled-components";
 import { openModal } from "../features/modal/modalSlice.js";
-import EditSideProfile from "../components/styles/EditSideProfile.styled";
+import EditProfileImg from "../components/EditProfileImg.js";
+import LoadingIndicator from "../components/defaults/LoadingIndicator.js";
 
 const StyledEditProfile = styled.div`
   grid-column: 4 / 12;
@@ -180,7 +179,9 @@ const ButtonWrap = styled.div`
 const MyPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isLoading, isError, message } = useSelector((state) => state.user);
+  const { user, isLoading, isError, message } = useSelector(
+    (state) => state.user
+  );
 
   const [userData, setUserData] = useState({
     username: "",
@@ -232,7 +233,10 @@ const MyPage = () => {
           <MyStudyTab className="tap" onClick={() => navigate("/mystudy")}>
             나의 스터디
           </MyStudyTab>
-          <LikedStudyTab className="tap" onClick={() => navigate("/likedstudy")}>
+          <LikedStudyTab
+            className="tap"
+            onClick={() => navigate("/likedstudy")}
+          >
             찜한 스터디
           </LikedStudyTab>
           <MyprofileTab className="tap" onClick={() => navigate("/profile")}>
@@ -242,7 +246,7 @@ const MyPage = () => {
 
         <ProfileContainer>
           <Side>
-            <EditSideProfile />
+            <EditProfileImg />
           </Side>
           <ProfileWrap>
             <Text>닉네임</Text>

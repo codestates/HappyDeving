@@ -2,7 +2,7 @@
 import React from "react";
 import styled from "styled-components";
 // import { Search } from "../components/styles/Search.styled";
-import Slider from "../components/Slider";
+import Slider from "../components/defaults/Slider";
 import whiteSpace from "../../src/assets/whiteSpace2.png";
 import landing_02 from "../../src/assets/landing2.png";
 import landing_03 from "../../src/assets/landing3.png";
