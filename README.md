@@ -49,9 +49,6 @@
 
 
 
-
-### :link:[Deployed domain: happydeving.com](https://happydeving.com/)
-
 ## 🔧 Tech Stack
 ![Happy Deving Stack](https://user-images.githubusercontent.com/79065544/168771710-45857bd1-a9ef-4c48-8454-2e4e0e367473.png)
 
