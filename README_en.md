@@ -31,141 +31,57 @@
 
 ## 🌟 Final App View
 
-<details>
-<summary>Responsive Landing Page</summary>
-<div markdown="1">
+- Responsive Landing Page  
+![반응형](https://user-images.githubusercontent.com/75279575/168737275-18ccc135-4416-4b80-96f6-ae655d9b0750.gif)  
+
+
+- Login/Disconnect Account  
+![로그인_소](https://user-images.githubusercontent.com/75279575/168737270-1ca152ee-a219-4576-b990-0008892b2346.gif)  
+![로그인요청_소](https://user-images.githubusercontent.com/75279575/168737274-da7847f7-1f27-4f27-8d20-fad457736231.gif)  
+![회원탈퇴_소](https://user-images.githubusercontent.com/75279575/168737304-65f18a36-9b85-473e-b387-7ab5f6de4256.gif)  
+
+- Email Verification  
+![이메일인증_소](https://user-images.githubusercontent.com/75279575/168737295-188d9e40-9419-4ac8-b34d-d196883eaee1.gif)  
+
+- Validation Check  
+![유효성검사_소](https://user-images.githubusercontent.com/75279575/168737294-17a26a05-3349-4012-bed0-6a5f38b30fb7.gif)  
   
-![반응형](https://user-images.githubusercontent.com/75279575/168737275-18ccc135-4416-4b80-96f6-ae655d9b0750.gif)
+- Search Projects  
+![스터디검색_소](https://user-images.githubusercontent.com/75279575/168737279-390858fd-d146-405c-8817-2677df5c84f6.gif)  
+
+- No Results  
+![검색결과없음_소](https://user-images.githubusercontent.com/75279575/168737239-ca70375f-bf96-4aca-8be0-fc2a179cfc7d.gif)  
+
+- Marker and Modal  
+![스터디모달클릭_소](https://user-images.githubusercontent.com/75279575/168737288-542d64f0-772d-41fc-825f-38f336f8f1af.gif)  
+![스터디모바일_소](https://user-images.githubusercontent.com/75279575/168737289-b832ba26-b2e5-476c-845b-885e15b3eca2.gif)  
   
-</div>
-</details>
+- Write a Post  
+![스터디글작성_소](https://user-images.githubusercontent.com/75279575/168737287-1bbe40c6-6df0-417e-a4f1-08beff91ea3d.gif)  
+- Edit a Post  
+![스터디글수정_소](https://user-images.githubusercontent.com/75279575/168737286-bdd0a0d0-1307-4d26-89b8-39b1f31db030.gif)  
+- Delete a Post  
+![스터디글삭제_소](https://user-images.githubusercontent.com/75279575/168737282-c8b1a13a-2846-44b4-aa00-28dbd3bbcfb9.gif)  
 
 
-<details>
-<summary>Login/Disconnect Account</summary>
-<div markdown="1">
+- Share a post  
+![공유트위터_소](https://user-images.githubusercontent.com/75279575/168737261-2f544cea-b2ea-464d-8559-2c70602204a0.gif)  
+![공유페북_소](https://user-images.githubusercontent.com/75279575/168737262-d0f45119-94df-4fe0-be2e-3a504dcb1e4d.gif)  
 
-![로그인_소](https://user-images.githubusercontent.com/75279575/168737270-1ca152ee-a219-4576-b990-0008892b2346.gif)
-![로그인요청_소](https://user-images.githubusercontent.com/75279575/168737274-da7847f7-1f27-4f27-8d20-fad457736231.gif)
-![회원탈퇴_소](https://user-images.githubusercontent.com/75279575/168737304-65f18a36-9b85-473e-b387-7ab5f6de4256.gif)
+- Write a Comment   
+![댓글달기_소](https://user-images.githubusercontent.com/75279575/168737265-f36e4a39-512f-49e5-8e8e-30bdd7f780ac.gif)  
+- Delete a Comment   
+![댓글삭제_소](https://user-images.githubusercontent.com/75279575/168737267-4946c9ed-72c6-4cc0-bb7a-32455b827126.gif)  
+- Edit a Comment   
+![댓글수정_소](https://user-images.githubusercontent.com/75279575/168737269-3c519ba1-2d85-4aee-bd86-1f256915a83a.gif)  
 
-</div>
-</details>
-
-<details>
-<summary>Email Verification</summary>
-<div markdown="1">
-
-![이메일인증_소](https://user-images.githubusercontent.com/75279575/168737295-188d9e40-9419-4ac8-b34d-d196883eaee1.gif)
-
-</div>
-
-</details>
-
-<details>
-<summary>Validation Check</summary>
-<div markdown="1">
-  
-![유효성검사_소](https://user-images.githubusercontent.com/75279575/168737294-17a26a05-3349-4012-bed0-6a5f38b30fb7.gif)
-  
-</div>
-
-</details>
-
-
-<details>
-<summary>Search Projects</summary>
-<div markdown="1">
-
-![스터디검색_소](https://user-images.githubusercontent.com/75279575/168737279-390858fd-d146-405c-8817-2677df5c84f6.gif)
-
-</div>
-</details>
-
-
-
-<details>
-<summary>No Results</summary>
-<div markdown="1">
-
-![검색결과없음_소](https://user-images.githubusercontent.com/75279575/168737239-ca70375f-bf96-4aca-8be0-fc2a179cfc7d.gif)
-
-</div>
-</details>
-
-
-<details>
-<summary>Click Marker and Modal</summary>
-<div markdown="1">
-
-![스터디모달클릭_소](https://user-images.githubusercontent.com/75279575/168737288-542d64f0-772d-41fc-825f-38f336f8f1af.gif)
-![스터디모바일_소](https://user-images.githubusercontent.com/75279575/168737289-b832ba26-b2e5-476c-845b-885e15b3eca2.gif)
-  
-</div>
-
-</details>
-
-
-
-<details>
-<summary>Post (CRUD)</summary>
-<div markdown="1">
-  
-![스터디글작성_소](https://user-images.githubusercontent.com/75279575/168737287-1bbe40c6-6df0-417e-a4f1-08beff91ea3d.gif)
-![스터디글수정_소](https://user-images.githubusercontent.com/75279575/168737286-bdd0a0d0-1307-4d26-89b8-39b1f31db030.gif)
-![스터디글삭제_소](https://user-images.githubusercontent.com/75279575/168737282-c8b1a13a-2846-44b4-aa00-28dbd3bbcfb9.gif)
-
-
-
-</div>
-</details>
-
-
-<details>
-<summary>Share</summary>
-<div markdown="1">
-
-![공유트위터_소](https://user-images.githubusercontent.com/75279575/168737261-2f544cea-b2ea-464d-8559-2c70602204a0.gif)
-![공유페북_소](https://user-images.githubusercontent.com/75279575/168737262-d0f45119-94df-4fe0-be2e-3a504dcb1e4d.gif)
-
-</div>
-</details>
-
-<details>
-<summary>Comment (CRUD)</summary>
-<div markdown="1">
-
-![댓글달기_소](https://user-images.githubusercontent.com/75279575/168737265-f36e4a39-512f-49e5-8e8e-30bdd7f780ac.gif)
-![댓글삭제_소](https://user-images.githubusercontent.com/75279575/168737267-4946c9ed-72c6-4cc0-bb7a-32455b827126.gif)
-![댓글수정_소](https://user-images.githubusercontent.com/75279575/168737269-3c519ba1-2d85-4aee-bd86-1f256915a83a.gif)
-
-</div>
-</details>
-
-
-
-<details>
-<summary>Like/Unlike</summary>
-<div markdown="1">
-  
+- Like/Unlike  
 ![찜하기_소](https://user-images.githubusercontent.com/75279575/168737297-61c6781b-8d91-437a-97be-32802aeb9a46.gif)
 ![찜해제_소](https://user-images.githubusercontent.com/75279575/168737298-376e8037-b153-4132-be83-f8dd1739457a.gif)
   
-</div>
-
-</details>
-
-
-<details>
-<summary>Profile (CRUD)</summary>
-<div markdown="1">
-  
+- Edit Profile    
 ![프로필수정_소](https://user-images.githubusercontent.com/75279575/168737301-cf2c3ea9-9aa0-468c-bd6a-b7aa3fde20f3.gif)
   
-</div>
-
-</details>
-
 
 ## Flowcharts
 ✨ [Happy Deving Flowcharts](https://www.figma.com/file/rgpYkg2kNQDUqIaTpRUD7b/HappyDeving-Flowcharts?node-id=0%3A1)
@@ -187,23 +103,21 @@
 >  
 > <img src="https://img.shields.io/badge/axios-2A1659?style=for-the-badge&logo= Query&logoColor=blue"><img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"><img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"><img src="https://img.shields.io/badge/REDUX Toolkit-764ABC?style=for-the-badge&logo=Redux&logoColor=white"><img src="https://img.shields.io/badge/styled components-hotpink?style=for-the-badge&logo=styled-components&logoColor=white"><img src="https://img.shields.io/badge/css-1572B6?style=for-the-badge&logo=css3&logoColor=white"><img src="https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black"><img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"><img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white"><img src="https://img.shields.io/badge/oauth0.2-black?style=for-the-badge&logo=Auth0&logoColor=white">
 
-<details>
-<summary>Worklog</summary>
-<div markdown="1">
+### Worklog
 
-- Google login (Google OAuth2 API)
-- Nodemailer email verification (Google OAuth2 API)
-- Signup validation check
-- StudyCard component
-- Like/unlike
-- Profile edit page
-- Comments and replies
-- Dialog modals
-- Responsive landing page
-- Routing
+- Redux Toolkit Slices (CODE ➡️ [userSlice.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/features/user/userSlice.js) | [allStudiesSlice.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/features/studies/allStudiesSlice.js) | [commentSlice.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/features/comment/commentSlice.js) | [modalSlice.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/features/modal/modalSlice.js))
+- Google login (Google OAuth2 API) (CODE ➡️ [Signin.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/pages/Signin.js))
+- Nodemailer email verification (Google OAuth2 API) (CODE ➡️ [signup.js](https://github.com/codestates/HappyDeving/blob/dev3/server/controllers/users/signup.js) | [sendEmail.js](https://github.com/codestates/HappyDeving/blob/dev3/server/utils/sendEmail.js) | [getHtmlMessage.js](https://github.com/codestates/HappyDeving/blob/dev3/server/utils/getHtmlMessage.js))
+- Signup validation check (CODE ➡️ [Signup.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/pages/Signup.js))
+- StudyCard component (CODE ➡️ [LikedStudy.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/pages/LikedStudy.js) | [MyStudy.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/pages/MyStudy.js) | [StudyCard.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/components/StudyCard.js))
+- Like/unlike (CODE ➡️ [allStudiesSlice.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/features/studies/allStudiesSlice.js) | [StudyDesc.styled.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/components/styles/StudyDesc.styled.js))
+- Profile edit page (CODE ➡️ [userSlice.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/features/user/userSlice.js) | [ProfileEdit.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/pages/ProfileEdit.js))
+- Comments and replies (CODE ➡️ [commentSlice.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/features/comment/commentSlice.js) | [Comments.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/components/Comments.js) | [Comment.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/components/Comment.js) | [CommentForm.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/components/CommentForm.js))
+- Dialog modals (CODE ➡️ [modalSlice.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/features/modal/modalSlice.js) | [ConfirmModal.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/components/styles/Modals/ConfirmModal.js) | [forms](https://github.com/codestates/HappyDeving/tree/dev3/client/src/components/styles/Modals/forms))
+- Responsive landing page (CODE ➡️ [Slider.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/components/Slider.js) | [Landing.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/pages/Landing.js))
+- Routing (CODE ➡️ [App.js](https://github.com/codestates/HappyDeving/blob/dev3/client/src/App.js))
 
-</div>
-</details>
+
 <br />
 <br />
 
