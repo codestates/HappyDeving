@@ -80,49 +80,7 @@ const Tab = styled.div`
     transition: 1s;
   }
 `;
-// const Alert = styled.div`
-//   display: flex;
-//   width: 80%;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-//   font-family: "Binggrae";
-//   position: absolute;
-//   top: 65%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-//   img {
-//     width: 30%;
-//   }
-// `;
-// const AlertText = styled.div`
-//   text-align: center;
-//   h1 {
-//     font-size: 40px;
-//   }
-//   p {
-//     font-size: 22px;
-//     color: gray;
-//   }
-//   @media screen and (max-width: 1024px) {
-//     h1 {
-//       font-size: 30px;
-//     }
-//     p {
-//       font-size: 18px;
-//       transition: 0.5s;
-//     }
-//   }
-//   @media screen and (max-width: 768px) {
-//     h1 {
-//       font-size: 20px;
-//     }
-//     p {
-//       font-size: 16px;
-//       transition: 0.5s;
-//     }
-//   }
-// `;
+
 const MyStudyTab = styled.div``;
 const LikedStudyTab = styled.div`
   color: black;
