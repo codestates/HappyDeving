@@ -84,7 +84,7 @@
   
 
 ## Flowcharts
-✨ [Happy Deving Flowcharts](https://www.figma.com/file/rgpYkg2kNQDUqIaTpRUD7b/HappyDeving-Flowcharts?node-id=0%3A1)
+✨ [Happy Deving Figma Flowcharts](https://www.figma.com/file/rgpYkg2kNQDUqIaTpRUD7b/HappyDeving-Flowcharts?node-id=0%3A1)
 
 ## DB Schema 
 ✨ [Happy Deving DBdiagram](https://dbdiagram.io/d/622ab22961d06e6eade12938)
@@ -143,6 +143,7 @@
 </details>
 <br />
 <br />
+
 ## 이희영 
 > **Role** : Team Member
 >
